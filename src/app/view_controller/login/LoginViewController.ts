@@ -1,5 +1,6 @@
-import { generalLogin } from "../../../services/api/endpoint/login/CS_LoginGeral";
-import { removeValueFromStorage } from "../../../services/storage/AsyncStorageConfig";
+import { generalLogin } from "../../services/api/endpoint/login/CS_LoginGeral";
+import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
+
 
 
 export async function generalLoginVc(loginData: ILoginData) {

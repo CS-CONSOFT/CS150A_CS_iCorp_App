@@ -1,4 +1,5 @@
-import { searchProduto } from "../../../services/api/endpoint/produto/CS_GetProduct";
+import { searchProduto } from "../../services/api/endpoint/produto/CS_GetProduct";
+
 
 interface SearchResult {
     IsOk: Boolean,

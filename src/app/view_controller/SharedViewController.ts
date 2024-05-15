@@ -1,8 +1,9 @@
 import { router } from "expo-router";
-import { getObject, storeObject, storeSimpleData } from "../../services/storage/AsyncStorageConfig"
+
 import { DataKey } from "../enum/DataKeys";
 import { ILoginResponse } from "../screens/login/ILoginResponse";
 import { IGetUserProperties } from "./interface/IGetUserProperties";
+import { getObject, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
 
 
 export async function storeObjectDataVc(key: string, value: object) {

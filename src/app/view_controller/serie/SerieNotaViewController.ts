@@ -1,5 +1,6 @@
-import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
-import { getNoteSerie, setNewCorSerie } from "../../../services/api/endpoint/notas/serie/CS_GetSerieNota";
+import { getNoteSerie, setNewCorSerie } from "../../services/api/endpoint/notas/serie/CS_GetSerieNota";
+import { IGetDelivery, ISetCorSerie } from "../../services/api/interfaces/notas/CS_INotes";
+
 
 
 export async function getNoteSeriesVc(iEntregaGet: IGetDelivery) {

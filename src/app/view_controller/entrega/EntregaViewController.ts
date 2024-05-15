@@ -1,6 +1,6 @@
+import { getEtrgNota, setEtrgEfetuada } from "../../services/api/endpoint/notas/entrega/CS_EntregNota";
+import { IGetDelivery, ISetEntrega } from "../../services/api/interfaces/notas/CS_INotes";
 
-import { getEtrgNota, setEtrgEfetuada } from "../../../services/api/endpoint/notas/entrega/CS_EntregNota";
-import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
 
 
 export async function getEntrgNotaVc(iEntregaGet: IGetDelivery) {

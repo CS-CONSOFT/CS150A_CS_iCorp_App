@@ -29,10 +29,13 @@ const CS_SC_Login = () => {
 
     useEffect(() => {
         getObjectDataVc("LoginResponse").then((res) => {
-            const result = res as ILoginResponse
-            if (result.TenantId !== undefined) {
-                navigateToMenu()
+            if (res !== null) {
+                const result = res as ILoginResponse
+                if (result.TenantId !== undefined) {
+                    navigateToMenu()
+                }
             }
+            
         })
     }, [])
 
