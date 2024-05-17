@@ -1,0 +1,41 @@
+trigger:
+- run
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: UseJavaVersion@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+    jdkOutputDirectory: '$(Agent.ToolsDirectory)/Java_17_x64'
+  displayName: 'Set up Java 17'
+
+- script: |
+    cd ./android
+    chmod +x gradlew
+  displayName: 'Give execute permission to gradlew'
+
+- script: |
+    cd ./android
+    ./gradlew assembleRelease
+  displayName: 'Generate APK'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'android/app/build/outputs/apk/release/app-release.apk'
+    artifactName: 'app-release-apk'
+    publishLocation: 'pipeline'
+  displayName: 'Upload APK'
