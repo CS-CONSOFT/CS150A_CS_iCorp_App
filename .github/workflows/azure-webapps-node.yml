@@ -19,11 +19,11 @@
 
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "#02-ConcertarRotaAlterarSerieProtudo" ]
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: your-app-name    # set this to your application's name
+  AZURE_WEBAPP_NAME: cs_app-pv-mobile-react-expo  # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
 
@@ -46,14 +46,12 @@ jobs:
       run: |
         npm install expo-cli --global
 
-    - name: npm install, build, and test
+    - name: npm install
       run: |
         npm install
-        npm run build --if-present
 
     - name: Generate APK
       run: |
-        npx expo prebuild
         cd ./android
         ./gradlew assembleRelease
 
