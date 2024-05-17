@@ -51,9 +51,11 @@ jobs:
         npm install
         npm run build --if-present
 
-    - name: Run Project
+    - name: Generate APK
       run: |
-        npx expo start
+        npx expo prebuild
+        cd ./android
+        ./gradlew assembleRelease
 
 #    - name: Upload artifact for deployment job
 #     uses: actions/upload-artifact@v3
