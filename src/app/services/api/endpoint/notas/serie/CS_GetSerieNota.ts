@@ -21,13 +21,8 @@ export async function getNoteSerie(entregaGet: IGetDelivery): Promise<DadosNota>
 
 export async function setNewCorSerie(iSetCorSerie: ISetCorSerie) {
     try {
-        const params = {
-            prm_Tenant_ID: iSetCorSerie.tenant,
-            prm_produto_ID: iSetCorSerie.productId,
-            prm_cor_serie: iSetCorSerie.newCorSerie
-        };
-        const url = `/Csws_Apps/rest/CS_WS_NOTA_Cor_Sr/Set_Etrg_Prod_Cor_serie`;
-        await api.post(url, params);
+        const url = `/Csws_Apps/rest/CS_WS_NOTA_Cor_Sr/Set_Etrg_Prod_Cor_serie?prm_Tenant_ID=${iSetCorSerie.tenant}&prm_produto_ID=${iSetCorSerie.productId}&prm_cor_serie=${iSetCorSerie.newCorSerie}`;
+        await api.post(url);
     } catch (err) {
         console.log(err);
         throw err;

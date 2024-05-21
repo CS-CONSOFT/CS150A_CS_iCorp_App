@@ -11,24 +11,27 @@ interface IGetProductSearch {
 
 interface IResProductSearch {
     Id?: string;
-    GG008_Referencia?: string;
-    GG007_Unidade?: string;
-    GG007_FormaVenda_ID?: number;
-    GG007_Sec_Unidade?: string;
-    GG015_SubGrupo?: string;
-    GG006_DescMarca?: string;
-    GG004_DescClasse?: string;
-    Qtd_Arred?: number;
-    PrecoInserido?: number;
-    GG008_FilialID?: string;
-    GG008_KardexID?: string;
-    GG003_DescGrupo?: string;
-    GG008_DescReduzida?: string;
-    GG008_CodgProduto?: number;
-    Qtd?: number;
-    GG520_SaldoSum?: number;
-    Qtd_Sec?: number;
-    GG008_Prc_VendaVarejo?: number;
-    GG005_DescArtigo?: string;
-    GG007_Sec_FormaVenda_ID?: number;
+    CodgProduto?: number;
+    DescArtigo?: string;
+    DescMarca?: string;
+    Referencia?: string;
+    Complemento?: string;
+    DescReduzida?: string;
+    DescGrupo?: string;
+    DescClasse?: string;
+    SubGrupo?: string;
+    Preco?: number;
+    PrcPromocional?: number;
+    isArredondaUnSec?: boolean;
+    isUnSec?: boolean;
+    isUnSecFracionado?: boolean;
+    isUnFracionado?: boolean;
+    UnidadeSecundaria?: string;
+    Unidade?: string;
+    Saldo?: number
+    Imagens?: {
+        SeqOrdem: number;
+        URL_Path: string;
+        IsPadrao?: boolean;
+    }[];
 }
