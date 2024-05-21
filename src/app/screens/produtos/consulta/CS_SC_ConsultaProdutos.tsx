@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
 import CustomSearch from "../../../components/input/CustomSearch";
 import { getUserProperties } from "../../../view_controller/SharedViewController";
@@ -15,18 +15,34 @@ const CS_SC_ConsultaProdutos = () => {
         hasPromotion: false,
         hasBalance: false,
     });
-
+    const [totalPages, setTotalpages] = useState(6);
+    const [currentPage, setCurrentPage] = useState(0);
     const [productList, setProductList] = useState<IResProductSearch[]>()
     const [isLoading, setIsLoading] = useState(false)
     const [isDataFetched, setIsDataFetched] = useState(false)
 
+
+    /**
+     * Essa função é chamada no formulário de filtros, no qual cada input é atribuído a 
+     * um valor da interface ISearchProduto.
+     * 
+     * Ou seja, o 'code' passando na key é atribuído ao 'code' da interface ISearchProduto.
+     * 
+     * @param key chave da interface
+     * @param newValue valor que será setado no lugar do valor da chave informada.
+     */
     function changeValueToSearch(key: keyof ISearchProduto, newValue: any) {
         setFilterValues((prevState) => ({ ...prevState!, [key]: newValue }))
     }
 
+    /**
+     * Nova pesquisa
+     */
     function resetValuesToSearch() {
         setIsDataFetched(false)
     }
+
+
 
     async function search() {
         setIsLoading(true)
@@ -47,11 +63,16 @@ const CS_SC_ConsultaProdutos = () => {
         }
 
         searchProductVc(productSearch).then((res) => {
-            setProductList(res.products)
-            setIsLoading(false)
-            setIsDataFetched(true)
+            if (res.products !== undefined) {
+                setProductList(res.products)
+                setIsLoading(false)
+                setIsDataFetched(true)
+            }
         })
     }
+
+
+    //Tela
     return (
         <SafeAreaView style={styles.container}>
             <>
@@ -128,17 +149,22 @@ const CS_SC_ConsultaProdutos = () => {
     );
 }
 
+
+//Item de produto que aparece na listagem
 const ProductItem = ({ product }: { product: IResProductSearch }) => {
     return (
         <View style={styles.productContainer}>
-            <Text style={styles.productName}>{product.GG003_DescGrupo}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.GG008_Prc_VendaVarejo}`}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.GG520_SaldoSum}`}</Text>
-            <Text style={styles.productInfo}>{`Qtd: ${product.Qtd_Sec}`}</Text>
+            <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />
+            <Text style={styles.productName}>{product.DescMarca}</Text>
+            <Text style={styles.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
+            <Text style={styles.productInfo}>{`R$: ${product.Saldo}`}</Text>
+            <Text style={styles.productInfo}>{`Qtd: ${product.Preco}`}</Text>
         </View>
     );
 };
 
+
+//estilos
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -171,7 +197,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        margin:16
+        margin: 16
     },
     searchButtonText: {
         color: '#fff',

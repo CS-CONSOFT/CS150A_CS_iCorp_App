@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import { IGetDelivery, ISetCorSerie } from "../../../../services/api/interfaces/notas/CS_INotes";
-import { Produto } from "../../../../services/api/interfaces/notas/CS_Response";
 
 import CustomButton from "../../../components/button/CustomButton";
 import Separator from "../../../components/lists/Separator";
@@ -11,6 +9,8 @@ import CustomAlertDialog from "../../../components/modal/CustomAlertDialog";
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
 import { getUserProperties } from "../../../view_controller/SharedViewController";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
+import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
+import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
 
 
 
@@ -52,7 +52,6 @@ const CS_SC_Serie = () => {
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             const iSetNewCorSerie: ISetCorSerie = { productId, tenant, newCorSerie }
-
             setNewCorSerieVc(iSetNewCorSerie).then(()=>{
                 search()
                 setShowPopUp(false);
@@ -62,7 +61,6 @@ const CS_SC_Serie = () => {
 
 
     return <>
-
         <SafeAreaView>
             <CustomHeaderInput
                 titleText="Chave Nota"
