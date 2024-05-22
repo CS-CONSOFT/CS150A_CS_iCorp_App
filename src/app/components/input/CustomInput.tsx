@@ -34,6 +34,7 @@ const CustomInput = ({ titleText = '', setValue, value, securityTextEnter = fals
 }
 
 
+
 const styles = StyleSheet.create({
     input: {
         height: 40,

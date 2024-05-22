@@ -5,16 +5,15 @@ import CustomIcon from "../icon/CustomIcon";
 
 export interface IItemListMenu {
     title: string,
-    hasPress?: boolean
     onPress?: () => void,
-    iconName:string
+    iconName: string
 }
 
-const ItemListMenu = ({ title, hasPress = false, onPress, iconName }: IItemListMenu) => {
+const ItemListMenu = ({ title, onPress = () => { }, iconName }: IItemListMenu) => {
     return (
         <TouchableHighlight style={styles.container} onPress={onPress}>
             <View>
-                <CustomIcon title={iconName} />
+                <CustomIcon icon={iconName} />
                 <Text style={styles.preVendaText}>{title}</Text>
             </View>
         </TouchableHighlight>
