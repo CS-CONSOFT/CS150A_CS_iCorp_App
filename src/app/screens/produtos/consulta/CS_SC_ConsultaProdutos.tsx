@@ -15,6 +15,8 @@ const CS_SC_ConsultaProdutos = () => {
         hasPromotion: false,
         hasBalance: false,
     });
+
+
     const [totalPages, setTotalpages] = useState(6);
     const [currentPage, setCurrentPage] = useState(0);
     const [productList, setProductList] = useState<IResProductSearch[]>()
@@ -78,33 +80,42 @@ const CS_SC_ConsultaProdutos = () => {
             <>
                 {!isDataFetched && (
                     <View style={styles.searchContainer}>
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('code', newValue)}
-                            value={filterValues!.code}
-                            placeholder="Código"
-                        />
 
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('article', newValue)}
-                            value={filterValues!.article}
-                            placeholder="Artigo"
-                        />
+                        <CustomSearch>
+                            <CustomSearch.Icon iconName="" />
+                            <CustomSearch.Input
+                                setValue={(newValue: string) => changeValueToSearch('code', newValue)}
+                                value={filterValues!.code}
+                                placeholder="Código"
+                            />
+                        </CustomSearch>
 
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('brand', newValue)}
-                            value={filterValues!.brand}
-                            placeholder="Marca"
-                        />
+                        <CustomSearch>
+                            <CustomSearch.Icon iconName="" />
+                            <CustomSearch.Input
+                                setValue={(newValue: string) => changeValueToSearch('article', newValue)}
+                                value={filterValues!.code}
+                                placeholder="Artigo"
+                            />
+                        </CustomSearch>
 
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('ref', newValue)}
-                            value={filterValues!.ref}
-                            placeholder="Referência"
-                        />
+                        <CustomSearch>
+                            <CustomSearch.Icon iconName="" />
+                            <CustomSearch.Input
+                                setValue={(newValue: string) => changeValueToSearch('brand', newValue)}
+                                value={filterValues!.code}
+                                placeholder="Marca"
+                            />
+                        </CustomSearch>
+
+                        <CustomSearch>
+                            <CustomSearch.Icon iconName="" />
+                            <CustomSearch.Input
+                                setValue={(newValue: string) => changeValueToSearch('ref', newValue)}
+                                value={filterValues!.code}
+                                placeholder="Referência"
+                            />
+                        </CustomSearch>
 
                         <CustomButton
                             title="Pesquisar"
@@ -114,10 +125,6 @@ const CS_SC_ConsultaProdutos = () => {
                         />
 
                         {isLoading ? <ActivityIndicator /> : <></>}
-
-
-
-
 
                     </View>
                 )
@@ -136,6 +143,7 @@ const CS_SC_ConsultaProdutos = () => {
                         <FlatList
                             data={productList}
                             keyExtractor={(item) => item.Id!}
+                            /*onEndReached={}*/
                             renderItem={({ item }) => <ProductItem product={item} />}
                         />
                     </View>
