@@ -1,7 +1,7 @@
-import { KeyboardType, View } from "react-native";
-import CustomInput from "./CustomInput";
-import CustomIcon from "../icon/CustomIcon";
 import React, { ReactNode } from "react";
+import { KeyboardType } from "react-native";
+import CustomIcon from "../icon/CustomIcon";
+import CustomInput from "./CustomInput";
 
 /** INTERFACES */
 interface CustomSearchProps {

@@ -14,7 +14,7 @@ const CS_SC_Menu = () => {
                 <FlatList
                     data={data}
                     keyExtractor={item => item.id.toString()}
-                    numColumns={2}
+                    numColumns={3}
                     renderItem={({ item }) => {
                         return (
                             <ItemListMenu

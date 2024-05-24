@@ -5,6 +5,7 @@ import CustomSearch from "../../../components/input/CustomSearch";
 import { getUserProperties } from "../../../view_controller/SharedViewController";
 import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
 import { ISearchProduto } from "./ISearchProduto";
+import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 
 const CS_SC_ConsultaProdutos = () => {
     const [filterValues, setFilterValues] = useState<ISearchProduto>({
@@ -19,6 +20,7 @@ const CS_SC_ConsultaProdutos = () => {
 
     const [totalPages, setTotalpages] = useState(6);
     const [currentPage, setCurrentPage] = useState(0);
+
     const [productList, setProductList] = useState<IResProductSearch[]>()
     const [isLoading, setIsLoading] = useState(false)
     const [isDataFetched, setIsDataFetched] = useState(false)
@@ -45,7 +47,7 @@ const CS_SC_ConsultaProdutos = () => {
     }
 
 
-
+    /** Pesquisar Produtos */
     async function search() {
         setIsLoading(true)
         setIsDataFetched(false)
@@ -76,11 +78,11 @@ const CS_SC_ConsultaProdutos = () => {
 
     //Tela
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={stylesConsultaProduto.container}>
             <>
                 {!isDataFetched && (
-                    <View style={styles.searchContainer}>
-
+                    <View style={stylesConsultaProduto.searchContainer}>
+                        /** INICIO INPUT DE PESQUISAS */
                         <CustomSearch>
                             <CustomSearch.Icon iconName="" />
                             <CustomSearch.Input
@@ -116,12 +118,13 @@ const CS_SC_ConsultaProdutos = () => {
                                 placeholder="Referência"
                             />
                         </CustomSearch>
+                        /** FIM INPUT DE PESQUISAS */
 
                         <CustomButton
                             title="Pesquisar"
                             onPress={search}
-                            buttonStyle={styles.searchButton}
-                            textStyle={styles.searchButtonText}
+                            buttonStyle={stylesConsultaProduto.searchButton}
+                            textStyle={stylesConsultaProduto.searchButtonText}
                         />
 
                         {isLoading ? <ActivityIndicator /> : <></>}
@@ -130,14 +133,15 @@ const CS_SC_ConsultaProdutos = () => {
                 )
                 }
 
+                /** SE A LISTA FOR BUSCADA E TIVER DADOS NA LISTA */
                 {isDataFetched && productList && productList.length > 0 && (
 
                     <View>
                         <CustomButton
                             title="Nova Pesquisa"
                             onPress={resetValuesToSearch}
-                            buttonStyle={styles.btnNewSearch}
-                            textStyle={styles.searchButtonText}
+                            buttonStyle={stylesConsultaProduto.btnNewSearch}
+                            textStyle={stylesConsultaProduto.searchButtonText}
                         />
 
                         <FlatList
@@ -149,6 +153,7 @@ const CS_SC_ConsultaProdutos = () => {
                     </View>
                 )}
 
+                /** SE A LISTA FOR BUSCADA E ESTIVER VAZIA */
                 {isDataFetched && (!productList || productList.length === 0) && (
                     <Text>Nenhum produto encontrado.</Text>
                 )}
@@ -161,74 +166,17 @@ const CS_SC_ConsultaProdutos = () => {
 //Item de produto que aparece na listagem
 const ProductItem = ({ product }: { product: IResProductSearch }) => {
     return (
-        <View style={styles.productContainer}>
+        <View style={stylesConsultaProduto.productContainer}>
             <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />
-            <Text style={styles.productName}>{product.DescMarca}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.Saldo}`}</Text>
-            <Text style={styles.productInfo}>{`Qtd: ${product.Preco}`}</Text>
+            <Text style={stylesConsultaProduto.productName}>{product.DescMarca}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.Saldo}`}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`Qtd: ${product.Preco}`}</Text>
         </View>
     );
 };
 
 
-//estilos
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    searchContainer: {
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginBottom: 10,
-    },
-    searchInput: {
-        flex: 1,
-        marginRight: 10,
-        height: 40,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        backgroundColor: '#f2f2f2',
-    },
-    searchButton: {
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    btnNewSearch: {
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        margin: 16
-    },
-    searchButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    productContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    productName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 8,
-    },
-    productInfo: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 3,
-    },
-});
+
 
 export default CS_SC_ConsultaProdutos;

@@ -11,6 +11,7 @@ import { getUserProperties } from "../../../view_controller/SharedViewController
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
+import { stylesNotaSerie } from "./StylesNotaSerie";
 
 
 
@@ -22,7 +23,7 @@ const CS_SC_Serie = () => {
     const [loadingProducts, setLoadingProducts] = useState(false)
     const [showPopUp, setShowPopUp] = useState(false)
     const [currentProductSelected, setCurrentProductSelected] = useState<Produto>()
-    
+
 
     async function search() {
         const note = noteTyped;
@@ -34,7 +35,7 @@ const CS_SC_Serie = () => {
             getNoteSeriesVc(iEntregaGet).then((res) => {
                 setProducts(res.Produtos)
                 setLoadingProducts(false)
-            })    
+            })
         }
     }
 
@@ -46,16 +47,16 @@ const CS_SC_Serie = () => {
         setCurrentProductSelected(product)
     }
 
-   async function setNewCorSerie(newSerie: string) {
+    async function setNewCorSerie(newSerie: string) {
         const productId = currentProductSelected?.DD060_Id
         const newCorSerie = newSerie;
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             const iSetNewCorSerie: ISetCorSerie = { productId, tenant, newCorSerie }
-            setNewCorSerieVc(iSetNewCorSerie).then(()=>{
+            setNewCorSerieVc(iSetNewCorSerie).then(() => {
                 search()
                 setShowPopUp(false);
-            })    
+            })
         }
     }
 
@@ -67,8 +68,8 @@ const CS_SC_Serie = () => {
                 setValue={setNoteTyped}
                 value={noteTyped}
                 onPress={search}
-                buttonStyle={styles.buttonStyle}
-                textStyle={styles.textStyle}
+                buttonStyle={stylesNotaSerie.buttonStyle}
+                textStyle={stylesNotaSerie.textStyle}
             >
             </CustomHeaderInput>
             <Text>Insira uma nota para buscar produtos</Text>
@@ -98,7 +99,7 @@ const CS_SC_Serie = () => {
             onDismiss={() => setShowPopUp(false)}
             title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
             onSave={(newSerie) => setNewCorSerie(newSerie)}
-            onCloseButton={()=>{setShowPopUp(false)}}
+            onCloseButton={() => { setShowPopUp(false) }}
         />
 
     </>
@@ -116,14 +117,14 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
     return (
 
         <View>
-            <View style={styles.container}>
-                <Text style={styles.text}>{productItemProps.product.DD060_Descricao}</Text>
-                <Text style={styles.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
+            <View style={stylesNotaSerie.container}>
+                <Text style={stylesNotaSerie.text}>{productItemProps.product.DD060_Descricao}</Text>
+                <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
                 <CustomButton
                     title="Alterar Cor Série"
                     onPress={() => productItemProps.onPress(productItemProps.product)}
-                    buttonStyle={styles.buttonStyleList}
-                    textStyle={styles.textStyle}></CustomButton>
+                    buttonStyle={stylesNotaSerie.buttonStyleList}
+                    textStyle={stylesNotaSerie.textStyle}></CustomButton>
             </View>
         </View>
 
@@ -132,43 +133,5 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
 
 
 
-/** ESTILOS */
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
-    },
-    text: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#333",
-    }, buttonStyle: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'green',
-        margin: 32
-    },
-    textStyle: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-    buttonStyleList: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'blue',
-        margin: 32
-    },
-});
+
 export default CS_SC_Serie;
