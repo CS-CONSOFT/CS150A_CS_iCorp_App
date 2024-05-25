@@ -182,7 +182,7 @@ const CS_SC_ConsultaProdutos = () => {
                                 keyExtractor={(item) => item.Id!}
                                 ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
                                 ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues.cs_page!} paginationArray={paginationArray} onItemClick={search} />}
-                                /*onEndReached={}*/
+                                /*onEndReached={} change*/
                                 renderItem={({ item }) => <ProductItem product={item} />}
                             />
                         }
