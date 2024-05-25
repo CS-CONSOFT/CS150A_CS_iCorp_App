@@ -10,8 +10,7 @@ import { getObjectDataVc, storeObjectDataVc } from "../../view_controller/Shared
 import { generalLoginVc } from "../../view_controller/login/LoginViewController";
 import { DataKey } from "../../enum/DataKeys";
 import HeaderLogo from "../../components/headers/HeaderLogo";
-
-
+import { stylesLogin } from "./StylesLogin";
 
 
 const CS_SC_Login = () => {
@@ -35,7 +34,7 @@ const CS_SC_Login = () => {
                     navigateToMenu()
                 }
             }
-            
+
         })
     }, [])
 
@@ -64,7 +63,7 @@ const CS_SC_Login = () => {
     return (
         <SafeAreaView>
             <HeaderLogo />
-            <Text style={styles.txtAtendimentoMobile}>Atendimento Mobile</Text>
+            <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
 
             <CustomInput
                 titleText="Domínio"
@@ -89,8 +88,8 @@ const CS_SC_Login = () => {
                 : <CustomButton
                     title="Logar"
                     onPress={() => { onClickLogin() }}
-                    buttonStyle={styles.button}
-                    textStyle={styles.text} />
+                    buttonStyle={stylesLogin.button}
+                    textStyle={stylesLogin.text} />
             }
 
         </SafeAreaView>
@@ -99,31 +98,7 @@ const CS_SC_Login = () => {
 }
 
 
-const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'green',
-        margin: 32
-    },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-    txtAtendimentoMobile: {
-        fontWeight: '600',
-        textAlign: 'center',
-        margin: 32,
-        fontSize: 18
-    }
-});
+
 
 
 export default CS_SC_Login;

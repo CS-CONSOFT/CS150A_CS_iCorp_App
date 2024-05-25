@@ -27,16 +27,17 @@ const HeaderUserInfo = () => {
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         marginLeft: 32,
-        marginTop: 12
+        marginTop: 12,
+        alignContent: 'center'
     },
     txtEstabName: {
         textAlign: 'left',
         fontSize: 18,
         fontWeight: '900'
     },
-    txtUsername:{
+    txtUsername: {
         textAlign: 'left'
     }
 })

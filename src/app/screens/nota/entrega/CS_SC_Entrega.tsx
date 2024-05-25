@@ -2,17 +2,20 @@ import { Button, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-na
 
 import { useEffect, useState } from "react";
 
-import { IGetDelivery, ISetEntrega } from "../../../../services/api/interfaces/notas/CS_INotes";
+
 
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
 
 import { ILoginResponse } from "../../login/ILoginResponse";
 
-import { InfoNota, Produto } from "../../../../services/api/interfaces/notas/CS_Response";
+
 import { getObjectDataVc, getUserProperties } from "../../../view_controller/SharedViewController";
 import { getEntrgNotaVc, setEntrNotaVc } from "../../../view_controller/entrega/EntregaViewController";
 import { IGetUserProperties } from "../../../view_controller/interface/IGetUserProperties";
 import { DataKey } from "../../../enum/DataKeys";
+import { stylesNotaEntrega } from "./StylesNotaEntrega";
+import { InfoNota, Produto } from "../../../services/api/interfaces/notas/CS_Response";
+import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
 
 
 const CS_SC_Entrega = () => {
@@ -93,23 +96,23 @@ const CS_SC_Entrega = () => {
     }
 
     return <>
-        <SafeAreaView style={styles.modalContainer}>
+        <SafeAreaView style={stylesNotaEntrega.modalContainer}>
             <CustomHeaderInput
                 titleText="Chave Nota - Entrega Produtos"
                 setValue={setNoteTyped}
                 value={noteTyped}
                 onPress={searchNote}
-                buttonStyle={styles.button}
-                textStyle={styles.text}
+                buttonStyle={stylesNotaEntrega.button}
+                textStyle={stylesNotaEntrega.text}
 
             />
         </SafeAreaView>
 
-        <SafeAreaView style={styles.container}>
-            {loadingProducts && <Text style={styles.loadingText}>Carregando produtos...</Text>}
+        <SafeAreaView style={stylesNotaEntrega.container}>
+            {loadingProducts && <Text style={stylesNotaEntrega.loadingText}>Carregando produtos...</Text>}
 
             {loadingProducts === false && products && products.length > 0 && (
-                <View style={styles.productContainer}>
+                <View style={stylesNotaEntrega.productContainer}>
                     <Button title="Confirmar Entrega" onPress={confirmDelivery} />
                     <FlatList
                         data={products}
@@ -120,8 +123,8 @@ const CS_SC_Entrega = () => {
             )}
 
             {loadingProducts === false && (messageList !== '0') && (
-                <View style={styles.messageContainer}>
-                    <Text style={styles.messageText}>{messageList}</Text>
+                <View style={stylesNotaEntrega.messageContainer}>
+                    <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
                 </View>
             )}
         </SafeAreaView>
@@ -133,75 +136,13 @@ const CS_SC_Entrega = () => {
 
 const ProductItem = ({ product }: { product: any }) => {
     return (
-        <View style={styles.container}>
-            <Text style={styles.productName}>{product.DD060_Descricao}</Text>
+        <View style={stylesNotaEntrega.container}>
+            <Text style={stylesNotaEntrega.productName}>{product.DD060_Descricao}</Text>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    modalContainer: {
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
-    },
-    separator: {
-        height: 1,
-        backgroundColor: "#ccc",
-    },
-    container: {
-        flex: 1,
-        padding: 10,
-    },
-    loadingText: {
-        textAlign: 'center',
-        fontSize: 16,
-        marginTop: 20,
-    },
-    productContainer: {
-        flex: 1,
-    },
-    productName: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#333",
-    },
-    productItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
-    },
-    productText: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#333",
-    },
-    messageContainer: {
-        marginTop: 20,
-        alignItems: 'center',
-    },
-    messageText: {
-        fontSize: 16,
-        color: '#FF5733',
-    },
 
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'green',
-        margin: 32
-    },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-});
 
 
 

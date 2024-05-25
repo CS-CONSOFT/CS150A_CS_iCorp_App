@@ -1,14 +1,25 @@
 interface IGetProductSearch {
-    cs_tenant_id: number,
-    cs_estab_id: string
-    cs_codigo_produto?: string,
-    cs_codigo_marca?: string,
-    cs_codigo_artigo?: string,
-    cs_codigo_referencia?: string,
-    cs_is_saldo?: boolean,
-    cs_is_promotion?:boolean
+    cs_tenant_id?: number,
+    cs_empresa_id?: string,
+    cs_page_size?: number,
+    cs_page?: number,
+
+    cs_codigo_produto: string,
+    cs_descricao_marca: string,
+    cs_descricao_grupo: string,
+    cs_descricao_classe: string,
+    cs_descricao_artigo: string,
+    cs_referencia: string,
+    cs_descricao_reduzida: string,
+    cs_complemento: string,
+    cs_descricao_sub_grupo: string,
+    cs_is_com_saldo: boolean
 }
 
+
+/**
+ * Lida somente com a lista de produto
+ */
 interface IResProductSearch {
     Id?: string;
     CodgProduto?: number;
@@ -34,4 +45,14 @@ interface IResProductSearch {
         URL_Path: string;
         IsPadrao?: boolean;
     }[];
+}
+
+/**
+ * Lida com toda a estrutura de retorno, as mensagens +  a lista
+ */
+interface IResCompleteProdutoSearch {
+    cs_is_ok: boolean,
+    cs_total_count: number,
+    c_pages_number: number,
+    List: IResProductSearch[]
 }

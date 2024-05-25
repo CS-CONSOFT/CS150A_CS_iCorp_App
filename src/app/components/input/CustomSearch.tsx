@@ -1,11 +1,11 @@
-import { KeyboardType, View } from "react-native";
-import CustomInput from "./CustomInput";
+import React, { ReactNode } from "react";
+import { KeyboardType } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
+import CustomInput from "./CustomInput";
 
-
+/** INTERFACES */
 interface CustomSearchProps {
     titleText?: string,
-    iconName: string,
     //recebe o hook ou funcao responsavel por alterar o estado da variavel
     setValue: any,
     //armazena a nova variavel
@@ -14,21 +14,45 @@ interface CustomSearchProps {
     keyboardType?: KeyboardType
 }
 
+interface CustomProp {
+    children: ReactNode;
+}
+/** FIM DAS INTERFACES */
 
 
-const CustomSearch = ({ titleText, iconName, setValue, value, placeholder, keyboardType }: CustomSearchProps) => {
+/** COMPONENTE EXPORTADO */
+const CustomSearch = ({ children }: CustomProp) => {
     return (
-        <View>
-            <CustomIcon title={iconName} />
-            <CustomInput
-                titleText={titleText}
-                setValue={setValue}
-                value={value}
-                placeholder={placeholder}
-                keyboardType={keyboardType}
-            />
-        </View>
-    );
+        <>{children}</>
+    )
 }
 
+CustomSearch.Icon = Icon
+CustomSearch.Input = Input
+
 export default CustomSearch;
+
+/** COMPONENTE EXPORTADO */
+
+
+/** FUNÇÕES PARA A COMPOSIÇÃO */
+function Icon({ iconName }: { iconName: string }) {
+    return <>
+        <CustomIcon icon={iconName} />
+    </>
+}
+
+function Input({ titleText, setValue, value, placeholder, keyboardType }: CustomSearchProps) {
+    return <>
+        <CustomInput
+            titleText={titleText}
+            setValue={setValue}
+            value={value}
+            placeholder={placeholder}
+            keyboardType={keyboardType}
+        />
+    </>
+}
+/** FUNÇÕES PARA A COMPOSIÇÃO */
+
+

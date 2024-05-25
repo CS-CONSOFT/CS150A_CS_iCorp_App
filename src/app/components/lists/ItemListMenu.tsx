@@ -1,23 +1,22 @@
-import { TouchableHighlight, Text, StyleSheet, View } from "react-native";
+import { TouchableHighlight, Text, StyleSheet, View, Pressable } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 
 
 
 export interface IItemListMenu {
     title: string,
-    hasPress?: boolean
     onPress?: () => void,
-    iconName:string
+    iconName: string
 }
 
-const ItemListMenu = ({ title, hasPress = false, onPress, iconName }: IItemListMenu) => {
+const ItemListMenu = ({ title, onPress = () => { }, iconName }: IItemListMenu) => {
     return (
-        <TouchableHighlight style={styles.container} onPress={onPress}>
+        <Pressable style={styles.containerItem} onPress={onPress}>
             <View>
-                <CustomIcon title={iconName} />
+                <CustomIcon icon={iconName} />
                 <Text style={styles.preVendaText}>{title}</Text>
             </View>
-        </TouchableHighlight>
+        </Pressable>
     );
 }
 
@@ -41,9 +40,9 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: 'red',
         margin: 32
-    }, container: {
+    }, containerItem: {
         flex: 1,
-        backgroundColor: '#C3C3C3',
+        backgroundColor: '#FFFFFF',
         alignItems: 'center',
         margin: 12,
         padding: 16,
@@ -54,6 +53,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
+        textAlign: 'center'
     },
 });
 

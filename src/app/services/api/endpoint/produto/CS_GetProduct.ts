@@ -1,27 +1,32 @@
 import api from "../../axios_config";
 
-export async function searchProduto(IGetProdutoSearch: IGetProductSearch): Promise<IResProductSearch[]> {
+export async function searchProduto(IGetProdutoSearch: IGetProductSearch): Promise<IResCompleteProdutoSearch> {
     try {
- 
-        const params = {
-            TenantId: IGetProdutoSearch.cs_tenant_id,
-            EmpresaID: IGetProdutoSearch.cs_estab_id,
-            CodProd: IGetProdutoSearch.cs_codigo_produto,
-            DescMarca: IGetProdutoSearch.cs_codigo_marca,
-            DescArtigo: IGetProdutoSearch.cs_codigo_artigo,
-            Referencia: IGetProdutoSearch.cs_codigo_referencia,
-            IsComSaldo: IGetProdutoSearch.cs_is_saldo
+
+        const headerParams = {
+            cs_tenant_id: IGetProdutoSearch.cs_tenant_id,
+            cs_empresa_id: IGetProdutoSearch.cs_empresa_id
         }
 
-        console.log(params);
-        
+        const urlParams = {
+            cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto,
+            cs_descricao_marca: IGetProdutoSearch.cs_descricao_marca,
+            cs_descricao_artigo: IGetProdutoSearch.cs_descricao_artigo,
+            cs_descricao_grupo: IGetProdutoSearch.cs_descricao_grupo,
+            cs_descricao_reduzida: IGetProdutoSearch.cs_descricao_reduzida,
+            cs_descricao_sub_grupo: IGetProdutoSearch.cs_descricao_sub_grupo,
+            cs_complemento: IGetProdutoSearch.cs_complemento,
+            cs_descricao_classe: IGetProdutoSearch.cs_descricao_classe,
+            cs_referencia: IGetProdutoSearch.cs_referencia,
+            cs_is_com_saldo: IGetProdutoSearch.cs_is_com_saldo,
+            cs_page_size: IGetProdutoSearch.cs_page_size,
+            cs_page: IGetProdutoSearch.cs_page
+        }
 
-        const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/PesquisaProdutos2`;
-        const response = await api.get(url, {params})
+        const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/PesquisaProdutos3`;
+        const response = await api.get(url, { headers: headerParams, params: urlParams })
+        let res = response.data as IResCompleteProdutoSearch
 
-        console.log(response.data.List);
-
-        let res = response.data.List as IResProductSearch[]
         return res
 
     } catch (error) {
