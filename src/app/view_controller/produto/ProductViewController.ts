@@ -1,24 +1,33 @@
 import { searchProduto } from "../../services/api/endpoint/produto/CS_GetProduct";
+import { getUserProperties } from "../SharedViewController";
 
 
-interface SearchResult {
-    IsOk: Boolean,
-    products?: IResProductSearch[]
+interface IArrayWithPagesAndProductResponse {
+    pagesArray: number[],
+    productResponse: IResCompleteProdutoSearch
 }
 
-export async function searchProductVc(IProdutoSearch: IGetProductSearch) {
-    let result: SearchResult = {
-        IsOk: false
-    };
-    if (IProdutoSearch.cs_tenant_id !== null
-        || IProdutoSearch.cs_tenant_id !== undefined
-        || IProdutoSearch.cs_tenant_id !== -1
-    ) {
-        let response = await searchProduto(IProdutoSearch)
-        result.products = response as IResProductSearch[]
-        result.IsOk = true
-    } else {
-        result.IsOk = false
+
+export async function searchProductVc(iGetProductSearch: IGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
+
+    const tenant = (await getUserProperties()).tenantId;
+    const estabId = (await getUserProperties()).estabId;
+
+    iGetProductSearch.cs_empresa_id = estabId
+    iGetProductSearch.cs_tenant_id = tenant!
+    iGetProductSearch.cs_page_size = 4
+
+    let productRes = await searchProduto(iGetProductSearch)
+
+    let pagesArray: number[] = []
+    for (let i = 1; i <= productRes.c_pages_number; i++) {
+        pagesArray.push(i)
     }
-    return result
+
+    const response: IArrayWithPagesAndProductResponse = {
+        pagesArray: pagesArray,
+        productResponse: productRes
+    }
+
+    return response
 }
