@@ -54,5 +54,6 @@ interface IResCompleteProdutoSearch {
     cs_is_ok: boolean,
     cs_total_count: number,
     c_pages_number: number,
+    cs_msg?: string
     List: IResProductSearch[]
 }

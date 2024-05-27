@@ -18,12 +18,13 @@ const CustomHeaderInput = ({ titleText, setValue, value, onPress, buttonStyle = 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>{titleText}</Text>
-            <CustomInput
-                titleText="Nota"
-                setValue={setValue}
-                value={value}
-                keyboardType='numeric'
-            />
+            <CustomInput>
+                <CustomInput.TitleText titleText="Nota" />
+                <CustomInput.InputArea setValue={setValue}
+                    value={value}
+                    keyboardType='numeric' />
+            </CustomInput>
+
             <CustomButton
                 title="Pesquisar"
                 onPress={onPress}

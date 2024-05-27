@@ -1,21 +1,14 @@
-import { Button, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-
+import { Button, FlatList, SafeAreaView, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-
-
-
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
-
 import { ILoginResponse } from "../../login/ILoginResponse";
-
-
+import { DataKey } from "../../../enum/DataKeys";
+import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
+import { InfoNota, Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { getObjectDataVc, getUserProperties } from "../../../view_controller/SharedViewController";
 import { getEntrgNotaVc, setEntrNotaVc } from "../../../view_controller/entrega/EntregaViewController";
-import { IGetUserProperties } from "../../../view_controller/interface/IGetUserProperties";
-import { DataKey } from "../../../enum/DataKeys";
 import { stylesNotaEntrega } from "./StylesNotaEntrega";
-import { InfoNota, Produto } from "../../../services/api/interfaces/notas/CS_Response";
-import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 
 
 const CS_SC_Entrega = () => {
@@ -25,7 +18,8 @@ const CS_SC_Entrega = () => {
     const [noteInfo, setNoteInfo] = useState<InfoNota | null>(null)
     const [messageList, setMessageList] = useState('')
     const [userId, setUserId] = useState('')
-    const [loadingProducts, setLoadingList] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     useEffect(() => {
@@ -45,16 +39,23 @@ const CS_SC_Entrega = () => {
             //enviando o objeto
             const iEntregaGet: IGetDelivery = { note, tenant }
             //setando loading
-            setLoadingList(true)
+            setStatus(FETCH_STATUS.LOADING)
             //buscando notas
             getEntrgNotaVc(iEntregaGet).then((res) => {
-                setLoadingList(false)
+                if (res.info_Nota.dd040_id !== '') {
+                    setStatus(FETCH_STATUS.SUCCESS)
+                    setProducts(res.Produtos)
+                    setNoteInfo(res.info_Nota)
 
-                setProducts(res.Produtos)
-                setNoteInfo(res.info_Nota)
+                    if (res.info_Nota.result != '0') {
+                        //definindo mensagem quando o result nao trouxer produtos da nota
+                        setMessageWhenNoteIsAlreadyDelivered(res.info_Nota.result)
+                    }
 
-                //definindo mensagem quando o result nao trouxer produtos da nota
-                setMessageWhenNoteIsAlreadyDelivered(res.info_Nota.result)
+                } else {
+                    setStatus(FETCH_STATUS.ERROR)
+                    setErrorMessage("Falha ao buscar a nota")
+                }
             })
         }
     }
@@ -81,11 +82,11 @@ const CS_SC_Entrega = () => {
 
     //funcao para confirmar entrega dos produtos da nota
     async function confirmDelivery() {
-
         const dd40id = noteInfo?.dd040_id;
         const tenant = (await getUserProperties()).tenantId;
         const userIdentifier = userId;
         if (tenant != undefined) {
+            setStatus(FETCH_STATUS.LOADING)
             const iSetEntrega: ISetEntrega = { dd40id, tenant, userIdentifier }
             setEntrNotaVc(iSetEntrega).then((ok) => {
                 if (ok) {
@@ -94,6 +95,14 @@ const CS_SC_Entrega = () => {
             })
         }
     }
+
+    const loadingProducts = status == FETCH_STATUS.LOADING
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const error = status == FETCH_STATUS.ERROR
+
+    if (loadingProducts) return <Text style={stylesNotaEntrega.loadingText}>Carregando produtos...</Text>
+    if (error) return <Text style={stylesNotaEntrega.loadingText}>{errorMessage}</Text>
+
 
     return <>
         <SafeAreaView style={stylesNotaEntrega.modalContainer}>
@@ -109,9 +118,7 @@ const CS_SC_Entrega = () => {
         </SafeAreaView>
 
         <SafeAreaView style={stylesNotaEntrega.container}>
-            {loadingProducts && <Text style={stylesNotaEntrega.loadingText}>Carregando produtos...</Text>}
-
-            {loadingProducts === false && products && products.length > 0 && (
+            {isSuccess && products && products.length > 0 && (
                 <View style={stylesNotaEntrega.productContainer}>
                     <Button title="Confirmar Entrega" onPress={confirmDelivery} />
                     <FlatList
@@ -122,7 +129,7 @@ const CS_SC_Entrega = () => {
                 </View>
             )}
 
-            {loadingProducts === false && (messageList !== '0') && (
+            {isSuccess && (messageList !== '') && (
                 <View style={stylesNotaEntrega.messageContainer}>
                     <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
                 </View>

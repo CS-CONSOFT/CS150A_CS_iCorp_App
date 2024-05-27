@@ -1,16 +1,15 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, Text, ActivityIndicator } from "react-native";
-
-
+import { ActivityIndicator, SafeAreaView, Text } from "react-native";
 import CustomButton from "../../components/button/CustomButton";
+import HeaderLogo from "../../components/headers/HeaderLogo";
 import CustomInput from "../../components/input/CustomInput";
-import { ILoginResponse } from "./ILoginResponse";
+import { DataKey } from "../../enum/DataKeys";
 import { getObjectDataVc, storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { generalLoginVc } from "../../view_controller/login/LoginViewController";
-import { DataKey } from "../../enum/DataKeys";
-import HeaderLogo from "../../components/headers/HeaderLogo";
+import { ILoginResponse } from "./ILoginResponse";
 import { stylesLogin } from "./StylesLogin";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 
 
 const CS_SC_Login = () => {
@@ -19,7 +18,8 @@ const CS_SC_Login = () => {
     const [domain, setDomain] = useState('Comercial')
     const [user, setUser] = useState('Valter')
     const [password, setPassword] = useState('va1234va')
-    const [isLoading, setIsLoading] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const [errorMsg, setErrorMsg] = useState('')
     //fim variaveis
 
     function navigateToMenu() {
@@ -34,53 +34,58 @@ const CS_SC_Login = () => {
                     navigateToMenu()
                 }
             }
-
         })
     }, [])
 
 
 
     async function onClickLogin(): Promise<void> {
-        setIsLoading(true)
+        setStatus(FETCH_STATUS.LOADING)
         const loginData: ILoginData = { domain, user, password }
         try {
             const response = await generalLoginVc(loginData);
             if (response.IsOk) {
                 //salvando dados localmente
                 storeObjectDataVc(DataKey.LoginResponse, response.Model)
-
                 navigateToMenu()
-
             }
         } catch (error) {
-            console.log('Erro ao fazer login:', error);
-        } finally {
-            setIsLoading(false)
+            setStatus(FETCH_STATUS.ERROR)
         }
     }
 
-
+    const isLoading = status == FETCH_STATUS.LOADING
     return (
         <SafeAreaView>
             <HeaderLogo />
             <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
 
-            <CustomInput
-                titleText="Domínio"
-                setValue={setDomain}
-                value={domain}
-            />
+            <CustomInput>
+                <CustomInput.TitleText titleText="Domínio" />
+                <CustomInput.InputArea
+                    setValue={setDomain}
+                    value={domain}
+                />
+            </CustomInput>
 
-            <CustomInput
-                titleText="Usuário"
-                setValue={setUser}
-                value={user}
-            />
-            <CustomInput titleText="Senha"
-                setValue={setPassword}
-                value={password}
-                securityTextEnter={true}
-            />
+
+            <CustomInput>
+                <CustomInput.TitleText titleText="Usuário" />
+                <CustomInput.InputArea
+                    setValue={setUser}
+                    value={user}
+                />
+            </CustomInput>
+
+
+            <CustomInput>
+                <CustomInput.TitleText titleText="Senha" />
+                <CustomInput.InputArea
+                    setValue={setPassword}
+                    value={password}
+                    securityTextEnter={true}
+                />
+            </CustomInput>
 
 
             {isLoading ?

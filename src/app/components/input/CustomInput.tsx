@@ -1,4 +1,6 @@
-import { KeyboardType, SafeAreaView, StyleSheet, Text, TextInput } from "react-native";
+import { ReactNode } from "react";
+import { KeyboardType, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import CustomIcon from "../icon/CustomIcon";
 
 interface CustomInputProps {
     titleText?: string;
@@ -11,26 +13,45 @@ interface CustomInputProps {
     keyboardType?: KeyboardType
 }
 
-const CustomInput = ({ titleText = '', setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default' }: CustomInputProps) => {
+interface CustomProp {
+    children: ReactNode
+}
+const CustomInput = ({ children }: CustomProp) => {
+    return <>{children}</>
+}
 
+CustomInput.TitleText = TitleText
+CustomInput.Icon = Icon
+CustomInput.InputArea = InputArea
+
+
+export default CustomInput;
+
+function TitleText({ titleText }: { titleText: string }) {
+    return <Text>{titleText}</Text>
+}
+
+function Icon({ iconName }: { iconName: string }) {
+    return <>
+        <View style={styles.iconContainer}>
+            <CustomIcon icon={iconName} />
+        </View>
+    </>
+}
+
+function InputArea({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default' }: CustomInputProps) {
     const handleChangeText = (newValue: string) => {
         setValue(newValue)
     }
+    return <TextInput
+        style={styles.input}
+        onChangeText={handleChangeText}
+        value={value}
+        secureTextEntry={securityTextEnter}
+        placeholder={placeholder}
+        keyboardType={keyboardType}
 
-
-    return (
-        <SafeAreaView>
-            {titleText !== '' ? <Text>{titleText}</Text> : <></>}
-            <TextInput
-                style={styles.input}
-                onChangeText={handleChangeText}
-                value={value}
-                secureTextEntry={securityTextEnter}
-                placeholder={placeholder}
-                keyboardType={keyboardType}
-            ></TextInput>
-        </SafeAreaView>
-    );
+    ></TextInput>
 }
 
 
@@ -42,7 +63,12 @@ const styles = StyleSheet.create({
         margin: 4,
         borderWidth: 1,
         padding: 10,
+        borderRadius: 32,
+        paddingHorizontal: 16
+    },
+    iconContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
-export default CustomInput;

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { KeyboardType } from "react-native";
+import { KeyboardType, View, StyleSheet } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 import CustomInput from "./CustomInput";
 
@@ -22,37 +22,54 @@ interface CustomProp {
 
 /** COMPONENTE EXPORTADO */
 const CustomSearch = ({ children }: CustomProp) => {
-    return (
-        <>{children}</>
-    )
+    return <View style={styles.searchContainer}>{children}</View>;
 }
 
-CustomSearch.Icon = Icon
+CustomSearch.IconSearch = IconSearch
+CustomSearch.IconFilter = IconFilter
 CustomSearch.Input = Input
 
 export default CustomSearch;
-
 /** COMPONENTE EXPORTADO */
 
 
 /** FUNÇÕES PARA A COMPOSIÇÃO */
-function Icon({ iconName }: { iconName: string }) {
+function IconSearch({ iconName, iconColor, style, iconSize }: { iconName: string, iconColor?: string, style?: object, iconSize?: number }) {
     return <>
-        <CustomIcon icon={iconName} />
+        <View style={style}>
+            <CustomIcon icon={iconName} iconColor={iconColor} iconSize={iconSize} />
+        </View>
     </>
 }
 
-function Input({ titleText, setValue, value, placeholder, keyboardType }: CustomSearchProps) {
+function IconFilter({ iconName, iconSize }: { iconName: string, iconSize: number }) {
     return <>
-        <CustomInput
-            titleText={titleText}
-            setValue={setValue}
-            value={value}
-            placeholder={placeholder}
-            keyboardType={keyboardType}
-        />
+        <CustomIcon icon={iconName} iconSize={iconSize} />
+    </>
+}
+
+function Input({ titleText = '', setValue, value, placeholder, keyboardType }: CustomSearchProps) {
+    return <>
+        <CustomInput>
+            <CustomInput.TitleText titleText={titleText} />
+            <CustomInput.InputArea
+                setValue={setValue}
+                value={value}
+                placeholder={placeholder}
+                keyboardType={keyboardType}
+            />
+        </CustomInput>
     </>
 }
 /** FUNÇÕES PARA A COMPOSIÇÃO */
+
+const styles = StyleSheet.create({
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        padding: 5,
+    }
+});
 
 

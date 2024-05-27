@@ -1,17 +1,16 @@
 
 import { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-
-
+import { FlatList, SafeAreaView, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
 import Separator from "../../../components/lists/Separator";
 import CustomAlertDialog from "../../../components/modal/CustomAlertDialog";
-import CustomHeaderInput from "../components/header/CustomHeaderInput";
+import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
+import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { getUserProperties } from "../../../view_controller/SharedViewController";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
-import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
-import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
+import CustomHeaderInput from "../components/header/CustomHeaderInput";
 import { stylesNotaSerie } from "./StylesNotaSerie";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 
 
 
@@ -20,9 +19,10 @@ const CS_SC_Serie = () => {
 
     const [noteTyped, setNoteTyped] = useState("20240100000000108")
     const [products, setProducts] = useState(Object)
-    const [loadingProducts, setLoadingProducts] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [showPopUp, setShowPopUp] = useState(false)
     const [currentProductSelected, setCurrentProductSelected] = useState<Produto>()
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     async function search() {
@@ -30,11 +30,15 @@ const CS_SC_Serie = () => {
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             const iEntregaGet: IGetDelivery = { note, tenant }
-
-            setLoadingProducts(true)
+            setStatus(FETCH_STATUS.LOADING)
             getNoteSeriesVc(iEntregaGet).then((res) => {
-                setProducts(res.Produtos)
-                setLoadingProducts(false)
+                if (res.Produtos != undefined) {
+                    setStatus(FETCH_STATUS.SUCCESS)
+                    setProducts(res.Produtos)
+                } else {
+                    setStatus(FETCH_STATUS.ERROR)
+                    setErrorMessage("Falha ao buscar a nota")
+                }
             })
         }
     }
@@ -61,6 +65,14 @@ const CS_SC_Serie = () => {
     }
 
 
+    const loadingProducts = status == FETCH_STATUS.LOADING
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const error = status == FETCH_STATUS.ERROR
+
+    if (loadingProducts) return <Text>Carregando produtos...</Text>
+    if (error) return <Text>{errorMessage}</Text>
+
+
     return <>
         <SafeAreaView>
             <CustomHeaderInput
@@ -74,8 +86,7 @@ const CS_SC_Serie = () => {
             </CustomHeaderInput>
             <Text>Insira uma nota para buscar produtos</Text>
 
-            {products !== undefined && products.length > 0 && (
-
+            {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={Separator}
                     data={products}
@@ -86,11 +97,6 @@ const CS_SC_Serie = () => {
                 />
 
             )}
-
-            {loadingProducts === true && (
-                <Text>Carregando produtos...</Text>
-            )}
-
         </SafeAreaView>
 
 

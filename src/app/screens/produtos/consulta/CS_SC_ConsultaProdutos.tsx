@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
 import CustomSearch from "../../../components/input/CustomSearch";
+import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { logWithTimestamp } from "../../../util/Logger";
 import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { ISearchProduto } from "./ISearchProduto";
-import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
 
 const CS_SC_ConsultaProdutos = () => {
+    logWithTimestamp("renderizou")
     const [filterValues, setFilterValues] = useState<IGetProductSearch>({
         cs_page: 1,
-        cs_codigo_produto: "",
+        cs_codigo_produto: '',
         cs_descricao_artigo: "",
-        cs_referencia: "",
-        cs_complemento: "",
+        cs_referencia: "sadfasdf",
+        cs_complemento: "asd",
         cs_descricao_marca: "",
         cs_descricao_grupo: "",
         cs_descricao_classe: "",
@@ -22,10 +24,9 @@ const CS_SC_ConsultaProdutos = () => {
         cs_is_com_saldo: false,
     });
     const [productList, setProductList] = useState<IResProductSearch[]>()
-    const [isLoading, setIsLoading] = useState(false)
-    const [isDataFetched, setIsDataFetched] = useState(false)
-    const [isNewSearch, setIsNewSearch] = useState(true)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
+    const [errorMsg, setErrorMsg] = useState();
 
 
 
@@ -46,9 +47,7 @@ const CS_SC_ConsultaProdutos = () => {
      * Nova pesquisa
      */
     function resetValuesToSearch() {
-        setIsDataFetched(false)
-        setIsNewSearch(true)
-        setIsLoading(false)
+        setStatus(FETCH_STATUS.IDLE)
     }
 
 
@@ -57,40 +56,53 @@ const CS_SC_ConsultaProdutos = () => {
         //seta a página atual que desejamos mostrar na lista ex. 1,2, 3...
         changeValueToSearch('cs_page', page)
 
-        setIsLoading(true)
+        setStatus(FETCH_STATUS.LOADING)
 
         searchProductVc(filterValues).then((res) => {
-            if (res.productResponse.cs_is_ok) {
-                setProductList(res.productResponse.List)
+            if (res.isOk) {
+                setProductList(res.productResponse?.List)
                 setPaginationArray(res.pagesArray)
-
-                setIsLoading(false)
-                setIsDataFetched(true)
+                setStatus(FETCH_STATUS.SUCCESS)
+            } else {
+                // @ts-ignore
+                setErrorMsg(res.error)
+                setStatus(FETCH_STATUS.ERROR)
             }
         })
     }
 
 
 
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const isNewSearch = status == FETCH_STATUS.IDLE
+    const isLoading = status == FETCH_STATUS.LOADING
+    const isError = status == FETCH_STATUS.ERROR
+
+
+    /** CARREGANDO */
+    if (isLoading) {
+        return <ActivityIndicator />
+    }
+
     //Tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>
             <>
-                {!isDataFetched && isNewSearch && (
+                {isNewSearch && (
                     <ScrollView>
                         <View style={stylesConsultaProduto.searchContainer}>
-
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_codigo_produto', newValue)}
-                                    value={filterValues.cs_codigo_produto}
+                                    value={filterValues.cs_codigo_produto.toString()}
                                     placeholder="Código"
+                                    keyboardType="numeric"
                                 />
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_artigo', newValue)}
                                     value={filterValues.cs_descricao_artigo}
@@ -99,7 +111,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_marca', newValue)}
                                     value={filterValues.cs_descricao_marca}
@@ -108,7 +120,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_referencia', newValue)}
                                     value={filterValues.cs_referencia}
@@ -117,7 +129,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_complemento', newValue)}
                                     value={filterValues.cs_complemento}
@@ -126,7 +138,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_classe', newValue)}
                                     value={filterValues.cs_descricao_classe}
@@ -135,7 +147,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_grupo', newValue)}
                                     value={filterValues.cs_descricao_grupo}
@@ -144,7 +156,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_reduzida', newValue)}
                                     value={filterValues.cs_descricao_reduzida}
@@ -153,7 +165,7 @@ const CS_SC_ConsultaProdutos = () => {
                             </CustomSearch>
 
                             <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
+                                <CustomSearch.IconSearch iconName="" />
                                 <CustomSearch.Input
                                     setValue={(newValue: string) => changeValueToSearch('cs_descricao_sub_grupo', newValue)}
                                     value={filterValues.cs_descricao_sub_grupo}
@@ -168,28 +180,33 @@ const CS_SC_ConsultaProdutos = () => {
                                 buttonStyle={stylesConsultaProduto.searchButton}
                                 textStyle={stylesConsultaProduto.searchButtonText}
                             />
-                            {isLoading ? <ActivityIndicator /> : <></>}
+
                         </View>
                     </ScrollView>
                 )
                 }
 
-                {isDataFetched && productList!.length > 0 && (
+                {isSuccess && productList!.length > 0 && (
                     <View>
-                        {isLoading ? <ActivityIndicator /> :
-                            <FlatList
-                                data={productList}
-                                keyExtractor={(item) => item.Id!}
-                                ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
-                                ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues.cs_page!} paginationArray={paginationArray} onItemClick={search} />}
-                                /*onEndReached={} change*/
-                                renderItem={({ item }) => <ProductItem product={item} />}
-                            />
-                        }
+                        <FlatList
+                            data={productList}
+                            keyExtractor={(item) => item.Id!}
+                            ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
+                            ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues.cs_page!} paginationArray={paginationArray} onItemClick={(page) => search(page)} />}
+                            /*onEndReached={}*/
+                            renderItem={({ item }) => <ProductItem product={item} />}
+                        />
                     </View>
                 )}
 
-                {isDataFetched && (!productList || productList.length === 0) && (
+                {isError && (
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>{errorMsg}</Text>
+                    </View>
+                )}
+
+                {isSuccess && (!productList || productList.length === 0) && (
                     <Text>Nenhum produto encontrado.</Text>
                 )}
             </>
