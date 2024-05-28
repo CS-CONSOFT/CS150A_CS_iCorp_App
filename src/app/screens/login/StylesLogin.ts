@@ -22,5 +22,12 @@ export const stylesLogin = StyleSheet.create({
         textAlign: 'center',
         margin: 32,
         fontSize: 18
+    },
+    textButton: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
     }
 });

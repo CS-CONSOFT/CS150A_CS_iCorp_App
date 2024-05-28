@@ -11,7 +11,10 @@ interface CustomSearchProps {
     //armazena a nova variavel
     value: string,
     placeholder?: string,
-    keyboardType?: KeyboardType
+    keyboardType?: KeyboardType,
+    securityTextEnter?: boolean,
+    //lida com a escrita dos valores no input
+    handleInput?: (newValue: any) => void
 }
 
 interface CustomProp {
@@ -28,6 +31,7 @@ const CustomSearch = ({ children }: CustomProp) => {
 CustomSearch.IconSearch = IconSearch
 CustomSearch.IconFilter = IconFilter
 CustomSearch.Input = Input
+CustomSearch.InputHandle = InputHandle
 
 export default CustomSearch;
 /** COMPONENTE EXPORTADO */
@@ -61,6 +65,26 @@ function Input({ titleText = '', setValue, value, placeholder, keyboardType }: C
         </CustomInput>
     </>
 }
+
+function InputHandle({ titleText = '', value, placeholder = '', keyboardType = 'default', handleInput, securityTextEnter = false }: CustomSearchProps) {
+    return <>
+        <CustomInput>
+            <View >
+                <CustomInput.TitleText titleText={titleText} />
+                <CustomInput.InputAreaHandle
+                    setValue={handleInput!}
+                    value={value}
+                    placeholder={placeholder}
+                    keyboardType={keyboardType}
+                    securityTextEnter={securityTextEnter}
+                />
+            </View>
+        </CustomInput>
+    </>
+}
+
+
+
 /** FUNÇÕES PARA A COMPOSIÇÃO */
 
 const styles = StyleSheet.create({

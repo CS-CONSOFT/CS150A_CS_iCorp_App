@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
-import CustomButton from "../../../components/button/CustomButton";
 import CustomSearch from "../../../components/input/CustomSearch";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { logWithTimestamp } from "../../../util/Logger";
 import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_SC_ConsultaProdutos = () => {
-    logWithTimestamp("renderizou")
     const [filterValues, setFilterValues] = useState<IGetProductSearch>({
         cs_page: 1,
         cs_codigo_produto: '',
         cs_descricao_artigo: "",
-        cs_referencia: "sadfasdf",
-        cs_complemento: "asd",
+        cs_referencia: "",
+        cs_complemento: "",
         cs_descricao_marca: "",
         cs_descricao_grupo: "",
         cs_descricao_classe: "",
@@ -207,7 +205,11 @@ const CS_SC_ConsultaProdutos = () => {
                 )}
 
                 {isSuccess && (!productList || productList.length === 0) && (
-                    <Text>Nenhum produto encontrado.</Text>
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>Nenhum produto encontrado.</Text>
+                    </View>
+
                 )}
             </>
         </SafeAreaView>

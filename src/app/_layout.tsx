@@ -1,13 +1,11 @@
 import { Stack } from "expo-router";
+import { lazy } from "react";
 
-import HeaderLogo from "./components/headers/HeaderLogo";
-import LoggoutTitle from "./components/headers/LoggoutTitle";
-
+const HeaderLogo = lazy(() => import("./components/headers/HeaderLogo"))
+const LoggoutTitle = lazy(() => import("./components/headers/LoggoutTitle"))
 
 
 export default function Layout() {
-
-
     return (
         <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />

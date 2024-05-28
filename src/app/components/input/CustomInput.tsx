@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { KeyboardType, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardType, StyleSheet, Text, TextInput, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 
 interface CustomInputProps {
@@ -11,6 +11,8 @@ interface CustomInputProps {
     securityTextEnter?: boolean
     placeholder?: string,
     keyboardType?: KeyboardType
+    //lida com a escrita dos valores no input
+    handleInput?: (newValue: any) => void
 }
 
 interface CustomProp {
@@ -23,6 +25,7 @@ const CustomInput = ({ children }: CustomProp) => {
 CustomInput.TitleText = TitleText
 CustomInput.Icon = Icon
 CustomInput.InputArea = InputArea
+CustomInput.InputAreaHandle = InputAreaHandle
 
 
 export default CustomInput;
@@ -39,7 +42,19 @@ function Icon({ iconName }: { iconName: string }) {
     </>
 }
 
-function InputArea({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default' }: CustomInputProps) {
+function InputArea({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default', handleInput }: CustomInputProps) {
+    return <TextInput
+        style={styles.input}
+        onChangeText={handleInput}
+        value={value}
+        secureTextEntry={securityTextEnter}
+        placeholder={placeholder}
+        keyboardType={keyboardType}
+
+    ></TextInput>
+}
+
+function InputAreaHandle({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default' }: CustomInputProps) {
     const handleChangeText = (newValue: string) => {
         setValue(newValue)
     }
@@ -50,7 +65,6 @@ function InputArea({ setValue, value, securityTextEnter = false, placeholder, ke
         secureTextEntry={securityTextEnter}
         placeholder={placeholder}
         keyboardType={keyboardType}
-
     ></TextInput>
 }
 
