@@ -1,32 +1,19 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
-import CustomButton from "../../../components/button/CustomButton";
-import CustomSearch from "../../../components/input/CustomSearch";
-import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
-import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { ISearchProduto } from "./ISearchProduto";
+import CustomForm from "../../../components/forms/CustomForm";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
+import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { formFields } from "./FormListItens";
+const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_SC_ConsultaProdutos = () => {
-    const [filterValues, setFilterValues] = useState<IGetProductSearch>({
-        cs_page: 1,
-        cs_codigo_produto: "",
-        cs_descricao_artigo: "",
-        cs_referencia: "",
-        cs_complemento: "",
-        cs_descricao_marca: "",
-        cs_descricao_grupo: "",
-        cs_descricao_classe: "",
-        cs_descricao_sub_grupo: "",
-        cs_descricao_reduzida: "",
-        cs_is_com_saldo: false,
-    });
     const [productList, setProductList] = useState<IResProductSearch[]>()
-    const [isLoading, setIsLoading] = useState(false)
-    const [isDataFetched, setIsDataFetched] = useState(false)
-    const [isNewSearch, setIsNewSearch] = useState(true)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
-
+    const [errorMsg, setErrorMsg] = useState();
+    const [filterValues, setFilterValues] = useState<IGetProductSearch>()
 
 
     /**
@@ -38,159 +25,128 @@ const CS_SC_ConsultaProdutos = () => {
      * @param key chave da interface
      * @param newValue valor que será setado no lugar do valor da chave informada.
      */
+    /*
     function changeValueToSearch(key: keyof IGetProductSearch, newValue: any) {
         setFilterValues((prevState) => ({ ...prevState!, [key]: newValue }))
     }
+    */
 
     /**
      * Nova pesquisa
      */
     function resetValuesToSearch() {
-        setIsDataFetched(false)
-        setIsNewSearch(true)
-        setIsLoading(false)
+        setStatus(FETCH_STATUS.IDLE)
     }
 
 
-    /** Pesquisar Produtos */
-    async function search(page: number) {
-        //seta a página atual que desejamos mostrar na lista ex. 1,2, 3...
-        changeValueToSearch('cs_page', page)
 
-        setIsLoading(true)
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const isNewSearch = status == FETCH_STATUS.IDLE
+    const isLoading = status == FETCH_STATUS.LOADING
+    const isError = status == FETCH_STATUS.ERROR
 
-        searchProductVc(filterValues).then((res) => {
-            if (res.productResponse.cs_is_ok) {
-                setProductList(res.productResponse.List)
+
+    /** CARREGANDO */
+    if (isLoading) {
+        return <ActivityIndicator />
+    }
+
+    const handleFormSubmit = (formData?: any, page?: number) => {
+        setStatus(FETCH_STATUS.LOADING)
+
+        /** Foi criada a variavel _filterValues para fazermos a busca, porem
+         * para mostrar a lista precisamos de um objeto filterValues 
+         * que tenha controle de estado a nivel da tela. Por iss foi implementado o useState que
+         * guarda o _filterValues, para que possamos usar o filterValues na flat list.
+        */
+
+        /**
+         * Os valores de formData seguem a estrutura de titles que formam o formFields
+         * Ex: Dominio: 'Comercial'; Usuario: 'Valter'; Senha:'xpto'
+         * A chave das propriedades é o que será usado em 'key' -> formData.[key]
+         * 
+         */
+        const _filterValues: IGetProductSearch = {
+            cs_page: page || 1,
+            cs_codigo_produto: formData.Código,
+            cs_descricao_artigo: formData.Artigo,
+            cs_referencia: formData.Referência,
+            cs_complemento: formData.Complemento,
+            cs_descricao_marca: formData.Marca,
+            cs_descricao_grupo: formData.Grupo,
+            cs_descricao_classe: formData.Classe,
+            cs_descricao_sub_grupo: formData.DescriçãoSubgrupo,
+            cs_descricao_reduzida: formData.DescriçãoProduto,
+            cs_is_com_saldo: false,
+        }
+        setFilterValues(_filterValues)
+
+        handleSearchProduct(filterValues!).then((res) => {
+            if (res.isOk) {
+                setProductList(res.productResponse?.List)
                 setPaginationArray(res.pagesArray)
-
-                setIsLoading(false)
-                setIsDataFetched(true)
+                setStatus(FETCH_STATUS.SUCCESS)
+            } else {
+                // @ts-ignore
+                setErrorMsg(res.error)
+                setStatus(FETCH_STATUS.ERROR)
             }
         })
+    };
+
+
+    /** INICIO - MONTANDO PROPRIEDADES DO CUSTOM FORM */
+    const buttonFormProp = {
+        title: "Pesquisar",
+        onPress: handleFormSubmit,
+        buttonStyle: stylesConsultaProduto.searchButton,
+        textStyle: stylesConsultaProduto.searchButtonText
     }
-
-
+    /** FIM - MONTANDO PROPRIEDADES DO CUSTOM FORM */
 
     //Tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>
             <>
-                {!isDataFetched && isNewSearch && (
+                {isNewSearch && (
                     <ScrollView>
                         <View style={stylesConsultaProduto.searchContainer}>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_codigo_produto', newValue)}
-                                    value={filterValues.cs_codigo_produto}
-                                    placeholder="Código"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_artigo', newValue)}
-                                    value={filterValues.cs_descricao_artigo}
-                                    placeholder="Artigo"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_marca', newValue)}
-                                    value={filterValues.cs_descricao_marca}
-                                    placeholder="Marca"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_referencia', newValue)}
-                                    value={filterValues.cs_referencia}
-                                    placeholder="Referência"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_complemento', newValue)}
-                                    value={filterValues.cs_complemento}
-                                    placeholder="Complemento"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_classe', newValue)}
-                                    value={filterValues.cs_descricao_classe}
-                                    placeholder="Classe"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_grupo', newValue)}
-                                    value={filterValues.cs_descricao_grupo}
-                                    placeholder="Grupo"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_reduzida', newValue)}
-                                    value={filterValues.cs_descricao_reduzida}
-                                    placeholder="Descrição Produto"
-                                />
-                            </CustomSearch>
-
-                            <CustomSearch>
-                                <CustomSearch.Icon iconName="" />
-                                <CustomSearch.Input
-                                    setValue={(newValue: string) => changeValueToSearch('cs_descricao_sub_grupo', newValue)}
-                                    value={filterValues.cs_descricao_sub_grupo}
-                                    placeholder="Descrição Subgrupo"
-                                />
-                            </CustomSearch>
-
-
-                            <CustomButton
-                                title="Pesquisar"
-                                onPress={() => search(1)}
-                                buttonStyle={stylesConsultaProduto.searchButton}
-                                textStyle={stylesConsultaProduto.searchButtonText}
+                            <CustomForm
+                                status={status}
+                                formInputTypeList={formFields}
+                                customButtonProp={buttonFormProp}
                             />
-                            {isLoading ? <ActivityIndicator /> : <></>}
                         </View>
                     </ScrollView>
                 )
                 }
 
-                {isDataFetched && productList!.length > 0 && (
+                {isSuccess && productList!.length > 0 && (
                     <View>
-                        {isLoading ? <ActivityIndicator /> :
-                            <FlatList
-                                data={productList}
-                                keyExtractor={(item) => item.Id!}
-                                ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
-                                ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues.cs_page!} paginationArray={paginationArray} onItemClick={search} />}
-                                /*onEndReached={} change*/
-                                renderItem={({ item }) => <ProductItem product={item} />}
-                            />
-                        }
+                        <FlatList
+                            data={productList}
+                            keyExtractor={(item) => item.Id!}
+                            ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
+                            ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues?.cs_page!} paginationArray={paginationArray} onItemClick={(page) => handleFormSubmit(filterValues, page)} />}
+                            /*onEndReached={}*/
+                            renderItem={({ item }) => <ProductItem product={item} />}
+                        />
                     </View>
                 )}
 
-                {isDataFetched && (!productList || productList.length === 0) && (
-                    <Text>Nenhum produto encontrado.</Text>
+                {isError && (
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>{errorMsg}</Text>
+                    </View>
+                )}
+
+                {isSuccess && (!productList || productList.length === 0) && (
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>Nenhum produto encontrado.</Text>
+                    </View>
+
                 )}
             </>
         </SafeAreaView>

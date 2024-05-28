@@ -1,17 +1,15 @@
 
-import { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-
-
+import { lazy, Suspense, useState } from "react";
+import { FlatList, SafeAreaView, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
 import Separator from "../../../components/lists/Separator";
 import CustomAlertDialog from "../../../components/modal/CustomAlertDialog";
-import CustomHeaderInput from "../components/header/CustomHeaderInput";
-import { getUserProperties } from "../../../view_controller/SharedViewController";
-import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
-import { IGetDelivery, ISetCorSerie } from "../../../services/api/interfaces/notas/CS_INotes";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { stylesNotaSerie } from "./StylesNotaSerie";
+
+const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
 
 
 
@@ -20,23 +18,24 @@ const CS_SC_Serie = () => {
 
     const [noteTyped, setNoteTyped] = useState("20240100000000108")
     const [products, setProducts] = useState(Object)
-    const [loadingProducts, setLoadingProducts] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [showPopUp, setShowPopUp] = useState(false)
     const [currentProductSelected, setCurrentProductSelected] = useState<Produto>()
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     async function search() {
         const note = noteTyped;
-        const tenant = (await getUserProperties()).tenantId;
-        if (tenant != undefined) {
-            const iEntregaGet: IGetDelivery = { note, tenant }
-
-            setLoadingProducts(true)
-            getNoteSeriesVc(iEntregaGet).then((res) => {
+        setStatus(FETCH_STATUS.LOADING)
+        getNoteSeriesVc(note).then((res) => {
+            if (res !== undefined && res.Produtos != undefined) {
+                setStatus(FETCH_STATUS.SUCCESS)
                 setProducts(res.Produtos)
-                setLoadingProducts(false)
-            })
-        }
+            } else {
+                setStatus(FETCH_STATUS.ERROR)
+                setErrorMessage("Falha ao buscar a nota")
+            }
+        })
     }
 
 
@@ -50,32 +49,38 @@ const CS_SC_Serie = () => {
     async function setNewCorSerie(newSerie: string) {
         const productId = currentProductSelected?.DD060_Id
         const newCorSerie = newSerie;
-        const tenant = (await getUserProperties()).tenantId;
-        if (tenant != undefined) {
-            const iSetNewCorSerie: ISetCorSerie = { productId, tenant, newCorSerie }
-            setNewCorSerieVc(iSetNewCorSerie).then(() => {
-                search()
-                setShowPopUp(false);
-            })
-        }
+        setNewCorSerieVc(productId!, newCorSerie).then(() => {
+            search()
+            setShowPopUp(false);
+        })
+
     }
+
+
+    const loadingProducts = status == FETCH_STATUS.LOADING
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const error = status == FETCH_STATUS.ERROR
+
+    if (loadingProducts) return <Text>Carregando produtos...</Text>
+    if (error) return <Text>{errorMessage}</Text>
 
 
     return <>
         <SafeAreaView>
-            <CustomHeaderInput
-                titleText="Chave Nota"
-                setValue={setNoteTyped}
-                value={noteTyped}
-                onPress={search}
-                buttonStyle={stylesNotaSerie.buttonStyle}
-                textStyle={stylesNotaSerie.textStyle}
-            >
-            </CustomHeaderInput>
+            <Suspense fallback={<Text>Loading Header Input</Text>}>
+                <CustomHeaderInput
+                    titleText="Chave Nota"
+                    setValue={setNoteTyped}
+                    value={noteTyped}
+                    onPress={search}
+                    buttonStyle={stylesNotaSerie.buttonStyle}
+                    textStyle={stylesNotaSerie.textStyle}
+                >
+                </CustomHeaderInput>
+            </Suspense>
             <Text>Insira uma nota para buscar produtos</Text>
 
-            {products !== undefined && products.length > 0 && (
-
+            {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={Separator}
                     data={products}
@@ -86,11 +91,6 @@ const CS_SC_Serie = () => {
                 />
 
             )}
-
-            {loadingProducts === true && (
-                <Text>Carregando produtos...</Text>
-            )}
-
         </SafeAreaView>
 
 

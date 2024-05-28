@@ -20,7 +20,15 @@ export const stylesLogin = StyleSheet.create({
     txtAtendimentoMobile: {
         fontWeight: '600',
         textAlign: 'center',
-        margin: 32,
-        fontSize: 18
+        fontSize: 18,
+        marginTop: 44,
+        marginBottom: 44
+    },
+    textButton: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
     }
 });

@@ -1,14 +1,15 @@
 import FontAwesome from '@expo/vector-icons/Ionicons'
 
 export interface ICustomIcon {
-    icon: any
+    icon: any,
+    style?: object,
+    iconColor?: string,
+    iconSize?: number
 }
 
-const CustomIcon = ({ icon }: ICustomIcon) => {
+const CustomIcon = ({ icon, style = { alignSelf: 'center' }, iconColor = '#000', iconSize = 32 }: ICustomIcon) => {
     return (
-        <FontAwesome size={32} style={{
-            alignSelf: 'center'
-        }} name={icon} />
+        <FontAwesome size={iconSize} style={style} name={icon} color={iconColor} />
     );
 }
 

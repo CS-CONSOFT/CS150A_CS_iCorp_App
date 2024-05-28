@@ -26,7 +26,6 @@ const CS_SC_Menu = () => {
                     }}
                 />
             </View>
-
         </SafeAreaView>
     );
 }

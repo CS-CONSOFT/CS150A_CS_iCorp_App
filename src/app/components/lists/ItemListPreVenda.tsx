@@ -3,7 +3,7 @@ import CustomIcon from "../icon/CustomIcon";
 import { IItemList } from "./IItemList";
 
 
-const ItemListMenu = ({ title, onPress = () => { }, iconName }: IItemList) => {
+const ItemListPreVenda = ({ title, onPress = () => { }, iconName }: IItemList) => {
     return (
         <Pressable style={styles.containerItem} onPress={onPress}>
             <View>
@@ -51,6 +51,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
-export default ItemListMenu;
+export default ItemListPreVenda;

@@ -1,18 +1,20 @@
 import React, { ReactNode } from "react";
-import { KeyboardType } from "react-native";
+import { KeyboardType, View, StyleSheet } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 import CustomInput from "./CustomInput";
 
 /** INTERFACES */
 interface CustomSearchProps {
     titleText?: string,
-    //recebe o hook ou funcao responsavel por alterar o estado da variavel
-    setValue: any,
     //armazena a nova variavel
     value: string,
     placeholder?: string,
-    keyboardType?: KeyboardType
+    keyboardType?: KeyboardType,
+    securityTextEnter?: boolean,
+    //lida com a escrita dos valores no input
+    handleInput?: (newValue: any) => void
 }
+
 
 interface CustomProp {
     children: ReactNode;
@@ -22,37 +24,61 @@ interface CustomProp {
 
 /** COMPONENTE EXPORTADO */
 const CustomSearch = ({ children }: CustomProp) => {
-    return (
-        <>{children}</>
-    )
+    return <View style={styles.searchContainer}>{children}</View>;
 }
 
-CustomSearch.Icon = Icon
-CustomSearch.Input = Input
+CustomSearch.IconSearch = IconSearch
+CustomSearch.IconFilter = IconFilter
+CustomSearch.InputHandle = InputHandle
 
 export default CustomSearch;
-
 /** COMPONENTE EXPORTADO */
 
 
 /** FUNÇÕES PARA A COMPOSIÇÃO */
-function Icon({ iconName }: { iconName: string }) {
+function IconSearch({ iconName, iconColor, style, iconSize }: { iconName: string, iconColor?: string, style?: object, iconSize?: number }) {
     return <>
-        <CustomIcon icon={iconName} />
+        <View style={style}>
+            <CustomIcon icon={iconName} iconColor={iconColor} iconSize={iconSize} />
+        </View>
     </>
 }
 
-function Input({ titleText, setValue, value, placeholder, keyboardType }: CustomSearchProps) {
+function IconFilter({ iconName, iconSize }: { iconName: string, iconSize: number }) {
     return <>
-        <CustomInput
-            titleText={titleText}
-            setValue={setValue}
-            value={value}
-            placeholder={placeholder}
-            keyboardType={keyboardType}
-        />
+        <CustomIcon icon={iconName} iconSize={iconSize} />
     </>
 }
+
+
+function InputHandle({ titleText = '', value, placeholder = '', keyboardType = 'default', handleInput, securityTextEnter = false }: CustomSearchProps) {
+    return <>
+        <CustomInput>
+            <View >
+                <CustomInput.TitleText titleText={titleText} />
+                <CustomInput.InputAreaHandle
+                    setValue={handleInput!}
+                    value={value}
+                    placeholder={placeholder}
+                    keyboardType={keyboardType}
+                    securityTextEnter={securityTextEnter}
+                />
+            </View>
+        </CustomInput>
+    </>
+}
+
+
+
 /** FUNÇÕES PARA A COMPOSIÇÃO */
+
+const styles = StyleSheet.create({
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        padding: 5,
+    }
+});
 
 

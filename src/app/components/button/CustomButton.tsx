@@ -1,9 +1,9 @@
 import { Text, TouchableHighlight } from "react-native";
 
 
-interface CustomButtonProps {
+export interface CustomButtonProps {
     title: string,
-    onPress: () => void,
+    onPress: (prop?: any) => void,
     onLongPress?: () => void,
     disabled?: boolean,
     buttonStyle: object,
@@ -11,7 +11,7 @@ interface CustomButtonProps {
 }
 
 
-const CustomButton = ({ title, onPress, onLongPress ,disabled = false, buttonStyle = {}, textStyle = {} }: CustomButtonProps) => {
+const CustomButton = ({ title, onPress, onLongPress, disabled = false, buttonStyle = {}, textStyle = {} }: CustomButtonProps) => {
     return (
         <TouchableHighlight
             onPress={onPress}

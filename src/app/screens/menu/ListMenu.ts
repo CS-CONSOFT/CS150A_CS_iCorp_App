@@ -9,7 +9,7 @@ export const data = [
     {
         id: 1,
         title: "Pré-Venda",
-        onPress: () => { goToSerie() },
+        onPress: () => { navigateTo("screens/pre-venda/(tabs)") },
         iconName: "cart-outline"
     },
     {
