@@ -5,14 +5,14 @@ import CustomSearch from "../input/CustomSearch";
 import { FormInputType } from "./IForm";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 
-interface FullData {
+interface IFormData {
     formInputTypeList: FormInputType[],
     customButtonProp: CustomButtonProps,
     status: string,
     initialFormState?: { [key: string]: any };
 }
 
-const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormState }: FullData) => {
+const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormState }: IFormData) => {
     const [formState, setFormState] = useState<{ [key: string]: any }>(
         /** o Reduce itera sobre todos os itens da lista
          * @acc -> um acumulador que inicialmente é um objeto vazio
@@ -66,18 +66,14 @@ const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormSt
                 }
             />
 
-            {isLoading && (
-                <ActivityIndicator />
-            )}
-
-            <CustomButton
+            {isLoading ? <ActivityIndicator /> : <CustomButton
                 title={customButtonProp.title}
                 onPress={handleSubmit}
                 onLongPress={customButtonProp.onLongPress}
                 disabled={customButtonProp.disabled}
                 buttonStyle={customButtonProp.buttonStyle}
                 textStyle={customButtonProp.textStyle}
-            />
+            />}
         </View>
     );
 }
