@@ -30,9 +30,6 @@ export default function Layout() {
                 title: "Consulta de Produto"
             }} />
 
-            <Stack.Screen name="screens/pre-venda/CS_SC_PreVenda" options={{
-                title: "Pré Venda"
-            }} />
         </Stack>
     )
 }

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import CustomSearch from "../../components/input/CustomSearch";
-import { IPreVendaListModel } from "../../services/api/interfaces/prevenda/IPreVenda";
-import { ICON_NAME } from "../../util/IconsName";
-import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
-import { stylesPreVenda } from "./PreVendaStyles";
-import CustomPvBottomMenu from "../../components/bottomMenus/01CustomPvBottomMenu";
+import { IPreVendaListModel } from "../../../services/api/interfaces/prevenda/IPreVenda";
+import { ICON_NAME } from "../../../util/IconsName";
+import { handleFetchPv } from "../../../view_controller/prevenda/PreVendaViewController";
+import { stylesPreVenda } from "../PreVendaStyles";
+import CustomPvBottomMenu from "../../../components/bottomMenus/01CustomPvBottomMenu";
+import CustomSearch from "../../../components/input/CustomSearch";
 
 const CS_SC_PreVenda = () => {
     const [preSaleSearch, setPreSaleSearch] = useState<string>('');
