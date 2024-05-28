@@ -5,53 +5,61 @@ function goToSerie() {
 }
 
 
-export const data =[
-    { 
-        id: 1, 
-        title: "Entrega", 
-        onPress: () => { navigateTo("/screens/nota/entrega/CS_SC_Entrega") }, 
-        iconName: "receipt-outline"
-    },
-    { 
-        id: 2, 
-        title: "Série Produto", 
-        onPress: () => { navigateTo("/screens/nota/serie/CS_SC_Serie") }, 
-        iconName: "albums-outline"
-    },
-    { 
-        id: 3, 
-        title: "Consulta Produtos", 
-        onPress: () => { navigateTo("/screens/produtos/consulta/CS_SC_ConsultaProdutos") }, 
-        iconName: "list-outline"
-    },
-    { 
-        id: 4, 
-        title: "Obras", 
-        onPress: () => { goToSerie() }, 
-        iconName: "construct-outline"
-    },
-    { 
-        id: 5, 
-        title: "Consulta Preços", 
-        onPress: () => { goToSerie() }, 
-        iconName: "cash-outline"
-    },
-    { 
-        id: 6, 
-        title: "Cadastro Cliente", 
-        onPress: () => { goToSerie() }, 
-        iconName: "person-add-outline"
-    },
-    { 
-        id: 7, 
-        title: "Pré-Venda", 
-        onPress: () => { goToSerie() }, 
+export const data = [
+    {
+        id: 1,
+        title: "Pré-Venda",
+        onPress: () => { navigateTo("screens/pre-venda/(tabs)") },
         iconName: "cart-outline"
     },
-    { 
-        id: 8, 
-        title: "Lista Comanda", 
-        onPress: () => { goToSerie() }, 
-        iconName: "clipboard-outline"
+    {
+        id: 2,
+        title: "Lista Comanda",
+        onPress: () => { goToSerie() },
+        iconName: "newspaper-outline"
+    },
+    {
+        id: 3,
+        title: "Consulta Produtos",
+        onPress: () => { navigateTo("/screens/produtos/consulta/CS_SC_ConsultaProdutos") },
+        iconName: "search-outline"
+
+    },
+    {
+        id: 4,
+        title: "Cadastro Cliente",
+        onPress: () => { goToSerie() },
+        iconName: "person-add-outline"
+    },
+    {
+        id: 5,
+        title: "Carga",
+        onPress: () => { goToSerie() },
+        iconName: "archive-outline"
+    },
+    {
+        id: 6,
+        title: "Consulta Preços",
+        onPress: () => { goToSerie() },
+        iconName: "search-outline"
+    },
+    {
+        id: 7,
+        title: "Série Produto",
+        onPress: () => { navigateTo("/screens/nota/serie/CS_SC_Serie") },
+        iconName: "barcode-outline"
+    },
+    {
+        id: 8,
+        title: "Obras",
+        onPress: () => { goToSerie() },
+        iconName: "construct-outline"
+    },
+    {
+        id: 9,
+        title: "Entrega",
+        onPress: () => { navigateTo("/screens/nota/entrega/CS_SC_Entrega") },
+        iconName: "bag-check-outline"
     }
+
 ]

@@ -1,26 +1,19 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, Text, ActivityIndicator } from "react-native";
-
-
-import CustomButton from "../../components/button/CustomButton";
-import CustomInput from "../../components/input/CustomInput";
-import { ILoginResponse } from "./ILoginResponse";
-import { getObjectDataVc, storeObjectDataVc } from "../../view_controller/SharedViewController";
-import { generalLoginVc } from "../../view_controller/login/LoginViewController";
-import { DataKey } from "../../enum/DataKeys";
+import { SafeAreaView, Text, View } from "react-native";
+import CustomForm from "../../components/forms/CustomForm";
+import { FormInputType } from "../../components/forms/IForm";
 import HeaderLogo from "../../components/headers/HeaderLogo";
-
-
+import { DataKey } from "../../enum/DataKeys";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { storeObjectDataVc } from "../../view_controller/SharedViewController";
+import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
+import { stylesLogin } from "./StylesLogin";
 
 
 const CS_SC_Login = () => {
-
     //variaveis
-    const [domain, setDomain] = useState('Comercial')
-    const [user, setUser] = useState('Valter')
-    const [password, setPassword] = useState('va1234va')
-    const [isLoading, setIsLoading] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     //fim variaveis
 
     function navigateToMenu() {
@@ -28,102 +21,76 @@ const CS_SC_Login = () => {
     }
 
     useEffect(() => {
-        getObjectDataVc("LoginResponse").then((res) => {
-            if (res !== null) {
-                const result = res as ILoginResponse
-                if (result.TenantId !== undefined) {
-                    navigateToMenu()
-                }
+        checkIfUserIsLogged().then((isLogged) => {
+            if (isLogged) {
+                navigateToMenu()
             }
-            
         })
     }, [])
 
 
 
-    async function onClickLogin(): Promise<void> {
-        setIsLoading(true)
+    async function onClickLogin(domain: string, user: string, password: string): Promise<void> {
+        setStatus(FETCH_STATUS.LOADING)
         const loginData: ILoginData = { domain, user, password }
         try {
             const response = await generalLoginVc(loginData);
             if (response.IsOk) {
                 //salvando dados localmente
                 storeObjectDataVc(DataKey.LoginResponse, response.Model)
-
                 navigateToMenu()
-
+            } else {
+                setStatus(FETCH_STATUS.ERROR)
             }
         } catch (error) {
-            console.log('Erro ao fazer login:', error);
-        } finally {
-            setIsLoading(false)
+            setStatus(FETCH_STATUS.ERROR)
         }
     }
 
+    const handleFormSubmit = (formData: any) => {
+        /**
+         * Os valores de formData seguem a estrutura de titles que formam o formFields
+         * Ex: Dominio: 'Comercial'; Usuario: 'Valter'; Senha:'xpto'
+         * A chave das propriedades é o que será usado em 'key' -> formData.[key]
+         * 
+         */
+        onClickLogin(formData.Domínio, formData.Usuário, formData.Senha)
+    };
+
+
+    /** INICIO - MONTANDO PROPRIEDADES DO CUSTOM FORM */
+    const formFields: FormInputType[] = [
+        { title: 'Domínio' },
+        { title: 'Usuário' },
+        { title: 'Senha', securityTextEnter: true },
+        // Adicione mais campos conforme necessário
+    ];
+
+    const buttonFormProp = {
+        title: "Logar",
+        onPress: handleFormSubmit,
+        buttonStyle: stylesLogin.button,
+        textStyle: stylesLogin.textButton
+    }
+    /** FIM - MONTANDO PROPRIEDADES DO CUSTOM FORM */
 
     return (
         <SafeAreaView>
-            <HeaderLogo />
-            <Text style={styles.txtAtendimentoMobile}>Atendimento Mobile</Text>
-
-            <CustomInput
-                titleText="Domínio"
-                setValue={setDomain}
-                value={domain}
-            />
-
-            <CustomInput
-                titleText="Usuário"
-                setValue={setUser}
-                value={user}
-            />
-            <CustomInput titleText="Senha"
-                setValue={setPassword}
-                value={password}
-                securityTextEnter={true}
-            />
+            <View style={{ margin: 56 }}>
+                <HeaderLogo />
+                <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
+                <CustomForm
+                    status={status}
+                    formInputTypeList={formFields}
+                    customButtonProp={buttonFormProp}
+                    initialFormState={{ Domínio: 'Comercial', Usuário: 'Valter', Senha: 'va1234va' }}
+                />
+            </View>
 
 
-            {isLoading ?
-                <ActivityIndicator />
-                : <CustomButton
-                    title="Logar"
-                    onPress={() => { onClickLogin() }}
-                    buttonStyle={styles.button}
-                    textStyle={styles.text} />
-            }
 
         </SafeAreaView>
-
     );
 }
-
-
-const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'green',
-        margin: 32
-    },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-    txtAtendimentoMobile: {
-        fontWeight: '600',
-        textAlign: 'center',
-        margin: 32,
-        fontSize: 18
-    }
-});
-
 
 export default CS_SC_Login;
