@@ -1,200 +1,173 @@
-import React, { useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import CustomButton from "../../../components/button/CustomButton";
-import CustomSearch from "../../../components/input/CustomSearch";
-import { getUserProperties } from "../../../view_controller/SharedViewController";
-import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
-import { ISearchProduto } from "./ISearchProduto";
+import React, { lazy, useState } from "react";
+import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
+import CustomForm from "../../../components/forms/CustomForm";
+import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
+import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
+import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { formFields } from "./FormListItens";
+const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_SC_ConsultaProdutos = () => {
-    const [filterValues, setFilterValues] = useState<ISearchProduto>({
-        code: "",
-        article: "",
-        ref: "",
-        brand: "",
-        hasPromotion: false,
-        hasBalance: false,
-    });
-
     const [productList, setProductList] = useState<IResProductSearch[]>()
-    const [isLoading, setIsLoading] = useState(false)
-    const [isDataFetched, setIsDataFetched] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
+    const [paginationArray, setPaginationArray] = useState<number[]>([])
+    const [errorMsg, setErrorMsg] = useState();
+    const [filterValues, setFilterValues] = useState<IGetProductSearch>()
 
-    function changeValueToSearch(key: keyof ISearchProduto, newValue: any) {
+
+    /**
+     * Essa função é chamada no formulário de filtros, no qual cada input é atribuído a 
+     * um valor da interface ISearchProduto.
+     * 
+     * Ou seja, o 'code' passando na key é atribuído ao 'code' da interface ISearchProduto.
+     * 
+     * @param key chave da interface
+     * @param newValue valor que será setado no lugar do valor da chave informada.
+     */
+    /*
+    function changeValueToSearch(key: keyof IGetProductSearch, newValue: any) {
         setFilterValues((prevState) => ({ ...prevState!, [key]: newValue }))
     }
+    */
 
+    /**
+     * Nova pesquisa
+     */
     function resetValuesToSearch() {
-        setIsDataFetched(false)
+        setStatus(FETCH_STATUS.IDLE)
     }
 
-    async function search() {
-        setIsLoading(true)
-        setIsDataFetched(false)
 
-        const tenant = (await getUserProperties()).tenantId;
-        const estabId = (await getUserProperties()).estabId;
 
-        const productSearch: IGetProductSearch = {
-            cs_tenant_id: tenant!,
-            cs_estab_id: estabId,
-            cs_codigo_produto: filterValues.code,
-            cs_codigo_marca: filterValues.brand,
-            cs_codigo_artigo: filterValues.article,
-            cs_codigo_referencia: filterValues.ref,
-            cs_is_saldo: true,
-            cs_is_promotion: false
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+    const isNewSearch = status == FETCH_STATUS.IDLE
+    const isLoading = status == FETCH_STATUS.LOADING
+    const isError = status == FETCH_STATUS.ERROR
+
+
+    /** CARREGANDO */
+    if (isLoading) {
+        return <ActivityIndicator />
+    }
+
+    const handleFormSubmit = (formData?: any, page?: number) => {
+        setStatus(FETCH_STATUS.LOADING)
+
+        /** Foi criada a variavel _filterValues para fazermos a busca, porem
+         * para mostrar a lista precisamos de um objeto filterValues 
+         * que tenha controle de estado a nivel da tela. Por iss foi implementado o useState que
+         * guarda o _filterValues, para que possamos usar o filterValues na flat list.
+        */
+
+        /**
+         * Os valores de formData seguem a estrutura de titles que formam o formFields
+         * Ex: Dominio: 'Comercial'; Usuario: 'Valter'; Senha:'xpto'
+         * A chave das propriedades é o que será usado em 'key' -> formData.[key]
+         * 
+         */
+        const _filterValues: IGetProductSearch = {
+            cs_page: page || 1,
+            cs_codigo_produto: formData.Código,
+            cs_descricao_artigo: formData.Artigo,
+            cs_referencia: formData.Referência,
+            cs_complemento: formData.Complemento,
+            cs_descricao_marca: formData.Marca,
+            cs_descricao_grupo: formData.Grupo,
+            cs_descricao_classe: formData.Classe,
+            cs_descricao_sub_grupo: formData.DescriçãoSubgrupo,
+            cs_descricao_reduzida: formData.DescriçãoProduto,
+            cs_is_com_saldo: false,
         }
+        setFilterValues(_filterValues)
 
-        searchProductVc(productSearch).then((res) => {
-            setProductList(res.products)
-            setIsLoading(false)
-            setIsDataFetched(true)
+        handleSearchProduct(filterValues!).then((res) => {
+            if (res.isOk) {
+                setProductList(res.productResponse?.List)
+                setPaginationArray(res.pagesArray)
+                setStatus(FETCH_STATUS.SUCCESS)
+            } else {
+                // @ts-ignore
+                setErrorMsg(res.error)
+                setStatus(FETCH_STATUS.ERROR)
+            }
         })
+    };
+
+
+    /** INICIO - MONTANDO PROPRIEDADES DO CUSTOM FORM */
+    const buttonFormProp = {
+        title: "Pesquisar",
+        onPress: handleFormSubmit,
+        buttonStyle: stylesConsultaProduto.searchButton,
+        textStyle: stylesConsultaProduto.searchButtonText
     }
+    /** FIM - MONTANDO PROPRIEDADES DO CUSTOM FORM */
+
+    //Tela
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={stylesConsultaProduto.container}>
             <>
-                {!isDataFetched && (
-                    <View style={styles.searchContainer}>
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('code', newValue)}
-                            value={filterValues!.code}
-                            placeholder="Código"
-                        />
-
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('article', newValue)}
-                            value={filterValues!.article}
-                            placeholder="Artigo"
-                        />
-
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('brand', newValue)}
-                            value={filterValues!.brand}
-                            placeholder="Marca"
-                        />
-
-                        <CustomSearch
-                            iconName=""
-                            setValue={(newValue: string) => changeValueToSearch('ref', newValue)}
-                            value={filterValues!.ref}
-                            placeholder="Referência"
-                        />
-
-                        <CustomButton
-                            title="Pesquisar"
-                            onPress={search}
-                            buttonStyle={styles.searchButton}
-                            textStyle={styles.searchButtonText}
-                        />
-
-                        {isLoading ? <ActivityIndicator /> : <></>}
-
-
-
-
-
-                    </View>
+                {isNewSearch && (
+                    <ScrollView>
+                        <View style={stylesConsultaProduto.searchContainer}>
+                            <CustomForm
+                                status={status}
+                                formInputTypeList={formFields}
+                                customButtonProp={buttonFormProp}
+                            />
+                        </View>
+                    </ScrollView>
                 )
                 }
 
-                {isDataFetched && productList && productList.length > 0 && (
-
+                {isSuccess && productList!.length > 0 && (
                     <View>
-                        <CustomButton
-                            title="Nova Pesquisa"
-                            onPress={resetValuesToSearch}
-                            buttonStyle={styles.btnNewSearch}
-                            textStyle={styles.searchButtonText}
-                        />
-
                         <FlatList
                             data={productList}
                             keyExtractor={(item) => item.Id!}
+                            ListHeaderComponent={() => <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />}
+                            ListFooterComponent={() => <Custom_Pagination currentClickedItem={filterValues?.cs_page!} paginationArray={paginationArray} onItemClick={(page) => handleFormSubmit(filterValues, page)} />}
+                            /*onEndReached={}*/
                             renderItem={({ item }) => <ProductItem product={item} />}
                         />
                     </View>
                 )}
 
-                {isDataFetched && (!productList || productList.length === 0) && (
-                    <Text>Nenhum produto encontrado.</Text>
+                {isError && (
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>{errorMsg}</Text>
+                    </View>
+                )}
+
+                {isSuccess && (!productList || productList.length === 0) && (
+                    <View>
+                        <CustomButton title="Nova Pesquisa" onPress={resetValuesToSearch} buttonStyle={stylesConsultaProduto.btnNewSearch} textStyle={stylesConsultaProduto.searchButtonText} />
+                        <Text>Nenhum produto encontrado.</Text>
+                    </View>
+
                 )}
             </>
         </SafeAreaView>
     );
 }
 
+
+//Item de produto que aparece na listagem
 const ProductItem = ({ product }: { product: IResProductSearch }) => {
     return (
-        <View style={styles.productContainer}>
-            <Text style={styles.productName}>{product.GG003_DescGrupo}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.GG008_Prc_VendaVarejo}`}</Text>
-            <Text style={styles.productInfo}>{`R$: ${product.GG520_SaldoSum}`}</Text>
-            <Text style={styles.productInfo}>{`Qtd: ${product.Qtd_Sec}`}</Text>
+        <View style={stylesConsultaProduto.productContainer}>
+            <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />
+            <Text style={stylesConsultaProduto.productName}>{product.DescMarca}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.Saldo}`}</Text>
+            <Text style={stylesConsultaProduto.productInfo}>{`Qtd: ${product.Preco}`}</Text>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    searchContainer: {
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginBottom: 10,
-    },
-    searchInput: {
-        flex: 1,
-        marginRight: 10,
-        height: 40,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        backgroundColor: '#f2f2f2',
-    },
-    searchButton: {
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    btnNewSearch: {
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        margin:16
-    },
-    searchButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    productContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    productName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 8,
-    },
-    productInfo: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 3,
-    },
-});
+
+
 
 export default CS_SC_ConsultaProdutos;

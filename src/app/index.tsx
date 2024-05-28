@@ -7,12 +7,11 @@ import CS_SC_Login from './screens/login/CS_SC_Login';
 
 export default function Home() {
   return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="auto" />
+      <CS_SC_Login />
+    </SafeAreaView>
 
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <CS_SC_Login />
-      </SafeAreaView>
- 
   );
 }
 
