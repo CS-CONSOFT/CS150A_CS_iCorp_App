@@ -3,10 +3,9 @@ import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, Vie
 import CustomForm from "../../../components/forms/CustomForm";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { searchProductVc } from "../../../view_controller/produto/ProductViewController";
+import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import { formFields } from "./FormListItens";
-import { logWithTimestamp } from "../../../util/Logger";
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_SC_ConsultaProdutos = () => {
@@ -82,7 +81,7 @@ const CS_SC_ConsultaProdutos = () => {
         }
         setFilterValues(_filterValues)
 
-        searchProductVc(filterValues!).then((res) => {
+        handleSearchProduct(filterValues!).then((res) => {
             if (res.isOk) {
                 setProductList(res.productResponse?.List)
                 setPaginationArray(res.pagesArray)

@@ -14,7 +14,7 @@ export const stylesPreVenda = StyleSheet.create({
         marginTop: 8
     },
     containerRenderItem: {
-        borderWidth: 1,
+        borderRadius: 12,
         flexDirection: 'row',
         margin: 8
     },
@@ -35,26 +35,31 @@ export const stylesPreVenda = StyleSheet.create({
         alignSelf: 'center'
     },
     containerRenderItemRight: {
+        flex: 1,
         justifyContent: 'center',
-        marginLeft: '10%',
         flexDirection: 'column',
-        borderTopLeftRadius: 12,
-        borderBottomLeftRadius: 12,
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12,
+        overflow: 'visible',
+        backgroundColor: '#FFF'
     },
     containerRenderItemRightTextBold: {
         color: "#000",
         fontWeight: 'bold',
-        padding: 1
+        padding: 1,
+        marginLeft: 12
     },
     containerRenderItemRightPriceText: {
         color: "#0A3147",
         fontWeight: 'bold',
-        fontSize: 22,
-        padding: 1
+        fontSize: 16,
+        padding: 1,
+        marginLeft: 12
     },
     containerRenderItemRightTextNormal: {
         color: "#000",
-        padding: 1
+        padding: 1,
+        marginLeft: 12
     },
 });
 

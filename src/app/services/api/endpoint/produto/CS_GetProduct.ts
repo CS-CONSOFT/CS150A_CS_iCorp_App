@@ -2,7 +2,6 @@ import api from "../../axios_config";
 
 export async function searchProduto(IGetProdutoSearch: IGetProductSearch): Promise<IResCompleteProdutoSearch> {
     try {
-
         const headerParams = {
             cs_tenant_id: IGetProdutoSearch.cs_tenant_id,
             cs_empresa_id: IGetProdutoSearch.cs_empresa_id

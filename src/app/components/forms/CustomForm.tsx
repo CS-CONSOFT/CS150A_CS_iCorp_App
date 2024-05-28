@@ -47,24 +47,25 @@ const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormSt
 
     const isLoading = status == FETCH_STATUS.LOADING
     return (
-        <View>
-            <FlatList
-                data={formInputTypeList}
-                keyExtractor={(item) => item.title}
-                renderItem={({ item }) =>
-                    <CustomSearch>
-                        <CustomSearch.IconSearch iconName="" />
-                        <CustomSearch.InputHandle
-                            titleText={item.title}
-                            placeholder={item.placeholder}
-                            handleInput={(newValue: any) => handleChange(item.title, newValue)}
-                            setValue={(newValue: string) => handleChange(item.title, newValue)}
-                            value={formState[item.title]}
-                            securityTextEnter={item.securityTextEnter}
-                        />
-                    </CustomSearch>
-                }
-            />
+        <View style={{ flex: 1 }}>
+            <View>
+                <FlatList
+                    data={formInputTypeList}
+                    keyExtractor={(item) => item.title}
+                    renderItem={({ item }) =>
+                        <CustomSearch>
+                            <CustomSearch.IconSearch iconName="" />
+                            <CustomSearch.InputHandle
+                                titleText={item.title}
+                                placeholder={item.placeholder}
+                                handleInput={(newValue: any) => handleChange(item.title, newValue)}
+                                value={formState[item.title]}
+                                securityTextEnter={item.securityTextEnter}
+                            />
+                        </CustomSearch>
+                    }
+                />
+            </View>
 
             {isLoading ? <ActivityIndicator /> : <CustomButton
                 title={customButtonProp.title}

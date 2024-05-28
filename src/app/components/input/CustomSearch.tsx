@@ -6,8 +6,6 @@ import CustomInput from "./CustomInput";
 /** INTERFACES */
 interface CustomSearchProps {
     titleText?: string,
-    //recebe o hook ou funcao responsavel por alterar o estado da variavel
-    setValue: any,
     //armazena a nova variavel
     value: string,
     placeholder?: string,
@@ -16,6 +14,7 @@ interface CustomSearchProps {
     //lida com a escrita dos valores no input
     handleInput?: (newValue: any) => void
 }
+
 
 interface CustomProp {
     children: ReactNode;
@@ -30,7 +29,6 @@ const CustomSearch = ({ children }: CustomProp) => {
 
 CustomSearch.IconSearch = IconSearch
 CustomSearch.IconFilter = IconFilter
-CustomSearch.Input = Input
 CustomSearch.InputHandle = InputHandle
 
 export default CustomSearch;
@@ -52,19 +50,6 @@ function IconFilter({ iconName, iconSize }: { iconName: string, iconSize: number
     </>
 }
 
-function Input({ titleText = '', setValue, value, placeholder, keyboardType }: CustomSearchProps) {
-    return <>
-        <CustomInput>
-            <CustomInput.TitleText titleText={titleText} />
-            <CustomInput.InputArea
-                setValue={setValue}
-                value={value}
-                placeholder={placeholder}
-                keyboardType={keyboardType}
-            />
-        </CustomInput>
-    </>
-}
 
 function InputHandle({ titleText = '', value, placeholder = '', keyboardType = 'default', handleInput, securityTextEnter = false }: CustomSearchProps) {
     return <>

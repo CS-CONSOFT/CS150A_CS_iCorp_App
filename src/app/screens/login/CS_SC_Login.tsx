@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import CustomForm from "../../components/forms/CustomForm";
 import { FormInputType } from "../../components/forms/IForm";
 import HeaderLogo from "../../components/headers/HeaderLogo";
@@ -76,15 +76,19 @@ const CS_SC_Login = () => {
 
     return (
         <SafeAreaView>
-            <HeaderLogo />
-            <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
+            <View style={{ margin: 56 }}>
+                <HeaderLogo />
+                <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
+                <CustomForm
+                    status={status}
+                    formInputTypeList={formFields}
+                    customButtonProp={buttonFormProp}
+                    initialFormState={{ Domínio: 'Comercial', Usuário: 'Valter', Senha: 'va1234va' }}
+                />
+            </View>
 
-            <CustomForm
-                status={status}
-                formInputTypeList={formFields}
-                customButtonProp={buttonFormProp}
-                initialFormState={{ Domínio: 'Comercial', Usuário: 'Valter', Senha: 'va1234va' }}
-            />
+
+
         </SafeAreaView>
     );
 }

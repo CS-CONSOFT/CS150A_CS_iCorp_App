@@ -4,7 +4,7 @@ const Separator = () => {
     return (
         <View
             style={{
-                borderBottomColor: 'black',
+                borderBottomColor: '#C3C3C3',
                 borderBottomWidth: 1,
             }}
         />

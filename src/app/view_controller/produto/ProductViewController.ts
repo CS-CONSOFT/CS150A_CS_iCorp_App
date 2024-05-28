@@ -10,7 +10,7 @@ interface IArrayWithPagesAndProductResponse {
 }
 
 
-export async function searchProductVc(iGetProductSearch: IGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
+export async function handleSearchProduct(iGetProductSearch: IGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
 
     const tenant = (await getUserProperties()).tenantId;
     const estabId = (await getUserProperties()).estabId;

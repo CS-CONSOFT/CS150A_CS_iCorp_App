@@ -20,6 +20,7 @@ export async function checkIfUserIsLogged(): Promise<boolean> {
         getObjectDataVc("LoginResponse").then((res) => {
             if (res !== null) {
                 const result = res as ILoginResponse
+                console.log(result.UserID);
                 if (result.TenantId !== undefined) {
                     isLogged = true
                 }

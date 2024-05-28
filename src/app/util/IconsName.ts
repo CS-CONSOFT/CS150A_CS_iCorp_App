@@ -7,5 +7,9 @@ export const ICON_NAME = {
     CODIGO_BARRA_CONTORNADO: 'barcode-outline',
     OBRA_CONTORNADO: 'construct-outline',
     CHECK_CONTORNADO: 'bag-check-outline',
-    FILTRAR_CONTORNADO: 'filter-circle-outline'
+    FILTRAR_CONTORNADO: 'filter-circle-outline',
+    ESTATISTICA_CONTORNADO: 'stats-chart-outline',
+    LISTA_CONTORNADO: 'list-outline',
+    CESTA_CONTORNADO: 'basket-outline',
+    ADICIONAR_CONTORNADO: 'add-outline',
 }
