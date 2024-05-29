@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+
 //estilos
 export const stylesPreVenda = StyleSheet.create({
     searchIcon: {
@@ -7,6 +8,19 @@ export const stylesPreVenda = StyleSheet.create({
         borderRadius: 32,
         marginLeft: 8,
         marginRight: 4
+    },
+    filterIcon: {
+        marginBottom: 12,
+        marginRight: 4
+    },
+    pressable: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    containerFilter: {
+        display: 'flex',
+        alignItems: 'center'
     },
     textTitle: {
         fontSize: 24,
@@ -62,5 +76,3 @@ export const stylesPreVenda = StyleSheet.create({
         marginLeft: 12
     },
 });
-
-

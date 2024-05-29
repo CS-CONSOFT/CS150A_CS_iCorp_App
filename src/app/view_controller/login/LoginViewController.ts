@@ -1,3 +1,4 @@
+import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/login/ILoginResponse";
 import { generalLogin } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
@@ -14,19 +15,18 @@ export async function generalLoginVc(loginData: ILoginData) {
     }
 }
 
-export async function checkIfUserIsLogged(): Promise<boolean> {
+export async function checkIfUserIsLogged() {
     try {
-        let isLogged: boolean = false
-        getObjectDataVc("LoginResponse").then((res) => {
-            if (res !== null) {
-                const result = res as ILoginResponse
-                console.log(result.UserID);
-                if (result.TenantId !== undefined) {
-                    isLogged = true
-                }
+        const res = await getObjectDataVc(DataKey.LoginResponse);
+        if (res !== null) {
+            const result = res as ILoginResponse;
+            if (result.TenantId !== undefined) {
+                return true;
+            } else {
+                return false;
             }
-        })
-        return isLogged
+        }
+        return false;
     } catch (err) {
         throw err;
     }

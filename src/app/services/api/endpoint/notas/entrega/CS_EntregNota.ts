@@ -15,9 +15,6 @@ export async function getEtrgNota(entregaGet: IGetDelivery): Promise<DadosNota> 
         const response = await api.get('Csws_Apps/rest/CS_WS_Entrega_Balcao/Get_Etrg_Nota', { params });
         return response.data;
     } catch (err) {
-        console.log('==============ERROR========');
-        console.log(err);
-        console.log('===========================');
         throw err;
     }
 }
@@ -29,9 +26,6 @@ export async function setEtrgEfetuada(setEntrega: ISetEntrega): Promise<Boolean>
         const response = await api.post(url);
         return response.data;
     } catch (err) {
-        console.log('==============ERROR========');
-        console.log(err);
-        console.log('===========================');
         throw err;
     }
 }

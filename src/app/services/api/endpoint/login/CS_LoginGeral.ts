@@ -10,12 +10,9 @@ export async function generalLogin(loginData: ILoginData) {
         }
 
         const response = await api.post('cs_At_40_LogicoService/rest/CS_PDV_API/LoginGeral', data);
-        
+
         return response.data;
     } catch (err) {
-        console.log('==============ERROR========');
-        console.log(err);
-        console.log('===========================');
         throw err; // Re-throwing the error to handle it in the calling code if needed
     }
 }
@@ -23,11 +20,8 @@ export async function generalLogin(loginData: ILoginData) {
 
 export async function doLogout() {
     try {
-        
+
     } catch (err) {
-        console.log('==============ERROR========');
-        console.log(err);
-        console.log('===========================');
         throw err; // Re-throwing the error to handle it in the calling code if needed
     }
 }

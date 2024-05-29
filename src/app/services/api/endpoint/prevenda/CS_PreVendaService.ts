@@ -15,7 +15,6 @@ export async function fetchPV(IGetPreVendaList: IGetPreVendaList): Promise<IResP
         let res = response.data as IResPreVenda
         return res
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }

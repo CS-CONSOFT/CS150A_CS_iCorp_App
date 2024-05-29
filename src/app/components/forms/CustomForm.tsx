@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, View } from "react-native";
 import CustomButton, { CustomButtonProps } from "../button/CustomButton";
 import CustomSearch from "../input/CustomSearch";
@@ -6,34 +6,39 @@ import { FormInputType } from "./IForm";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 
 interface IFormData {
+    // Uma lista de objetos que descrevem os campos de entrada do formulário.
     formInputTypeList: FormInputType[],
+
+    // Propriedades do botão personalizado a serem exibidas no final do formulário.
     customButtonProp: CustomButtonProps,
+
+    // O status do formulário, que pode ser usado para exibir um indicador de carregamento ou mensagem de erro.
     status: string,
+
+    // Um objeto contendo os valores iniciais para os campos do formulário.
+    // Cada chave do objeto deve corresponder ao título de um campo de entrada e o valor associado deve ser o valor inicial desejado para esse campo.
     initialFormState?: { [key: string]: any };
+
+    /** Uma função que pode ser usada para manipular o valor de um campo de entrada enquanto ele 
+     * está sendo digitado. 
+     * Esta função recebe um novo valor como argumento. */
+    handleValueOfInput?: (newValue: any) => void,
 }
 
-const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormState }: IFormData) => {
-    const [formState, setFormState] = useState<{ [key: string]: any }>(
-        /** o Reduce itera sobre todos os itens da lista
-         * @acc -> um acumulador que inicialmente é um objeto vazio
-         * Aqui pegamos todas as propriedades de acc copiamos, atribuindo a essa cópia
-         * o valor o título de cada campo do formulario, para termos um state de todos.
-         * 
-         * Ex. lista de form [username, email, password] -> Pegamos cada titulo dela
-         * e criamos um objeto novo que seria {username:'', email:'',password:''}
-         */
+const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormState = {} }: IFormData) => {
+    const [formState, setFormState] = useState<{ [key: string]: any }>();
+    useEffect(() => {
+        if (initialFormState) {
+            setFormState(initialFormState)
+        }
+    }, [initialFormState])
 
-        /**
-         * Se initial state tiver definido, usa ele
-         */
-        initialFormState || formInputTypeList.reduce((acc, field) => ({ ...acc, [field.title]: '' }), {})
-    );
     /**
      * Função para alterar o valor do item de cada input do formulario
      * @param title a chave que identifica o input do formulario
      * @param value o valor a ser passado
      */
-    const handleChange = (title: string, value: any) => {
+    const handleChangeValue = (title: string, value: any) => {
         setFormState(prevState => ({ ...prevState, [title]: value }));
     };
 
@@ -58,9 +63,11 @@ const CustomForm = ({ status, formInputTypeList, customButtonProp, initialFormSt
                             <CustomSearch.InputHandle
                                 titleText={item.title}
                                 placeholder={item.placeholder}
-                                handleInput={(newValue: any) => handleChange(item.title, newValue)}
-                                value={formState[item.title]}
+                                handleValueOfInput={(valueTyped) => {
+                                    handleChangeValue(item.title, valueTyped)
+                                }}
                                 securityTextEnter={item.securityTextEnter}
+                                initialState={initialFormState[item.title]}
                             />
                         </CustomSearch>
                     }

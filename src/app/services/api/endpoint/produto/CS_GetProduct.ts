@@ -29,7 +29,6 @@ export async function searchProduto(IGetProdutoSearch: IGetProductSearch): Promi
         return res
 
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }

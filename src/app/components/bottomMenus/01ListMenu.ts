@@ -1,9 +1,15 @@
 import { router } from "expo-router"
 import { navigateTo } from "../../view_controller/SharedViewController"
 import { ICON_NAME } from "../../util/IconsName"
+
 function goToSerie() {
     router.push("/screens/nota/serie/CS_SC_Serie")
 }
+
+function goToSearchProduct() {
+    router.push("/screens/produtos/consulta/CS_SC_ConsultaProdutos")
+}
+
 
 
 export const menu01Data = [
@@ -22,7 +28,7 @@ export const menu01Data = [
     {
         id: 'special-button',
         title: "Lista",
-        onPress: () => { goToSerie() },
+        onPress: () => { goToSearchProduct() },
         iconName: ICON_NAME.LISTA_CONTORNADO
     },
     {

@@ -5,7 +5,7 @@ const HeaderLogo = lazy(() => import("./components/headers/HeaderLogo"))
 const LoggoutTitle = lazy(() => import("./components/headers/LoggoutTitle"))
 
 
-export default function Layout() {
+function Layout() {
     return (
         <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -33,4 +33,6 @@ export default function Layout() {
         </Stack>
     )
 }
+
+export default Layout
 

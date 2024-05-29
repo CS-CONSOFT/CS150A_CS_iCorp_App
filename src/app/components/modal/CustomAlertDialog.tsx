@@ -12,12 +12,10 @@ interface CustomModalProps {
 }
 
 const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton }: CustomModalProps) => {
-
     const [serie, setSerie] = useState('')
-
     useEffect(() => {
         setSerie(title)
-    }, []);
+    }, [isVisible]);
 
     return (
         <Modal
@@ -28,19 +26,16 @@ const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton 
         >
             <View style={styles.container}>
                 <View style={styles.dialog}>
-                    <TouchableOpacity onPress={() => {setSerie(''); onCloseButton()}} style={styles.closeButton}>
+                    <TouchableOpacity onPress={() => { setSerie(''); onCloseButton() }} style={styles.closeButton}>
                         <Text style={styles.buttonText}>Fechar</Text>
                     </TouchableOpacity>
-
-                    <CustomInput
-                        titleText={title}
-                        setValue={setSerie}
-                        value={serie}
-                    />
-
-
+                    <CustomInput>
+                        <CustomInput.InputAreaHandle titleText={title}
+                            setValue={setSerie}
+                            value={serie} />
+                    </CustomInput>
                     <View style={styles.buttonsContainer}>
-                        <TouchableOpacity onPress={() => {setSerie(''); onSave(serie)}} style={styles.button}>
+                        <TouchableOpacity onPress={() => { setSerie(''); onSave(serie) }} style={styles.button}>
                             <Text style={styles.buttonText}>Salvar</Text>
                         </TouchableOpacity>
                     </View>
@@ -98,6 +93,4 @@ const styles = StyleSheet.create({
 
 export default CustomAlertDialog;
 
-function usEffect(arg0: () => void, arg1: never[]) {
-    throw new Error("Function not implemented.");
-}
+

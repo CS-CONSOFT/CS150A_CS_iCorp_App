@@ -1,18 +1,17 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { KeyboardType, StyleSheet, Text, TextInput, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 
 interface CustomInputProps {
-    titleText?: string;
-    //recebe o hook ou funcao responsavel por alterar o estado da variavel
-    setValue: (newValues: any) => void,
-    //armazena a nova variavel
-    value: string,
+    titleText: string;
     securityTextEnter?: boolean
     placeholder?: string,
-    keyboardType?: KeyboardType
+    keyboardType?: KeyboardType,
+    valueOfInput: string
     //lida com a escrita dos valores no input
-    handleInput?: (newValue: any) => void
+    handleValueOfInput: (id: any, valueTyped: any) => void
+
+
 }
 
 interface CustomProp {
@@ -24,7 +23,6 @@ const CustomInput = ({ children }: CustomProp) => {
 
 CustomInput.TitleText = TitleText
 CustomInput.Icon = Icon
-CustomInput.InputArea = InputArea
 CustomInput.InputAreaHandle = InputAreaHandle
 
 
@@ -42,26 +40,22 @@ function Icon({ iconName }: { iconName: string }) {
     </>
 }
 
-function InputArea({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default', handleInput }: CustomInputProps) {
+
+function InputAreaHandle({
+    titleText,
+    handleValueOfInput,
+    valueOfInput,
+    securityTextEnter = false,
+    placeholder,
+    keyboardType = 'default',
+
+}: CustomInputProps) {
     return <TextInput
         style={styles.input}
-        onChangeText={handleInput}
-        value={value}
-        secureTextEntry={securityTextEnter}
-        placeholder={placeholder}
-        keyboardType={keyboardType}
-
-    ></TextInput>
-}
-
-function InputAreaHandle({ setValue, value, securityTextEnter = false, placeholder, keyboardType = 'default' }: CustomInputProps) {
-    const handleChangeText = (newValue: string) => {
-        setValue(newValue)
-    }
-    return <TextInput
-        style={styles.input}
-        onChangeText={handleChangeText}
-        value={value}
+        onChangeText={(valueTyped) => {
+            handleValueOfInput!(titleText, valueTyped)
+        }}
+        value={valueOfInput}
         secureTextEntry={securityTextEnter}
         placeholder={placeholder}
         keyboardType={keyboardType}

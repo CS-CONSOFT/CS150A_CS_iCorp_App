@@ -1,16 +1,15 @@
 
 import { lazy, Suspense, useState } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
 import Separator from "../../../components/lists/Separator";
-import CustomAlertDialog from "../../../components/modal/CustomAlertDialog";
 import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { stylesNotaSerie } from "./StylesNotaSerie";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
-
+const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
 
 
 
@@ -67,7 +66,7 @@ const CS_SC_Serie = () => {
 
     return <>
         <SafeAreaView>
-            <Suspense fallback={<Text>Loading Header Input</Text>}>
+            <Suspense fallback={<ActivityIndicator />}>
                 <CustomHeaderInput
                     titleText="Chave Nota"
                     setValue={setNoteTyped}
@@ -93,14 +92,15 @@ const CS_SC_Serie = () => {
             )}
         </SafeAreaView>
 
-
-        <CustomAlertDialog
-            isVisible={showPopUp}
-            onDismiss={() => setShowPopUp(false)}
-            title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
-            onSave={(newSerie) => setNewCorSerie(newSerie)}
-            onCloseButton={() => { setShowPopUp(false) }}
-        />
+        <Suspense fallback={<ActivityIndicator />}>
+            <CustomAlertDialog
+                isVisible={showPopUp}
+                onDismiss={() => setShowPopUp(false)}
+                title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
+                onSave={(newSerie) => setNewCorSerie(newSerie)}
+                onCloseButton={() => { setShowPopUp(false) }}
+            />
+        </Suspense>
 
     </>
 }

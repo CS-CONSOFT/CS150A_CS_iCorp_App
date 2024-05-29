@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
-import { IPreVendaListModel } from "../../../services/api/interfaces/prevenda/IPreVenda";
-import { ICON_NAME } from "../../../util/IconsName";
-import { handleFetchPv } from "../../../view_controller/prevenda/PreVendaViewController";
-import { stylesPreVenda } from "../PreVendaStyles";
-import CustomPvBottomMenu from "../../../components/bottomMenus/01CustomPvBottomMenu";
-import CustomSearch from "../../../components/input/CustomSearch";
+import { FlatList, Text, View } from "react-native";
+import { IPreVendaListModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
+import { handleFetchPv } from "../../../../view_controller/prevenda/PreVendaViewController";
+import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
+import { stylesPreVenda } from "./PreVendaStyles";
+
+
+
 
 const CS_SC_PreVenda = () => {
-    const [preSaleSearch, setPreSaleSearch] = useState<string>('');
     const [pvList, setPvList] = useState<IPreVendaListModel[]>([]);
 
     useEffect(() => {
-        _fetchPV()
+        _fetchPV('')
     }, [])
 
 
@@ -26,34 +26,21 @@ const CS_SC_PreVenda = () => {
     const finalDateString: string = finalDate.toISOString().slice(0, 10);
     /**Formatando data */
     const memorizeFetchPV = useMemo(() => {
-        return async () => {
+        return async (preSaleSearch: string) => {
             handleFetchPv(initialDateString, finalDateString, preSaleSearch).then((res) => {
                 setPvList(res.List)
             })
         };
-    }, [initialDate, finalDate, preSaleSearch])
+    }, [initialDate, finalDate])
 
-    const _fetchPV = async () => {
-        await memorizeFetchPV()
+    const _fetchPV = async (preSaleSearch: string) => {
+        await memorizeFetchPV(preSaleSearch)
     }
 
     return (
         <View>
-            <CustomSearch>
-                <CustomSearch.InputHandle
-                    handleInput={setPreSaleSearch}
-                    value={preSaleSearch}
-                    placeholder="Protocolo/Conta"
-                    keyboardType="numeric"
-                />
-                <Pressable onPress={_fetchPV}>
-                    <CustomSearch.IconSearch style={stylesPreVenda.searchIcon} iconSize={22} iconColor="#FFF" iconName={ICON_NAME.BUSCA_CONTORNADO} />
-                </Pressable>
-                <CustomSearch.IconFilter iconName={ICON_NAME.FILTRAR_CONTORNADO} iconSize={42} />
-            </CustomSearch>
-            <CustomPvBottomMenu />
+            <CS_SearchInputPreVenda onSearchPress={_fetchPV} />
             <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
-
             <FlatList
                 data={pvList}
                 renderItem={({ item }) => <PreVendaRenderItem item={item} />}

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { KeyboardType, View, StyleSheet } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 import CustomInput from "./CustomInput";
@@ -6,13 +6,13 @@ import CustomInput from "./CustomInput";
 /** INTERFACES */
 interface CustomSearchProps {
     titleText?: string,
-    //armazena a nova variavel
-    value: string,
     placeholder?: string,
     keyboardType?: KeyboardType,
     securityTextEnter?: boolean,
+    valueOfInput: string,
     //lida com a escrita dos valores no input
-    handleInput?: (newValue: any) => void
+    handleValueOfInput: (id: any, valueTyped: any) => void,
+    initialState?: any
 }
 
 
@@ -44,24 +44,33 @@ function IconSearch({ iconName, iconColor, style, iconSize }: { iconName: string
     </>
 }
 
-function IconFilter({ iconName, iconSize }: { iconName: string, iconSize: number }) {
+function IconFilter({ style, iconName, iconSize }: { style?: object, iconName: string, iconSize: number }) {
     return <>
-        <CustomIcon icon={iconName} iconSize={iconSize} />
+        <CustomIcon style={style} icon={iconName} iconSize={iconSize} />
     </>
 }
 
 
-function InputHandle({ titleText = '', value, placeholder = '', keyboardType = 'default', handleInput, securityTextEnter = false }: CustomSearchProps) {
+function InputHandle({
+    titleText = '',
+    placeholder = '',
+    keyboardType = 'default',
+    securityTextEnter = false,
+    handleValueOfInput,
+    valueOfInput }: CustomSearchProps) {
+    /**Inicio do Metodo */
+
     return <>
         <CustomInput>
             <View >
                 <CustomInput.TitleText titleText={titleText} />
                 <CustomInput.InputAreaHandle
-                    setValue={handleInput!}
-                    value={value}
+                    titleText={titleText}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
                     securityTextEnter={securityTextEnter}
+                    handleValueOfInput={handleValueOfInput}
+                    valueOfInput={valueOfInput}
                 />
             </View>
         </CustomInput>

@@ -14,7 +14,6 @@ export async function getNoteSerie(entregaGet: IGetDelivery): Promise<DadosNota>
         const response = await api.get('Csws_Apps/rest/CS_WS_NOTA_Cor_Sr/Get_Etrg_Nota', { params });
         return response.data;
     } catch (err) {
-        console.log(err);
         throw err;
     }
 }
@@ -24,7 +23,6 @@ export async function setNewCorSerie(iSetCorSerie: ISetCorSerie) {
         const url = `/Csws_Apps/rest/CS_WS_NOTA_Cor_Sr/Set_Etrg_Prod_Cor_serie?prm_Tenant_ID=${iSetCorSerie.tenant}&prm_produto_ID=${iSetCorSerie.productId}&prm_cor_serie=${iSetCorSerie.newCorSerie}`;
         await api.post(url);
     } catch (err) {
-        console.log(err);
         throw err;
     }
 }

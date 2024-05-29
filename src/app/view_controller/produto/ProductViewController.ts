@@ -14,7 +14,6 @@ export async function handleSearchProduct(iGetProductSearch: IGetProductSearch):
 
     const tenant = (await getUserProperties()).tenantId;
     const estabId = (await getUserProperties()).estabId;
-
     iGetProductSearch.cs_empresa_id = estabId
     iGetProductSearch.cs_tenant_id = tenant!
     iGetProductSearch.cs_page_size = 4

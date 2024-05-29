@@ -1,11 +1,16 @@
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
 import { menu01Data } from "./01ListMenu";
 import ItemListMenu01Pv from "../lists/ItemListMenu01Pv";
 import Separator from "../lists/Separator";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
+import { router } from "expo-router";
 
 const CustomPvBottomMenu = () => {
+    function goToSearchProduct() {
+        router.push("/screens/produtos/consulta/CS_SC_ConsultaProdutos")
+    }
+
     return (
         <View style={styles.mainContainer}>
             <Separator />
@@ -17,11 +22,13 @@ const CustomPvBottomMenu = () => {
                 renderItem={({ item }) => {
                     if (item.id === "special-button") {
                         return (
-                            <View style={styles.centerBottomMenuButtonContainer}>
-                                <CustomIcon
-                                    icon={ICON_NAME.ADICIONAR_CONTORNADO}
-                                    iconColor="#A3C5D9" />
-                            </View>
+                            <Pressable onPress={goToSearchProduct}>
+                                <View style={styles.centerBottomMenuButtonContainer}>
+                                    <CustomIcon
+                                        icon={ICON_NAME.ADICIONAR_CONTORNADO}
+                                        iconColor="#A3C5D9" />
+                                </View>
+                            </Pressable>
                         )
                     } else {
                         return (

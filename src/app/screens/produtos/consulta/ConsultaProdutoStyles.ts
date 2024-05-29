@@ -40,10 +40,13 @@ export const stylesConsultaProduto = StyleSheet.create({
         fontWeight: 'bold',
     },
     productContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        height: 'auto',
+        backgroundColor: '#A3C5D9',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 12,
+        margin: 12
     },
     productName: {
         fontSize: 20,
