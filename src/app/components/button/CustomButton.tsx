@@ -1,4 +1,5 @@
-import { Text, TouchableHighlight } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Text, TouchableHighlight } from "react-native";
 
 
 export interface CustomButtonProps {
@@ -7,20 +8,35 @@ export interface CustomButtonProps {
     onLongPress?: () => void,
     disabled?: boolean,
     buttonStyle: object,
-    textStyle: object
+    textStyle: object,
 }
 
 
-const CustomButton = ({ title, onPress, onLongPress, disabled = false, buttonStyle = {}, textStyle = {} }: CustomButtonProps) => {
+const CustomButton = ({
+    title,
+    onPress,
+    onLongPress,
+    disabled = false,
+    buttonStyle = {}, textStyle = {} }: CustomButtonProps) => {
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handlePress = () => {
+        setIsLoading(true);
+        const done = () => setIsLoading(false);
+        onPress(done);
+    };
+
+
     return (
         <TouchableHighlight
-            onPress={onPress}
+            onPress={handlePress}
             disabled={disabled}
             style={buttonStyle}
             onLongPress={onLongPress}
             underlayColor='white'
         >
-            <Text style={textStyle}>{title}</Text>
+            {isLoading ? <ActivityIndicator /> : <Text style={textStyle}>{title}</Text>}
         </TouchableHighlight>
     );
 }

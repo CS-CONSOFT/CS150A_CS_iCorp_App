@@ -1,7 +1,6 @@
-export const FETCH_STATUS = {
+export let FETCH_STATUS = {
     IDLE: 'idle',
     LOADING: 'loading',
-    LOADING_PAGINATION: 'loading-page',
     SUCCESS: 'success',
     ERROR: 'error'
 }

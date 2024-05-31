@@ -3,13 +3,13 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { paginationStyles } from "./PaginationStyles";
 
 const Custom_Pagination = ({ paginationArray, onPagePress }:
-    { paginationArray: number[], onPagePress: (page: number, cameFromPagination: boolean) => void }) => {
+    { paginationArray: number[], onPagePress: (page: number) => void }) => {
 
     const [currentPage, setCurrentPage] = useState<number>(1)
 
     function clickedPage(page: number) {
         setCurrentPage(page)
-        onPagePress(page, true)
+        onPagePress(page)
     }
 
     return (

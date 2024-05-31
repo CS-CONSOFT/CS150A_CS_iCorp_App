@@ -33,7 +33,8 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
         userName: '',
         tenantId: undefined,
         estabId: '',
-        estabName: ''
+        estabName: '',
+        usuarioId: ''
     };
 
     try {
@@ -45,7 +46,8 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
                 userName: loginResponse.NomeUsuario,
                 tenantId: loginResponse.TenantId,
                 estabId: loginResponse.EstabelecimentoId,
-                estabName: loginResponse.NomeEstabelecimento
+                estabName: loginResponse.NomeEstabelecimento,
+                usuarioId: loginResponse.UsuarioId
             }
             return userProperties;
         }
@@ -57,11 +59,11 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
 }
 
 
-export function navigateTo(route:string){
+export function navigateTo(route: string) {
     router.push(route)
 }
 
-export function replaceScreen(route:string){
+export function replaceScreen(route: string) {
     router.replace(route)
 }
 
