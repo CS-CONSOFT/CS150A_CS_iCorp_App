@@ -15,8 +15,8 @@ function goToSearchProduct() {
 export const menu01Data = [
     {
         id: 1,
-        title: "Home",
-        onPress: () => { navigateTo("/screens/pre-venda/CS_SC_PreVenda") },
+        title: "Menu",
+        onPress: () => { navigateTo("/screens/menu/CS_SC_Menu") },
         iconName: ICON_NAME.ESTATISTICA_CONTORNADO
     },
     {

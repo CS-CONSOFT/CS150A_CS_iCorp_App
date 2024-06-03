@@ -116,6 +116,8 @@ const CS_SC_ConsultaProdutos = () => {
         })
     };
 
+
+
     //Tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>

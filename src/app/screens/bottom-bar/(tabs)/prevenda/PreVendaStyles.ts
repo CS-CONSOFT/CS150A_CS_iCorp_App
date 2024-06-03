@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 //estilos
 export const stylesPreVenda = StyleSheet.create({
     searchIcon: {
-        backgroundColor: '#c3c3c3',
+        backgroundColor: '#5E5D5D',
         padding: 8,
         borderRadius: 32,
         marginLeft: 8,
@@ -16,21 +16,27 @@ export const stylesPreVenda = StyleSheet.create({
     pressable: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 14
     },
     containerFilter: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%'
     },
     textTitle: {
         fontSize: 24,
         marginLeft: 18,
-        marginTop: 8
+        marginTop: 18,
+        marginBottom: 18
+
     },
     containerRenderItem: {
         borderRadius: 12,
         flexDirection: 'row',
-        margin: 8
+        margin: 8,
+        elevation: 3
+
     },
     containerRenderItemLeft: {
         width: 111,

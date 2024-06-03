@@ -1,16 +1,18 @@
 import { Tabs } from 'expo-router';
 import CustomPvBottomMenu from '../../../components/bottomMenus/01CustomPvBottomMenu';
 
-export default function TabLayout() {
+function BottomTabLayout() {
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}
+        <Tabs
             tabBar={CustomPvBottomMenu}>
             <Tabs.Screen
                 name="prevenda/CS_SC_PreVenda"
                 options={{
-                    headerShown: false
+                    title: 'Pré Vendas'
                 }}
             />
         </Tabs>
     );
 }
+
+export default BottomTabLayout;

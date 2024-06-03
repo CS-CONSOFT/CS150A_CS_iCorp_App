@@ -30,6 +30,20 @@ function Layout() {
                 title: "Consulta de Produto"
             }} />
 
+            <Stack.Screen name="screens/bottom-bar/(tabs)" options={{
+                title: "Consulta de Produto",
+                headerShown: false
+            }} />
+
+            <Stack.Screen name="screens/top-bar-slider/(tabs)" options={{
+                title: "Consulta de Produto",
+                headerTitleAlign: 'center',
+                headerTintColor: "#c3c3c3",
+                headerStyle: {
+                    backgroundColor: "#104765"
+                }
+            }} />
+
         </Stack>
     )
 }

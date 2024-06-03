@@ -1,8 +1,7 @@
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import HeaderLogo from "../../components/headers/HeaderLogo";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { checkIfUserIsLogged } from "../../view_controller/login/LoginViewController";
 import CS_SC_LoginForm from "./CS_LoginForm";
 import { stylesLogin } from "./StylesLogin";

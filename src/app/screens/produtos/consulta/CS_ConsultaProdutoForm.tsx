@@ -10,8 +10,6 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
 
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({})
 
-
-
     const handleInputTyping = (id: string, value: string) => {
         setAttributesMap((prevState => {
             return { ...prevState, [id]: value }

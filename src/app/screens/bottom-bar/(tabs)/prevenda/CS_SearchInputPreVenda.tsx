@@ -29,6 +29,7 @@ const CS_SearchInputPreVenda = ({ onSearchPress }: { onSearchPress: (searchValue
                     <Pressable onPress={() => onSearchPress(preSaleSearch)}>
                         <CustomSearch.IconSearch style={stylesPreVenda.searchIcon} iconSize={22} iconColor="#FFF" iconName={ICON_NAME.BUSCA_CONTORNADO} />
                     </Pressable>
+
                     <CustomSearch.IconFilter iconName={ICON_NAME.FILTRAR_CONTORNADO} iconSize={42} />
                 </View>
             </CustomSearch>
