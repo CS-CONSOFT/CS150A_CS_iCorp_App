@@ -59,7 +59,7 @@ export interface IResPreVenda {
 }
 
 
-/** RES PV MODEL */
+/** RES PV MODEL LISTA*/
 export interface IPreVendaListModel {
     ID: string;
     ProtocolNumber: string;
@@ -74,4 +74,30 @@ export interface IPreVendaListModel {
     Total?: number;
     Is_Selecionado?: boolean;
     Is_PV_Resultante?: boolean
+}
+
+/** RES PRODUTOS PV */
+export interface IProductsPvModel {
+    IsOk: boolean;
+    Msg: string;
+    List: IProductItemModel[];
+}
+
+export interface IProductItemModel {
+    Id: string;
+    Codigo: number;
+    Sequencia: number;
+    Descricao: string;
+    Quantidade: number;
+    Unidade: string;
+    TotalLiquido: number;
+    TotalBruto: number;
+    TotalDesconto: number;
+    PrecoUnitario: number;
+    PrecoTabela: number;
+    PrecoTabela2: string;
+    Imagem: string;
+    gg008_ID: string;
+    gg008_Kdx_ID: string;
+    gg520_ID: string;
 }

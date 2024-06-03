@@ -1,5 +1,5 @@
 import api from "../../axios_config";
-import { IResPreVenda, IGetPreVendaList, IInsertPvWhitoutService as IInsertPv, IInsertPvResponse } from "../../interfaces/prevenda/IPreVenda";
+import { IResPreVenda, IGetPreVendaList, IInsertPvWhitoutService as IInsertPv, IInsertPvResponse, IProductsPvModel } from "../../interfaces/prevenda/IPreVenda";
 
 /**
  * Lista todas as PVS
@@ -52,7 +52,13 @@ export async function insertProductToPv(insertPv: IInsertPv): Promise<IInsertPvR
     } catch (error) {
         throw error;
     }
+}
 
+export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atendimento_id }:
+    { cs_tenant_id: number, cs_empresa_id: string, cs_atendimento_id: string }): Promise<IProductsPvModel> {
 
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/ListarProdutos`
 
+    const response = await api.get(url)
+    return response.data as IProductsPvModel
 }

@@ -1,5 +1,8 @@
-import { fetchPVs, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
-import { IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
+import { DataKey } from "../../enum/DataKeys";
+import { ILoginResponse } from "../../screens/login/ILoginResponse";
+import { fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductsPvModel, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
+import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
 
 
@@ -50,5 +53,20 @@ export async function handleInsertProductPv(
     }
 
     const result = insertProductToPv(insert)
+    return result
+}
+
+
+export async function handleGetProductsPv(): Promise<IProductsPvModel> {
+    let currentPvId: any = ''
+    getSimpleData(DataKey.CurrentPV).then((res) => {
+        currentPvId = res
+    })
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+    const result = getPreSaleProducts({
+        cs_tenant_id: currentUser.TenantId,
+        cs_empresa_id: currentUser.EstabelecimentoId,
+        cs_atendimento_id: currentPvId
+    })
     return result
 }

@@ -6,6 +6,7 @@ import { handleSearchProduct } from "../../../view_controller/produto/ProductVie
 import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import CS_ConsultaProdutoForm from "./CS_ConsultaProdutoForm";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { ProductItem } from "../../../components/lists/ProductItem";
 
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
@@ -179,24 +180,6 @@ const CS_SC_ConsultaProdutos = () => {
 }
 
 
-//Item de produto que aparece na listagem
-const ProductItem = ({ product, onClick }: { product: IResProductSearch, onClick: (product: IResProductSearch, done: () => void) => void }) => {
-    return (
-        <View style={stylesConsultaProduto.productContainer}>
-            <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />
-            <Text style={stylesConsultaProduto.productName}>{product.DescMarca}</Text>
-            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
-            <Text style={stylesConsultaProduto.productInfo}>{`R$: ${product.Saldo}`}</Text>
-            <Text style={stylesConsultaProduto.productInfo}>{`Qtd: ${product.Preco}`}</Text>
-            <CustomButton
-                title="Adicionar Produto"
-                onPress={(done) => { onClick(product, done) }}
-                buttonStyle={stylesConsultaProduto.btnNewSearch}
-                textStyle={stylesConsultaProduto.searchButtonText}
-            />
-        </View>
-    );
-};
 
 
 

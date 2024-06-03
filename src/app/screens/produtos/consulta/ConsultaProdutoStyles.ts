@@ -38,25 +38,6 @@ export const stylesConsultaProduto = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-    },
-    productContainer: {
-        height: 'auto',
-        backgroundColor: '#A3C5D9',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-        borderTopLeftRadius: 12,
-        borderBottomLeftRadius: 12,
-        margin: 12
-    },
-    productName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 8,
-    },
-    productInfo: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 3,
-    },
+    }
+
 });

@@ -5,6 +5,8 @@ import { handleFetchPv } from "../../../../view_controller/prevenda/PreVendaView
 import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
 import { stylesPreVenda } from "./PreVendaStyles";
 import { router } from "expo-router";
+import { storeSimpleData } from "../../../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../../../enum/DataKeys";
 
 
 
@@ -46,7 +48,8 @@ const CS_SC_PreVenda = () => {
         })
     }
 
-    function goToDetails() {
+    function goToDetails(currentPv: string) {
+        storeSimpleData(DataKey.CurrentPV, currentPv)
         router.push("screens/top-bar-slider/(tabs)")
     }
 
@@ -58,11 +61,9 @@ const CS_SC_PreVenda = () => {
                 data={pvList}
                 refreshing={isLoading}
                 onRefresh={handleRefreshList}
-                renderItem={({ item }) => <PreVendaRenderItem item={item} onPress={goToDetails} />}
+                renderItem={({ item }) => <PreVendaRenderItem item={item} onPress={() => goToDetails(item.ID)} />}
                 keyExtractor={(item) => item.ID.toString()}
             />
-
-
         </View>
     );
 }
@@ -87,7 +88,7 @@ function PreVendaRenderItem({ item, onPress }: { item: IPreVendaListModel, onPre
                     <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.ProtocolNumber}</Text>
                     <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.Codigo}</Text>
                     <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.Nome_Cliente}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.Situacao}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.NomeUsuario}</Text>
                 </View>
             </View>
         </Pressable>

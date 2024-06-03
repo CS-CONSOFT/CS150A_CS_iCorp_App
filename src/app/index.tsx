@@ -8,12 +8,10 @@ import { NavigationContainer } from '@react-navigation/native';
 
 function Home() {
   return (
-    <NavigationContainer>
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <CS_SC_Login />
-      </SafeAreaView>
-    </NavigationContainer>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="auto" />
+      <CS_SC_Login />
+    </SafeAreaView>
   );
 }
 
