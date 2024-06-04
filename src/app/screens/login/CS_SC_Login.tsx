@@ -1,15 +1,16 @@
-import { router } from "expo-router";
 import { useEffect } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import HeaderLogo from "../../components/headers/HeaderLogo";
 import { checkIfUserIsLogged } from "../../view_controller/login/LoginViewController";
 import CS_SC_LoginForm from "./CS_LoginForm";
 import { stylesLogin } from "./StylesLogin";
+import { useNavigation } from "@react-navigation/native";
 
 
 const CS_SC_Login = () => {
+    const { navigate } = useNavigation()
     function navigateToMenu() {
-        router.replace("screens/menu/CS_SC_Menu")
+        navigate('Login')
     }
 
     useEffect(() => {

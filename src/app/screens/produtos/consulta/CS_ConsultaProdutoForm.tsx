@@ -1,5 +1,5 @@
-import React, { lazy, useState } from "react";
-import { View } from "react-native";
+import React, { lazy, Suspense, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 import CustomSearch from "../../../components/input/CustomSearch";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
@@ -20,7 +20,6 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
     //Tela
     return (
         <View style={stylesConsultaProduto.searchContainer}>
-
             <CustomSearch.InputHandle
                 titleText={'Código'}
                 handleValueOfInput={handleInputTyping}
@@ -84,12 +83,15 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
                 securityTextEnter={false}
             />
 
-            <CustomButton
-                title={'Pesquisar'}
-                onPress={() => onSearchPress(attributesMap)}
-                buttonStyle={stylesConsultaProduto.searchButton}
-                textStyle={stylesConsultaProduto.searchButtonText}
-            />
+            <Suspense fallback={<ActivityIndicator />}>
+                <CustomButton
+                    title={'Pesquisar'}
+                    onPress={() => onSearchPress(attributesMap)}
+                    buttonStyle={stylesConsultaProduto.searchButton}
+                    textStyle={stylesConsultaProduto.searchButtonText}
+                />
+            </Suspense>
+
         </View>
     );
 }

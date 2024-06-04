@@ -4,10 +4,10 @@ import { IPreVendaListModel } from "../../../../services/api/interfaces/prevenda
 import { handleFetchPv } from "../../../../view_controller/prevenda/PreVendaViewController";
 import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
 import { stylesPreVenda } from "./PreVendaStyles";
-import { router } from "expo-router";
 import { storeSimpleData } from "../../../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../../../enum/DataKeys";
 import { FETCH_STATUS } from "../../../../util/FETCH_STATUS";
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -15,6 +15,7 @@ import { FETCH_STATUS } from "../../../../util/FETCH_STATUS";
 const CS_SC_PreVenda = () => {
     const [pvList, setPvList] = useState<IPreVendaListModel[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         _fetchPV('')
@@ -55,7 +56,7 @@ const CS_SC_PreVenda = () => {
 
     function goToDetails(currentPv: string) {
         storeSimpleData(DataKey.CurrentPV, currentPv)
-        router.push("screens/top-bar-slider/(tabs)")
+        navigate('Pre_Venda_Detalhes')
     }
 
     const isLoading = status === FETCH_STATUS.LOADING

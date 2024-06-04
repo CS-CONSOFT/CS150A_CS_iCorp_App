@@ -20,8 +20,10 @@ const CustomHeaderInput = ({ titleText, setValue, value, onPress, buttonStyle = 
             <Text style={styles.title}>{titleText}</Text>
             <CustomInput>
                 <CustomInput.TitleText titleText="Nota" />
-                <CustomInput.InputArea setValue={setValue}
-                    value={value}
+                <CustomInput.InputAreaHandle
+                    titleText="nota"
+                    valueOfInput={value}
+                    handleValueOfInput={setValue}
                     keyboardType='numeric' />
             </CustomInput>
 
