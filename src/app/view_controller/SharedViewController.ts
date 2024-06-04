@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 
 import { DataKey } from "../enum/DataKeys";
 import { ILoginResponse } from "../screens/login/ILoginResponse";
@@ -67,11 +66,11 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
 }
 
 
-export function navigateTo(route: string) {
-    router.push(route)
+export function navigateTo(navigate: any, route: string) {
+    navigate(route)
 }
 
-export function replaceScreen(route: string) {
-    router.replace(route)
+export function replaceScreen(navigate: any, route: string) {
+    navigate(route)
 }
 

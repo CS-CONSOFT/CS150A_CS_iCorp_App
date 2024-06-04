@@ -4,14 +4,15 @@ import ItemListMenu01Pv from "../lists/ItemListMenu01Pv";
 import Separator from "../lists/Separator";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
-import { router } from "expo-router";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../enum/DataKeys";
+import { useNavigation } from "@react-navigation/native";
 
 const CustomPvBottomMenu = () => {
+    const { navigate } = useNavigation()
     function goToSearchProduct() {
         removeValueFromStorage(DataKey.CurrentPV).then(() => {
-            router.push("/screens/produtos/consulta/CS_SC_ConsultaProdutos")
+            navigate('Consulta_Produtos')
         })
     }
 
@@ -38,7 +39,7 @@ const CustomPvBottomMenu = () => {
                         return (
                             <ItemListMenu01Pv
                                 title={item.title}
-                                onPress={item.onPress}
+                                onPress={() => item.onPress(navigate)}
                                 iconName={item.iconName}
                             />
                         );

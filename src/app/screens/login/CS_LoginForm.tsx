@@ -1,6 +1,5 @@
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import { Alert, SafeAreaView, View } from "react-native";
 import CustomButton from "../../components/button/CustomButton";
 import CustomSearch from "../../components/input/CustomSearch";
 import { DataKey } from "../../enum/DataKeys";
@@ -8,20 +7,21 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
 import { stylesLogin } from "./StylesLogin";
+import { useNavigation } from "@react-navigation/native";
 
 
 const CS_SC_LoginForm = () => {
     //variaveis
-    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         Domínio: 'Comercial',
         Usuário: 'Barros',
         Senha: 'ba'
     });
+    const { navigate } = useNavigation()
     //fim variaveis
 
     function navigateToMenu() {
-        router.replace("screens/menu/CS_SC_Menu")
+        navigate('Menu')
     }
 
     useEffect(() => {
@@ -34,8 +34,7 @@ const CS_SC_LoginForm = () => {
 
 
 
-    async function onClickLogin(): Promise<void> {
-        setStatus(FETCH_STATUS.LOADING)
+    async function onClickLogin(done: () => void): Promise<void> {
         const loginData: ILoginData = {
             domain: attributesMap.Domínio,
             user: attributesMap.Usuário,
@@ -47,14 +46,11 @@ const CS_SC_LoginForm = () => {
                 //salvando dados localmente
                 storeObjectDataVc(DataKey.LoginResponse, response.Model)
                 navigateToMenu()
-                attributesMap
-            } else {
-                setStatus(FETCH_STATUS.ERROR)
             }
         } catch (error) {
-            setStatus(FETCH_STATUS.ERROR)
+            Alert.alert(error as string)
         } finally {
-            setAttributesMap({})
+            done()
         }
     }
 
@@ -65,43 +61,42 @@ const CS_SC_LoginForm = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View style={{ margin: 56 }}>
-                <CustomSearch>
-                    <CustomSearch.InputHandle
-                        titleText={'Domínio'}
-                        handleValueOfInput={handleInputTyping}
-                        valueOfInput={attributesMap.Domínio}
-                        securityTextEnter={false}
-                    />
-                </CustomSearch>
-
-                <CustomSearch>
-                    <CustomSearch.InputHandle
-                        titleText={'Usuário'}
-                        handleValueOfInput={handleInputTyping}
-                        valueOfInput={attributesMap.Usuário}
-                        securityTextEnter={false}
-                    />
-                </CustomSearch>
-
-                <CustomSearch>
-                    <CustomSearch.InputHandle
-                        titleText={'Senha'}
-                        handleValueOfInput={handleInputTyping}
-                        valueOfInput={attributesMap.Senha}
-                        securityTextEnter={false}
-                    />
-                </CustomSearch>
-
-                <CustomButton
-                    title={'Logar'}
-                    onPress={onClickLogin}
-                    buttonStyle={stylesLogin.button}
-                    textStyle={stylesLogin.textButton}
+        <SafeAreaView>
+            <CustomSearch>
+                <CustomSearch.InputHandle
+                    titleText={'Domínio'}
+                    handleValueOfInput={handleInputTyping}
+                    valueOfInput={attributesMap.Domínio}
+                    securityTextEnter={false}
                 />
+            </CustomSearch>
 
-            </View>
+            <CustomSearch>
+                <CustomSearch.InputHandle
+                    titleText={'Usuário'}
+                    handleValueOfInput={handleInputTyping}
+                    valueOfInput={attributesMap.Usuário}
+                    securityTextEnter={false}
+                />
+            </CustomSearch>
+
+            <CustomSearch>
+                <CustomSearch.InputHandle
+                    titleText={'Senha'}
+                    handleValueOfInput={handleInputTyping}
+                    valueOfInput={attributesMap.Senha}
+                    securityTextEnter={false}
+                />
+            </CustomSearch>
+
+            <CustomButton
+                title={'Logar'}
+                onPress={(done) => onClickLogin(done)}
+                buttonStyle={stylesLogin.button}
+                textStyle={stylesLogin.textButton}
+            />
+
+
         </SafeAreaView>
     );
 }

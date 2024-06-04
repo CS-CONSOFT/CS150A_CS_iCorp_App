@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { ProductItem } from "../../../components/lists/ProductItem";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
@@ -8,10 +8,11 @@ import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { replaceScreen } from "../../../view_controller/SharedViewController";
 import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
-import CS_ConsultaProdutoForm from "./CS_ConsultaProdutoForm";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { useNavigation } from "@react-navigation/native";
 
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
+const CS_ConsultaProdutoForm = lazy(() => import("./CS_ConsultaProdutoForm"))
 
 const CS_SC_ConsultaProdutos = () => {
     const [productList, setProductList] = useState<IResProductSearch[]>()
@@ -19,6 +20,7 @@ const CS_SC_ConsultaProdutos = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IGetProductSearch>()
+    const { navigate } = useNavigation()
 
 
     /**
@@ -60,7 +62,7 @@ const CS_SC_ConsultaProdutos = () => {
                 undefined
             ).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                pvId !== undefined ? replaceScreen("../../top-bar-slider/(tabs)/produto/CS_SC_PreVendaDetalheProduto") : showToast(res.Msg)
+                pvId !== undefined ? navigate('Pre_Venda_Detalhes') : showToast(res.Msg)
                 done();
             })
         })
@@ -80,6 +82,7 @@ const CS_SC_ConsultaProdutos = () => {
     }
 
     const handleFormSubmitToSearch = (formData?: any, page?: number) => {
+        setStatus(FETCH_STATUS.LOADING)
         /** caso a chamada seja feita por paginação, mudar o tipo de loading para manter a paginação mostrando em tela
          * enquanto o usuário estiver vendo uma lista de produto baseado nos filtros dele.
          */
@@ -131,7 +134,9 @@ const CS_SC_ConsultaProdutos = () => {
             <>
                 {isNewSearch && (
                     <ScrollView>
-                        <CS_ConsultaProdutoForm onSearchPress={handleFormSubmitToSearch} />
+                        <Suspense fallback={<ActivityIndicator />}>
+                            <CS_ConsultaProdutoForm onSearchPress={handleFormSubmitToSearch} />
+                        </Suspense>
                     </ScrollView>
                 )
                 }
