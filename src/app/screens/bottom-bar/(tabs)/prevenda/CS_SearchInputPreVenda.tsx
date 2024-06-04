@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import CustomSearch from "../../../../components/input/CustomSearch";
-import { IPreVendaListModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { stylesPreVenda } from "./PreVendaStyles";
 

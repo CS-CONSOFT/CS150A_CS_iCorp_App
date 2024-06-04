@@ -5,10 +5,14 @@ import Separator from "../lists/Separator";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import { router } from "expo-router";
+import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../enum/DataKeys";
 
 const CustomPvBottomMenu = () => {
     function goToSearchProduct() {
-        router.push("/screens/produtos/consulta/CS_SC_ConsultaProdutos")
+        removeValueFromStorage(DataKey.CurrentPV).then(() => {
+            router.push("/screens/produtos/consulta/CS_SC_ConsultaProdutos")
+        })
     }
 
     return (

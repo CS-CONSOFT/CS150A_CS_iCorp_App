@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { FlatList, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { IPreVendaListModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
 import { handleFetchPv } from "../../../../view_controller/prevenda/PreVendaViewController";
 import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
@@ -7,13 +7,14 @@ import { stylesPreVenda } from "./PreVendaStyles";
 import { router } from "expo-router";
 import { storeSimpleData } from "../../../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../../../enum/DataKeys";
+import { FETCH_STATUS } from "../../../../util/FETCH_STATUS";
 
 
 
 
 const CS_SC_PreVenda = () => {
     const [pvList, setPvList] = useState<IPreVendaListModel[]>([]);
-    const [isLoading, setIsLoading] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
     useEffect(() => {
         _fetchPV('')
@@ -31,7 +32,9 @@ const CS_SC_PreVenda = () => {
     /**Formatando data */
     const memorizeFetchPV = useMemo(() => {
         return async (preSaleSearch: string) => {
+            setStatus(FETCH_STATUS.LOADING)
             handleFetchPv(initialDateString, finalDateString, preSaleSearch).then((res) => {
+                setStatus(FETCH_STATUS.SUCCESS)
                 setPvList(res.List)
             })
         };
@@ -42,28 +45,38 @@ const CS_SC_PreVenda = () => {
     }
 
     function handleRefreshList(): void {
-        setIsLoading(true)
+        setStatus(FETCH_STATUS.LOADING)
         _fetchPV("").then(() => {
-            setIsLoading(false)
+            setStatus(FETCH_STATUS.SUCCESS)
         })
     }
+
+
 
     function goToDetails(currentPv: string) {
         storeSimpleData(DataKey.CurrentPV, currentPv)
         router.push("screens/top-bar-slider/(tabs)")
     }
 
+    const isLoading = status === FETCH_STATUS.LOADING
+
     return (
         <View>
             <CS_SearchInputPreVenda onSearchPress={_fetchPV} />
-            <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
-            <FlatList
-                data={pvList}
-                refreshing={isLoading}
-                onRefresh={handleRefreshList}
-                renderItem={({ item }) => <PreVendaRenderItem item={item} onPress={() => goToDetails(item.ID)} />}
-                keyExtractor={(item) => item.ID.toString()}
-            />
+            {isLoading ? <>
+                <ActivityIndicator />
+            </> :
+                <>
+                    <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
+                    <FlatList
+                        data={pvList}
+                        refreshing={isLoading}
+                        onRefresh={handleRefreshList}
+                        renderItem={({ item }) => <PreVendaRenderItem item={item} onPress={() => goToDetails(item.ID)} />}
+                        keyExtractor={(item) => item.ID.toString()}
+                    />
+                </>
+            }
         </View>
     );
 }

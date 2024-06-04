@@ -42,7 +42,10 @@ function Icon({ iconName }: { iconName: string }) {
 
 
 function InputAreaHandle({
-    titleText,
+    /**
+     * Responsavel por identificar o input atual
+     */
+    titleText: textIdentifier,
     handleValueOfInput,
     valueOfInput,
     securityTextEnter = false,
@@ -53,7 +56,7 @@ function InputAreaHandle({
     return <TextInput
         style={styles.input}
         onChangeText={(valueTyped) => {
-            handleValueOfInput!(titleText, valueTyped)
+            handleValueOfInput!(textIdentifier, valueTyped)
         }}
         value={valueOfInput}
         secureTextEntry={securityTextEnter}

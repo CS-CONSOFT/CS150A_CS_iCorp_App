@@ -62,3 +62,11 @@ export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atend
     const response = await api.get(url)
     return response.data as IProductsPvModel
 }
+
+export async function deleteProductFromPv({ cs_tenant_id, cs_empresa_id, cs_atendimento_id, cs_product_pv_id }:
+    { cs_tenant_id: number, cs_empresa_id: string, cs_atendimento_id: string, cs_product_pv_id: string }): Promise<boolean> {
+
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/${cs_product_pv_id}/RemoverProduto`
+    const response = await api.delete(url)
+    return response.data.IsOk
+}

@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 4,
         alignContent: 'center',
-        margin: 4
+        margin: 4,
+        justifyContent: 'space-evenly'
     },
     containerIcon: {
         backgroundColor: '#A3C5D9',

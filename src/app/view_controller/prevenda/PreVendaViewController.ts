@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/login/ILoginResponse";
-import { fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { deleteProductFromPv, fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductsPvModel, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
@@ -34,9 +34,9 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
  * @returns 
  */
 export async function handleInsertProductPv(
-    cs_codigo_produto: string, cs_conta_id: string, cs_entrega: boolean,
+    cs_codigo_produto: string, cs_entrega: boolean,
     cs_quantidade: number, cs_tipo_atendimento: number,
-    cs_atendimento?: string
+    cs_atendimento?: string, cs_conta_id?: string
 ): Promise<IInsertPvResponse> {
 
     const userProp = (await getUserProperties())
@@ -67,6 +67,21 @@ export async function handleGetProductsPv(): Promise<IProductsPvModel> {
         cs_tenant_id: currentUser.TenantId,
         cs_empresa_id: currentUser.EstabelecimentoId,
         cs_atendimento_id: currentPvId
+    })
+    return result
+}
+
+export async function handleDeleteProductFromPv(productId: string): Promise<boolean> {
+    let currentPvId: any = ''
+    getSimpleData(DataKey.CurrentPV).then((res) => {
+        currentPvId = res
+    })
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+    const result = deleteProductFromPv({
+        cs_tenant_id: currentUser.TenantId,
+        cs_empresa_id: currentUser.EstabelecimentoId,
+        cs_atendimento_id: currentPvId,
+        cs_product_pv_id: productId
     })
     return result
 }

@@ -1,12 +1,15 @@
 import React, { lazy, useState } from "react";
-import { ActivityIndicator, FlatList, Image, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
+import { ProductItem } from "../../../components/lists/ProductItem";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
+import { DataKey } from "../../../enum/DataKeys";
+import { getSimpleData } from "../../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
+import { replaceScreen } from "../../../view_controller/SharedViewController";
 import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVendaViewController";
+import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
 import CS_ConsultaProdutoForm from "./CS_ConsultaProdutoForm";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { ProductItem } from "../../../components/lists/ProductItem";
 
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
@@ -46,19 +49,22 @@ const CS_SC_ConsultaProdutos = () => {
     }
 
     function scInsertProductPv(product: IResProductSearch, done: () => void) {
-        handleInsertProductPv(
-            product.CodgProduto!.toString(),
-            '7463cf92-3601-4a06-b696-0f3b314294e5',
-            false,
-            1,
-            1).then((res) => {
+        getSimpleData(DataKey.CurrentPV).then((currentPv) => {
+            const pvId = currentPv as string
+            handleInsertProductPv(
+                product.CodgProduto!.toString(),
+                false,
+                1,
+                1,
+                pvId || undefined,
+                undefined
+            ).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                showToast(res.Msg)
+                pvId !== undefined ? replaceScreen("../../top-bar-slider/(tabs)/produto/CS_SC_PreVendaDetalheProduto") : showToast(res.Msg)
                 done();
             })
+        })
     }
-
-
 
 
     const isSuccess = status == FETCH_STATUS.SUCCESS

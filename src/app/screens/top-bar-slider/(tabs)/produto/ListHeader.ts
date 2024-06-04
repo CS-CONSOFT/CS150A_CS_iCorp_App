@@ -13,13 +13,6 @@ export const data = [
         iconName: "newspaper-outline"
     },
     {
-        id: 3,
-        title: "Bipe",
-        onPress: () => { navigateTo("/screens/produtos/consulta/CS_SC_ConsultaProdutos") },
-        iconName: "search-outline"
-
-    },
-    {
         id: 4,
         title: "Código",
         onPress: () => { goToSerie() },
@@ -28,20 +21,8 @@ export const data = [
     {
         id: 5,
         title: "Requisição",
-        onPress: () => { goToSerie() },
+        onPress: () => { navigateTo("/screens/produtos/consulta/CS_SC_ConsultaProdutos") },
         iconName: "archive-outline"
-    },
-    {
-        id: 6,
-        title: "Adicionar",
-        onPress: () => { goToSerie() },
-        iconName: "search-outline"
-    },
-    {
-        id: 7,
-        title: "Últimas",
-        onPress: () => { navigateTo("/screens/nota/serie/CS_SC_Serie") },
-        iconName: "barcode-outline"
     }
 
 ]

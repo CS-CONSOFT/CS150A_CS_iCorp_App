@@ -4,7 +4,7 @@ export interface IInsertPvWhitoutService {
     cs_empresa_id: string,
     cs_usuario_id: string,
     cs_atendimento?: string
-    cs_conta_id: string,
+    cs_conta_id?: string,
     cs_quantidade: number,
     cs_codigo_produto: string,
     cs_entrega: boolean,

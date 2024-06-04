@@ -1,5 +1,9 @@
 import { Stack } from "expo-router";
 import { lazy } from "react";
+import { Pressable, Text } from "react-native";
+import CustomIcon from "./components/icon/CustomIcon";
+import { ICON_NAME } from "./util/IconsName";
+import { navigateTo } from "./view_controller/SharedViewController";
 
 const HeaderLogo = lazy(() => import("./components/headers/HeaderLogo"))
 const LoggoutTitle = lazy(() => import("./components/headers/LoggoutTitle"))
@@ -41,7 +45,12 @@ function Layout() {
                 headerTintColor: "#c3c3c3",
                 headerStyle: {
                     backgroundColor: "#104765"
-                }
+                },
+                headerLeft: () => <>
+                    <Pressable onPress={() => { navigateTo("screens/bottom-bar/(tabs)/prevenda/CS_SC_PreVenda") }}>
+                        <CustomIcon icon={ICON_NAME.VOLTAR_CONTORNADO} iconSize={24} iconColor="#c3c3c3" />
+                    </Pressable>
+                </>
             }} />
 
         </Stack>

@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { DataKey } from "../enum/DataKeys";
 import { ILoginResponse } from "../screens/login/ILoginResponse";
 import { IGetUserProperties } from "./interface/IGetUserProperties";
-import { getObject, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
+import { getObject, getSimpleData, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
 
 
 export async function storeObjectDataVc(key: string, value: object) {
@@ -12,6 +12,14 @@ export async function storeObjectDataVc(key: string, value: object) {
     } catch (error) {
         return error
     }
+}
+
+export async function handleGetSimpleData(key: string) {
+    let value: any = ''
+    getSimpleData(key).then((res) => {
+        value = res
+    })
+    return value
 }
 
 export async function getObjectDataVc(key: string) {

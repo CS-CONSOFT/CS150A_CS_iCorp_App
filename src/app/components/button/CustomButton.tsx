@@ -7,7 +7,7 @@ export interface CustomButtonProps {
     onPress: (prop?: any) => void,
     onLongPress?: () => void,
     disabled?: boolean,
-    buttonStyle: object,
+    buttonStyle?: object,
     textStyle: object,
 }
 

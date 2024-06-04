@@ -36,7 +36,6 @@ export const stylesPreVenda = StyleSheet.create({
         flexDirection: 'row',
         margin: 8,
         elevation: 3
-
     },
     containerRenderItemLeft: {
         width: 111,
