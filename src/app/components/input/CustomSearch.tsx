@@ -64,8 +64,8 @@ function InputHandle({
         <CustomInput>
             <View >
                 <CustomInput.TitleText titleText={titleText} />
-                <CustomInput.InputAreaHandle
-                    titleText={titleText}
+                <CustomInput.InputFormsAreaHandle
+                    textTitleIdentifier={titleText}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
                     securityTextEnter={securityTextEnter}

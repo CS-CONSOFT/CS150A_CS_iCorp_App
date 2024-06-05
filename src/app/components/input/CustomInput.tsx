@@ -2,16 +2,24 @@ import { ReactNode, useState } from "react";
 import { KeyboardType, StyleSheet, Text, TextInput, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 
-interface CustomInputProps {
-    titleText: string;
+interface CustomInputFormProps {
+    textTitleIdentifier: string;
     securityTextEnter?: boolean
     placeholder?: string,
     keyboardType?: KeyboardType,
     valueOfInput: string
     //lida com a escrita dos valores no input
     handleValueOfInput: (id: any, valueTyped: any) => void
+}
 
-
+interface CustomInputFormProp {
+    title: string;
+    securityTextEnter?: boolean
+    placeholder?: string,
+    keyboardType?: KeyboardType,
+    value: string
+    //lida com a escrita dos valores no input
+    setValue: any
 }
 
 interface CustomProp {
@@ -23,6 +31,7 @@ const CustomInput = ({ children }: CustomProp) => {
 
 CustomInput.TitleText = TitleText
 CustomInput.Icon = Icon
+CustomInput.InputFormsAreaHandle = InputFormsAreaHandle
 CustomInput.InputAreaHandle = InputAreaHandle
 
 
@@ -40,25 +49,60 @@ function Icon({ iconName }: { iconName: string }) {
     </>
 }
 
-
-function InputAreaHandle({
+/**
+ * Input usado em formularios que possuem muitos campos
+ * podendo dividir todos esses campos em um objeto chave valor
+ * que levara como identificador [key] ou [chave] o 
+ * @textTitleIdentifier e o valor sera o valor digitado no 
+ * onChangeText, ou seja, @valueTyped
+ * 
+ * Use quando tiver um formulario grande
+ * 
+ */
+function InputFormsAreaHandle({
     /**
      * Responsavel por identificar o input atual
      */
-    titleText: textIdentifier,
+    textTitleIdentifier,
     handleValueOfInput,
     valueOfInput,
     securityTextEnter = false,
     placeholder,
     keyboardType = 'default',
 
-}: CustomInputProps) {
+}: CustomInputFormProps) {
     return <TextInput
         style={styles.input}
         onChangeText={(valueTyped) => {
-            handleValueOfInput!(textIdentifier, valueTyped)
+            handleValueOfInput!(textTitleIdentifier, valueTyped)
         }}
         value={valueOfInput}
+        secureTextEntry={securityTextEnter}
+        placeholder={placeholder}
+        keyboardType={keyboardType}
+    ></TextInput>
+}
+
+/**
+ * Utiliza o useState normal para definir um change text,
+ * usar em contextos com poucos inputs
+ */
+function InputAreaHandle({
+    /**
+     * Responsavel por identificar o input atual
+     */
+    title,
+    value,
+    setValue,
+    securityTextEnter = false,
+    placeholder,
+    keyboardType = 'default',
+
+}: CustomInputFormProp) {
+    return <TextInput
+        style={styles.input}
+        onChangeText={setValue}
+        value={value}
         secureTextEntry={securityTextEnter}
         placeholder={placeholder}
         keyboardType={keyboardType}

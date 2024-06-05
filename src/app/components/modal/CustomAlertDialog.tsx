@@ -30,7 +30,7 @@ const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton 
                         <Text style={styles.buttonText}>Fechar</Text>
                     </TouchableOpacity>
                     <CustomInput>
-                        <CustomInput.InputAreaHandle titleText={title}
+                        <CustomInput.InputFormsAreaHandle textTitleIdentifier={title}
                             setValue={setSerie}
                             value={serie} />
                     </CustomInput>

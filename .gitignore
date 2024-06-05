@@ -33,3 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+#service
+src\app\services\storage\sqlite\envoriment_config.db

@@ -108,7 +108,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                     <View style={styles.extraBottomStyleInputs}>
                         <Text style={styles.extraBottomStylePrecoVenda}>Preço Venda</Text>
                         <CustomInput>
-                            <CustomInput.InputAreaHandle titleText="precovenda" valueOfInput={product.TotalBruto.toString()} handleValueOfInput={() => { }} />
+                            <CustomInput.InputFormsAreaHandle textTitleIdentifier="precovenda" valueOfInput={product.TotalBruto.toString()} handleValueOfInput={() => { }} />
                         </CustomInput>
                     </View>
 
@@ -117,7 +117,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                     <View style={styles.extraBottomStyleInputs}>
                         <Text style={styles.extraBottomStylePrecoVenda}>Desconto</Text>
                         <CustomInput>
-                            <CustomInput.InputAreaHandle titleText="desconto" valueOfInput={product.TotalDesconto.toString()} handleValueOfInput={() => { }} />
+                            <CustomInput.InputFormsAreaHandle textTitleIdentifier="desconto" valueOfInput={product.TotalDesconto.toString()} handleValueOfInput={() => { }} />
                         </CustomInput>
                     </View>
 
