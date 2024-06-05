@@ -10,6 +10,7 @@ import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVend
 import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import { useNavigation } from "@react-navigation/native";
+import { logWithTimestamp } from "../../../util/Logger";
 
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 const CS_ConsultaProdutoForm = lazy(() => import("./CS_ConsultaProdutoForm"))
@@ -21,6 +22,7 @@ const CS_SC_ConsultaProdutos = () => {
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IGetProductSearch>()
     const { navigate } = useNavigation()
+
 
 
     /**
@@ -62,7 +64,7 @@ const CS_SC_ConsultaProdutos = () => {
                 undefined
             ).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                pvId !== undefined ? navigate('Pre_Venda_Detalhes') : showToast(res.Msg)
+                showToast(res.Msg)
                 done();
             })
         })
@@ -101,16 +103,8 @@ const CS_SC_ConsultaProdutos = () => {
          */
         const _filterValues: IGetProductSearch = {
             cs_page: page || 1,
-            cs_codigo_produto: formData.Código || '',
-            cs_descricao_artigo: formData.Artigo || '',
-            cs_referencia: formData.Referência || '',
-            cs_complemento: formData.Complemento || '',
-            cs_descricao_marca: formData.Marca || '',
-            cs_descricao_grupo: formData.Grupo || '',
-            cs_descricao_classe: formData.Classe || '',
-            cs_descricao_sub_grupo: formData.DescriçãoSubgrupo || '',
-            cs_descricao_reduzida: formData.DescriçãoProduto || '',
-            cs_is_com_saldo: false,
+            cs_codigo_produto: formData.code || '',
+            cs_descricao_reduzida: formData.desc || ''
         }
         setProductAtributtesToSearch(_filterValues)
         handleSearchProduct(_filterValues!).then((res) => {
