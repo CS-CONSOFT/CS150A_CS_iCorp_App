@@ -6,6 +6,7 @@ import CustomButton from "../button/CustomButton";
 import CustomIcon from "../icon/CustomIcon";
 import CustomInput from "../input/CustomInput";
 import CustomSwitch from "../switch/CustomSwitch";
+import { formatMoneyValue } from "../../util/FormatText";
 
 //Item de produto que aparece na listagem
 export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
@@ -35,7 +36,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
 
     const downSwipe = () => {
         if (!extraIconsRightOpen) {
-            const toValue = extraBottomOpen ? 0 : -5;
+            const toValue = extraBottomOpen ? 0 : -15;
             Animated.timing(dragY, {
                 toValue,
                 duration: 150,
@@ -68,8 +69,8 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                     <Text style={styles.productName}>N° {product.Codigo}</Text>
                     <Text style={styles.productInfo}>{product.Descricao.slice(0, 20)}</Text>
                     <Text style={styles.productInfo}>{`Qtd: ${product.Quantidade}`}</Text>
-                    <Text style={styles.productInfo}>{`Unitário R$: ${product.PrecoUnitario}`}</Text>
-                    <Text style={styles.productInfo}>{`Total R$: ${product.TotalLiquido}`}</Text>
+                    <Text style={styles.productInfo}>{`Unitário: ${formatMoneyValue(product.PrecoUnitario)}`}</Text>
+                    <Text style={styles.productInfo}>{`Total: ${formatMoneyValue(product.TotalLiquido)}`}</Text>
                 </View>
 
                 <Pressable style={styles.productContainerArrow} onPress={leftSwipe}>

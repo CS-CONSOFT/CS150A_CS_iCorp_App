@@ -1,14 +1,14 @@
-import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
-import { menu01Data } from "./01ListMenu";
-import ItemListMenu01Pv from "../lists/ItemListMenu01Pv";
-import Separator from "../lists/Separator";
-import CustomIcon from "../icon/CustomIcon";
-import { ICON_NAME } from "../../util/IconsName";
-import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
-import { DataKey } from "../../enum/DataKeys";
 import { useNavigation } from "@react-navigation/native";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { DataKey } from "../../enum/DataKeys";
+import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
+import { ICON_NAME } from "../../util/IconsName";
+import CustomIcon from "../icon/CustomIcon";
+import ItemIconTitleNoColor from "../items/ItemIconTitleNoColor";
+import Separator from "../lists/Separator";
+import { listBottomMenu001 } from "./ListBottomMenu";
 
-const CustomPvBottomMenu = () => {
+const CustomPvBottomMenu_001 = () => {
     const { navigate } = useNavigation()
     function goToSearchProduct() {
         removeValueFromStorage(DataKey.CurrentPV).then(() => {
@@ -20,7 +20,7 @@ const CustomPvBottomMenu = () => {
         <View style={styles.mainContainer}>
             <Separator />
             <FlatList
-                data={menu01Data}
+                data={listBottomMenu001}
                 key={"_"}
                 keyExtractor={item => "_" + item.id.toString()}
                 numColumns={5}
@@ -37,7 +37,7 @@ const CustomPvBottomMenu = () => {
                         )
                     } else {
                         return (
-                            <ItemListMenu01Pv
+                            <ItemIconTitleNoColor
                                 title={item.title}
                                 onPress={() => item.onPress(navigate)}
                                 iconName={item.iconName}
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CustomPvBottomMenu;
+export default CustomPvBottomMenu_001;

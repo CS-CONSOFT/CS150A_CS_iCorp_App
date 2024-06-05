@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Pressable, View } from "react-native";
-import CustomSearch from "../../../../components/input/CustomSearch";
-import { ICON_NAME } from "../../../../util/IconsName";
 import { stylesPreVenda } from "./PreVendaStyles";
+import CustomSearch from "../../components/input/CustomSearch";
+import { ICON_NAME } from "../../util/IconsName";
 
 
 

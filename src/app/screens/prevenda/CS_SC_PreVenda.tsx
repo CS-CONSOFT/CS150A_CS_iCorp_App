@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, TouchableOpacity, View } from "react-native";
-import { IPreVendaListModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
-import { handleFetchPv } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+
 import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
 import { stylesPreVenda } from "./PreVendaStyles";
-import { storeSimpleData } from "../../../../services/storage/AsyncStorageConfig";
-import { DataKey } from "../../../../enum/DataKeys";
-import { FETCH_STATUS } from "../../../../util/FETCH_STATUS";
+
 import { useNavigation } from "@react-navigation/native";
+import { DataKey } from "../../enum/DataKeys";
+import { IPreVendaItemListModel } from "../../services/api/interfaces/prevenda/IPreVenda";
+import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
+import { formatDate, formatMoneyValue } from "../../util/FormatText";
 
 
 
 
 const CS_SC_PreVenda = () => {
-    const [pvList, setPvList] = useState<IPreVendaListModel[]>([]);
+    const [pvList, setPvList] = useState<IPreVendaItemListModel[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
 
@@ -54,9 +57,14 @@ const CS_SC_PreVenda = () => {
 
 
 
-    function goToDetails(currentPv: string) {
-        storeSimpleData(DataKey.CurrentPV, currentPv)
-        navigate('Pre_Venda_Detalhes')
+    function goToDetails(currentPv: IPreVendaItemListModel) {
+        storeSimpleData(DataKey.CurrentPV, currentPv.ID)
+        navigate('Pre_Venda_Detalhes', {
+            currentPv: currentPv.ID,
+            emissao: formatDate(currentPv.Data_Emissao),
+            validade: formatDate(currentPv.DataValidade),
+            totalLiquido: formatMoneyValue(currentPv.Total!)
+        })
     }
 
     const isLoading = status === FETCH_STATUS.LOADING
@@ -73,8 +81,10 @@ const CS_SC_PreVenda = () => {
                         data={pvList}
                         refreshing={isLoading}
                         onRefresh={handleRefreshList}
-                        renderItem={({ item }) => <PreVendaRenderItem item={item} onPress={() => goToDetails(item.ID)} />}
+                        renderItem={({ item }) => <PreVendaRenderItem item={item}
+                            onPress={() => goToDetails(item)} />}
                         keyExtractor={(item) => item.ID.toString()}
+                        extraData={pvList}
                     />
                 </>
             }
@@ -85,7 +95,7 @@ export default CS_SC_PreVenda;
 
 
 /** RENDER ITEM */
-function PreVendaRenderItem({ item, onPress }: { item: IPreVendaListModel, onPress: () => void }) {
+function PreVendaRenderItem({ item, onPress }: { item: IPreVendaItemListModel, onPress: () => void }) {
     const [year, month, day] = item.Data_Emissao.split('-')
     return (
         <Pressable onPress={onPress}>

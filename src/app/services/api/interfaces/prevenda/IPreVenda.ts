@@ -55,12 +55,12 @@ export interface IGetPreVendaList {
 export interface IResPreVenda {
     IsOk: boolean,
     Msg: string,
-    List: IPreVendaListModel[]
+    List: IPreVendaItemListModel[]
 }
 
 
 /** RES PV MODEL LISTA*/
-export interface IPreVendaListModel {
+export interface IPreVendaItemListModel {
     ID: string;
     ProtocolNumber: string;
     Data_Emissao: string;
@@ -75,6 +75,15 @@ export interface IPreVendaListModel {
     Is_Selecionado?: boolean;
     Is_PV_Resultante?: boolean
 }
+
+/**
+ * Traz os produtos + os dados da PV
+ */
+export interface IProductsPVAndPVData {
+    pvModel: IPreVendaItemListModel,
+    products: IProductsPvModel
+}
+
 
 /** RES PRODUTOS PV */
 export interface IProductsPvModel {

@@ -1,14 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
-import { IItemList } from "./IItemList";
+import { IItemList } from "../lists/IItemList";
 
 
-const ItemListHeaderProdutoPreVenda = ({ title, onPress = () => { }, iconName }: IItemList) => {
+const ItemIconTitleRoundedBlue = ({ title, onPress = () => { }, iconName }: IItemList) => {
 
     return (
         <View style={styles.containerItem}>
             <Pressable onPress={onPress} style={styles.containerIcon}>
-                <CustomIcon icon={iconName} iconSize={14} />
+                <CustomIcon icon={iconName} iconSize={14} style={styles.iconStyle} />
             </Pressable>
             <Text style={styles.preVendaText}>{title}</Text>
         </View>
@@ -16,16 +16,6 @@ const ItemListHeaderProdutoPreVenda = ({ title, onPress = () => { }, iconName }:
 }
 
 const styles = StyleSheet.create({
-    buttonSerie: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'blue',
-        margin: 32
-    },
     buttonDelivery: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -63,8 +53,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         justifyContent: 'center',
         width: 100
+    },
+    iconStyle: {
+        elevation: 1
     }
 });
 
 
-export default ItemListHeaderProdutoPreVenda;
+export default ItemIconTitleRoundedBlue;

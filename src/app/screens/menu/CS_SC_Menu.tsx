@@ -1,6 +1,6 @@
 import { FlatList, SafeAreaView, View } from "react-native";
 import HeaderUserInfo from "../../components/headers/HeaderUserInfo";
-import ItemListMenu from "../../components/lists/ItemListMenu";
+import ItemIconTitleHalfRoundedWhite from "../../components/items/ItemIconTitleHalfRoundedWhite";
 import { data } from "./ListMenu";
 import { useNavigation } from "@react-navigation/native";
 
@@ -19,7 +19,7 @@ const CS_SC_Menu = () => {
                     numColumns={3}
                     renderItem={({ item }) => {
                         return (
-                            <ItemListMenu
+                            <ItemIconTitleHalfRoundedWhite
                                 title={item.title}
                                 onPress={() => item.onPress(navigate)}
                                 iconName={item.iconName}

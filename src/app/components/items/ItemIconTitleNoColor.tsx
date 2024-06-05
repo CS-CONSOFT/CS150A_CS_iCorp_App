@@ -1,13 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
-import { IItemList } from "./IItemList";
+import { IItemList } from "../lists/IItemList";
 
 
-const ItemListMenu = ({ title, onPress = () => { }, iconName }: IItemList) => {
+const ItemIconTitleNoColor = ({ title, onPress = () => { }, iconName }: IItemList) => {
     return (
         <Pressable style={styles.containerItem} onPress={onPress}>
             <View>
-                <CustomIcon icon={iconName} />
+                <CustomIcon icon={iconName} iconSize={24} iconColor="#6A7178" />
                 <Text style={styles.preVendaText}>{title}</Text>
             </View>
         </Pressable>
@@ -34,23 +34,22 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: 'red',
         margin: 32
-    }, containerItem: {
-        flex: 1,
+    },
+    containerItem: {
         backgroundColor: '#FFFFFF',
-        alignItems: 'center',
-        margin: 12,
-        padding: 16,
-        borderRadius: 16,
-
+        justifyContent: 'center',
+        flexDirection: 'row',
+        flex: 1,
+        margin: 12
     },
     preVendaText: {
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#6A7178',
         textAlign: 'center'
     },
 });
 
 
 
-export default ItemListMenu;
+export default ItemIconTitleNoColor;
