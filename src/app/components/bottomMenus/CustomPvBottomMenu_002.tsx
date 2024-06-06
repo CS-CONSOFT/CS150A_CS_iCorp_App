@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { FlatList, Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { DataKey } from "../../enum/DataKeys";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { ICON_NAME } from "../../util/IconsName";
@@ -7,6 +7,7 @@ import CustomIcon from "../icon/CustomIcon";
 import ItemIconTitleNoColor from "../items/ItemIconTitleNoColor";
 import Separator from "../lists/Separator";
 import { listBottomMenu001, listBottomMenu002 } from "./ListBottomMenu";
+import { useEffect, useState } from "react";
 
 const CustomPvBottomMenu_002 = () => {
     const { navigate } = useNavigation()
@@ -16,25 +17,52 @@ const CustomPvBottomMenu_002 = () => {
         })
     }
 
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
+
     return (
-        <View style={styles.mainContainer}>
-            <Separator />
-            <FlatList
-                data={listBottomMenu002}
-                key={"_"}
-                keyExtractor={item => "_" + item.id.toString()}
-                numColumns={5}
-                renderItem={({ item }) => {
-                    return (
-                        <ItemIconTitleNoColor
-                            title={item.title}
-                            onPress={() => item.onPress(navigate)}
-                            iconName={item.iconName}
-                        />
-                    );
-                }}
-            />
+        <View>
+            {!isKeyboardVisible && (
+                <View style={styles.mainContainer}>
+                    <Separator />
+                    <FlatList
+                        data={listBottomMenu002}
+                        key={"_"}
+                        keyExtractor={item => "_" + item.id.toString()}
+                        numColumns={5}
+                        renderItem={({ item }) => {
+                            return (
+                                <ItemIconTitleNoColor
+                                    title={item.title}
+                                    onPress={() => item.onPress(navigate)}
+                                    iconName={item.iconName}
+                                />
+                            );
+                        }}
+                    />
+                </View>
+            )}
         </View>
+
     );
 }
 

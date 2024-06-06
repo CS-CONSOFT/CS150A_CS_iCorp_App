@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { IProductItemModel } from "../../services/api/interfaces/prevenda/IPreVenda";
-import { ICON_NAME } from "../../util/IconsName";
-import CustomButton from "../button/CustomButton";
-import CustomIcon from "../icon/CustomIcon";
-import CustomInput from "../input/CustomInput";
-import CustomSwitch from "../switch/CustomSwitch";
-import { formatMoneyValue } from "../../util/FormatText";
+import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
+import { ICON_NAME } from "../../../../util/IconsName";
+import CustomButton from "../../../../components/button/CustomButton";
+import CustomIcon from "../../../../components/icon/CustomIcon";
+import CustomInput from "../../../../components/input/CustomInput";
+import CustomSwitch from "../../../../components/switch/CustomSwitch";
+import { formatMoneyValue } from "../../../../util/FormatText";
+import Separator from "../../../../components/lists/Separator";
+import { IScreenUpdateProductItens } from "../../../../services/api/interfaces/produto/IProduct";
+
+
+
 
 //Item de produto que aparece na listagem
-export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
+export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
     {
         product: IProductItemModel,
         onProductClick: (product: IProductItemModel) => void,
-        onDeleteProductClick: (productId: string) => void
+        onDeleteProductClick: (productId: string) => void,
+        saveTablePrice: (tablePrice: number, productId: string) => void
+        saveUnityPrice: (unityPrice: number, productId: string) => void
+        saveDiscountPercent: (discountPercent: number, productId: string) => void
+        saveDiscountValue: (valueDiscount: number, productId: string) => void
     }) => {
 
     const [dragX] = useState(new Animated.Value(0));
@@ -21,6 +30,26 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
 
     const [extraIconsRightOpen, setExtraIconsRightOpen] = useState(false);
     const [extraBottomOpen, setExtraBottomOpen] = useState(false);
+
+    const [isEntregar, setIsEntregar] = useState(false);
+    const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
+    const [isRequisitar, setIsRequisitar] = useState(false);
+    const [isMontar, setIsMontar] = useState(false);
+    const [tablePrice, setTablePrice] = useState(0);
+    const [unityPrice, setUnityPrice] = useState(0);
+    const [percentDiscount, setPercentDiscount] = useState(0);
+    const [valueDiscount, setValueDiscount] = useState(0);
+
+    useEffect(() => {
+        setIsEntregar(false);
+        setIsSaldoNegativo(false);
+        setIsRequisitar(false);
+        setIsMontar(false);
+        setTablePrice(product.PrecoTabela);
+        setUnityPrice(product.PrecoUnitario);
+        setPercentDiscount(0);
+        setValueDiscount(product.TotalDesconto);
+    }, [product]);
 
     const leftSwipe = () => {
         if (!extraBottomOpen) {
@@ -61,11 +90,13 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
 
     return (
         <Pressable onPress={() => itemProductClick(product)}>
-            <Animated.View style={[styles.containerRenderItem, animatedStyleX, animatedStyleY, extraIconsRightOpen && styles.openContainerX]}>
+            <Animated.View style={[styles.containerRenderItem, styles.boxShadow, animatedStyleX, animatedStyleY, extraIconsRightOpen && styles.openContainerX]}>
+                {/** IMAGEM */}
                 <View style={styles.productContainerLeft}>
                     <Image style={styles.productImage} source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnT98rwKfnZngX2pDhX4EkbW-y0pUOCz9iCg&s' }} />
                 </View>
-                <View style={styles.productContainerRight}>
+                {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
+                <View style={styles.productContainerMiddle}>
                     <Text style={styles.productName}>N° {product.Codigo}</Text>
                     <Text style={styles.productInfo}>{product.Descricao.slice(0, 20)}</Text>
                     <Text style={styles.productInfo}>{`Qtd: ${product.Quantidade}`}</Text>
@@ -73,6 +104,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                     <Text style={styles.productInfo}>{`Total: ${formatMoneyValue(product.TotalLiquido)}`}</Text>
                 </View>
 
+                {/** CLIQUE DO LADO DIREITO */}
                 <Pressable style={styles.productContainerArrow} onPress={leftSwipe}>
                     <View>
                         {extraIconsRightOpen ? <CustomIcon icon={ICON_NAME.FLECHA_ESQUERDA} iconSize={18} /> : <CustomIcon icon={ICON_NAME.FLECHA_DIRETA} iconSize={18} />}
@@ -89,9 +121,11 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                 )}
             </Animated.View>
 
+
             {/** CONTEUDO EXIBIDO ABAIXO DE CADA ITEM DA LISTA */}
             {extraBottomOpen && (
-                <View>
+                <View style={{ backgroundColor: "#fffafa" }}>
+                    {/** SWITCHS */}
                     <View style={styles.extraBottomStyleSwitchs}>
                         <View>
                             <CustomSwitch title="Entregar" />
@@ -104,28 +138,74 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick }:
                     </View>
 
 
-
+                    {/** UPDATE DE VALORES E DESCONTOS */}
                     <View style={styles.extraBottomStyleInputs}>
-                        <Text style={styles.extraBottomStylePrecoVenda}>Preço Venda</Text>
-                        <CustomInput>
-                            <CustomInput.InputFormsAreaHandle textTitleIdentifier="precovenda" valueOfInput={product.TotalBruto.toString()} handleValueOfInput={() => { }} />
-                        </CustomInput>
-                    </View>
+                        <Text style={styles.extraBottomStylePrecoVenda}>Preço</Text>
 
+                        <Separator />
 
+                        {/** LINHA DE PREÇO */}
+                        <View style={styles.extraBottomPriceStyle}>
+                            <View>
+                                <Text style={styles.extraBottomStylePrecoVenda}>Tabela</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <CustomInput>
+                                        <CustomInput.InputAreaHandle value={tablePrice} setValue={setTablePrice} width={125} keyboardType='decimal-pad' />
+                                    </CustomInput>
+                                    <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveTablePrice(tablePrice, product.Id)} />
+                                </View>
+                            </View>
 
-                    <View style={styles.extraBottomStyleInputs}>
+                            <View style={{ marginRight: 16 }}>
+                                <Text style={styles.extraBottomStylePrecoVenda}>Unitário</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <CustomInput>
+                                        <CustomInput.InputAreaHandle value={unityPrice} setValue={setUnityPrice} width={125} keyboardType='decimal-pad' />
+                                    </CustomInput>
+                                    <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveUnityPrice(unityPrice, product.Id)} />
+                                </View>
+
+                            </View>
+                        </View>
+
+                        {/** LINHA DE DESCONTO */}
                         <Text style={styles.extraBottomStylePrecoVenda}>Desconto</Text>
-                        <CustomInput>
-                            <CustomInput.InputFormsAreaHandle textTitleIdentifier="desconto" valueOfInput={product.TotalDesconto.toString()} handleValueOfInput={() => { }} />
-                        </CustomInput>
+
+                        <Separator />
+
+                        <View style={styles.extraBottomPriceStyle}>
+                            <View>
+                                <Text style={styles.extraBottomStylePrecoVenda}>%</Text>
+                                <View style={{ flexDirection: 'row' }}>
+
+                                    <CustomInput>
+                                        <CustomInput.InputAreaHandle value={percentDiscount} setValue={setPercentDiscount} width={125} keyboardType='decimal-pad' />
+                                    </CustomInput>
+                                    <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.Id)} />
+                                </View>
+
+                            </View>
+
+                            <View style={{ marginRight: 16 }}>
+                                <Text style={styles.extraBottomStylePrecoVenda}>Valor</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <CustomInput>
+                                        <CustomInput.InputAreaHandle value={valueDiscount} setValue={setValueDiscount} width={125} keyboardType='decimal-pad' />
+                                    </CustomInput>
+                                    <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountValue(valueDiscount, product.Id)} />
+                                </View>
+                            </View>
+
+                        </View>
                     </View>
 
+                    {/** BOTOES */}
                     <View style={[styles.extraBottomStyleContainer, styles.extraBottomStyleRow, styles.extraBottomStyleJustify]}>
-                        <CustomButton title="Salvar" onPress={(done) => { done() }} buttonStyle={styles.extraBottomStyleBtnSalvar} textStyle={styles.extraBottomStyleTextButtonSave} />
-                        <CustomButton title="Cancelar" onPress={(done) => { done() }} buttonStyle={styles.extraBottomStyleBtnCancelar} textStyle={styles.extraBottomStyleTextButtonCancel} />
+                        <CustomButton title="Cancelar" onPress={(done) => {
+                            downSwipe()
+                            done()
+                        }} buttonStyle={styles.extraBottomStyleBtnCancelar} textStyle={styles.extraBottomStyleTextButtonCancel} />
                     </View>
-
                 </View>
             )}
         </Pressable>
@@ -137,9 +217,19 @@ const styles = StyleSheet.create({
     containerRenderItem: {
         borderRadius: 12,
         flexDirection: 'row',
-        margin: 8,
-        elevation: 4,
+        marginLeft: 8,
+        marginRight: 8,
+        marginTop: 8,
         height: 110
+    },
+    boxShadow: {
+        shadowColor: "#333333",
+        shadowOffset: {
+            width: 6,
+            height: 6
+        },
+        shadowOpacity: 0.6,
+        shadowRadius: 4
     },
     productContainerLeft: {
         width: 111,
@@ -150,12 +240,12 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 12,
         borderBottomLeftRadius: 12
     },
-    productContainerRight: {
+    productContainerMiddle: {
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'column',
         overflow: 'hidden',
-        backgroundColor: '#FFF',
+        backgroundColor: '#fffafa',
         paddingLeft: 8
     },
     productImage: {
@@ -216,15 +306,20 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch'
     },
     extraBottomStylePrecoVenda: {
-        color: "#0A3147",
+        color: "#000",
         fontWeight: '600',
         fontSize: 18,
         lineHeight: 21,
-        marginLeft: 8
+        marginLeft: 8,
+        padding: 4
     },
     extraBottomStyleInputs: {
         marginLeft: 32,
         marginBottom: 8
+    },
+    extraBottomPriceStyle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     extraBottomStyleBtnSalvar: {
         alignItems: 'center',

@@ -1,8 +1,9 @@
-import { Text, View, StyleSheet } from "react-native";
-import CustomBottomItem from "../../../components/bottomItem/CustomBottomItem";
-import CustomTextValueWithTitleBoldHorizontal from "../../../components/text/CustomTextValueWithTitleBoldHorizontal";
-import Separator from "../../../components/lists/Separator";
-import CustomButton from "../../../components/button/CustomButton";
+import { StyleSheet, Text, View } from "react-native";
+import CustomBottomItem from "../../../../components/bottomItem/CustomBottomItem";
+import CustomButton from "../../../../components/button/CustomButton";
+import Separator from "../../../../components/lists/Separator";
+import CustomTextValueWithTitleBoldHorizontal from "../../../../components/text/CustomTextValueWithTitleBoldHorizontal";
+
 
 export interface IPreVendaData {
     dataEmissao: string,
@@ -11,8 +12,10 @@ export interface IPreVendaData {
 }
 
 const CS_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
+
+
     return (
-        <CustomBottomItem height={160}>
+        <CustomBottomItem height={160} >
             <View style={[styles.row, styles.padding_12, styles.space_between]}>
                 <CustomTextValueWithTitleBoldHorizontal title="Emissão" value={dataEmissao} />
                 <CustomTextValueWithTitleBoldHorizontal title="Validade" value={dataValidade} />

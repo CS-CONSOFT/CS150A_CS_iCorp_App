@@ -12,14 +12,16 @@ interface CustomInputFormProps {
     handleValueOfInput: (id: any, valueTyped: any) => void
 }
 
-interface CustomInputFormProp {
-    title: string;
+interface CustomInputProp {
     securityTextEnter?: boolean
     placeholder?: string,
     keyboardType?: KeyboardType,
-    value: string
+    value: any
     //lida com a escrita dos valores no input
-    setValue: any
+    setValue: any,
+    width?: number,
+    height?: number,
+    maxLenght?: number
 }
 
 interface CustomProp {
@@ -91,21 +93,24 @@ function InputAreaHandle({
     /**
      * Responsavel por identificar o input atual
      */
-    title,
     value,
     setValue,
     securityTextEnter = false,
     placeholder,
     keyboardType = 'default',
+    width,
+    height,
+    maxLenght
 
-}: CustomInputFormProp) {
+}: CustomInputProp) {
     return <TextInput
-        style={styles.input}
+        style={[styles.input, { width: width, height: height }]}
         onChangeText={setValue}
-        value={value}
+        value={value.toString()}
         secureTextEntry={securityTextEnter}
         placeholder={placeholder}
         keyboardType={keyboardType}
+        maxLength={maxLenght}
     ></TextInput>
 }
 

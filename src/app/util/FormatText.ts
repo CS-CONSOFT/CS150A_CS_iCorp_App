@@ -12,7 +12,7 @@ export function formatDate(date: string): string {
     return `${day}/${month}/${year}`
 }
 
-export function formatMoneyValue(value: number) {
+export function formatMoneyValue(value: number): string {
     let formattedValue = value.toFixed(2);
     formattedValue = formattedValue.replace('.', ',');
     return `R$ ${formattedValue}`;

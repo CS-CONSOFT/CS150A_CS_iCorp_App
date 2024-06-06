@@ -1,15 +1,17 @@
 import FontAwesome from '@expo/vector-icons/Ionicons'
+import { Pressable } from 'react-native';
 
 export interface ICustomIcon {
     icon: any,
     style?: object,
     iconColor?: string,
-    iconSize?: number
+    iconSize?: number,
+    onPress?: (prop?: any) => void
 }
 
-const CustomIcon = ({ icon, style = { alignSelf: 'center' }, iconColor = '#000', iconSize = 32 }: ICustomIcon) => {
+const CustomIcon = ({ onPress, icon, style = { alignSelf: 'center' }, iconColor = '#000', iconSize = 32 }: ICustomIcon) => {
     return (
-        <FontAwesome size={iconSize} style={style} name={icon} color={iconColor} />
+        <FontAwesome size={iconSize} style={style} name={icon} color={iconColor} onPress={onPress} />
     );
 }
 

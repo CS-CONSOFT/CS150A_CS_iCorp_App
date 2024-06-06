@@ -1,4 +1,5 @@
-import { searchProduto } from "../../services/api/endpoint/produto/CS_GetProduct";
+import { getProducts } from "../../services/api/endpoint/produto/CS_GetProduct";
+import { IGetProductSearch, IResCompleteProdutoSearch } from "../../services/api/interfaces/produto/IProduct";
 import { getUserProperties } from "../SharedViewController";
 
 
@@ -19,7 +20,7 @@ export async function handleSearchProduct(iGetProductSearch: IGetProductSearch):
     iGetProductSearch.cs_page_size = 4
 
 
-    const productRes = await searchProduto(iGetProductSearch)
+    const productRes = await getProducts(iGetProductSearch)
     let response: IArrayWithPagesAndProductResponse;
     if (productRes.cs_is_ok) {
         let pagesArray: number[] = []

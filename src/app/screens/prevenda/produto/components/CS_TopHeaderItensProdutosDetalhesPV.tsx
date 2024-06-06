@@ -1,10 +1,11 @@
 import { Alert, View } from "react-native";
-import { styleProdutoPVDetalhe } from "./StylePreVendaProdutoDetalhe";
-import ItemIconTitleRoundedBlue from "../../../components/items/ItemIconTitleRoundedBlue";
-import { ICON_NAME } from "../../../util/IconsName";
-import CustomTopItem from "../../../components/topItem/CustomTopItem";
+import ItemIconTitleRoundedBlue from "../../../../components/items/ItemIconTitleRoundedBlue";
+import CustomTopItem from "../../../../components/topItem/CustomTopItem";
+import { ICON_NAME } from "../../../../util/IconsName";
+import { styleProdutoPVDetalhe } from "../style/StylePreVendaProdutoDetalhe";
 
 const CS_TopHeaderItensProdutosDetalhesPV = () => {
+
     return (
         <CustomTopItem>
             <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
