@@ -1,5 +1,5 @@
 import api from "../../axios_config";
-import { IPVProductDiscount, IPVTenant } from "../../interfaces/prevenda/IPreVenda";
+import { ICommonResponse, IPVProductDiscount, IPVTenant } from "../../interfaces/prevenda/IPreVenda";
 import { IGetProductSearch, IResCompleteProdutoSearch, IUpdateAmount, IUpdatePercentageDiscount, IUpdatePrice, IUpdateProdutAmount, IUpdateTablePrice, IUpdateValueDiscount } from "../../interfaces/produto/IProduct";
 
 /** ROTAS DE GET */
@@ -39,19 +39,21 @@ export async function getProducts(IGetProdutoSearch: IGetProductSearch): Promise
  * Rota para atualizar o percentual de desconto de um produto na 
  * pre venda.
  */
-export async function updatePercentDiscount({ pvTenant, productDiscount: percentDiscount }: IUpdatePercentageDiscount) {
+export async function updatePercentDiscount({ pvTenant, productDiscount: percentDiscount }: IUpdatePercentageDiscount): Promise<ICommonResponse> {
     try {
 
         const bodyData = {
             AtendimentoProdutoId: percentDiscount.AtendimentoProdutoId,
             Valor: percentDiscount.Valor
         }
-
-        console.log(percentDiscount.Valor);
-
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoPercentual`
 
-        api.post(url, bodyData)
+        const result = await api.post(url, bodyData)
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        return commonResponse
     } catch (error) {
         throw error
     }
@@ -62,9 +64,8 @@ export async function updatePercentDiscount({ pvTenant, productDiscount: percent
  * Rota para atualizar o valor de desconto de um produto na 
  * pre venda.
  */
-export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdateValueDiscount) {
+export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdateValueDiscount): Promise<ICommonResponse> {
     try {
-        console.log(productDiscount.Valor);
 
         const params = {
             AtendimentoProdutoId: productDiscount.AtendimentoProdutoId,
@@ -73,7 +74,13 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdate
 
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoValor`
 
-        api.post(url, params)
+        const result = await api.post(url, params)
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        console.log(commonResponse);
+        return commonResponse
     } catch (error) {
         throw error
     }
@@ -85,9 +92,8 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdate
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePrice) {
+export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePrice): Promise<ICommonResponse> {
     try {
-
         const urlParams = {
             TenantId: pvTenant.TenantId,
             AtendimentoId: pvTenant.AtendimentoId,
@@ -96,8 +102,12 @@ export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePr
         }
 
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoUnitario`
-
-        api.post(url, null, { params: urlParams })
+        const result = await api.post(url, null, { params: urlParams })
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        return commonResponse
     } catch (error) {
         throw error
     }
@@ -107,7 +117,7 @@ export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePr
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePrice) {
+export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePrice): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
@@ -118,9 +128,12 @@ export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePr
         }
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTabelaItem`
 
-        api.post(url, null, { params: urlParams }).then((res) => {
-            console.log(res.data.Msg);
-        })
+        const result = await api.post(url, null, { params: urlParams })
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        return commonResponse
 
     } catch (error) {
         console.log(error);
@@ -133,7 +146,7 @@ export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePr
 /**
  * Rota para atualizar a quantidade de um protudo na pre venda
  */
-export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, updateQuantidade }: IUpdateAmount) {
+export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
@@ -152,7 +165,12 @@ export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, upda
 
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTabelaItem`
 
-        api.post(url, bodyParams, { params: { urlParams } })
+        const result = await api.post(url, bodyParams, { params: { urlParams } })
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        return commonResponse
     } catch (error) {
         throw error
     }

@@ -1,13 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView } from "react-native";
+import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
 import { IProductItemModel, IProductsPvModel } from "../../../services/api/interfaces/prevenda/IPreVenda";
+import { IScreenUpdateProductItens } from "../../../services/api/interfaces/produto/IProduct";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { handleDeleteProductFromPv, handleGetProductsPv, handleUpdatePercentDiscount, handleUpdateProductItes, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
+import { handleDeleteProductFromPv, handleGetProductsPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
 import CS_BottomScreenItemProdutosDetalhesPV from "./components/CS_BottomScreenItemProdutosDetalhesPV";
 import { ProductPvItem } from "./components/CS_ProductPvItem";
 import CS_TopHeaderItensProdutosDetalhesPV from "./components/CS_TopHeaderItensProdutosDetalhesPV";
-import { IScreenUpdateProductItens } from "../../../services/api/interfaces/produto/IProduct";
+import ToastError from "../../../components/toast/ToastError";
 
 
 const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
@@ -43,11 +44,53 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
         getProductsToCurrentPv()
     }
 
-    function updateProductItens(productUpdateItens: IScreenUpdateProductItens, product: IProductItemModel, changedFields: string[]): void {
-        setStatus(FETCH_STATUS.LOADING)
-        handleUpdateProductItes(productUpdateItens, product, changedFields).then(() => {
-            getProductsToCurrentPv()
-        })
+    function updateDiscountPercent(productId: string, discountPercent: number, getProductsToCurrentPv: () => void): void {
+        handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent })
+            .then((res) => {
+                if (res.IsOk) {
+                    getProductsToCurrentPv()
+                } else {
+                    Alert.alert(res.Msg)
+                }
+            });
+    }
+
+
+    function updateValueDiscount(productId: string, valueDiscount: number): void {
+        handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount })
+            .then((res) => {
+                if (res.IsOk) {
+                    getProductsToCurrentPv()
+                } else {
+                    Alert.alert(res.Msg)
+                }
+            });
+    }
+
+
+
+    function updateTablePrice(productId: string, tablePrice: number): void {
+        handleUpdateTablePrice({ AtendimentoProdutoId: productId, Valor: tablePrice })
+            .then((res) => {
+                if (res.IsOk) {
+                    getProductsToCurrentPv()
+                } else {
+                    Alert.alert(res.Msg)
+                }
+            });
+    }
+
+
+
+    function updateUnityPrice(productId: string, unityPrice: number): void {
+        handleUpdateUnityPrice({ AtendimentoProdutoId: productId, Valor: unityPrice })
+            .then((res) => {
+                if (res.IsOk) {
+                    getProductsToCurrentPv()
+                } else {
+                    Alert.alert(res.Msg)
+                }
+            });
     }
 
 
@@ -69,10 +112,10 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
 
                             }}
                             onDeleteProductClick={(productId) => { deleteProduct(productId) }}
-                            saveDiscountPercent={(discountPercent, productId) => handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent }).then(() => getProductsToCurrentPv())}
-                            saveDiscountValue={(valueDiscount, productId) => handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount }).then(() => getProductsToCurrentPv())}
-                            saveTablePrice={(tablePrice, productId) => handleUpdateTablePrice({ AtendimentoProdutoId: productId, Valor: tablePrice }).then(() => getProductsToCurrentPv())}
-                            saveUnityPrice={(unityPrice, productId) => handleUpdateUnityPrice({ AtendimentoProdutoId: productId, Valor: unityPrice }).then(() => getProductsToCurrentPv())}
+                            saveDiscountPercent={(discountPercent, productId) => updateDiscountPercent(productId, discountPercent, getProductsToCurrentPv)}
+                            saveDiscountValue={(valueDiscount, productId) => updateValueDiscount(productId, valueDiscount)}
+                            saveTablePrice={(tablePrice, productId) => updateTablePrice(productId, tablePrice)}
+                            saveUnityPrice={(unityPrice, productId) => updateUnityPrice(productId, unityPrice)}
                         />
                     )}
                 />
@@ -86,6 +129,8 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
 
         </SafeAreaView>
     );
+
 }
 
 export default CS_SC_PreVendaDetalheProduto;
+

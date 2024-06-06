@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
-import { ICON_NAME } from "../../../../util/IconsName";
 import CustomButton from "../../../../components/button/CustomButton";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomInput from "../../../../components/input/CustomInput";
-import CustomSwitch from "../../../../components/switch/CustomSwitch";
-import { formatMoneyValue } from "../../../../util/FormatText";
 import Separator from "../../../../components/lists/Separator";
-import { IScreenUpdateProductItens } from "../../../../services/api/interfaces/produto/IProduct";
+import CustomSwitch from "../../../../components/switch/CustomSwitch";
+import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
+import { formatMoneyValue } from "../../../../util/FormatText";
+import { ICON_NAME } from "../../../../util/IconsName";
 
 
 

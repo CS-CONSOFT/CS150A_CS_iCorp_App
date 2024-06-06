@@ -2,7 +2,7 @@ import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/login/ILoginResponse";
 import { deleteProductFromPv, fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
-import { IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductItemModel, IProductsPvModel, IPVProductDiscount, IPVTenant, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
+import { ICommonResponse, IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductItemModel, IProductsPvModel, IPVProductDiscount, IPVTenant, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
 import { IScreenUpdateProductItens, IUpdatePrice, IUpdateTablePrice } from "../../services/api/interfaces/produto/IProduct";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
@@ -91,7 +91,7 @@ export async function handleDeleteProductFromPv(productId: string): Promise<bool
 /**
  * Atualiza o percentual de desconto de um produto na pv
  */
-export async function handleUpdatePercentDiscount(productDiscount: IPVProductDiscount) {
+export async function handleUpdatePercentDiscount(productDiscount: IPVProductDiscount): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -103,10 +103,10 @@ export async function handleUpdatePercentDiscount(productDiscount: IPVProductDis
         AtendimentoId: currentPvId
     }
 
-    updatePercentDiscount({ pvTenant, productDiscount })
+    return updatePercentDiscount({ pvTenant, productDiscount })
 }
 
-export async function handleUpdateValueDiscount(productDiscount: IPVProductDiscount) {
+export async function handleUpdateValueDiscount(productDiscount: IPVProductDiscount): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -117,25 +117,10 @@ export async function handleUpdateValueDiscount(productDiscount: IPVProductDisco
         TenantId: currentUser.TenantId,
         AtendimentoId: currentPvId
     }
-    updateValueDiscount({ pvTenant, productDiscount })
+    return updateValueDiscount({ pvTenant, productDiscount })
 }
 
-export async function handleUpdateTablePrice(updatePrice: IUpdatePrice) {
-    let currentPvId: any = ''
-    getSimpleData(DataKey.CurrentPV).then((res) => {
-        currentPvId = res
-    })
-    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-
-    const pvTenant: IPVTenant = {
-        TenantId: currentUser.TenantId,
-        AtendimentoId: currentPvId
-    }
-
-    updateTablePrice({ pvTenant, updatePrice })
-}
-
-export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice) {
+export async function handleUpdateTablePrice(updatePrice: IUpdatePrice): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -147,24 +132,20 @@ export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice) {
         AtendimentoId: currentPvId
     }
 
-    updateUnityPrice({ pvTenant, updatePrice })
+    return updateTablePrice({ pvTenant, updatePrice })
 }
 
-
-
-export async function handleUpdateProductItes(productUpdateItens: IScreenUpdateProductItens, product: IProductItemModel, changedFields: string[]) {
-    changedFields.forEach((field) => {
-        if (field === 'tablePrice') {
-            handleUpdateTablePrice({ AtendimentoProdutoId: product.Id, Valor: productUpdateItens.tablePrice });
-        } else if (field === 'unityPrice' && !changedFields.includes("tablePrice")) {
-            handleUpdateUnityPrice({ AtendimentoProdutoId: product.Id, Valor: productUpdateItens.unityPrice })
-        } else if (field === 'percentDiscount') {
-            handleUpdatePercentDiscount({ AtendimentoProdutoId: product.Id, Valor: productUpdateItens.percentDiscount })
-        } else if (field === 'valueDiscount') {
-            handleUpdateValueDiscount({ AtendimentoProdutoId: product.Id, Valor: productUpdateItens.valueDiscount })
-        }
+export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice): Promise<ICommonResponse> {
+    let currentPvId: any = ''
+    getSimpleData(DataKey.CurrentPV).then((res) => {
+        currentPvId = res
     })
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
 
+    const pvTenant: IPVTenant = {
+        TenantId: currentUser.TenantId,
+        AtendimentoId: currentPvId
+    }
 
-
+    return updateUnityPrice({ pvTenant, updatePrice })
 }
