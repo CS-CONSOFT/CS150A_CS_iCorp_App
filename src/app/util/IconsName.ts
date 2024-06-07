@@ -15,6 +15,8 @@ export const ICON_NAME = {
     VOLTAR_CONTORNADO: 'arrow-back-outline',
     FLECHA_ESQUERDA: 'chevron-back-outline',
     FLECHA_DIRETA: 'chevron-forward-outline',
+    FLECHA_CIMA: 'chevron-up-outline',
+    FLECHA_BAIXO: 'chevron-down-outline',
     LIXEIRA: 'trash-outline',
     CHECK: 'save-outline',
 }

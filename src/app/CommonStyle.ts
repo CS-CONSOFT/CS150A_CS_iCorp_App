@@ -47,4 +47,10 @@ export const commonStyle = StyleSheet.create({
     margin_top_8: {
         marginTop: 8
     },
+    margin_left_16: {
+        marginLeft: 16
+    },
+    margin_right_16: {
+        marginRight: 16
+    },
 });

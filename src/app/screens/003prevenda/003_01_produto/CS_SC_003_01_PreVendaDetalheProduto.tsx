@@ -4,9 +4,9 @@ import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
 import { IProductItemModel, IProductsPvModel } from "../../../services/api/interfaces/prevenda/IPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleDeleteProductFromPv, handleGetProductsPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
-import C_003_01_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_BottomScreenItemProdutosDetalhesPV";
+import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
-import C_003_01_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_TopHeaderItensProdutosDetalhesPV";
+import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
@@ -103,7 +103,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                     keyExtractor={(item) => item.Id!}
                     refreshing={isLoading}
                     onRefresh={handleRefreshProducts}
-                    ListHeaderComponent={C_003_01_TopHeaderItensProdutosDetalhesPV}
+                    ListHeaderComponent={C_003_01_05_TopHeaderItensProdutosDetalhesPV}
                     renderItem={({ item }) => (
                         <C_003_01_ProductPvItem
                             product={item}
@@ -116,7 +116,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                     )}
                 />
 
-                <C_003_01_BottomScreenItemProdutosDetalhesPV
+                <C_003_01_04_BottomScreenItemProdutosDetalhesPV
                     dataEmissao={emissao}
                     dataValidade={validade}
                     totalLiquido={totalLiquido}

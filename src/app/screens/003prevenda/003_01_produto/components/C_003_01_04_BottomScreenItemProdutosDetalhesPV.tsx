@@ -11,7 +11,7 @@ export interface IPreVendaData {
     totalLiquido: number
 }
 
-const C_003_01_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
+const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
     return (
         <CustomBottomItem height={160} >
             <View style={[styles.row, styles.padding_12, styles.space_between]}>
@@ -81,4 +81,4 @@ export const styles = StyleSheet.create({
 })
 
 
-export default C_003_01_BottomScreenItemProdutosDetalhesPV;
+export default C_003_01_04_BottomScreenItemProdutosDetalhesPV;

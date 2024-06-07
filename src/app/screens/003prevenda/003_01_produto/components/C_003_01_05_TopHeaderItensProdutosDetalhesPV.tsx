@@ -4,7 +4,7 @@ import CustomTopItem from "../../../../components/topItem/CustomTopItem";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { styleProdutoPVDetalhe } from "../style/StylePreVendaProdutoDetalhe";
 
-const C_003_01_TopHeaderItensProdutosDetalhesPV = () => {
+const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
 
     return (
         <CustomTopItem>
@@ -33,4 +33,4 @@ const C_003_01_TopHeaderItensProdutosDetalhesPV = () => {
     );
 }
 
-export default C_003_01_TopHeaderItensProdutosDetalhesPV;
+export default C_003_01_05_TopHeaderItensProdutosDetalhesPV;

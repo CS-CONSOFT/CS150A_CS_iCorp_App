@@ -77,7 +77,7 @@ const LastSalesRenderItem = ({ item }: { item: any }) => {
     );
 }
 
-export const common003_01_styles = StyleSheet.create({
+const common003_01_styles = StyleSheet.create({
     blueBackgroundColor: {
         backgroundColor: "#A3C5D9"
     },

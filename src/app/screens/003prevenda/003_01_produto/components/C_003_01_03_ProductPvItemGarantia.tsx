@@ -16,7 +16,7 @@ const C_003_01_03_ProductPvItemGarantia = ({ close }: { close: () => void }) => 
 }
 
 
-export const common003_02_styles = StyleSheet.create({
+const common003_02_styles = StyleSheet.create({
     blueBackgroundColor: {
         backgroundColor: "#A3C5D9"
     },
