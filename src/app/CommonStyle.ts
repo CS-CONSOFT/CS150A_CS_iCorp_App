@@ -29,4 +29,22 @@ export const commonStyle = StyleSheet.create({
         letterSpacing: 0.25,
         color: 'white',
     },
+    rowItem: {
+        flexDirection: 'row'
+    },
+    columnItem: {
+        flexDirection: 'column'
+    },
+    fontWeight_600: {
+        fontWeight: '600'
+    },
+    margin_bottom_16: {
+        marginBottom: 16
+    },
+    margin_bottom_8: {
+        marginBottom: 8
+    },
+    margin_top_8: {
+        marginTop: 8
+    },
 });

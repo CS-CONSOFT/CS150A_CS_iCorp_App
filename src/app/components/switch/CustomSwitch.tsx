@@ -1,10 +1,10 @@
 import { Switch, Text, View, StyleSheet } from "react-native";
 
-const CustomSwitch = ({ title }: { title: string }) => {
+const CustomSwitch = ({ title, switchValue, onValueChange }: { title: string, switchValue: boolean, onValueChange: (value: boolean) => void }) => {
     return (
         <View style={styles.containerRenderItem}>
             <Text style={styles.textTitle}>{title}</Text>
-            <Switch />
+            <Switch onValueChange={onValueChange} value={switchValue} />
         </View>
     );
 }

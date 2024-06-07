@@ -1,6 +1,6 @@
 import api from "../../axios_config";
 import { ICommonResponse, IPVProductDiscount, IPVTenant } from "../../interfaces/prevenda/IPreVenda";
-import { IGetProductSearch, IResCompleteProdutoSearch, IUpdateAmount, IUpdatePercentageDiscount, IUpdatePrice, IUpdateProdutAmount, IUpdateTablePrice, IUpdateValueDiscount } from "../../interfaces/produto/IProduct";
+import { IGetProductSearch, IResCompleteProdutoSearch, IUpdateAmount, IUpdatePercentageDiscount, IUpdatePrice, IUpdateProdutItens, IUpdateTablePrice, IUpdateValueDiscount } from "../../interfaces/produto/IProduct";
 
 /** ROTAS DE GET */
 
@@ -146,7 +146,7 @@ export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePr
 /**
  * Rota para atualizar a quantidade de um protudo na pre venda
  */
-export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
+export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
@@ -156,23 +156,65 @@ export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, upda
         }
 
         const bodyParams = {
-            Quantidade: updateQuantidade.Quantidade,
-            IsMontar: updateQuantidade.IsMontar,
-            IsSaldoNegativo: updateQuantidade.IsSaldoNegativo,
-            IsRequisitar: updateQuantidade.IsRequisitar,
-            IsEntregar: updateQuantidade.IsEntregar
+            Quantidade: updateQuantidade.Quantidade!.toFixed(1)
         }
 
-        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTabelaItem`
+        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/Salvar_Qtd_PV`
 
-        const result = await api.post(url, bodyParams, { params: { urlParams } })
+
+        const result = await api.put(url, bodyParams, { params: urlParams })
+
+
         const commonResponse: ICommonResponse = {
             IsOk: result.data.IsOk,
             Msg: result.data.Msg
         }
         return commonResponse
     } catch (error) {
+        console.log(error);
         throw error
+
+    }
+}
+
+
+/**
+ * Rota para atualizar os itens de switch   IsMontar?: boolean,
+    IsSaldoNegativo?: boolean,
+    IsRequisitar?: boolean,
+    IsEntregar?: boolean
+ */
+export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
+    try {
+
+        const urlParams = {
+            TenantId: pvTenant.TenantId,
+            AtendimentoId: pvTenant.AtendimentoId,
+            AtendimentoProdutoId: AtendimentoProdutoId
+        }
+
+        const bodyParams = {
+            IsMontar: updateQuantidade.IsMontar,
+            IsSaldoNegativo: updateQuantidade.IsSaldoNegativo,
+            IsRequisitar: updateQuantidade.IsRequisitar,
+            IsEntregar: updateQuantidade.IsEntregar,
+        }
+
+        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/Salvar_Set_ItemPV`
+
+
+        const result = await api.put(url, bodyParams, { params: urlParams })
+
+
+        const commonResponse: ICommonResponse = {
+            IsOk: result.data.IsOk,
+            Msg: result.data.Msg
+        }
+        return commonResponse
+    } catch (error) {
+        console.log(error);
+        throw error
+
     }
 }
 

@@ -1,5 +1,4 @@
-import FontAwesome from '@expo/vector-icons/Ionicons'
-import { Pressable } from 'react-native';
+import FontAwesome from '@expo/vector-icons/Ionicons';
 
 export interface ICustomIcon {
     icon: any,

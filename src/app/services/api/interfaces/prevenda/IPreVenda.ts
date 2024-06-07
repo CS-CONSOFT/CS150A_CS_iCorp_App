@@ -115,6 +115,10 @@ export interface IProductItemModel {
     gg008_ID: string;
     gg008_Kdx_ID: string;
     gg520_ID: string;
+    IsMontar: boolean,
+    IsSaldoNegativo: boolean,
+    IsRequisitar: boolean,
+    IsEntregar: boolean
 }
 
 /**

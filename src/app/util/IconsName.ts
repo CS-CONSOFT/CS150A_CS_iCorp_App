@@ -16,5 +16,5 @@ export const ICON_NAME = {
     FLECHA_ESQUERDA: 'chevron-back-outline',
     FLECHA_DIRETA: 'chevron-forward-outline',
     LIXEIRA: 'trash-outline',
-    CHECK: 'checkmark-outline',
+    CHECK: 'save-outline',
 }

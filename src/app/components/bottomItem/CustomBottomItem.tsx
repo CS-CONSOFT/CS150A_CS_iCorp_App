@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Text, View, StyleSheet, Keyboard } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 
 interface CustomProp {
     children: ReactNode,

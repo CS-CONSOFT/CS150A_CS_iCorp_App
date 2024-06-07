@@ -72,12 +72,12 @@ export interface IUpdateTablePrice {
 /**
  * Interface para atualizar quantiade, is montar, is entrega, is requisitar e is saldo negativo
  */
-export interface IUpdateProdutAmount {
-    Quantidade: number,
-    IsMontar: true,
-    IsSaldoNegativo: false,
-    IsRequisitar: false,
-    IsEntregar: false
+export interface IUpdateProdutItens {
+    Quantidade?: number,
+    IsMontar?: boolean,
+    IsSaldoNegativo?: boolean,
+    IsRequisitar?: boolean,
+    IsEntregar?: boolean
 }
 
 export interface IUpdatePercentageDiscount {
@@ -91,7 +91,7 @@ export interface IUpdateValueDiscount {
 }
 
 export interface IUpdateAmount {
-    updateQuantidade: IUpdateProdutAmount
+    productAmount: IUpdateProdutItens
     pvTenant: IPVTenant,
     AtendimentoProdutoId: string
 }

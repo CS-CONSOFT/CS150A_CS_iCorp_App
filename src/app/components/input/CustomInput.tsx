@@ -26,7 +26,7 @@ interface CustomInputProp {
     keyboardType?: KeyboardType,
     value: any
     //lida com a escrita dos valores no input
-    setValue: any,
+    setValue: (value?: any) => void,
     width?: number,
     height?: number,
     maxLenght?: number
@@ -119,7 +119,7 @@ function InputAreaHandle({
         <Text>{ }</Text>
         <TextInput
             style={[styles.input, { width: width, height: height }]}
-            onChangeText={setValue}
+            onChangeText={(text) => setValue(text)}
             value={value.toString()}
             secureTextEntry={securityTextEnter}
             placeholder={placeholder}

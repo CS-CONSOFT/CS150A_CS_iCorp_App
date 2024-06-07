@@ -1,9 +1,9 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { deleteProductFromPv, fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
-import { updatePercentDiscount, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
+import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse, IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductItemModel, IProductsPvModel, IPVProductDiscount, IPVTenant, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
-import { IScreenUpdateProductItens, IUpdatePrice, IUpdateTablePrice } from "../../services/api/interfaces/produto/IProduct";
+import { IScreenUpdateProductItens, IUpdatePrice, IUpdateProdutItens, IUpdateTablePrice } from "../../services/api/interfaces/produto/IProduct";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
 
@@ -149,3 +149,36 @@ export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice): Promise
 
     return updateUnityPrice({ pvTenant, updatePrice })
 }
+
+export async function handleUpdateProductAmount(productId: string, productAmount: IUpdateProdutItens): Promise<ICommonResponse> {
+    let currentPvId: any = ''
+    getSimpleData(DataKey.CurrentPV).then((res) => {
+        currentPvId = res
+    })
+
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+    const pvTenant: IPVTenant = {
+        TenantId: currentUser.TenantId,
+        AtendimentoId: currentPvId
+    }
+
+    const result = await updateProductAmount({ pvTenant: pvTenant, AtendimentoProdutoId: productId, productAmount: productAmount })
+    return result
+}
+
+export async function handleUpdateProductSwtichs(productId: string, productAmount: IUpdateProdutItens): Promise<ICommonResponse> {
+    let currentPvId: any = ''
+    getSimpleData(DataKey.CurrentPV).then((res) => {
+        currentPvId = res
+    })
+
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+    const pvTenant: IPVTenant = {
+        TenantId: currentUser.TenantId,
+        AtendimentoId: currentPvId
+    }
+
+    const result = await updateProductSwitchItens({ pvTenant: pvTenant, AtendimentoProdutoId: productId, productAmount: productAmount })
+    return result
+}
+

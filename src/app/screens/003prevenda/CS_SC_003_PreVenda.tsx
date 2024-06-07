@@ -9,8 +9,8 @@ import { DataKey } from "../../enum/DataKeys";
 import { IPreVendaItemListModel } from "../../services/api/interfaces/prevenda/IPreVenda";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { formatDate, formatMoneyValue } from "../../util/FormatText";
+import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import C_003_SearchInputPreVenda from "./components/C_003_SearchInputPreVenda";
 
 
@@ -20,6 +20,7 @@ const CS_SC_003_PreVenda = () => {
     const [pvList, setPvList] = useState<IPreVendaItemListModel[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
+
 
     useEffect(() => {
         _fetchPV('')

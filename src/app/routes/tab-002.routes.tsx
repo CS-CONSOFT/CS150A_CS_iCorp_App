@@ -1,9 +1,8 @@
-import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CustomPvBottomMenu_002 from "../components/bottomMenus/CustomPvBottomMenu_002";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import TopTab001 from "./top-tab001.routes";
-import { RouteProp } from "@react-navigation/native";
 
 const BottomTab = createBottomTabNavigator()
 const TopTab = createMaterialTopTabNavigator();
