@@ -6,35 +6,62 @@ Este repositório contém o código-fonte e recursos para a construção do apli
 ```
 └── 📁app
     └── 📁components
+        └── 📁bottomItem
+            └── CustomBottomItem.tsx
+        └── 📁bottomMenus
+            └── CustomPvBottomMenu_001.tsx
+            └── CustomPvBottomMenu_002.tsx
+            └── ListBottomMenu.ts
         └── 📁button
             └── CustomButton.tsx
         └── 📁headers
-            └── HeaderLogo.tsx
-            └── HeaderUserInfo.tsx
-            └── LoggoutTitle.tsx
+            └── CustomHeaderLogo.tsx
+            └── CustomHeaderUserInfo.tsx
+            └── CustomLoggoutTitle.tsx
         └── 📁icon
             └── CustomIcon.tsx
         └── 📁input
             └── CustomInput.tsx
-            └── CustomSearch.tsx
+        └── 📁items
+            └── CustomItemIconTitleHalfRoundedWhite.tsx
+            └── CustomItemIconTitleNoColor.tsx
+            └── CustomItemIconTitleRoundedBlue.tsx
         └── 📁lists
-            └── ItemListMenu.tsx
-            └── ListComponent.tsx
-            └── Separator.tsx
+            └── CustomProductItem.tsx
+            └── CustomSeparator.tsx
+            └── IItemList.ts
         └── 📁modal
             └── CustomAlertDialog.tsx
+        └── 📁pagination
+            └── Custom_Pagination.tsx
+            └── PaginationStyles.ts
+        └── 📁switch
+            └── CustomSwitch.tsx
+        └── 📁text
+            └── CustomTextValueWithTitleBoldHorizontal.tsx
+        └── 📁toast
+            └── CustomToastError.tsx
+        └── 📁topItem
+            └── CustomTopItem.tsx
     └── 📁enum
         └── DataKeys.ts
-    └── index.tsx
-    └── Logger.ts
+    └── 📁routes
+        └── index.tsx
+        └── stack.routes.tsx
+        └── tab-001.routes.tsx
+        └── tab-002.routes.tsx
+        └── top-tab001.routes.tsx
     └── 📁screens
-        └── 📁login
-            └── CS_SC_Login.tsx
+        └── 📁001login
+            └── CS_SC_001_Login.tsx
+            └── C_001_LoginForm.tsx
             └── ILoginResponse.ts
             └── StylesLogin.ts
-        └── 📁menu
-            └── CS_SC_Menu.tsx
+        └── 📁002menu
+            └── CS_SC_002_Menu.tsx
             └── ListMenu.ts
+        └── 📁config
+            └── CS_SC_EnvorimentConfig.tsx
         └── 📁nota
             └── 📁components
                 └── 📁header
@@ -45,10 +72,27 @@ Este repositório contém o código-fonte e recursos para a construção do apli
             └── 📁serie
                 └── CS_SC_Serie.tsx
                 └── StylesNotaSerie.ts
+        └── 📁prevenda
+            └── 📁cliente
+                └── CS_SC_003_02_PreVendaDetalheCliente.tsx
+            └── 📁components
+                └── C_003_SearchInputPreVenda.tsx
+            └── CS_SC_003_PreVenda.tsx
+            └── PreVendaStyles.ts
+            └── 📁produto
+                └── 📁components
+                    └── C_003_01_BottomScreenItemProdutosDetalhesPV.tsx
+                    └── C_003_01_ProductPvItem.tsx
+                    └── C_003_01_TopHeaderItensProdutosDetalhesPV.tsx
+                └── CS_SC_003_01_PreVendaDetalheProduto.tsx
+                └── 📁style
+                    └── StylePreVendaProdutoDetalhe.ts
         └── 📁produtos
             └── 📁consulta
                 └── ConsultaProdutoStyles.ts
+                └── CS_ConsultaProdutoForm.tsx
                 └── CS_SC_ConsultaProdutos.tsx
+                └── FormListItens.ts
                 └── ISearchProduto.ts
     └── 📁services
         └── 📁api
@@ -61,6 +105,8 @@ Este repositório contém o código-fonte e recursos para a construção do apli
                         └── CS_EntregNota.ts
                     └── 📁serie
                         └── CS_GetSerieNota.ts
+                └── 📁prevenda
+                    └── CS_PreVendaService.ts
                 └── 📁produto
                     └── CS_GetProduct.ts
             └── 📁interfaces
@@ -69,12 +115,22 @@ Este repositório contém o código-fonte e recursos para a construção do apli
                 └── 📁notas
                     └── CS_INotes.ts
                     └── CS_Response.ts
+                └── 📁prevenda
+                    └── IPreVenda.ts
                 └── 📁produto
-                    └── IProductSearch.ts
+                    └── IProduct.ts
         └── 📁storage
             └── AsyncStorageConfig.ts
+            └── 📁sqlite
+                └── envoriment_config.db
+                └── SQLiteConfig.ts
     └── 📁style
         └── CommonStyle.ts
+    └── 📁util
+        └── FETCH_STATUS.ts
+        └── FormatText.ts
+        └── IconsName.ts
+        └── Logger.ts
     └── 📁view_controller
         └── 📁entrega
             └── EntregaViewController.ts
@@ -82,10 +138,11 @@ Este repositório contém o código-fonte e recursos para a construção do apli
             └── IGetUserProperties.ts
         └── 📁login
             └── LoginViewController.ts
+        └── 📁prevenda
+            └── PreVendaViewController.ts
         └── 📁produto
             └── ProductViewController.ts
         └── 📁serie
             └── SerieNotaViewController.ts
         └── SharedViewController.ts
-    └── _layout.tsx
 ```
