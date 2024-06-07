@@ -3,7 +3,7 @@ import CustomIcon from "../icon/CustomIcon";
 import { IItemList } from "../lists/IItemList";
 
 
-const ItemIconTitleRoundedBlue = ({ title, onPress = () => { }, iconName }: IItemList) => {
+const CustomItemIconTitleRoundedBlue = ({ title, onPress = () => { }, iconName }: IItemList) => {
 
     return (
         <View style={styles.containerItem}>
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ItemIconTitleRoundedBlue;
+export default CustomItemIconTitleRoundedBlue;

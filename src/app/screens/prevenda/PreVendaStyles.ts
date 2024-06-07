@@ -15,14 +15,13 @@ export const stylesPreVenda = StyleSheet.create({
     },
     pressable: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 14
+        marginTop: 14,
+        marginRight: 12
     },
     containerFilter: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%'
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 16
     },
     textTitle: {
         fontSize: 24,

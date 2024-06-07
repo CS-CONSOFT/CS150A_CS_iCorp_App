@@ -2,16 +2,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
 import { IProductItemModel, IProductsPvModel } from "../../../services/api/interfaces/prevenda/IPreVenda";
-import { IScreenUpdateProductItens } from "../../../services/api/interfaces/produto/IProduct";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleDeleteProductFromPv, handleGetProductsPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
-import CS_BottomScreenItemProdutosDetalhesPV from "./components/CS_BottomScreenItemProdutosDetalhesPV";
-import { ProductPvItem } from "./components/CS_ProductPvItem";
-import CS_TopHeaderItensProdutosDetalhesPV from "./components/CS_TopHeaderItensProdutosDetalhesPV";
-import ToastError from "../../../components/toast/ToastError";
+import C_003_01_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_BottomScreenItemProdutosDetalhesPV";
+import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
+import C_003_01_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_TopHeaderItensProdutosDetalhesPV";
 
 
-const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
+const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     const [productsPv, setProductsPv] = useState<IProductItemModel[]>([])
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { emissao, validade, totalLiquido } = route.params
@@ -104,9 +102,9 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                     keyExtractor={(item) => item.Id!}
                     refreshing={isLoading}
                     onRefresh={handleRefreshProducts}
-                    ListHeaderComponent={CS_TopHeaderItensProdutosDetalhesPV}
+                    ListHeaderComponent={C_003_01_TopHeaderItensProdutosDetalhesPV}
                     renderItem={({ item }) => (
-                        <ProductPvItem
+                        <C_003_01_ProductPvItem
                             product={item}
                             onProductClick={(product) => {
 
@@ -120,7 +118,7 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                     )}
                 />
 
-                <CS_BottomScreenItemProdutosDetalhesPV
+                <C_003_01_BottomScreenItemProdutosDetalhesPV
                     dataEmissao={emissao}
                     dataValidade={validade}
                     totalLiquido={totalLiquido}
@@ -132,5 +130,5 @@ const CS_SC_PreVendaDetalheProduto = ({ route }: { route: any }) => {
 
 }
 
-export default CS_SC_PreVendaDetalheProduto;
+export default CS_SC_003_01_PreVendaDetalheProduto;
 

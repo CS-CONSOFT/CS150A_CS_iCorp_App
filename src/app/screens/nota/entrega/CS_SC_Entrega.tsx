@@ -1,7 +1,7 @@
 import { Button, FlatList, SafeAreaView, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
-import { ILoginResponse } from "../../login/ILoginResponse";
+import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";
 import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
 import { InfoNota, Produto } from "../../../services/api/interfaces/notas/CS_Response";

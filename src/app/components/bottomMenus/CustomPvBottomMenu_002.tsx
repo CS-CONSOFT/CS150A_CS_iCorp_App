@@ -4,8 +4,8 @@ import { DataKey } from "../../enum/DataKeys";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { ICON_NAME } from "../../util/IconsName";
 import CustomIcon from "../icon/CustomIcon";
-import ItemIconTitleNoColor from "../items/ItemIconTitleNoColor";
-import Separator from "../lists/Separator";
+import CustomItemIconTitleNoColor from "../items/CustomItemIconTitleNoColor";
+import CustomSeparator from "../lists/CustomSeparator";
 import { listBottomMenu001, listBottomMenu002 } from "./ListBottomMenu";
 import { useEffect, useState } from "react";
 
@@ -43,7 +43,7 @@ const CustomPvBottomMenu_002 = () => {
         <View>
             {!isKeyboardVisible && (
                 <View style={styles.mainContainer}>
-                    <Separator />
+                    <CustomSeparator />
                     <FlatList
                         data={listBottomMenu002}
                         key={"_"}
@@ -51,7 +51,7 @@ const CustomPvBottomMenu_002 = () => {
                         numColumns={5}
                         renderItem={({ item }) => {
                             return (
-                                <ItemIconTitleNoColor
+                                <CustomItemIconTitleNoColor
                                     title={item.title}
                                     onPress={() => item.onPress(navigate)}
                                     iconName={item.iconName}

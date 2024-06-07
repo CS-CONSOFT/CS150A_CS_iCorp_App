@@ -1,5 +1,5 @@
 import { DataKey } from "../../enum/DataKeys";
-import { ILoginResponse } from "../../screens/login/ILoginResponse";
+import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { generalLogin } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { getObjectDataVc } from "../SharedViewController";

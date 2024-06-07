@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
-import { ProductItem } from "../../../components/lists/ProductItem";
+import { CustomProductItem } from "../../../components/lists/CustomProductItem";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
 import { DataKey } from "../../../enum/DataKeys";
 import { getSimpleData } from "../../../services/storage/AsyncStorageConfig";
@@ -152,7 +152,7 @@ const CS_SC_ConsultaProdutos = () => {
                                     data={productList}
                                     keyExtractor={(item) => item.Id!}
                                     renderItem={({ item }) => (
-                                        <ProductItem
+                                        <CustomProductItem
                                             product={item}
                                             onClick={(currentProduct, done) => {
                                                 scInsertProductPv(currentProduct, done);

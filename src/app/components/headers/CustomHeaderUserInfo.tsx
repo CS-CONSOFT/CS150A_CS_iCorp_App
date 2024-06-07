@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { getUserProperties } from "../../view_controller/SharedViewController";
 import { IGetUserProperties } from "../../view_controller/interface/IGetUserProperties";
 
-const HeaderUserInfo = () => {
+const CustomHeaderUserInfo = () => {
     const [useProp, setUserProp] = useState<IGetUserProperties>()
     useEffect(() => {
         getUserProperties().then((res) => {
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HeaderUserInfo;
+export default CustomHeaderUserInfo;

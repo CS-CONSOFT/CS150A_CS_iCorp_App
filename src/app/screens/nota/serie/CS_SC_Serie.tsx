@@ -2,7 +2,7 @@
 import { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from "react-native";
 import CustomButton from "../../../components/button/CustomButton";
-import Separator from "../../../components/lists/Separator";
+import CustomSeparator from "../../../components/lists/CustomSeparator";
 import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
@@ -81,7 +81,7 @@ const CS_SC_Serie = () => {
 
             {isSuccess && products.length > 0 && (
                 <FlatList
-                    ItemSeparatorComponent={Separator}
+                    ItemSeparatorComponent={CustomSeparator}
                     data={products}
                     renderItem={({ item }) => (
                         <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />

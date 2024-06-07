@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import CustomBottomItem from "../../../../components/bottomItem/CustomBottomItem";
 import CustomButton from "../../../../components/button/CustomButton";
-import Separator from "../../../../components/lists/Separator";
+import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomTextValueWithTitleBoldHorizontal from "../../../../components/text/CustomTextValueWithTitleBoldHorizontal";
 
 
@@ -11,16 +11,14 @@ export interface IPreVendaData {
     totalLiquido: number
 }
 
-const CS_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
-
-
+const C_003_01_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
     return (
         <CustomBottomItem height={160} >
             <View style={[styles.row, styles.padding_12, styles.space_between]}>
                 <CustomTextValueWithTitleBoldHorizontal title="Emissão" value={dataEmissao} />
                 <CustomTextValueWithTitleBoldHorizontal title="Validade" value={dataValidade} />
             </View>
-            <Separator />
+            <CustomSeparator />
             <View style={[styles.row, styles.space_between]}>
                 <Text style={[styles.total_liquido_text, styles.padding_12]}>Total Liquido</Text>
                 <Text style={[styles.valor, styles.padding_12]}>{totalLiquido}</Text>
@@ -83,4 +81,4 @@ export const styles = StyleSheet.create({
 })
 
 
-export default CS_BottomScreenItemProdutosDetalhesPV;
+export default C_003_01_BottomScreenItemProdutosDetalhesPV;

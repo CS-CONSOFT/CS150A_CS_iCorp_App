@@ -3,7 +3,7 @@ import { logout } from "../../view_controller/login/LoginViewController";
 import { DataKey } from "../../enum/DataKeys";
 import { useNavigation } from "@react-navigation/native";
 
-const LoggoutTitle = () => {
+const CustomLoggoutTitle = () => {
     const { navigate } = useNavigation()
     return (
         <TouchableHighlight
@@ -20,4 +20,4 @@ const LoggoutTitle = () => {
     );
 }
 
-export default LoggoutTitle;
+export default CustomLoggoutTitle;

@@ -3,7 +3,7 @@ import { Animated, Text, StyleSheet } from "react-native";
 interface ToastProps {
     message: string;
 }
-const ToastError = ({ message }: ToastProps) => {
+const CustomToastError = ({ message }: ToastProps) => {
     const fadeAnim = new Animated.Value(0);
 
     useEffect(() => {
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ToastError;
+export default CustomToastError;

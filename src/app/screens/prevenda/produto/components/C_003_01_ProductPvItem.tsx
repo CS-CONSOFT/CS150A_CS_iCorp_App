@@ -3,7 +3,7 @@ import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native
 import CustomButton from "../../../../components/button/CustomButton";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomInput from "../../../../components/input/CustomInput";
-import Separator from "../../../../components/lists/Separator";
+import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomSwitch from "../../../../components/switch/CustomSwitch";
 import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
 import { formatMoneyValue } from "../../../../util/FormatText";
@@ -13,7 +13,7 @@ import { ICON_NAME } from "../../../../util/IconsName";
 
 
 //Item de produto que aparece na listagem
-export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
+export const C_003_01_ProductPvItem = ({ product, onProductClick, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
     {
         product: IProductItemModel,
         onProductClick: (product: IProductItemModel) => void,
@@ -141,7 +141,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick, s
                     <View style={styles.extraBottomStyleInputs}>
                         <Text style={styles.extraBottomStylePrecoVenda}>Preço</Text>
 
-                        <Separator />
+                        <CustomSeparator />
 
                         {/** LINHA DE PREÇO */}
                         <View style={styles.extraBottomPriceStyle}>
@@ -170,7 +170,7 @@ export const ProductPvItem = ({ product, onProductClick, onDeleteProductClick, s
                         {/** LINHA DE DESCONTO */}
                         <Text style={styles.extraBottomStylePrecoVenda}>Desconto</Text>
 
-                        <Separator />
+                        <CustomSeparator />
 
                         <View style={styles.extraBottomPriceStyle}>
                             <View>

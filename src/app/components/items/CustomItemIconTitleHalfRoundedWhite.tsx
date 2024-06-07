@@ -3,11 +3,11 @@ import CustomIcon from "../icon/CustomIcon";
 import { IItemList } from "../lists/IItemList";
 
 
-const ItemIconTitleNoColor = ({ title, onPress = () => { }, iconName }: IItemList) => {
+const CustomItemIconTitleHalfRoundedWhite = ({ title, onPress = () => { }, iconName }: IItemList) => {
     return (
         <Pressable style={styles.containerItem} onPress={onPress}>
             <View>
-                <CustomIcon icon={iconName} iconSize={24} iconColor="#6A7178" />
+                <CustomIcon icon={iconName} />
                 <Text style={styles.preVendaText}>{title}</Text>
             </View>
         </Pressable>
@@ -34,22 +34,23 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: 'red',
         margin: 32
-    },
-    containerItem: {
-        backgroundColor: '#FFFFFF',
-        justifyContent: 'center',
-        flexDirection: 'row',
+    }, containerItem: {
         flex: 1,
-        margin: 12
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+        margin: 12,
+        padding: 16,
+        borderRadius: 16,
+
     },
     preVendaText: {
-        fontSize: 12,
+        fontSize: 16,
         fontWeight: 'bold',
-        color: '#6A7178',
+        color: '#000',
         textAlign: 'center'
     },
 });
 
 
 
-export default ItemIconTitleNoColor;
+export default CustomItemIconTitleHalfRoundedWhite;

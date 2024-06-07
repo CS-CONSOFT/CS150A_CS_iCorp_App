@@ -1,11 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context"
-import CustomSearch from "../../components/input/CustomSearch"
-import CustomButton from "../../components/button/CustomButton";
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CustomButton from "../../components/button/CustomButton";
 import CustomInput from "../../components/input/CustomInput";
 import { getDBEnvorimentConfig, insertUpdateDBEnvorimentConfig } from "../../view_controller/SharedViewController";
-import { useNavigation } from "@react-navigation/native";
 
 const CS_SC_EnvorimentConfig = () => {
     const [tenant, setTenant] = useState<number>(0)
@@ -31,7 +30,6 @@ const CS_SC_EnvorimentConfig = () => {
         <SafeAreaView>
             <CustomInput>
                 <CustomInput.InputAreaHandle
-                    title="Tenant"
                     setValue={setTenant}
                     value={tenant!.toString()}
                 />
@@ -39,7 +37,6 @@ const CS_SC_EnvorimentConfig = () => {
 
             <CustomInput>
                 <CustomInput.InputAreaHandle
-                    title="URL Base"
                     setValue={setUrlBase}
                     value={urlBase}
                 />
@@ -47,7 +44,6 @@ const CS_SC_EnvorimentConfig = () => {
 
             <CustomInput>
                 <CustomInput.InputAreaHandle
-                    title="Token"
                     setValue={setToken}
                     value={token}
                 />

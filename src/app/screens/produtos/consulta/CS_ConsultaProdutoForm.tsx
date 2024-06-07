@@ -21,9 +21,8 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
     return (
         <View style={stylesConsultaProduto.searchContainer}>
             <CustomInput>
-                <CustomInput.TitleText titleText="Código" />
                 <CustomInput.InputFormsAreaHandle
-                    textTitleIdentifier={'code'}
+                    textTitleIdentifier={'Código'}
                     handleValueOfInput={handleInputTyping}
                     valueOfInput={attributesMap.Código}
                     securityTextEnter={false}
@@ -31,9 +30,8 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
             </CustomInput>
 
             <CustomInput>
-                <CustomInput.TitleText titleText="Descrição Produto" />
                 <CustomInput.InputFormsAreaHandle
-                    textTitleIdentifier={'desc'}
+                    textTitleIdentifier={'Descrição Produto'}
                     handleValueOfInput={handleInputTyping}
                     valueOfInput={attributesMap.Usuário}
                     securityTextEnter={false}

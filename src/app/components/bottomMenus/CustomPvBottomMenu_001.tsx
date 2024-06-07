@@ -4,8 +4,8 @@ import { DataKey } from "../../enum/DataKeys";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { ICON_NAME } from "../../util/IconsName";
 import CustomIcon from "../icon/CustomIcon";
-import ItemIconTitleNoColor from "../items/ItemIconTitleNoColor";
-import Separator from "../lists/Separator";
+import CustomItemIconTitleNoColor from "../items/CustomItemIconTitleNoColor";
+import CustomSeparator from "../lists/CustomSeparator";
 import { listBottomMenu001 } from "./ListBottomMenu";
 
 const CustomPvBottomMenu_001 = () => {
@@ -18,7 +18,7 @@ const CustomPvBottomMenu_001 = () => {
 
     return (
         <View style={styles.mainContainer}>
-            <Separator />
+            <CustomSeparator />
             <FlatList
                 data={listBottomMenu001}
                 key={"_"}
@@ -37,7 +37,7 @@ const CustomPvBottomMenu_001 = () => {
                         )
                     } else {
                         return (
-                            <ItemIconTitleNoColor
+                            <CustomItemIconTitleNoColor
                                 title={item.title}
                                 onPress={() => item.onPress(navigate)}
                                 iconName={item.iconName}

@@ -1,16 +1,15 @@
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, SafeAreaView, View } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
 import CustomButton from "../../components/button/CustomButton";
-import CustomSearch from "../../components/input/CustomSearch";
+import CustomInput from "../../components/input/CustomInput";
 import { DataKey } from "../../enum/DataKeys";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
 import { stylesLogin } from "./StylesLogin";
-import { useNavigation } from "@react-navigation/native";
 
 
-const CS_SC_LoginForm = () => {
+const CS_SC001_LoginForm = () => {
     //variaveis
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         Domínio: 'Comercial',
@@ -62,32 +61,29 @@ const CS_SC_LoginForm = () => {
 
     return (
         <SafeAreaView>
-            <CustomSearch>
-                <CustomSearch.InputHandle
-                    titleText={'Domínio'}
-                    handleValueOfInput={handleInputTyping}
+            <CustomInput>
+                <CustomInput.InputFormsAreaHandle
                     valueOfInput={attributesMap.Domínio}
-                    securityTextEnter={false}
-                />
-            </CustomSearch>
-
-            <CustomSearch>
-                <CustomSearch.InputHandle
-                    titleText={'Usuário'}
                     handleValueOfInput={handleInputTyping}
+                    textTitleIdentifier="Domínio"
+                />
+            </CustomInput>
+
+            <CustomInput>
+                <CustomInput.InputFormsAreaHandle
                     valueOfInput={attributesMap.Usuário}
-                    securityTextEnter={false}
-                />
-            </CustomSearch>
-
-            <CustomSearch>
-                <CustomSearch.InputHandle
-                    titleText={'Senha'}
                     handleValueOfInput={handleInputTyping}
-                    valueOfInput={attributesMap.Senha}
-                    securityTextEnter={false}
+                    textTitleIdentifier="Usuário"
                 />
-            </CustomSearch>
+            </CustomInput>
+
+            <CustomInput>
+                <CustomInput.InputFormsAreaHandle
+                    valueOfInput={attributesMap.Senha}
+                    handleValueOfInput={handleInputTyping}
+                    textTitleIdentifier="Senha"
+                />
+            </CustomInput>
 
             <CustomButton
                 title={'Logar'}
@@ -101,4 +97,4 @@ const CS_SC_LoginForm = () => {
     );
 }
 
-export default CS_SC_LoginForm;
+export default CS_SC001_LoginForm;

@@ -1,29 +1,29 @@
 import { Alert, View } from "react-native";
-import ItemIconTitleRoundedBlue from "../../../../components/items/ItemIconTitleRoundedBlue";
+import CustomItemIconTitleRoundedBlue from "../../../../components/items/CustomItemIconTitleRoundedBlue";
 import CustomTopItem from "../../../../components/topItem/CustomTopItem";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { styleProdutoPVDetalhe } from "../style/StylePreVendaProdutoDetalhe";
 
-const CS_TopHeaderItensProdutosDetalhesPV = () => {
+const C_003_01_TopHeaderItensProdutosDetalhesPV = () => {
 
     return (
         <CustomTopItem>
             <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                <ItemIconTitleRoundedBlue
+                <CustomItemIconTitleRoundedBlue
                     title={"Descontos"}
                     onPress={() => Alert.alert("Falta fazer")}
                     iconName={ICON_NAME.PAPEL_LISTA_CONTORNADO}
                 />
             </View>
             <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                <ItemIconTitleRoundedBlue
+                <CustomItemIconTitleRoundedBlue
                     title={"Código"}
                     onPress={() => Alert.alert("Falta fazer")}
                     iconName={ICON_NAME.ADICIONAR_CONTORNADO}
                 />
             </View>
             <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                <ItemIconTitleRoundedBlue
+                <CustomItemIconTitleRoundedBlue
                     title={"Requisição"}
                     onPress={() => Alert.alert("Falta fazer")}
                     iconName={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO}
@@ -33,4 +33,4 @@ const CS_TopHeaderItensProdutosDetalhesPV = () => {
     );
 }
 
-export default CS_TopHeaderItensProdutosDetalhesPV;
+export default C_003_01_TopHeaderItensProdutosDetalhesPV;

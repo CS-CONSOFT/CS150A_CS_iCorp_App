@@ -1,5 +1,5 @@
 import { DataKey } from "../../enum/DataKeys";
-import { ILoginResponse } from "../../screens/login/ILoginResponse";
+import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { deleteProductFromPv, fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse, IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductItemModel, IProductsPvModel, IPVProductDiscount, IPVTenant, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";

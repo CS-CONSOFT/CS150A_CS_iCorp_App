@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 
-import CS_SearchInputPreVenda from "./CS_SearchInputPreVenda";
+
 import { stylesPreVenda } from "./PreVendaStyles";
 
 import { useNavigation } from "@react-navigation/native";
@@ -11,11 +11,12 @@ import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { formatDate, formatMoneyValue } from "../../util/FormatText";
+import C_003_SearchInputPreVenda from "./components/C_003_SearchInputPreVenda";
 
 
 
 
-const CS_SC_PreVenda = () => {
+const CS_SC_003_PreVenda = () => {
     const [pvList, setPvList] = useState<IPreVendaItemListModel[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
@@ -71,7 +72,7 @@ const CS_SC_PreVenda = () => {
 
     return (
         <View>
-            <CS_SearchInputPreVenda onSearchPress={_fetchPV} />
+            <C_003_SearchInputPreVenda onSearchPress={_fetchPV} />
             {isLoading ? <>
                 <ActivityIndicator />
             </> :
@@ -91,7 +92,7 @@ const CS_SC_PreVenda = () => {
         </View>
     );
 }
-export default CS_SC_PreVenda;
+export default CS_SC_003_PreVenda;
 
 
 /** RENDER ITEM */

@@ -1,8 +1,9 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 import CustomButton from "../button/CustomButton";
+import { IResProductSearch } from "../../services/api/interfaces/produto/IProduct";
 
 //Item de produto que aparece na listagem
-export const ProductItem = ({ product, onClick }: { product: IResProductSearch, onClick: (product: IResProductSearch, done: () => void) => void }) => {
+export const CustomProductItem = ({ product, onClick }: { product: IResProductSearch, onClick: (product: IResProductSearch, done: () => void) => void }) => {
     return (
         <View style={styles.productContainer}>
             <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />

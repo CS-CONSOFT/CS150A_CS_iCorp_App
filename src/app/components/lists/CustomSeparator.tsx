@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-const Separator = () => {
+const CustomSeparator = () => {
     return (
         <View
             style={{
@@ -11,4 +11,4 @@ const Separator = () => {
     );
 }
 
-export default Separator;
+export default CustomSeparator;

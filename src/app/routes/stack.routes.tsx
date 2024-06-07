@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HeaderLogo from "../components/headers/HeaderLogo";
-import LoggoutTitle from "../components/headers/LoggoutTitle";
-import CS_SC_Login from "../screens/login/CS_SC_Login";
-import CS_SC_Menu from "../screens/menu/CS_SC_Menu";
+import CustomHeaderLogo from "../components/headers/CustomHeaderLogo";
+import CustomLoggoutTitle from "../components/headers/CustomLoggoutTitle";
+import CS_SC_001_Login from "../screens/001login/CS_SC_001_Login";
+import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import CS_SC_ConsultaProdutos from "../screens/produtos/consulta/CS_SC_ConsultaProdutos";
@@ -31,13 +31,13 @@ declare global {
 export default function StackRoutes() {
     return (
         <StackNav.Navigator>
-            <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_Login} />
+            <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
-            <StackNav.Screen name="Menu" component={CS_SC_Menu} options={{
-                headerRight: () => <HeaderLogo />,
+            <StackNav.Screen name="Menu" component={CS_SC_002_Menu} options={{
+                headerRight: () => <CustomHeaderLogo />,
                 headerTitleAlign: 'center',
                 title: '',
-                headerLeft: () => <LoggoutTitle />
+                headerLeft: () => <CustomLoggoutTitle />
             }} />
 
             <StackNav.Screen name="Entrega" component={CS_SC_Entrega} options={{
