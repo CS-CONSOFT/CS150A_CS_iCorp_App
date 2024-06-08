@@ -1,6 +1,11 @@
 import api from "../../axios_config";
-import { ICommonResponse, IPVProductDiscount, IPVTenant } from "../../interfaces/prevenda/IPreVenda";
-import { IGetProductSearch, IResCompleteProdutoSearch, IUpdateAmount, IUpdatePercentageDiscount, IUpdatePrice, IUpdateProdutItens, IUpdateTablePrice, IUpdateValueDiscount } from "../../interfaces/produto/IProduct";
+import { ICommonResponse } from "../../interfaces/prevenda/CS_Common_IPreVenda";
+import { IReqGetProductSearch } from "../../interfaces/produto/CS_IReqGetProdutoSearch";
+import { IReqUpdatePercentageDiscount } from "../../interfaces/produto/CS_IReqUpdatePercentualDesconto";
+import { IReqUpdateTablePrice } from "../../interfaces/produto/CS_IReqUpdateProdutoPreco";
+import { IReqUpdateAmount } from "../../interfaces/produto/CS_IReqUpdateQuantidadeProduto";
+import { IReqUpdateValueDiscount } from "../../interfaces/produto/CS_IReqUpdateValorDesconto";
+import { IResProdutoSearch } from "../../interfaces/produto/CS_IResGetProdutoSearch";
 
 /** ROTAS DE GET */
 
@@ -8,7 +13,7 @@ import { IGetProductSearch, IResCompleteProdutoSearch, IUpdateAmount, IUpdatePer
  * Rota para buscar todos os produtos baseado nos paramentros de busca
  * @param IGetProdutoSearch parametro de busca
  */
-export async function getProducts(IGetProdutoSearch: IGetProductSearch): Promise<IResCompleteProdutoSearch> {
+export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Promise<IResProdutoSearch> {
     try {
         const headerParams = {
             cs_tenant_id: IGetProdutoSearch.cs_tenant_id,
@@ -23,7 +28,7 @@ export async function getProducts(IGetProdutoSearch: IGetProductSearch): Promise
 
         const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/PesquisaProdutos3`;
         const response = await api.get(url, { headers: headerParams, params: urlParams })
-        let res = response.data as IResCompleteProdutoSearch
+        let res = response.data as IResProdutoSearch
 
         return res
 
@@ -39,7 +44,7 @@ export async function getProducts(IGetProdutoSearch: IGetProductSearch): Promise
  * Rota para atualizar o percentual de desconto de um produto na 
  * pre venda.
  */
-export async function updatePercentDiscount({ pvTenant, productDiscount: percentDiscount }: IUpdatePercentageDiscount): Promise<ICommonResponse> {
+export async function updatePercentDiscount({ pvTenant, productDiscount: percentDiscount }: IReqUpdatePercentageDiscount): Promise<ICommonResponse> {
     try {
 
         const bodyData = {
@@ -64,7 +69,7 @@ export async function updatePercentDiscount({ pvTenant, productDiscount: percent
  * Rota para atualizar o valor de desconto de um produto na 
  * pre venda.
  */
-export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdateValueDiscount): Promise<ICommonResponse> {
+export async function updateValueDiscount({ pvTenant, productDiscount }: IReqUpdateValueDiscount): Promise<ICommonResponse> {
     try {
 
         const params = {
@@ -92,7 +97,7 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IUpdate
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePrice): Promise<ICommonResponse> {
+export async function updateUnityPrice({ pvTenant, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
     try {
         const urlParams = {
             TenantId: pvTenant.TenantId,
@@ -117,7 +122,7 @@ export async function updateUnityPrice({ pvTenant, updatePrice }: IUpdateTablePr
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePrice): Promise<ICommonResponse> {
+export async function updateTablePrice({ pvTenant, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
@@ -146,7 +151,7 @@ export async function updateTablePrice({ pvTenant, updatePrice }: IUpdateTablePr
 /**
  * Rota para atualizar a quantidade de um protudo na pre venda
  */
-export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
+export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IReqUpdateAmount): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
@@ -184,7 +189,7 @@ export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, prod
     IsRequisitar?: boolean,
     IsEntregar?: boolean
  */
-export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IUpdateAmount): Promise<ICommonResponse> {
+export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId, productAmount: updateQuantidade }: IReqUpdateAmount): Promise<ICommonResponse> {
     try {
 
         const urlParams = {

@@ -1,12 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, SafeAreaView } from "react-native";
-import CustomButton from "../../components/button/CustomButton";
-import CustomInput from "../../components/input/CustomInput";
+import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight } from "react-native";
 import { DataKey } from "../../enum/DataKeys";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
 import { stylesLogin } from "./StylesLogin";
+import { commonStyle } from "../../CommonStyle";
 
 
 const CS_SC001_LoginForm = () => {
@@ -33,8 +32,8 @@ const CS_SC001_LoginForm = () => {
 
 
 
-    async function onClickLogin(done: () => void): Promise<void> {
-        const loginData: ILoginData = {
+    async function onClickLogin(): Promise<void> {
+        const loginData: IPostLoginData = {
             domain: attributesMap.Domínio,
             user: attributesMap.Usuário,
             password: attributesMap.Senha
@@ -48,8 +47,6 @@ const CS_SC001_LoginForm = () => {
             }
         } catch (error) {
             Alert.alert(error as string)
-        } finally {
-            done()
         }
     }
 
@@ -61,38 +58,33 @@ const CS_SC001_LoginForm = () => {
 
     return (
         <SafeAreaView>
-            <CustomInput>
-                <CustomInput.InputFormsAreaHandle
-                    valueOfInput={attributesMap.Domínio}
-                    handleValueOfInput={handleInputTyping}
-                    textTitleIdentifier="Domínio"
-                />
-            </CustomInput>
+            <Text>Domínio</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={(value) => handleInputTyping('Domínio', value)}
+                value={attributesMap.Domínio}
+            />
 
-            <CustomInput>
-                <CustomInput.InputFormsAreaHandle
-                    valueOfInput={attributesMap.Usuário}
-                    handleValueOfInput={handleInputTyping}
-                    textTitleIdentifier="Usuário"
-                />
-            </CustomInput>
+            <Text>Usuário</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={(value) => handleInputTyping('Usuário', value)}
+                value={attributesMap.Usuário}
+            />
 
-            <CustomInput>
-                <CustomInput.InputFormsAreaHandle
-                    valueOfInput={attributesMap.Senha}
-                    handleValueOfInput={handleInputTyping}
-                    textTitleIdentifier="Senha"
-                />
-            </CustomInput>
-
-            <CustomButton
-                title={'Logar'}
-                onPress={(done) => onClickLogin(done)}
-                buttonStyle={stylesLogin.button}
-                textStyle={stylesLogin.textButton}
+            <Text>Senha</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={(value) => handleInputTyping('Senha', value)}
+                value={attributesMap.Senha}
             />
 
 
+            <TouchableHighlight
+                onPress={onClickLogin}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            ><Text style={commonStyle.common_text_button_style}>Logar</Text></TouchableHighlight>
         </SafeAreaView>
     );
 }

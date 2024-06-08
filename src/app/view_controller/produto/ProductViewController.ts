@@ -1,5 +1,6 @@
 import { getProducts } from "../../services/api/endpoint/produto/CS_GetProduct";
-import { IGetProductSearch, IResCompleteProdutoSearch } from "../../services/api/interfaces/produto/IProduct";
+import { IReqGetProductSearch } from "../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
+import { IResProdutoSearch } from "../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
 import { getUserProperties } from "../SharedViewController";
 
 
@@ -7,11 +8,11 @@ interface IArrayWithPagesAndProductResponse {
     isOk: boolean,
     error?: string,
     pagesArray: number[],
-    productResponse?: IResCompleteProdutoSearch
+    productResponse?: IResProdutoSearch
 }
 
 
-export async function handleSearchProduct(iGetProductSearch: IGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
+export async function handleSearchProduct(iGetProductSearch: IReqGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
 
     const tenant = (await getUserProperties()).tenantId;
     const estabId = (await getUserProperties()).estabId;

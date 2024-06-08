@@ -6,7 +6,7 @@ import { getObjectDataVc } from "../SharedViewController";
 
 
 
-export async function generalLoginVc(loginData: ILoginData) {
+export async function generalLoginVc(loginData: IPostLoginData) {
     try {
         const result = await generalLogin(loginData);
         return result;

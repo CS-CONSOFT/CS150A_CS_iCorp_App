@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { commonStyle } from "../../../../CommonStyle";
-import CustomAccordion from "../../../../components/accordion/CustomAccordion";
 
 const C_003_02_01_HeaderClient = () => {
     return (

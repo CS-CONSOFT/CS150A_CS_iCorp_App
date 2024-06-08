@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { CustomProductItem } from "../../../components/lists/CustomProductItem";
@@ -5,22 +6,21 @@ import Custom_Pagination from "../../../components/pagination/Custom_Pagination"
 import { DataKey } from "../../../enum/DataKeys";
 import { getSimpleData } from "../../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { replaceScreen } from "../../../view_controller/SharedViewController";
 import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { useNavigation } from "@react-navigation/native";
-import { logWithTimestamp } from "../../../util/Logger";
+import { IResGetProductItem, IResProdutoSearch } from "../../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
+import { IReqGetProductSearch } from "../../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
 
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 const CS_ConsultaProdutoForm = lazy(() => import("./CS_ConsultaProdutoForm"))
 
 const CS_SC_ConsultaProdutos = () => {
-    const [productList, setProductList] = useState<IResProductSearch[]>()
+    const [productList, setProductList] = useState<IResGetProductItem[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
-    const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IGetProductSearch>()
+    const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
     const { navigate } = useNavigation()
 
 
@@ -52,7 +52,7 @@ const CS_SC_ConsultaProdutos = () => {
         ToastAndroid.show(msg, ToastAndroid.SHORT)
     }
 
-    function scInsertProductPv(product: IResProductSearch, done: () => void) {
+    function scInsertProductPv(product: IResGetProductItem) {
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
             const pvId = currentPv as string
             handleInsertProductPv(
@@ -65,7 +65,6 @@ const CS_SC_ConsultaProdutos = () => {
             ).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 showToast(res.Msg)
-                done();
             })
         })
     }
@@ -101,7 +100,7 @@ const CS_SC_ConsultaProdutos = () => {
          * A chave das propriedades é o que será usado em 'key' -> formData.[key]
          * 
          */
-        const _filterValues: IGetProductSearch = {
+        const _filterValues: IReqGetProductSearch = {
             cs_page: page || 1,
             cs_codigo_produto: formData.code || '',
             cs_descricao_reduzida: formData.desc || ''
@@ -154,8 +153,8 @@ const CS_SC_ConsultaProdutos = () => {
                                     renderItem={({ item }) => (
                                         <CustomProductItem
                                             product={item}
-                                            onClick={(currentProduct, done) => {
-                                                scInsertProductPv(currentProduct, done);
+                                            onClick={(currentProduct) => {
+                                                scInsertProductPv(currentProduct);
                                             }}
                                         />
                                     )}

@@ -1,12 +1,16 @@
 import api from "../../axios_config";
-import { IResPreVenda, IGetPreVendaList, IInsertPvWhitoutService as IInsertPv, IInsertPvResponse, IProductsPvModel } from "../../interfaces/prevenda/IPreVenda";
+import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
+import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
+import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
+import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
+import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
 
 /**
  * Lista todas as PVS
  * @param IGetPreVendaList 
  * @returns lista de pvs
  */
-export async function fetchPVs(IGetPreVendaList: IGetPreVendaList): Promise<IResPreVenda> {
+export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
         const urlParams = {
             UsuarioId: IGetPreVendaList.cs_usuario_id,
@@ -28,7 +32,7 @@ export async function fetchPVs(IGetPreVendaList: IGetPreVendaList): Promise<IRes
  * Caso o atendimento id seja undefined, irá inserir produto e gerar uma nova pv,
  * com o atendimento id definido, irá inserir o produto no atendimento especificado.
  */
-export async function insertProductToPv(insertPv: IInsertPv): Promise<IInsertPvResponse> {
+export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): Promise<IResInsertPv> {
     try {
         const data = {
             UsuarioId: insertPv.cs_usuario_id,
@@ -47,7 +51,7 @@ export async function insertProductToPv(insertPv: IInsertPv): Promise<IInsertPvR
         }
 
         const response = await api.post(url, data)
-        return response.data as IInsertPvResponse
+        return response.data as IResInsertPv
 
     } catch (error) {
         throw error;
@@ -58,13 +62,13 @@ export async function insertProductToPv(insertPv: IInsertPv): Promise<IInsertPvR
  * Busca os produtos da pv
  */
 export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atendimento_id }:
-    { cs_tenant_id: number, cs_empresa_id: string, cs_atendimento_id: string }): Promise<IProductsPvModel> {
+    { cs_tenant_id: number, cs_empresa_id: string, cs_atendimento_id: string }): Promise<IResProductsListPvModel> {
 
     const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/ListarProdutos`
 
     /** RESPONSE DE PRODUTOS */
     const response = await api.get(url)
-    return response.data as IProductsPvModel
+    return response.data as IResProductsListPvModel
 }
 
 /**

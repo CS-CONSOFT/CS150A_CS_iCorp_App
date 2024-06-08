@@ -1,20 +1,19 @@
-import { View, Text, Animated } from "react-native";
-import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import CustomInput from "../../../../components/input/CustomInput";
-import CustomIcon from "../../../../components/icon/CustomIcon";
-import CustomSwitch from "../../../../components/switch/CustomSwitch";
-import CustomButton from "../../../../components/button/CustomButton";
 import { useEffect, useState } from "react";
-import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
-import { moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
-import { common003_01_styles } from "./CommonStyles";
-import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { Text, TextInput, TouchableHighlight, View } from "react-native";
+import { commonStyle } from "../../../../CommonStyle";
+import CustomIcon from "../../../../components/icon/CustomIcon";
+import CustomSeparator from "../../../../components/lists/CustomSeparator";
+import CustomSwitch from "../../../../components/switch/CustomSwitch";
+import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 import { ICON_NAME } from "../../../../util/IconsName";
+import { moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
+import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { common003_01_styles } from "./CommonStyles";
 
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
     {
-        product: IProductItemModel,
+        product: IResProductItemModel,
         saveTablePrice: (tablePrice: number, productId: string) => void
         saveUnityPrice: (unityPrice: number, productId: string) => void
         saveDiscountPercent: (discountPercent: number, productId: string) => void
@@ -166,11 +165,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Tabela</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <CustomInput>
-                                <CustomInput.InputAreaHandle
-                                    value={tablePrice}
-                                    setValue={(text) => applyMaskAndDisplay(text, 1)} width={125} keyboardType='decimal-pad' />
-                            </CustomInput>
+                            <TextInput
+                                style={[commonStyle.common_input]}
+                                onChangeText={(value) => applyMaskAndDisplay(value, 1)}
+                                value={tablePrice}
+                                keyboardType='decimal-pad'
+                            />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => {
                                 removeMaskAndSaveData(tablePrice, 1)
                             }} />
@@ -180,11 +180,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ marginRight: 16 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Unitário</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <CustomInput>
-                                <CustomInput.InputAreaHandle
-                                    value={unityPrice}
-                                    setValue={(text) => applyMaskAndDisplay(text, 2)} width={125} keyboardType='decimal-pad' />
-                            </CustomInput>
+                            <TextInput
+                                style={[commonStyle.common_input]}
+                                onChangeText={(value) => applyMaskAndDisplay(value, 2)}
+                                value={tablePrice}
+                                keyboardType='decimal-pad'
+                            />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(unityPrice, 2)} />
                         </View>
 
@@ -200,10 +201,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>%</Text>
                         <View style={{ flexDirection: 'row' }}>
-
-                            <CustomInput>
-                                <CustomInput.InputAreaHandle value={percentDiscount} setValue={setPercentDiscount} width={125} keyboardType='decimal-pad' />
-                            </CustomInput>
+                            <TextInput
+                                style={[commonStyle.common_input]}
+                                onChangeText={(value) => setPercentDiscount(Number(value))}
+                                value={percentDiscount.toString()}
+                                keyboardType='decimal-pad'
+                            />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.Id)} />
                         </View>
 
@@ -212,10 +215,13 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ marginRight: 16 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Valor</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <CustomInput>
-                                <CustomInput.InputAreaHandle value={valueDiscount}
-                                    setValue={(text) => applyMaskAndDisplay(text, 3)} width={125} keyboardType='decimal-pad' />
-                            </CustomInput>
+                            <TextInput
+                                style={[commonStyle.common_input]}
+                                onChangeText={(value) => applyMaskAndDisplay(value, 3)}
+                                value={valueDiscount}
+                                keyboardType='decimal-pad'
+                            />
+
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(valueDiscount, 3)} />
                         </View>
                     </View>
@@ -237,10 +243,11 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
             {/** BOTOES */}
             <View style={[common003_01_styles.extraBottomStyleContainer, common003_01_styles.extraBottomStyleRow, common003_01_styles.extraBottomStyleJustify]}>
-                <CustomButton title="Cancelar" onPress={(done) => {
-                    downSwipe()
-                    done()
-                }} buttonStyle={common003_01_styles.extraBottomStyleBtnCancelar} textStyle={common003_01_styles.extraBottomStyleTextButtonCancel} />
+                <TouchableHighlight
+                    onPress={downSwipe}
+                    style={commonStyle.common_button_style}
+                    underlayColor='white'
+                ><Text style={commonStyle.common_text_button_style}>Cancelar</Text></TouchableHighlight>
             </View>
         </View>
     );

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Pressable, View } from "react-native";
-import { stylesPreVenda } from "../PreVendaStyles";
 import FontAwesome from '@expo/vector-icons/Ionicons';
-import CustomInput from "../../../components/input/CustomInput";
+import React, { useState } from "react";
+import { TextInput, View, Text } from "react-native";
+import { stylesPreVenda } from "../PreVendaStyles";
+import { commonStyle } from '../../../CommonStyle';
 
 
 /**
@@ -13,16 +13,13 @@ const C_003_SearchInputPreVenda = ({ onSearchPress }: { onSearchPress: (searchVa
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
             <View style={stylesPreVenda.containerFilter}>
-                <CustomInput>
-                    <CustomInput.InputAreaHandle
-                        value={preSaleSearch}
-                        setValue={setPreSaleSearch}
-                        placeholder="Protocolo/Conta"
-                        keyboardType="numeric"
-                        width={250}
-
-                    />
-                </CustomInput>
+                <TextInput
+                    style={[commonStyle.common_input, { width: 250 }]}
+                    onChangeText={setPreSaleSearch}
+                    value={preSaleSearch}
+                    placeholder="Protocolo/Conta"
+                    keyboardType="numeric"
+                />
             </View>
             <View style={stylesPreVenda.pressable}>
                 <FontAwesome size={30} style={{

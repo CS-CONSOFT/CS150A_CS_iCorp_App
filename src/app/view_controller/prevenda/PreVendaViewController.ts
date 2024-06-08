@@ -2,8 +2,15 @@ import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { deleteProductFromPv, fetchPVs, getPreSaleProducts, insertProductToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
-import { ICommonResponse, IGetPreVendaList, IInsertPvResponse, IInsertPvWhitoutService, IProductItemModel, IProductsPvModel, IPVProductDiscount, IPVTenant, IResPreVenda } from "../../services/api/interfaces/prevenda/IPreVenda";
-import { IScreenUpdateProductItens, IUpdatePrice, IUpdateProdutItens, IUpdateTablePrice } from "../../services/api/interfaces/produto/IProduct";
+import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
+import { IPVProductDiscount, IPVTenant } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { IReqInsertPvWhitoutService } from "../../services/api/interfaces/prevenda/CS_IReqInserirNovaPv";
+import { IReqGetPreVendaList } from "../../services/api/interfaces/prevenda/CS_IReqPreVendaLista";
+import { IResInsertPv } from "../../services/api/interfaces/prevenda/CS_IResInserirNovaPv";
+import { IResPreVenda } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
+import { IResProductsListPvModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
+import { IReqUpdateProdutItens } from "../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens";
+import { IReqUpdatePrice } from "../../services/api/interfaces/produto/CS_IReqUpdateProdutoPreco";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
 
@@ -11,7 +18,7 @@ import { getUserProperties } from "../SharedViewController";
 
 export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_pesquisa?: string): Promise<IResPreVenda> {
     const userProp = (await getUserProperties())
-    const IGetPreVendaList: IGetPreVendaList = {
+    const IGetPreVendaList: IReqGetPreVendaList = {
         cs_tenant_id: userProp.tenantId!,
         cs_empresa_id: userProp.estabId,
         cs_usuario_id: userProp.userId.toString(),
@@ -39,10 +46,10 @@ export async function handleInsertProductPv(
     cs_codigo_produto: string, cs_entrega: boolean,
     cs_quantidade: number, cs_tipo_atendimento: number,
     cs_atendimento?: string, cs_conta_id?: string
-): Promise<IInsertPvResponse> {
+): Promise<IResInsertPv> {
 
     const userProp = (await getUserProperties())
-    const insert: IInsertPvWhitoutService = {
+    const insert: IReqInsertPvWhitoutService = {
         cs_tenant_id: userProp.tenantId!,
         cs_empresa_id: userProp.estabId,
         cs_usuario_id: userProp.usuarioId!,
@@ -59,7 +66,7 @@ export async function handleInsertProductPv(
 }
 
 
-export async function handleGetProductsPv(): Promise<IProductsPvModel> {
+export async function handleGetProductsPv(): Promise<IResProductsListPvModel> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -120,7 +127,7 @@ export async function handleUpdateValueDiscount(productDiscount: IPVProductDisco
     return updateValueDiscount({ pvTenant, productDiscount })
 }
 
-export async function handleUpdateTablePrice(updatePrice: IUpdatePrice): Promise<ICommonResponse> {
+export async function handleUpdateTablePrice(updatePrice: IReqUpdatePrice): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -135,7 +142,7 @@ export async function handleUpdateTablePrice(updatePrice: IUpdatePrice): Promise
     return updateTablePrice({ pvTenant, updatePrice })
 }
 
-export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice): Promise<ICommonResponse> {
+export async function handleUpdateUnityPrice(updatePrice: IReqUpdatePrice): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -150,7 +157,7 @@ export async function handleUpdateUnityPrice(updatePrice: IUpdatePrice): Promise
     return updateUnityPrice({ pvTenant, updatePrice })
 }
 
-export async function handleUpdateProductAmount(productId: string, productAmount: IUpdateProdutItens): Promise<ICommonResponse> {
+export async function handleUpdateProductAmount(productId: string, productAmount: IReqUpdateProdutItens): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res
@@ -166,7 +173,7 @@ export async function handleUpdateProductAmount(productId: string, productAmount
     return result
 }
 
-export async function handleUpdateProductSwtichs(productId: string, productAmount: IUpdateProdutItens): Promise<ICommonResponse> {
+export async function handleUpdateProductSwtichs(productId: string, productAmount: IReqUpdateProdutItens): Promise<ICommonResponse> {
     let currentPvId: any = ''
     getSimpleData(DataKey.CurrentPV).then((res) => {
         currentPvId = res

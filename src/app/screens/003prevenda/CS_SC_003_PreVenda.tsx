@@ -6,18 +6,18 @@ import { stylesPreVenda } from "./PreVendaStyles";
 
 import { useNavigation } from "@react-navigation/native";
 import { DataKey } from "../../enum/DataKeys";
-import { IPreVendaItemListModel } from "../../services/api/interfaces/prevenda/IPreVenda";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatDate, formatMoneyValue } from "../../util/FormatText";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import C_003_SearchInputPreVenda from "./components/C_003_SearchInputPreVenda";
+import { IResPreVendaItemListModel } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 
 
 
 
 const CS_SC_003_PreVenda = () => {
-    const [pvList, setPvList] = useState<IPreVendaItemListModel[]>([]);
+    const [pvList, setPvList] = useState<IResPreVendaItemListModel[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
 
@@ -59,7 +59,7 @@ const CS_SC_003_PreVenda = () => {
 
 
 
-    function goToDetails(currentPv: IPreVendaItemListModel) {
+    function goToDetails(currentPv: IResPreVendaItemListModel) {
         storeSimpleData(DataKey.CurrentPV, currentPv.ID)
         navigate('Pre_Venda_Detalhes', {
             currentPv: currentPv.ID,
@@ -97,7 +97,7 @@ export default CS_SC_003_PreVenda;
 
 
 /** RENDER ITEM */
-function PreVendaRenderItem({ item, onPress }: { item: IPreVendaItemListModel, onPress: () => void }) {
+function PreVendaRenderItem({ item, onPress }: { item: IResPreVendaItemListModel, onPress: () => void }) {
     const [year, month, day] = item.Data_Emissao.split('-')
     return (
         <Pressable onPress={onPress}>
