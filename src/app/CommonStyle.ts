@@ -1,18 +1,18 @@
 import { StyleSheet } from "react-native"
 
 export const commonStyle = StyleSheet.create({
-    container: {
+    common_container: {
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    menuText: {
+    common_menuText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
     },
-    buttonLogoff: {
+    common_buttonLogoff: {
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
@@ -22,35 +22,35 @@ export const commonStyle = StyleSheet.create({
         backgroundColor: 'black',
         margin: 32
     },
-    textButton: {
+    common_textButton: {
         fontSize: 16,
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
     },
-    rowItem: {
+    common_rowItem: {
         flexDirection: 'row'
     },
-    columnItem: {
+    common_columnItem: {
         flexDirection: 'column'
     },
-    fontWeight_600: {
+    common_fontWeight_600: {
         fontWeight: '600'
     },
-    margin_bottom_16: {
+    common_margin_bottom_16: {
         marginBottom: 16
     },
-    margin_bottom_8: {
+    common_margin_bottom_8: {
         marginBottom: 8
     },
-    margin_top_8: {
+    common_margin_top_8: {
         marginTop: 8
     },
-    margin_left_16: {
+    common_margin_left_16: {
         marginLeft: 16
     },
-    margin_right_16: {
+    common_margin_right_16: {
         marginRight: 16
     },
     common_input: {

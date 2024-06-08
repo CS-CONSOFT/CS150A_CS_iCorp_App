@@ -14,10 +14,10 @@ const CS_003_01_02_ProductPvItemUltimasVendas = ({ close }: { close: () => void 
     return (
         <View>
             <View style={[{ flexDirection: 'row', justifyContent: 'space-between' }, common003_01_styles.blueBackgroundColor]}>
-                <View style={[commonStyle.rowItem, common003_01_styles.blueBackgroundColor]}>
-                    <Text style={[commonStyle.fontWeight_600, common003_01_styles.titleItem]}>3 Últimas Vendas</Text>
+                <View style={[commonStyle.common_rowItem, common003_01_styles.blueBackgroundColor]}>
+                    <Text style={[commonStyle.common_fontWeight_600, common003_01_styles.titleItem]}>3 Últimas Vendas</Text>
                 </View>
-                <View style={[commonStyle.rowItem, common003_01_styles.blueBackgroundColor, { marginRight: 2, justifyContent: 'flex-end' }]}>
+                <View style={[commonStyle.common_rowItem, common003_01_styles.blueBackgroundColor, { marginRight: 2, justifyContent: 'flex-end' }]}>
                     <Ioicons name="close-outline" size={22} onPress={close} />
                 </View>
             </View>
@@ -36,42 +36,42 @@ const CS_003_01_02_ProductPvItemUltimasVendas = ({ close }: { close: () => void 
 
 const LastSalesRenderItem = ({ item }: { item: any }) => {
     return (
-        <View style={[commonStyle.columnItem]}>
-            <View style={[commonStyle.rowItem, common003_01_styles.container]}>
-                <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_top_8, commonStyle.margin_bottom_8]}>Protocolo:</Text>
-                <Text style={[common003_01_styles.value, commonStyle.margin_top_8, commonStyle.margin_bottom_8]}>{item.protocolo}</Text>
+        <View style={[commonStyle.common_columnItem]}>
+            <View style={[commonStyle.common_rowItem, common003_01_styles.container]}>
+                <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_top_8, commonStyle.common_margin_bottom_8]}>Protocolo:</Text>
+                <Text style={[common003_01_styles.value, commonStyle.common_margin_top_8, commonStyle.common_margin_bottom_8]}>{item.protocolo}</Text>
             </View>
 
 
 
-            <View style={[commonStyle.rowItem, common003_01_styles.container, { justifyContent: 'space-between', marginHorizontal: 64 }]}>
-                <View style={commonStyle.columnItem}>
-                    <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_bottom_8, commonStyle.margin_top_8]}>Emissão</Text>
-                    <Text style={[common003_01_styles.value, commonStyle.margin_bottom_8]} >{item.emissao}</Text>
+            <View style={[commonStyle.common_rowItem, common003_01_styles.container, { justifyContent: 'space-between', marginHorizontal: 64 }]}>
+                <View style={commonStyle.common_columnItem}>
+                    <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_bottom_8, commonStyle.common_margin_top_8]}>Emissão</Text>
+                    <Text style={[common003_01_styles.value, commonStyle.common_margin_bottom_8]} >{item.emissao}</Text>
                 </View>
-                <View style={commonStyle.columnItem}>
-                    <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_bottom_8, commonStyle.margin_top_8, { marginRight: 24 }]}>Série</Text>
-                    <Text style={[common003_01_styles.value, commonStyle.margin_bottom_8, { marginRight: 24 }]}>{item.serie}</Text>
+                <View style={commonStyle.common_columnItem}>
+                    <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_bottom_8, commonStyle.common_margin_top_8, { marginRight: 24 }]}>Série</Text>
+                    <Text style={[common003_01_styles.value, commonStyle.common_margin_bottom_8, { marginRight: 24 }]}>{item.serie}</Text>
                 </View>
             </View>
 
 
-            <View style={[commonStyle.rowItem, common003_01_styles.container, { justifyContent: 'space-between', marginHorizontal: 64 }]}>
-                <View style={commonStyle.columnItem}>
-                    <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_bottom_8, commonStyle.margin_top_8]}>Preço Venda</Text>
-                    <Text style={[common003_01_styles.value, commonStyle.margin_bottom_8]}>{item.preçoVenda}</Text>
+            <View style={[commonStyle.common_rowItem, common003_01_styles.container, { justifyContent: 'space-between', marginHorizontal: 64 }]}>
+                <View style={commonStyle.common_columnItem}>
+                    <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_bottom_8, commonStyle.common_margin_top_8]}>Preço Venda</Text>
+                    <Text style={[common003_01_styles.value, commonStyle.common_margin_bottom_8]}>{item.preçoVenda}</Text>
                 </View>
                 <View style={{ borderLeftWidth: 1, borderColor: '#c3c3c3', height: '175%', marginBottom: 76, alignSelf: 'center' }} />
-                <View style={commonStyle.columnItem}>
-                    <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_bottom_8, commonStyle.margin_top_8]}>Total</Text>
-                    <Text style={[common003_01_styles.value, commonStyle.margin_bottom_8]}>{item.total}</Text>
+                <View style={commonStyle.common_columnItem}>
+                    <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_bottom_8, commonStyle.common_margin_top_8]}>Total</Text>
+                    <Text style={[common003_01_styles.value, commonStyle.common_margin_bottom_8]}>{item.total}</Text>
                 </View>
             </View>
 
 
-            <View style={[commonStyle.rowItem, common003_01_styles.container]}>
-                <Text style={[common003_01_styles.title, commonStyle.fontWeight_600, commonStyle.margin_top_8, commonStyle.margin_bottom_8]}>Quantidade:</Text>
-                <Text style={[common003_01_styles.value, commonStyle.margin_top_8, commonStyle.margin_bottom_8]}>{item.quantidade}</Text>
+            <View style={[commonStyle.common_rowItem, common003_01_styles.container]}>
+                <Text style={[common003_01_styles.title, commonStyle.common_fontWeight_600, commonStyle.common_margin_top_8, commonStyle.common_margin_bottom_8]}>Quantidade:</Text>
+                <Text style={[common003_01_styles.value, commonStyle.common_margin_top_8, commonStyle.common_margin_bottom_8]}>{item.quantidade}</Text>
             </View>
         </View>
     );

@@ -1,18 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, Text, ToastAndroid, TouchableHighlight, View } from "react-native";
 import { CustomProductItem } from "../../../components/lists/CustomProductItem";
 import Custom_Pagination from "../../../components/pagination/Custom_Pagination";
 import { DataKey } from "../../../enum/DataKeys";
+import { IReqGetProductSearch } from "../../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
+import { IResGetProductItem } from "../../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
 import { getSimpleData } from "../../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleInsertProductPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { IResGetProductItem, IResProdutoSearch } from "../../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
-import { IReqGetProductSearch } from "../../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
 
-const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 const CS_ConsultaProdutoForm = lazy(() => import("./CS_ConsultaProdutoForm"))
 
 const CS_SC_ConsultaProdutos = () => {
@@ -137,12 +136,11 @@ const CS_SC_ConsultaProdutos = () => {
 
                 {isSuccess && (
                     <View>
-                        <CustomButton
-                            title="Nova Pesquisa"
+                        <TouchableHighlight
                             onPress={resetValuesToSearch}
-                            buttonStyle={stylesConsultaProduto.btnNewSearch}
-                            textStyle={stylesConsultaProduto.searchButtonText}
-                        />
+                            style={stylesConsultaProduto.btnNewSearch}
+                            underlayColor='white'
+                        ><Text style={stylesConsultaProduto.searchButtonText}>Nova Pesquisa</Text></TouchableHighlight>
                         {!productList || productList.length === 0 ? (
                             <Text>Nenhum produto encontrado.</Text>
                         ) : (
@@ -166,10 +164,11 @@ const CS_SC_ConsultaProdutos = () => {
 
                 {isError && (
                     <View>
-                        <CustomButton title="Nova Pesquisa"
+                        <TouchableHighlight
                             onPress={resetValuesToSearch}
-                            buttonStyle={stylesConsultaProduto.btnNewSearch}
-                            textStyle={stylesConsultaProduto.searchButtonText} />
+                            style={stylesConsultaProduto.btnNewSearch}
+                            underlayColor='white'
+                        ><Text style={stylesConsultaProduto.searchButtonText}>Nova Pesquisa</Text></TouchableHighlight>
                         <Text>{errorMsg}</Text>
                     </View>
                 )}

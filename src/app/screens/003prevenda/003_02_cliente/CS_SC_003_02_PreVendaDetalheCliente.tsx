@@ -9,7 +9,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = () => {
     return (
         <View>
             <C_003_02_01_HeaderClient />
-            <View style={[commonStyle.rowItem]}>
+            <View style={[commonStyle.common_rowItem]}>
                 <Text>Endereço</Text>
             </View>
 
@@ -37,7 +37,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = () => {
 
 const VisibleAccordionItem = ({ title, icon }: { title: string, icon: any }) => {
     return (
-        <View style={[commonStyle.rowItem, { justifyContent: 'space-between', padding: 8 }]}>
+        <View style={[commonStyle.common_rowItem, { justifyContent: 'space-between', padding: 8 }]}>
             <Text>{title}</Text>
             <Ionicons name={icon} style={{ alignSelf: 'center' }} size={18} />
         </View>
@@ -46,35 +46,35 @@ const VisibleAccordionItem = ({ title, icon }: { title: string, icon: any }) => 
 
 const EnderecoItem = () => {
     return (
-        <View style={[commonStyle.columnItem, { padding: 8 }]}>
-            <View style={[commonStyle.rowItem]}>
-                <Text style={[commonStyle.fontWeight_600]}>CEP: </Text>
+        <View style={[commonStyle.common_columnItem, { padding: 8 }]}>
+            <View style={[commonStyle.common_rowItem]}>
+                <Text style={[commonStyle.common_fontWeight_600]}>CEP: </Text>
                 <Text>687454-30</Text>
             </View>
 
-            <View style={[commonStyle.rowItem]}>
-                <Text style={[commonStyle.fontWeight_600]}>Logradouro: </Text>
+            <View style={[commonStyle.common_rowItem]}>
+                <Text style={[commonStyle.common_fontWeight_600]}>Logradouro: </Text>
                 <Text>Almirante Barroso, 90</Text>
             </View>
 
-            <View style={[commonStyle.rowItem]}>
-                <Text style={[commonStyle.fontWeight_600]}>Bairro: </Text>
+            <View style={[commonStyle.common_rowItem]}>
+                <Text style={[commonStyle.common_fontWeight_600]}>Bairro: </Text>
                 <Text>Marco</Text>
             </View>
 
-            <View style={[commonStyle.rowItem]}>
-                <Text style={[commonStyle.fontWeight_600]}>Cidade: </Text>
+            <View style={[commonStyle.common_rowItem]}>
+                <Text style={[commonStyle.common_fontWeight_600]}>Cidade: </Text>
                 <Text>Belém</Text>
             </View>
 
-            <View style={[commonStyle.rowItem, { justifyContent: 'space-between' }, commonStyle.margin_right_16]}>
-                <View style={[commonStyle.rowItem]}>
-                    <Text style={[commonStyle.fontWeight_600]}>UF: </Text>
+            <View style={[commonStyle.common_rowItem, { justifyContent: 'space-between' }, commonStyle.common_margin_right_16]}>
+                <View style={[commonStyle.common_rowItem]}>
+                    <Text style={[commonStyle.common_fontWeight_600]}>UF: </Text>
                     <Text>PA</Text>
                 </View>
 
-                <View style={[commonStyle.rowItem]}>
-                    <Text style={[commonStyle.fontWeight_600]}>País: </Text>
+                <View style={[commonStyle.common_rowItem]}>
+                    <Text style={[commonStyle.common_fontWeight_600]}>País: </Text>
                     <Text>Brasil</Text>
                 </View>
 

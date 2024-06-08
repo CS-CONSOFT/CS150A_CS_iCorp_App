@@ -1,8 +1,7 @@
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, TextInput, View, Text } from "react-native";
+import { ActivityIndicator, TextInput, View, Text, TouchableHighlight } from "react-native";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import { commonStyle } from "../../../CommonStyle";
-const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_ConsultaProdutoForm = ({ onSearchPress }:
     { onSearchPress: (atributes: any) => void }) => {
@@ -36,12 +35,11 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
 
 
             <Suspense fallback={<ActivityIndicator />}>
-                <CustomButton
-                    title={'Pesquisar'}
+                <TouchableHighlight
                     onPress={() => onSearchPress(attributesMap)}
-                    buttonStyle={stylesConsultaProduto.searchButton}
-                    textStyle={stylesConsultaProduto.searchButtonText}
-                />
+                    style={stylesConsultaProduto.searchButton}
+                    underlayColor='white'
+                ><Text style={stylesConsultaProduto.searchButtonText}>Pesquisar</Text></TouchableHighlight>
             </Suspense>
 
         </View>
