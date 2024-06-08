@@ -1,7 +1,7 @@
 import api from "../../axios_config";
 
 
-export async function generalLogin(loginData: ILoginData) {
+export async function generalLogin(loginData: IPostLoginData) {
     try {
         const data = {
             Dominio: loginData.domain,

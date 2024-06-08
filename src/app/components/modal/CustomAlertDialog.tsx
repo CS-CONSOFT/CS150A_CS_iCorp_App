@@ -1,6 +1,6 @@
-import { StyleSheet, Text, Modal, View, TouchableOpacity } from "react-native";
-import CustomInput from "../input/CustomInput";
+import { StyleSheet, Text, Modal, View, TouchableOpacity, TextInput } from "react-native";
 import { useEffect, useState } from "react";
+import { commonStyle } from "../../CommonStyle";
 
 
 interface CustomModalProps {
@@ -29,11 +29,12 @@ const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton 
                     <TouchableOpacity onPress={() => { setSerie(''); onCloseButton() }} style={styles.closeButton}>
                         <Text style={styles.buttonText}>Fechar</Text>
                     </TouchableOpacity>
-                    <CustomInput>
-                        <CustomInput.InputFormsAreaHandle textTitleIdentifier={title}
-                            setValue={setSerie}
-                            value={serie} />
-                    </CustomInput>
+                    <Text>{title}</Text>
+                    <TextInput
+                        style={[commonStyle.common_input]}
+                        onChangeText={setSerie}
+                        value={serie}
+                    />
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity onPress={() => { setSerie(''); onSave(serie) }} style={styles.button}>
                             <Text style={styles.buttonText}>Salvar</Text>

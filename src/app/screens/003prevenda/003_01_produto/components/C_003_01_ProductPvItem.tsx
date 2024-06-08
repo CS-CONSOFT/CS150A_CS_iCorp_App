@@ -1,6 +1,5 @@
 import { Animated, Image, Pressable, Text, View } from "react-native";
 import CustomIcon from "../../../../components/icon/CustomIcon";
-import { IProductItemModel } from "../../../../services/api/interfaces/prevenda/IPreVenda";
 import { formatMoneyValue } from "../../../../util/FormatText";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { common003_01_styles } from './CommonStyles';
@@ -8,6 +7,7 @@ import { useEffect, useState } from "react";
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
 import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
+import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 
 
 
@@ -15,7 +15,7 @@ import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarant
 //Item de produto que aparece na listagem
 export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
     {
-        product: IProductItemModel,
+        product: IResProductItemModel,
         onDeleteProductClick: (productId: string) => void,
         saveTablePrice: (tablePrice: number, productId: string) => void
         saveUnityPrice: (unityPrice: number, productId: string) => void

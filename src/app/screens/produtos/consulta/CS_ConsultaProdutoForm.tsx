@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
-import CustomInput from "../../../components/input/CustomInput";
+import { ActivityIndicator, TextInput, View, Text } from "react-native";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { commonStyle } from "../../../CommonStyle";
 const CustomButton = lazy(() => import("../../../components/button/CustomButton"))
 
 const CS_ConsultaProdutoForm = ({ onSearchPress }:
@@ -20,24 +20,19 @@ const CS_ConsultaProdutoForm = ({ onSearchPress }:
     //Tela
     return (
         <View style={stylesConsultaProduto.searchContainer}>
-            <CustomInput>
-                <CustomInput.InputFormsAreaHandle
-                    textTitleIdentifier={'Código'}
-                    handleValueOfInput={handleInputTyping}
-                    valueOfInput={attributesMap.Código}
-                    securityTextEnter={false}
-                />
-            </CustomInput>
+            <Text>Código</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={(value) => handleInputTyping('code', value)}
+                value={attributesMap.code}
+            />
 
-            <CustomInput>
-                <CustomInput.InputFormsAreaHandle
-                    textTitleIdentifier={'Descrição Produto'}
-                    handleValueOfInput={handleInputTyping}
-                    valueOfInput={attributesMap.Usuário}
-                    securityTextEnter={false}
-                />
-            </CustomInput>
-
+            <Text>Descrição Produto</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={(value) => handleInputTyping('desc', value)}
+                value={attributesMap.desc}
+            />
 
 
             <Suspense fallback={<ActivityIndicator />}>

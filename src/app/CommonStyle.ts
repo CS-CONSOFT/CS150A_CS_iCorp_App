@@ -53,4 +53,30 @@ export const commonStyle = StyleSheet.create({
     margin_right_16: {
         marginRight: 16
     },
+    common_input: {
+        height: 40,
+        width: 250,
+        margin: 4,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 32,
+        paddingHorizontal: 16,
+    },
+    common_button_style: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: 'green',
+        margin: 32
+    },
+    common_text_button_style: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
+    }
 });

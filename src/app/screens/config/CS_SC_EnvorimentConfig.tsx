@@ -1,60 +1,104 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, TouchableHighlight } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../../components/button/CustomButton";
-import CustomInput from "../../components/input/CustomInput";
-import { getDBEnvorimentConfig, insertUpdateDBEnvorimentConfig } from "../../view_controller/SharedViewController";
+import { commonStyle } from "../../CommonStyle";
+import { useDatabase } from "../../services/storage/useDatabase";
 
 const CS_SC_EnvorimentConfig = () => {
-    const [tenant, setTenant] = useState<number>(0)
+    const [_tenant, setTenant] = useState('')
     const [urlBase, setUrlBase] = useState('')
     const [token, setToken] = useState('')
+    const [hasValue, setHasValue] = useState(false)
     const { navigate } = useNavigation()
+    const db = useDatabase()
 
-    async function save(done: () => void) {
-        await insertUpdateDBEnvorimentConfig({ baseUrl: urlBase, tenantId: tenant!, token: token, isValidado: false })
-        /**
-         * verificar api pra ver se ta validado
-         */
-        done()
-        navigate('Menu')
+
+
+    async function get() {
+        try {
+            await db.get().then((response) => {
+                setHasValue(true)
+                setTenant(String(response!.tenant))
+                setUrlBase(response!.urlBase)
+                setToken(response!.token)
+            })
+
+
+        } catch (error) {
+
+        }
     }
 
-    useEffect(() => {
-        getDBEnvorimentConfig()
-    })
+    async function create() {
+        const id = 501
+        const isValidado = false
+        try {
+            const num = Number(_tenant)
+            db.create({ id, urlBase, token, tenant: num, isValidado })
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Error", "Deu erro, cheque o log")
+        }
+    }
 
+
+
+    async function exclude() {
+        try {
+            db.exclude()
+        } catch (error) {
+
+        }
+    }
 
     return (
         <SafeAreaView>
-            <CustomInput>
-                <CustomInput.InputAreaHandle
-                    setValue={setTenant}
-                    value={tenant!.toString()}
-                />
-            </CustomInput>
 
-            <CustomInput>
-                <CustomInput.InputAreaHandle
-                    setValue={setUrlBase}
-                    value={urlBase}
-                />
-            </CustomInput>
+            <Text>Tenant</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={setTenant}
+                value={_tenant}
 
-            <CustomInput>
-                <CustomInput.InputAreaHandle
-                    setValue={setToken}
-                    value={token}
-                />
-            </CustomInput>
-
-            <CustomButton
-                title={'Salvar'}
-                onPress={(done) => save(done)}
-                buttonStyle={stylesLogin.button}
-                textStyle={stylesLogin.textButton}
             />
+
+            <Text>URL</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={setUrlBase}
+                value={urlBase}
+
+            />
+
+
+            <Text>TOKEN</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={setToken}
+                value={token}
+
+            />
+
+            <TouchableHighlight
+                onPress={get}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            ><Text style={commonStyle.common_text_button_style}>Buscar</Text></TouchableHighlight>
+
+            <TouchableHighlight
+                onPress={create}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            ><Text style={commonStyle.common_text_button_style}>Salvar</Text></TouchableHighlight>
+
+            <TouchableHighlight
+                onPress={exclude}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            ><Text style={commonStyle.common_text_button_style}>Deletar</Text></TouchableHighlight>
+
+
         </SafeAreaView>
     );
 }

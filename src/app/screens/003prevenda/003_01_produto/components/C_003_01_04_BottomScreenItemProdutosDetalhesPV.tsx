@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import CustomBottomItem from "../../../../components/bottomItem/CustomBottomItem";
-import CustomButton from "../../../../components/button/CustomButton";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomTextValueWithTitleBoldHorizontal from "../../../../components/text/CustomTextValueWithTitleBoldHorizontal";
 
@@ -23,11 +22,12 @@ const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValid
                 <Text style={[styles.total_liquido_text, styles.padding_12]}>Total Liquido</Text>
                 <Text style={[styles.valor, styles.padding_12]}>{totalLiquido}</Text>
             </View>
-            <CustomButton
-                title="Pagamento"
-                onPress={(done) => { done() }}
-                buttonStyle={styles.btnStyle}
-                textStyle={styles.txtBtnStyle} />
+            <TouchableHighlight
+                onPress={() => { }}
+                style={styles.btnStyle}
+                underlayColor='white'
+            ><Text style={styles.txtBtnStyle}>Pagamento</Text></TouchableHighlight>
+
         </CustomBottomItem>
     );
 }

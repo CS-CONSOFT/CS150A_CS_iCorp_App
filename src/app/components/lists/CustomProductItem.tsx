@@ -1,9 +1,9 @@
-import { View, StyleSheet, Text, Image } from "react-native";
-import CustomButton from "../button/CustomButton";
-import { IResProductSearch } from "../../services/api/interfaces/produto/IProduct";
+import { Image, StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { commonStyle } from "../../CommonStyle";
+import { IResGetProductItem } from "../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
 
 //Item de produto que aparece na listagem
-export const CustomProductItem = ({ product, onClick }: { product: IResProductSearch, onClick: (product: IResProductSearch, done: () => void) => void }) => {
+export const CustomProductItem = ({ product, onClick }: { product: IResGetProductItem, onClick: (product: IResGetProductItem) => void }) => {
     return (
         <View style={styles.productContainer}>
             <Image source={{ uri: product.Imagens?.find(img => img.IsPadrao)?.URL_Path }} />
@@ -11,12 +11,13 @@ export const CustomProductItem = ({ product, onClick }: { product: IResProductSe
             <Text style={styles.productInfo}>{`R$: ${product.DescGrupo}`}</Text>
             <Text style={styles.productInfo}>{`R$: ${product.Saldo}`}</Text>
             <Text style={styles.productInfo}>{`Qtd: ${product.Preco}`}</Text>
-            <CustomButton
-                title="Adicionar Produto"
-                onPress={(done) => { onClick(product, done) }}
-                buttonStyle={styles.btnNewSearch}
-                textStyle={styles.searchButtonText}
-            />
+
+            <TouchableHighlight
+                onPress={() => onClick(product)}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            ><Text style={commonStyle.common_text_button_style}>Adicionar Produto</Text></TouchableHighlight>
+
         </View>
     );
 };
