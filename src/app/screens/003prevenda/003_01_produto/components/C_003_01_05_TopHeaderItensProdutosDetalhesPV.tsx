@@ -1,8 +1,7 @@
-import { Alert, View } from "react-native";
+import { Alert, View, StyleSheet } from "react-native";
 import CustomItemIconTitleRoundedBlue from "../../../../components/items/CustomItemIconTitleRoundedBlue";
 import CustomTopItem from "../../../../components/topItem/CustomTopItem";
 import { ICON_NAME } from "../../../../util/IconsName";
-import { styleProdutoPVDetalhe } from "../style/StylePreVendaProdutoDetalhe";
 
 const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
 
@@ -32,5 +31,21 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
         </CustomTopItem>
     );
 }
+export const styleProdutoPVDetalhe = StyleSheet.create({
+    textProduct: {
+        fontWeight: '600',
+        margin: 16,
+        fontSize: 16
+    },
+    topHeaderStyle: {
+        margin: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    topHeaderItemStyle: {
+        elevation: 1,
+        width: '33.3%'
+    }
+});
 
 export default C_003_01_05_TopHeaderItensProdutosDetalhesPV;
