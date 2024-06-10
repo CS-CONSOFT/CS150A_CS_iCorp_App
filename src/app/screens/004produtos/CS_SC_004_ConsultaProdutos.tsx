@@ -108,41 +108,43 @@ const CS_SC_ConsultaProdutos = () => {
     //Tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>
-            <View>
-                <Suspense fallback={<ActivityIndicator />}>
+            <Suspense fallback={<ActivityIndicator />}>
+                <View>
+
                     <CS_ConsultaProdutoForm
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick} />
-                </Suspense>
-                {isLoading ? <ActivityIndicator /> :
-                    <View>
-                        <FlatList
-                            data={productList}
-                            keyExtractor={(item) => item.Id!}
-                            ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
-                            renderItem={({ item }) => (
-                                <CustomProduct
-                                    children={<ProductItem product={item} />}
-                                    image={<ImageProductItem />}
-                                    rightItem={<RightItem loadingClick={loadingBtnClickItem} click={() => scInsertProductPv(item)} />}
-                                />
-                            )}
-                        />
-                    </View>
-                }
-            </View>
-            <Custom_Pagination
-                onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch, page)}
-                paginationArray={paginationArray} />
 
-            <CustomAlertDialog
-                isVisible={openModal}
-                onDismiss={() => { }}
-                title={"SSS"}
-                children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
-                    handleFormSubmitToSearch(filters)
-                }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
-            />
+                    {isLoading ? <ActivityIndicator /> :
+                        <View>
+                            <FlatList
+                                data={productList}
+                                keyExtractor={(item) => item.Id!}
+                                ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
+                                renderItem={({ item }) => (
+                                    <CustomProduct
+                                        children={<ProductItem product={item} />}
+                                        image={<ImageProductItem />}
+                                        rightItem={<RightItem loadingClick={loadingBtnClickItem} click={() => scInsertProductPv(item)} />}
+                                    />
+                                )}
+                            />
+                        </View>
+                    }
+                </View>
+                <Custom_Pagination
+                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch, page)}
+                    paginationArray={paginationArray} />
+
+                <CustomAlertDialog
+                    isVisible={openModal}
+                    onDismiss={() => { }}
+                    title={"SSS"}
+                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
+                        handleFormSubmitToSearch(filters)
+                    }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+                />
+            </Suspense>
         </SafeAreaView>
     );
 }
