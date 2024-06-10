@@ -1,6 +1,5 @@
-import { SafeAreaView, StyleSheet, Text } from "react-native";
-import CustomButton from "../../../../components/button/CustomButton";
-import CustomInput from "../../../../components/input/CustomInput";
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight } from "react-native";
+import { commonStyle } from "../../../../CommonStyle";
 
 
 export interface CustomModalInputProps {
@@ -18,19 +17,19 @@ const CustomHeaderInput = ({ titleText, setValue, value, onPress, buttonStyle = 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>{titleText}</Text>
-            <CustomInput>
-                <CustomInput.TitleText titleText="Nota" />
-                <CustomInput.InputArea setValue={setValue}
-                    value={value}
-                    keyboardType='numeric' />
-            </CustomInput>
-
-            <CustomButton
-                title="Pesquisar"
-                onPress={onPress}
-                buttonStyle={buttonStyle}
-                textStyle={textStyle}
+            <Text>Nota</Text>
+            <TextInput
+                style={[commonStyle.common_input]}
+                onChangeText={setValue}
+                value={value}
+                keyboardType='numeric'
             />
+
+            <TouchableHighlight
+                onPress={onPress}
+                style={buttonStyle}
+                underlayColor='white'
+            ><Text style={textStyle}>Pesquisar</Text></TouchableHighlight>
         </SafeAreaView>
     );
 };

@@ -1,21 +1,22 @@
 import { Button, FlatList, SafeAreaView, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
-import { ILoginResponse } from "../../login/ILoginResponse";
+import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";
-import { IGetDelivery, ISetEntrega } from "../../../services/api/interfaces/notas/CS_INotes";
-import { InfoNota, Produto } from "../../../services/api/interfaces/notas/CS_Response";
 import { getObjectDataVc, getUserProperties } from "../../../view_controller/SharedViewController";
 import { getEntrgNotaVc, setEntrNotaVc } from "../../../view_controller/entrega/EntregaViewController";
 import { stylesNotaEntrega } from "./StylesNotaEntrega";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
+import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
+import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
 
 
 const CS_SC_Entrega = () => {
 
     const [noteTyped, setNoteTyped] = useState("20240100000000108")
-    const [products, setProducts] = useState<Produto[] | null>(null)
-    const [noteInfo, setNoteInfo] = useState<InfoNota | null>(null)
+    const [products, setProducts] = useState<IResNotaProdutoItem[] | null>(null)
+    const [noteInfo, setNoteInfo] = useState<IResInfoNota | null>(null)
     const [messageList, setMessageList] = useState('')
     const [userId, setUserId] = useState('')
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
@@ -37,7 +38,7 @@ const CS_SC_Entrega = () => {
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             //enviando o objeto
-            const iEntregaGet: IGetDelivery = { note, tenant }
+            const iEntregaGet: IReqGetDelivery = { note, tenant }
             //setando loading
             setStatus(FETCH_STATUS.LOADING)
             //buscando notas
@@ -87,7 +88,7 @@ const CS_SC_Entrega = () => {
         const userIdentifier = userId;
         if (tenant != undefined) {
             setStatus(FETCH_STATUS.LOADING)
-            const iSetEntrega: ISetEntrega = { dd40id, tenant, userIdentifier }
+            const iSetEntrega: IReqSetDelivery = { dd40id, tenant, userIdentifier }
             setEntrNotaVc(iSetEntrega).then((ok) => {
                 if (ok) {
                     searchNote()

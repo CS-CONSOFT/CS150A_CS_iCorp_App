@@ -1,16 +1,15 @@
 
 import { lazy, Suspense, useState } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
-import CustomButton from "../../../components/button/CustomButton";
-import Separator from "../../../components/lists/Separator";
-import CustomAlertDialog from "../../../components/modal/CustomAlertDialog";
-import { Produto } from "../../../services/api/interfaces/notas/CS_Response";
+import { ActivityIndicator, FlatList, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import CustomSeparator from "../../../components/lists/CustomSeparator";
+import { IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { stylesNotaSerie } from "./StylesNotaSerie";
+import { commonStyle } from "../../../CommonStyle";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
-
+const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
 
 
 
@@ -20,7 +19,7 @@ const CS_SC_Serie = () => {
     const [products, setProducts] = useState(Object)
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [showPopUp, setShowPopUp] = useState(false)
-    const [currentProductSelected, setCurrentProductSelected] = useState<Produto>()
+    const [currentProductSelected, setCurrentProductSelected] = useState<IResNotaProdutoItem>()
     const [errorMessage, setErrorMessage] = useState('');
 
 
@@ -41,7 +40,7 @@ const CS_SC_Serie = () => {
 
     const showDialog = () => setShowPopUp(true);
 
-    function switchShowPopUp(product: Produto) {
+    function switchShowPopUp(product: IResNotaProdutoItem) {
         showDialog()
         setCurrentProductSelected(product)
     }
@@ -67,7 +66,7 @@ const CS_SC_Serie = () => {
 
     return <>
         <SafeAreaView>
-            <Suspense fallback={<Text>Loading Header Input</Text>}>
+            <Suspense fallback={<ActivityIndicator />}>
                 <CustomHeaderInput
                     titleText="Chave Nota"
                     setValue={setNoteTyped}
@@ -82,7 +81,7 @@ const CS_SC_Serie = () => {
 
             {isSuccess && products.length > 0 && (
                 <FlatList
-                    ItemSeparatorComponent={Separator}
+                    ItemSeparatorComponent={CustomSeparator}
                     data={products}
                     renderItem={({ item }) => (
                         <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />
@@ -93,24 +92,32 @@ const CS_SC_Serie = () => {
             )}
         </SafeAreaView>
 
-
-        <CustomAlertDialog
-            isVisible={showPopUp}
-            onDismiss={() => setShowPopUp(false)}
-            title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
-            onSave={(newSerie) => setNewCorSerie(newSerie)}
-            onCloseButton={() => { setShowPopUp(false) }}
-        />
-
+        <Suspense fallback={<ActivityIndicator />}>
+            <CustomAlertDialog
+                isVisible={showPopUp}
+                onDismiss={() => setShowPopUp(false)}
+                title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
+                onSave={(newSerie) => setNewCorSerie(newSerie)}
+                onCloseButton={() => { setShowPopUp(false) }}
+                children={<AlertDialog />}
+            />
+        </Suspense>
     </>
 }
 
+const AlertDialog = () => {
+    return (
+        <View style={stylesNotaSerie.dialog}>
+            <></>
+        </View>
+    )
+}
 
 
 /** ITEM DA LISTA */
 interface ProductItemProps {
-    product: Produto;
-    onPress: (product: Produto) => void;
+    product: IResNotaProdutoItem;
+    onPress: (product: IResNotaProdutoItem) => void;
 }
 
 const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps }) => {
@@ -120,11 +127,11 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
             <View style={stylesNotaSerie.container}>
                 <Text style={stylesNotaSerie.text}>{productItemProps.product.DD060_Descricao}</Text>
                 <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
-                <CustomButton
-                    title="Alterar Cor Série"
+                <TouchableHighlight
                     onPress={() => productItemProps.onPress(productItemProps.product)}
-                    buttonStyle={stylesNotaSerie.buttonStyleList}
-                    textStyle={stylesNotaSerie.textStyle}></CustomButton>
+                    style={stylesNotaSerie.buttonStyleList}
+                    underlayColor='white'
+                ><Text style={stylesNotaSerie.textStyle}>Alterar Cor Série</Text></TouchableHighlight>
             </View>
         </View>
 

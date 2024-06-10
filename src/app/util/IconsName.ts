@@ -12,4 +12,12 @@ export const ICON_NAME = {
     LISTA_CONTORNADO: 'list-outline',
     CESTA_CONTORNADO: 'basket-outline',
     ADICIONAR_CONTORNADO: 'add-outline',
+    VOLTAR_CONTORNADO: 'arrow-back-outline',
+    FLECHA_ESQUERDA: 'chevron-back-outline',
+    FLECHA_DIRETA: 'chevron-forward-outline',
+    FLECHA_CIMA: 'chevron-up-outline',
+    FLECHA_BAIXO: 'chevron-down-outline',
+    LIXEIRA: 'trash-outline',
+    CHECK: 'save-outline',
+    TRISTE: 'sad-outline',
 }

@@ -1,9 +1,9 @@
-import { router } from "expo-router";
 
 import { DataKey } from "../enum/DataKeys";
-import { ILoginResponse } from "../screens/login/ILoginResponse";
+import { ILoginResponse } from "../screens/001login/ILoginResponse";
 import { IGetUserProperties } from "./interface/IGetUserProperties";
-import { getObject, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
+import { getObject, getSimpleData, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
+import { getConfig, insertOrUpdateConfig, openDatabase } from "../services/storage/sqlite/SQLiteConfig";
 
 
 export async function storeObjectDataVc(key: string, value: object) {
@@ -12,6 +12,14 @@ export async function storeObjectDataVc(key: string, value: object) {
     } catch (error) {
         return error
     }
+}
+
+export async function handleGetSimpleData(key: string) {
+    let value: any = ''
+    getSimpleData(key).then((res) => {
+        value = res
+    })
+    return value
 }
 
 export async function getObjectDataVc(key: string) {
@@ -33,7 +41,8 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
         userName: '',
         tenantId: undefined,
         estabId: '',
-        estabName: ''
+        estabName: '',
+        usuarioId: ''
     };
 
     try {
@@ -45,7 +54,8 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
                 userName: loginResponse.NomeUsuario,
                 tenantId: loginResponse.TenantId,
                 estabId: loginResponse.EstabelecimentoId,
-                estabName: loginResponse.NomeEstabelecimento
+                estabName: loginResponse.NomeEstabelecimento,
+                usuarioId: loginResponse.UsuarioId
             }
             return userProperties;
         }
@@ -57,11 +67,24 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
 }
 
 
-export function navigateTo(route:string){
-    router.push(route)
+export function navigateTo(navigate: any, route: string) {
+    navigate(route)
 }
 
-export function replaceScreen(route:string){
-    router.replace(route)
+export function replaceScreen(navigate: any, route: string) {
+    navigate(route)
+}
+
+export async function insertUpdateDBEnvorimentConfig({ baseUrl, tenantId, token, isValidado }: { baseUrl: string, tenantId: number, token: string, isValidado: boolean }) {
+    const db = await openDatabase()
+    await insertOrUpdateConfig(db, baseUrl, tenantId, token, isValidado)
+}
+
+export async function getDBEnvorimentConfig() {
+    const db = await openDatabase()
+    const all = await getConfig(db)
+    console.log(all);
+
+    return all
 }
 

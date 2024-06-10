@@ -8,6 +8,15 @@ export const storeSimpleData = async (key: string, value: string) => {
     }
 };
 
+export const getSimpleData = async (key: string) => {
+    try {
+        return await AsyncStorage.getItem(key)
+    } catch (e) {
+        return e
+    }
+};
+
+
 export const storeObject = async (key: string, value: object) => {
     try {
         const jsonValue = JSON.stringify(value);
