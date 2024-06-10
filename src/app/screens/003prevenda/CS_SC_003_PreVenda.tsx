@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 
 
@@ -10,10 +10,9 @@ import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatDate, formatMoneyValue } from "../../util/FormatText";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
-import C_003_SearchInputPreVenda from "./components/C_003_SearchInputPreVenda";
 import { IResPreVendaItemListModel } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 
-
+const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
 
 const CS_SC_003_PreVenda = () => {
@@ -57,6 +56,9 @@ const CS_SC_003_PreVenda = () => {
         })
     }
 
+    function handleFilterClick(): void {
+        throw new Error("Function not implemented.");
+    }
 
 
     function goToDetails(currentPv: IResPreVendaItemListModel) {
@@ -73,7 +75,10 @@ const CS_SC_003_PreVenda = () => {
 
     return (
         <View>
-            <C_003_SearchInputPreVenda onSearchPress={_fetchPV} />
+            <CustomSearch
+                placeholder="Protocolo/Conta"
+                onSearchPress={_fetchPV}
+                onFilterClick={handleFilterClick} />
             {isLoading ? <>
                 <ActivityIndicator />
             </> :

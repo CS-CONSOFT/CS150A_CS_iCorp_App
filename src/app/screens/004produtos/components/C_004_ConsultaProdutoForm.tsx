@@ -34,4 +34,6 @@ const CS_ConsultaProdutoForm = ({ onSearchPress, onFilterClick }:
     );
 }
 
+
+
 export default CS_ConsultaProdutoForm;

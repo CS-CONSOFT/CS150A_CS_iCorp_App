@@ -19,7 +19,7 @@ import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaVi
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 
-const CS_ConsultaProdutoForm = lazy(() => import("./components/C_004_ConsultaProdutoForm"))
+const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
 const CS_SC_ConsultaProdutos = () => {
     const [productList, setProductList] = useState<IResGetProductItem[]>()
@@ -107,11 +107,13 @@ const CS_SC_ConsultaProdutos = () => {
     const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
     //Tela
     return (
+
         <SafeAreaView style={stylesConsultaProduto.container}>
             <Suspense fallback={<ActivityIndicator />}>
                 <View>
 
-                    <CS_ConsultaProdutoForm
+                    <CustomSearch
+                        placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick} />
 
