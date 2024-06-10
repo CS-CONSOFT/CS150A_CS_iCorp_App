@@ -3,7 +3,7 @@ import { DataKey } from "../enum/DataKeys";
 import { ILoginResponse } from "../screens/001login/ILoginResponse";
 import { IGetUserProperties } from "./interface/IGetUserProperties";
 import { getObject, getSimpleData, storeObject, storeSimpleData } from "../services/storage/AsyncStorageConfig";
-import { getConfig, insertOrUpdateConfig, openDatabase } from "../services/storage/sqlite/SQLiteConfig";
+
 
 
 export async function storeObjectDataVc(key: string, value: object) {
@@ -75,16 +75,5 @@ export function replaceScreen(navigate: any, route: string) {
     navigate(route)
 }
 
-export async function insertUpdateDBEnvorimentConfig({ baseUrl, tenantId, token, isValidado }: { baseUrl: string, tenantId: number, token: string, isValidado: boolean }) {
-    const db = await openDatabase()
-    await insertOrUpdateConfig(db, baseUrl, tenantId, token, isValidado)
-}
 
-export async function getDBEnvorimentConfig() {
-    const db = await openDatabase()
-    const all = await getConfig(db)
-    console.log(all);
-
-    return all
-}
 
