@@ -19,7 +19,7 @@ const CS_SC001_LoginForm = () => {
     //fim variaveis
 
     function navigateToMenu() {
-        navigate('Config_Ambiente')
+        navigate('Menu')
     }
 
     useEffect(() => {

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, Modal, View, TouchableOpacity, TextInput } from "react-native";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { commonStyle } from "../../CommonStyle";
 
 
@@ -7,11 +7,10 @@ interface CustomModalProps {
     isVisible: boolean;
     onDismiss: () => void;
     title: string;
-    onSave: (newSerie: string) => void;
-    onCloseButton: () => void;
+    children: ReactNode
 }
 
-const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton }: CustomModalProps) => {
+const CustomAlertDialog = ({ isVisible, onDismiss, title, children }: CustomModalProps) => {
     const [serie, setSerie] = useState('')
     useEffect(() => {
         setSerie(title)
@@ -25,22 +24,7 @@ const CustomAlertDialog = ({ isVisible, onDismiss, title, onSave, onCloseButton 
             onRequestClose={onDismiss}
         >
             <View style={styles.container}>
-                <View style={styles.dialog}>
-                    <TouchableOpacity onPress={() => { setSerie(''); onCloseButton() }} style={styles.closeButton}>
-                        <Text style={styles.buttonText}>Fechar</Text>
-                    </TouchableOpacity>
-                    <Text>{title}</Text>
-                    <TextInput
-                        style={[commonStyle.common_input]}
-                        onChangeText={setSerie}
-                        value={serie}
-                    />
-                    <View style={styles.buttonsContainer}>
-                        <TouchableOpacity onPress={() => { setSerie(''); onSave(serie) }} style={styles.button}>
-                            <Text style={styles.buttonText}>Salvar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                {children}
             </View>
         </Modal>
     )

@@ -54,13 +54,17 @@ export const commonStyle = StyleSheet.create({
         marginRight: 16
     },
     common_input: {
-        height: 40,
-        width: 250,
         margin: 4,
         borderWidth: 1,
         padding: 10,
         borderRadius: 32,
         paddingHorizontal: 16,
+    },
+    productImage: {
+        height: '100%',
+        width: '100%',
+        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 12
     },
     common_button_style: {
         alignItems: 'center',
@@ -78,5 +82,8 @@ export const commonStyle = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
+    },
+    justify_content_space_btw: {
+        justifyContent: 'space-between'
     }
 });

@@ -4,11 +4,11 @@ import CustomLoggoutTitle from "../components/headers/CustomLoggoutTitle";
 import CS_SC_001_Login from "../screens/001login/CS_SC_001_Login";
 import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
-import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
-import CS_SC_ConsultaProdutos from "../screens/produtos/consulta/CS_SC_ConsultaProdutos";
 import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import CS_SC_EnvorimentConfig from "../screens/config/CS_SC_EnvorimentConfig";
+import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
+import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
 
 
 const StackNav = createNativeStackNavigator()

@@ -6,4 +6,6 @@ export interface IReqGetProductSearch {
 
     cs_codigo_produto: string,
     cs_descricao_reduzida: string,
+
+    cs_is_com_saldo?: boolean
 }

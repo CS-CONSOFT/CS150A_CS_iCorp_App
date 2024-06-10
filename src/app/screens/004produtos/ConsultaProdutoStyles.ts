@@ -5,8 +5,28 @@ export const stylesConsultaProduto = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    rightIcons: {
+        backgroundColor: '#E3E3E3',
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        borderRadius: 5,
+        flex: 1,
+        justifyContent: 'center',
+    },
+    productCode: {
+        fontWeight: '600',
+        fontSize: 16
+    },
+    productDesc: {
+        fontWeight: '400'
+    },
+    productPrice: {
+        fontSize: 24,
+        color: '#333333',
+        fontWeight: 'bold'
+    },
     searchContainer: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,

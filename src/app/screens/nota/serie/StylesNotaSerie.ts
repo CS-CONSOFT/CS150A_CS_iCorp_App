@@ -37,4 +37,40 @@ export const stylesNotaSerie = StyleSheet.create({
         backgroundColor: 'blue',
         margin: 32
     },
+    dialog: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10
+    },
+    message: {
+        marginBottom: 20
+    },
+    buttonsContainer: {
+        flexDirection: 'row'
+    },
+    button: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#007bff',
+        borderRadius: 5,
+        marginHorizontal: 5
+    },
+    closeButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: 'red',
+        borderRadius: 5,
+        marginHorizontal: 5,
+        alignSelf: "flex-end"
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold'
+    }
 });

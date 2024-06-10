@@ -1,11 +1,12 @@
 
 import { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, Text, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import CustomSeparator from "../../../components/lists/CustomSeparator";
 import { IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { stylesNotaSerie } from "./StylesNotaSerie";
+import { commonStyle } from "../../../CommonStyle";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
 const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
@@ -98,12 +99,19 @@ const CS_SC_Serie = () => {
                 title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
                 onSave={(newSerie) => setNewCorSerie(newSerie)}
                 onCloseButton={() => { setShowPopUp(false) }}
+                children={<AlertDialog />}
             />
         </Suspense>
-
     </>
 }
 
+const AlertDialog = () => {
+    return (
+        <View style={stylesNotaSerie.dialog}>
+            <></>
+        </View>
+    )
+}
 
 
 /** ITEM DA LISTA */

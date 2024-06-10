@@ -19,4 +19,5 @@ export const ICON_NAME = {
     FLECHA_BAIXO: 'chevron-down-outline',
     LIXEIRA: 'trash-outline',
     CHECK: 'save-outline',
+    TRISTE: 'sad-outline',
 }
