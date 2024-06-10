@@ -58,7 +58,7 @@ export const commonStyle = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         borderRadius: 32,
-        paddingHorizontal: 16,
+        paddingHorizontal: 16
     },
     productImage: {
         height: '100%',

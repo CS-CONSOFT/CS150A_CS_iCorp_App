@@ -161,12 +161,15 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 <CustomSeparator />
 
                 {/** LINHA DE PREÇO */}
-                <View style={common003_01_styles.extraBottomPriceStyle}>
-                    <View>
+                <View style={[common003_01_styles.extraBottomPriceStyle, { flexDirection: 'row', justifyContent: 'space-between', marginRight: 16 }]}>
+                    <View style={{ flex: 1, marginRight: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Tabela</Text>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
-                                style={[commonStyle.common_input]}
+                                style={[
+                                    commonStyle.common_input,
+                                    { height: 40, flex: 1, padding: 10 }
+                                ]}
                                 onChangeText={(value) => applyMaskAndDisplay(value, 1)}
                                 value={tablePrice}
                                 keyboardType='decimal-pad'
@@ -177,56 +180,63 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                         </View>
                     </View>
 
-                    <View style={{ marginRight: 16 }}>
+                    <View style={{ flex: 1, marginLeft: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Unitário</Text>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
-                                style={[commonStyle.common_input]}
+                                style={[
+                                    commonStyle.common_input,
+                                    { height: 40, flex: 1, padding: 10 }
+                                ]}
                                 onChangeText={(value) => applyMaskAndDisplay(value, 2)}
-                                value={tablePrice}
+                                value={unityPrice}
                                 keyboardType='decimal-pad'
                             />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(unityPrice, 2)} />
                         </View>
-
                     </View>
                 </View>
+
 
                 {/** LINHA DE DESCONTO */}
                 <Text style={common003_01_styles.extraBottomStyleTitles}>Desconto</Text>
 
                 <CustomSeparator />
 
-                <View style={common003_01_styles.extraBottomPriceStyle}>
-                    <View>
+                <View style={[common003_01_styles.extraBottomPriceStyle, { flexDirection: 'row', justifyContent: 'space-between', marginRight: 16 }]}>
+                    <View style={{ flex: 1, marginRight: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>%</Text>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
-                                style={[commonStyle.common_input]}
+                                style={[
+                                    commonStyle.common_input,
+                                    { height: 40, flex: 1, padding: 10 }
+                                ]}
                                 onChangeText={(value) => setPercentDiscount(Number(value))}
                                 value={percentDiscount.toString()}
                                 keyboardType='decimal-pad'
                             />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.Id)} />
                         </View>
-
                     </View>
 
-                    <View style={{ marginRight: 16 }}>
+                    <View style={{ flex: 1, marginLeft: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Valor</Text>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
-                                style={[commonStyle.common_input]}
+                                style={[
+                                    commonStyle.common_input,
+                                    { height: 40, flex: 1, padding: 10 }
+                                ]}
                                 onChangeText={(value) => applyMaskAndDisplay(value, 3)}
                                 value={valueDiscount}
                                 keyboardType='decimal-pad'
                             />
-
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(valueDiscount, 3)} />
                         </View>
                     </View>
-
                 </View>
+
             </View>
 
             {/** SWITCHS */}
