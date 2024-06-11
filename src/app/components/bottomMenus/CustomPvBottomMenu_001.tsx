@@ -12,7 +12,7 @@ const CustomPvBottomMenu_001 = () => {
     const { navigate } = useNavigation()
     function goToSearchProduct() {
         removeValueFromStorage(DataKey.CurrentPV).then(() => {
-            navigate('Consulta_Produtos')
+            navigate('Consulta_Produtos', { cameFromPv: false })
         })
     }
 

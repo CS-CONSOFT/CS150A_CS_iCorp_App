@@ -36,6 +36,8 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
 
     useEffect(() => {
+        console.log(product);
+
         setIsEntregar(product.IsEntregar)
         setIsMontar(product.IsMontar)
         setIsSaldoNegativo(product.IsSaldoNegativo)

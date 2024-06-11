@@ -1,11 +1,13 @@
 import api from "../../axios_config";
-import { ICommonResponse } from "../../interfaces/prevenda/CS_Common_IPreVenda";
+import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
+
 import { IReqGetProductSearch } from "../../interfaces/produto/CS_IReqGetProdutoSearch";
 import { IReqUpdatePercentageDiscount } from "../../interfaces/produto/CS_IReqUpdatePercentualDesconto";
 import { IReqUpdateTablePrice } from "../../interfaces/produto/CS_IReqUpdateProdutoPreco";
 import { IReqUpdateAmount } from "../../interfaces/produto/CS_IReqUpdateQuantidadeProduto";
 import { IReqUpdateValueDiscount } from "../../interfaces/produto/CS_IReqUpdateValorDesconto";
 import { IResProdutoSearch } from "../../interfaces/produto/CS_IResGetProdutoSearch";
+import { IResUltimasVendaProduto } from "../../interfaces/produto/CS_IResGetUltimasVendasProduto";
 
 /** ROTAS DE GET */
 
@@ -221,6 +223,17 @@ export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId,
         throw error
 
     }
+}
+
+export async function getLastSalesProduct({ cs_tenant_id, cs_produto_id, cs_conta_id }:
+    { cs_tenant_id: number, cs_produto_id: string, cs_conta_id: string }): Promise<IResUltimasVendaProduto> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_produto_id}/${cs_conta_id}`
+    const response = await api.get(url)
+    console.log({ cs_tenant_id, cs_conta_id, cs_produto_id });
+
+    console.log(response.data);
+
+    return response.data as IResUltimasVendaProduto
 }
 
 

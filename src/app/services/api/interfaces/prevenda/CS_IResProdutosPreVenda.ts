@@ -3,6 +3,7 @@ export interface IResProductsListPvModel {
     IsOk: boolean;
     Msg: string;
     List: IResProductItemModel[];
+
 }
 
 export interface IResProductItemModel {

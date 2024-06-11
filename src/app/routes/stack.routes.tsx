@@ -9,6 +9,8 @@ import TabRoutes002 from "./tab-002.routes";
 import CS_SC_EnvorimentConfig from "../screens/config/CS_SC_EnvorimentConfig";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
+import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
+import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
 
 
 const StackNav = createNativeStackNavigator()
@@ -20,10 +22,12 @@ declare global {
             Menu: undefined,
             Entrega: undefined,
             Serie: undefined,
-            Consulta_Produtos: undefined,
+            Consulta_Produtos: { cameFromPv: boolean },
             Config_Ambiente: undefined,
             Pre_Venda_Detalhes: { currentPv: string, emissao: string, validade: string, totalLiquido: string },
             Pre_Venda: undefined,
+            Obras: undefined,
+            Obras_Solicitacao: undefined
         }
     }
 }
@@ -55,6 +59,14 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Config_Ambiente" component={CS_SC_EnvorimentConfig} options={{
                 title: "Configuração de Ambiente"
+            }} />
+
+            <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
+                title: "Obras"
+            }} />
+
+            <StackNav.Screen name="Obras_Solicitacao" component={CS_SC_005_02_Solicitação} options={{
+                title: "Solicitação"
             }} />
 
             <StackNav.Screen name="Pre_Venda_Detalhes" component={TabRoutes002} options={({ route }: { route: any }) => ({

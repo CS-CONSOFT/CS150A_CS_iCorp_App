@@ -1,13 +1,15 @@
+import { useEffect, useState } from "react";
 import { Animated, Image, Pressable, Text, View } from "react-native";
 import CustomIcon from "../../../../components/icon/CustomIcon";
+import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
+import { IProdutoItemUltimasVendas, IResUltimasVendaProduto } from "../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
 import { formatMoneyValue } from "../../../../util/FormatText";
 import { ICON_NAME } from "../../../../util/IconsName";
-import { common003_01_styles } from './CommonStyles';
-import { useEffect, useState } from "react";
+import { handleGetLastSalesProduct } from "../../../../view_controller/produto/ProductViewController";
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
-import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
-import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
+import { common003_01_styles } from './CommonStyles';
+import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 
 
 
@@ -24,6 +26,7 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
     }) => {
 
     const [productAmount, setProductAmount] = useState(0.0);
+    const [lastSalesProduct, setLastSalesProduct] = useState<IProdutoItemUltimasVendas[]>()
 
     useEffect(() => {
         setProductAmount(product.Quantidade)
@@ -38,9 +41,17 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
     const [extraBottomOpenGuarantee, setExtraBottomOpenGuarantee] = useState(false);
 
 
-    function showLastSales(Id: string): void {
-        console.log("click");
-        downSwipeToLastSales()
+    function showLastSales(Id: string) {
+        console.log(product.Id);
+
+        handleGetLastSalesProduct({ cs_produto_id: Id }).then((res) => {
+            if (res.IsOk) {
+                setLastSalesProduct(res.UltimasVendas)
+                downSwipeToLastSales()
+            } else {
+                throw 'Fazer alert'
+            }
+        })
     }
 
     function showGuarantee(Id: string): void {
@@ -79,17 +90,11 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
     const downSwipeToLastSales = () => {
         animateDownSwipe(extraBottomOpenLastSales, dragY);
         setExtraBottomOpenLastSales(!extraBottomOpenLastSales);
-        if (extraBottomOpenLastSales) {
-            leftSwipe()
-        }
     };
 
     const downSwipeToGuarantee = () => {
         animateDownSwipe(extraBottomOpenGuarantee, dragY);
         setExtraBottomOpenGuarantee(!extraBottomOpenGuarantee);
-        if (extraBottomOpenGuarantee) {
-            leftSwipe()
-        }
     };
 
     const animatedStyleX = {
@@ -132,8 +137,8 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                 {extraIconsRightOpen && (
                     <Pressable style={common003_01_styles.iconsRight}>
                         <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.Id)} />
-                        <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.Id)} />
-                        <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.Id)} />
+                        <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.gg008_ID)} />
+                        <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.gg008_ID)} />
                     </Pressable>
                 )}
             </Animated.View>
@@ -153,7 +158,7 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                     />
                 )}
                 {extraBottomOpenLastSales && (
-                    <CS_003_01_02_ProductPvItemUltimasVendas close={() => downSwipeToLastSales()} />
+                    <CS_003_01_02_ProductPvItemUltimasVendas close={() => downSwipeToLastSales()} lastSales={lastSalesProduct!} />
                 )}
 
                 {extraBottomOpenGuarantee && (

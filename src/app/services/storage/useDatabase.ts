@@ -32,8 +32,6 @@ export function useDatabase() {
         try {
             const query = "SELECT * FROM csloc_config_env WHERE id=501"
             const response = await database.getFirstAsync<ConfigDB>(query)
-            console.log(response);
-
             return response
         } catch (error) {
             throw error

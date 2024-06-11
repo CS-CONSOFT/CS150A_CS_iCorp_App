@@ -20,7 +20,7 @@ const CustomAlertDialog = ({ isVisible, onDismiss, title, children }: CustomModa
         <Modal
             visible={isVisible}
             transparent
-            animationType="fade"
+            animationType='none'
             onRequestClose={onDismiss}
         >
             <View style={styles.container}>
