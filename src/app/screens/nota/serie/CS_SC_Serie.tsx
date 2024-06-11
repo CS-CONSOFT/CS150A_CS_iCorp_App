@@ -97,8 +97,6 @@ const CS_SC_Serie = () => {
                 isVisible={showPopUp}
                 onDismiss={() => setShowPopUp(false)}
                 title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
-                onSave={(newSerie) => setNewCorSerie(newSerie)}
-                onCloseButton={() => { setShowPopUp(false) }}
                 children={<AlertDialog />}
             />
         </Suspense>

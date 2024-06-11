@@ -18,7 +18,7 @@ export const data = [
     {
         id: 3,
         title: "Consulta Produtos",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos') },
+        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
         iconName: "search-outline"
 
     },
@@ -49,7 +49,7 @@ export const data = [
     {
         id: 8,
         title: "Obras",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
+        onPress: (navigate: any) => { navigate('Obras') },
         iconName: "construct-outline"
     },
     {

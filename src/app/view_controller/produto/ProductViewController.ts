@@ -1,6 +1,10 @@
-import { getProducts } from "../../services/api/endpoint/produto/CS_GetProduct";
+import { DataKey } from "../../enum/DataKeys";
+import { ILoginResponse } from "../../screens/001login/ILoginResponse";
+import { getLastSalesProduct, getProducts } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { IReqGetProductSearch } from "../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
 import { IResProdutoSearch } from "../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
+import { IResUltimasVendaProduto } from "../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
+import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { getUserProperties } from "../SharedViewController";
 
 
@@ -41,5 +45,16 @@ export async function handleSearchProduct(iGetProductSearch: IReqGetProductSearc
         }
     }
     return response
+}
+
+export async function handleGetLastSalesProduct({ cs_produto_id }: { cs_produto_id: string }): Promise<IResUltimasVendaProduto> {
+
+    let currentContaId: any = ''
+    getSimpleData(DataKey.CurrentContaId).then((res) => {
+        currentContaId = res
+    })
+    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+
+    return await getLastSalesProduct({ cs_tenant_id: currentUser.TenantId, cs_produto_id, cs_conta_id: currentContaId })
 }
 

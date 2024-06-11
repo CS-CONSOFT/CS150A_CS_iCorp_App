@@ -20,4 +20,7 @@ export const ICON_NAME = {
     LIXEIRA: 'trash-outline',
     CHECK: 'save-outline',
     TRISTE: 'sad-outline',
+    ENVIAR: 'send-outline',
+    CHAT: 'chatbox-ellipses-outline',
+    ANEXO: 'attach-outline',
 }

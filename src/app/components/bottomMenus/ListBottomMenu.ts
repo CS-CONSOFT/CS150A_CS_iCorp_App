@@ -18,7 +18,7 @@ export const listBottomMenu001 = [
     {
         id: 'special-button',
         title: "Lista",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos') },
+        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
         iconName: ICON_NAME.LISTA_CONTORNADO
     },
     {
@@ -47,7 +47,7 @@ export const listBottomMenu002 = [
     {
         id: 'special-button',
         title: "Produto",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos') },
+        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
         iconName: ICON_NAME.LISTA_CONTORNADO
     },
     {

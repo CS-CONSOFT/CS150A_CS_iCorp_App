@@ -1,4 +1,7 @@
+import { DataKey } from "../../../../enum/DataKeys";
+import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
+import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
@@ -66,9 +69,20 @@ export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atend
 
     const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/ListarProdutos`
 
+
     /** RESPONSE DE PRODUTOS */
     const response = await api.get(url)
+
     return response.data as IResProductsListPvModel
+}
+
+export async function getPv({ cs_tenant_id, cs_atendimento_id }: { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResGetPv> {
+    const url_get_pv = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/GetPV/${cs_atendimento_id}`
+    const response = await api.get(url_get_pv)
+
+    await storeSimpleData(DataKey.CurrentContaId, response.data.Model.ClienteId)
+
+    return response.data.Model
 }
 
 /**

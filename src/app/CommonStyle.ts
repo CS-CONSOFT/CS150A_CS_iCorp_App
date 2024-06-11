@@ -7,6 +7,12 @@ export const commonStyle = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    border_radius_32: {
+        borderRadius: 32
+    },
+    margin_16: {
+        margin: 16
+    },
     common_menuText: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -74,7 +80,7 @@ export const commonStyle = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         backgroundColor: 'green',
-        margin: 32
+        margin: 16
     },
     common_text_button_style: {
         fontSize: 16,
@@ -85,5 +91,8 @@ export const commonStyle = StyleSheet.create({
     },
     justify_content_space_btw: {
         justifyContent: 'space-between'
+    },
+    justify_content_space_evl: {
+        justifyContent: 'space-evenly'
     }
 });

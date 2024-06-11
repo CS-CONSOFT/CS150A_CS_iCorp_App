@@ -1,19 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, Keyboard, Pressable, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, Keyboard, StyleSheet, View } from "react-native";
 import { DataKey } from "../../enum/DataKeys";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
-import { ICON_NAME } from "../../util/IconsName";
-import CustomIcon from "../icon/CustomIcon";
 import CustomItemIconTitleNoColor from "../items/CustomItemIconTitleNoColor";
 import CustomSeparator from "../lists/CustomSeparator";
-import { listBottomMenu001, listBottomMenu002 } from "./ListBottomMenu";
-import { useEffect, useState } from "react";
+import { listBottomMenu002 } from "./ListBottomMenu";
 
 const CustomPvBottomMenu_002 = () => {
     const { navigate } = useNavigation()
     function goToSearchProduct() {
         removeValueFromStorage(DataKey.CurrentPV).then(() => {
-            navigate('Consulta_Produtos')
+            navigate('Consulta_Produtos', { cameFromPv: false })
         })
     }
 

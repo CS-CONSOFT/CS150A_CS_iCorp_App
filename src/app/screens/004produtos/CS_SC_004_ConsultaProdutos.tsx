@@ -21,7 +21,7 @@ import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
-const CS_SC_ConsultaProdutos = () => {
+const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [productList, setProductList] = useState<IResGetProductItem[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])

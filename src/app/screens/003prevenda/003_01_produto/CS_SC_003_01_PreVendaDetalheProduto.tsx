@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { handleDeleteProductFromPv, handleGetProductsPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
+import { handleDeleteProductFromPv, handleGetProductsPv, handleGetPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
@@ -12,21 +12,33 @@ import { IResProductItemModel, IResProductsListPvModel } from "../../../services
 const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     const [productsPv, setProductsPv] = useState<IResProductItemModel[]>([])
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-    const { emissao, validade, totalLiquido } = route.params
+    const { emissao: data_emissao, validade: data_validade, totalLiquido } = route.params
     const { navigate } = useNavigation()
 
     useEffect(() => {
         getProductsToCurrentPv()
     }, [])
 
+
     function getProductsToCurrentPv() {
         setStatus(FETCH_STATUS.LOADING)
-        handleGetProductsPv().then((res) => {
-            setStatus(FETCH_STATUS.SUCCESS)
-            const response = res as IResProductsListPvModel
-            if (response.IsOk) {
-                setProductsPv(response.List)
-            }
+        //pega a pv
+        handleGetPv().then((res) => {
+            console.log("Cliente Nome: " + res.Nome_Cliente);
+            console.log("Cliente Conta ID: " + res.ClienteId);
+
+            //depois pega os produtos
+            handleGetProductsPv().then((res) => {
+                setStatus(FETCH_STATUS.SUCCESS)
+                const response = res as IResProductsListPvModel
+                if (response.IsOk) {
+                    console.log("Produto Desc: " + res.List.at(0)?.Descricao);
+                    console.log("Produto Id: " + res.List.at(0)?.gg008_ID);
+                    console.log("Produto Codigo: " + res.List.at(0)?.Codigo);
+
+                    setProductsPv(response.List)
+                }
+            })
         })
     }
 
@@ -117,8 +129,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 />
 
                 <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                    dataEmissao={emissao}
-                    dataValidade={validade}
+                    dataEmissao={data_emissao}
+                    dataValidade={data_validade}
                     totalLiquido={totalLiquido}
                 />
             </>}
