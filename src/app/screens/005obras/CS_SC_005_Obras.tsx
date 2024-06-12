@@ -74,20 +74,20 @@ const RenderItem = ({ item }: { item: Dd190_Obras }) => {
             <CustomCard_001
                 title={item.DD190_Obra.csicp_dd190.dd190_Descricao}
                 children={<CustomCardObraChildren leftSwipe={leftSwipe} isRightChildrenOpen={extraIconsRightOpen} item={item} />}
-                rightChildren={<RightItem />}
+                rightChildren={<RightItem obraId={item.DD190_Obra.csicp_dd190.dd190_Id} />}
                 showRightChildren={extraIconsRightOpen}
             />
         </View>
     )
 }
 
-const RightItem = () => {
+const RightItem = ({ obraId }: { obraId: number }) => {
     const { navigate } = useNavigation()
     return (
         <View style={[commonStyle.common_columnItem,
         { backgroundColor: "#95B5C7", flex: 1, padding: 8, paddingVertical: 16, borderTopRightRadius: 16, borderBottomRightRadius: 16 },
         commonStyle.justify_content_space_btw]}>
-            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => navigate('Obras_Solicitacao')} />
+            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => navigate('Obras_Solicitacao', { obraId: obraId })} />
             <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { }} />
             <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => { }} />
             <CustomIcon icon={ICON_NAME.ANEXO} onPress={() => { }} />
