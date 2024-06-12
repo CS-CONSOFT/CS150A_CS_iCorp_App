@@ -44,6 +44,9 @@ export const commonStyle = StyleSheet.create({
     common_fontWeight_600: {
         fontWeight: '600'
     },
+    common_fontWeight_200: {
+        fontWeight: '200'
+    },
     common_margin_bottom_16: {
         marginBottom: 16
     },
@@ -97,5 +100,11 @@ export const commonStyle = StyleSheet.create({
     },
     modal_common_container: {
         backgroundColor: '#FFF', padding: 16, borderRadius: 16, alignSelf: 'center', width: '80%'
+    },
+    text_size_20: {
+        fontSize: 20
+    },
+    text_size_16: {
+        fontSize: 16
     }
 });

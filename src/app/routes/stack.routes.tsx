@@ -27,7 +27,7 @@ declare global {
             Pre_Venda_Detalhes: { currentPv: string, emissao: string, validade: string, totalLiquido: string },
             Pre_Venda: undefined,
             Obras: undefined,
-            Obras_Solicitacao: undefined
+            Obras_Solicitacao: { obraId: number }
         }
     }
 }

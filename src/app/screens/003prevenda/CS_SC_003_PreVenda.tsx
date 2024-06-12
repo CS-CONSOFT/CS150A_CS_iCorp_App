@@ -5,7 +5,6 @@ import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native
 import { stylesPreVenda } from "./PreVendaStyles";
 
 import { useNavigation } from "@react-navigation/native";
-import CustomToast from "../../components/toast/CustomToast";
 import { DataKey } from "../../enum/DataKeys";
 import { IResPreVendaItemListModel } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
