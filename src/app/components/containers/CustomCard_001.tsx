@@ -3,6 +3,8 @@ import { commonStyle } from "../../CommonStyle";
 import { ReactNode } from "react";
 
 const CustomCard_001 = ({ title, children, rightChildren, showRightChildren }: { title: string, children: ReactNode, rightChildren?: ReactNode, showRightChildren?: boolean }) => {
+    console.log(showRightChildren);
+
     return (
         <View style={[commonStyle.margin_16, commonStyle.common_rowItem, { backgroundColor: '#95B5C7', borderRadius: 32 }]}>
             <View style={[commonStyle.common_columnItem, { flex: 1 }]}>

@@ -1,41 +1,16 @@
-import { ReactNode, useEffect, useState } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
+import { ReactNode } from "react";
+import { StyleSheet, View } from "react-native";
 
 interface CustomProp {
     children: ReactNode,
     height: number
 }
 const CustomBottomItem = ({ children, height }: CustomProp) => {
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            () => {
-                setKeyboardVisible(true);
-            }
-        );
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                setKeyboardVisible(false);
-            }
-        );
-
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, []);
-
     return (
         <View>
-            {!isKeyboardVisible && (
-                <View style={[styles.container, { height: height }]}>
-                    {children}
-                </View>
-            )}
+            <View style={[styles.container, { height: height }]}>
+                {children}
+            </View>
         </View>
 
     );

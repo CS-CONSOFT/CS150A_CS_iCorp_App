@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_DSV17 = 'https://dsv17.csicorpnet.com.br/';
+const API_DSV17 = 'https://dsv17.csicorpnet.com.br';
 
 const api = axios.create(
     {

@@ -94,5 +94,8 @@ export const commonStyle = StyleSheet.create({
     },
     justify_content_space_evl: {
         justifyContent: 'space-evenly'
+    },
+    modal_common_container: {
+        backgroundColor: '#FFF', padding: 16, borderRadius: 16, alignSelf: 'center', width: '80%'
     }
 });

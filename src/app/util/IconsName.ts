@@ -23,4 +23,7 @@ export const ICON_NAME = {
     ENVIAR: 'send-outline',
     CHAT: 'chatbox-ellipses-outline',
     ANEXO: 'attach-outline',
+    BUG_ERROR: 'bug-outline',
+    SUCCESS: 'checkmark-outline',
+    ALERT: 'alert-outline',
 }
