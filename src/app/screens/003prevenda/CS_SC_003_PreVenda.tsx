@@ -5,11 +5,12 @@ import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native
 import { stylesPreVenda } from "./PreVendaStyles";
 
 import { useNavigation } from "@react-navigation/native";
+import CustomToast from "../../components/toast/CustomToast";
 import { DataKey } from "../../enum/DataKeys";
 import { IResPreVendaItemListModel } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { formatDate, formatMoneyValue } from "../../util/FormatText";
+import { formatDateToSlashPattern, formatMoneyValue } from "../../util/FormatText";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
@@ -63,12 +64,10 @@ const CS_SC_003_PreVenda = () => {
 
     function goToDetails(currentPv: IResPreVendaItemListModel) {
         storeSimpleData(DataKey.CurrentPV, currentPv.ID)
-        console.log(currentPv.ID);
-
         navigate('Pre_Venda_Detalhes', {
             currentPv: currentPv.ID,
-            emissao: formatDate(currentPv.Data_Emissao),
-            validade: formatDate(currentPv.DataValidade),
+            emissao: formatDateToSlashPattern(currentPv.Data_Emissao),
+            validade: formatDateToSlashPattern(currentPv.DataValidade),
             totalLiquido: formatMoneyValue(currentPv.Total!)
         })
     }

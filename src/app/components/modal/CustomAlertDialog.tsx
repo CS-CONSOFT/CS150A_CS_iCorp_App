@@ -1,32 +1,29 @@
-import { StyleSheet, Text, Modal, View, TouchableOpacity, TextInput } from "react-native";
-import { ReactNode, useEffect, useState } from "react";
-import { commonStyle } from "../../CommonStyle";
+
+import { ReactNode } from "react";
+import { Modal, StyleSheet, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
 interface CustomModalProps {
     isVisible: boolean;
     onDismiss: () => void;
-    title: string;
     children: ReactNode
 }
 
-const CustomAlertDialog = ({ isVisible, onDismiss, title, children }: CustomModalProps) => {
-    const [serie, setSerie] = useState('')
-    useEffect(() => {
-        setSerie(title)
-    }, [isVisible]);
-
+const CustomAlertDialog = ({ isVisible, onDismiss, children }: CustomModalProps) => {
     return (
-        <Modal
-            visible={isVisible}
-            transparent
-            animationType='none'
-            onRequestClose={onDismiss}
-        >
-            <View style={styles.container}>
-                {children}
-            </View>
-        </Modal>
+        <GestureHandlerRootView>
+            <Modal
+                visible={isVisible}
+                transparent
+                animationType='none'
+                onRequestClose={onDismiss}
+            >
+                <View style={styles.container}>
+                    {children}
+                </View>
+            </Modal>
+        </GestureHandlerRootView>
     )
 }
 

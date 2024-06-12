@@ -104,8 +104,6 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     }
 
 
-
-
     const isLoading = status === FETCH_STATUS.LOADING
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>

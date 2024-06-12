@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
@@ -24,17 +24,11 @@ const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [productList, setProductList] = useState<IResGetProductItem[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
+    const [showToast, setShowToast] = useState(false);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
     const { navigate } = useNavigation()
-
-
-
-
-    function showToast(msg: string) {
-        ToastAndroid.show(msg, ToastAndroid.SHORT)
-    }
 
     function scInsertProductPv(product: IResGetProductItem) {
         setStatus(FETCH_STATUS.BTN_CLICK)
@@ -47,9 +41,9 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 1,
                 pvId || undefined,
                 undefined
-            ).then((res) => {
+            ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                showToast(res.Msg)
+                setShowToast(true)
             })
         })
     }
@@ -57,7 +51,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const isLoading = status == FETCH_STATUS.LOADING
     const isError = status == FETCH_STATUS.ERROR
     const openModal = status == FETCH_STATUS.MODAL
-
 
     function handleFilterClick() {
         setStatus(FETCH_STATUS.MODAL)
@@ -105,17 +98,18 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
 
     const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
+
+
     //Tela
     return (
-
         <SafeAreaView style={stylesConsultaProduto.container}>
             <Suspense fallback={<ActivityIndicator />}>
                 <View>
-
                     <CustomSearch
                         placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick} />
+
 
                     {isLoading ? <ActivityIndicator /> :
                         <View>
@@ -127,7 +121,12 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                     <CustomProduct
                                         children={<ProductItem product={item} />}
                                         image={<ImageProductItem />}
-                                        rightItem={<RightItem loadingClick={loadingBtnClickItem} click={() => scInsertProductPv(item)} />}
+                                        rightItem={<>
+                                            <RightItem
+                                                loadingClick={loadingBtnClickItem}
+                                                click={() => scInsertProductPv(item)}
+                                            />
+                                        </>}
                                     />
                                 )}
                             />
@@ -141,7 +140,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}
-                    title={"SSS"}
                     children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
                         handleFormSubmitToSearch(filters)
                     }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
