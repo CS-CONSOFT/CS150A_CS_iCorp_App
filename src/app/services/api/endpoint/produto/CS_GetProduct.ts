@@ -25,7 +25,8 @@ export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Prom
         const urlParams = {
             cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto,
             cs_page_size: IGetProdutoSearch.cs_page_size,
-            cs_page: IGetProdutoSearch.cs_page
+            cs_page: IGetProdutoSearch.cs_page,
+            cs_itens_per_page: 5
         }
 
         const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/PesquisaProdutos3`;
