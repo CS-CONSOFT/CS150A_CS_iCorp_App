@@ -62,12 +62,24 @@ export default function StackRoutes() {
             }} />
 
             <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
-                title: "Obras"
+                title: "Obras",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="Obras_Solicitacao" component={CS_SC_005_02_Solicitação} options={{
-                title: "Solicitação"
-            }} />
+            <StackNav.Screen name="Obras_Solicitacao" component={CS_SC_005_02_Solicitação} options={({ route }: { route: any }) => ({
+                title: route.params.obraId,
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
 
             <StackNav.Screen name="Pre_Venda_Detalhes" component={TabRoutes002} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,

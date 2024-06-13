@@ -1,4 +1,4 @@
-import { View, Text, TextInput, SafeAreaView, FlatList } from "react-native";
+import { View, Text, TextInput, SafeAreaView, FlatList, ActivityIndicator, Pressable } from "react-native";
 import CustomCard_001 from "../../components/containers/CustomCard_001";
 import { commonStyle } from "../../CommonStyle";
 import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
@@ -7,13 +7,16 @@ import { DD191_Produtos } from "../../services/api/interfaces/obras/CS_IResGetLi
 import { ToastType, showToast } from "../../util/ShowToast";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 
 const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
     const { obraId } = route.params
     const [obraProdutos, setObraProdutos] = useState<DD191_Produtos[]>()
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
 
     function getObraById() {
+        setStatus(FETCH_STATUS.LOADING)
         try {
             handleGetObraById({ cs_obra_id: obraId }).then((res) => {
                 if (res !== undefined) {
@@ -22,6 +25,8 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Error", error.message)
+        } finally {
+            setStatus(FETCH_STATUS.SUCCESS)
         }
 
     }
@@ -30,18 +35,26 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
         getObraById()
     }, [])
 
+    const isLoading = status == FETCH_STATUS.LOADING
+    const isSuccess = status == FETCH_STATUS.SUCCESS
+
+    if (isLoading) {
+        return <ActivityIndicator size={52} />
+    }
+
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <FlatList
                 data={obraProdutos}
                 keyExtractor={(item) => item.csicp_dd191.dd191_ID.toString()}
-                ListEmptyComponent={() => <CustomEmpty text={"Nenhum item encontrado"} />}
                 renderItem={({ item }) => (<CustomCard_001
-                    title={obraId}
+                    title={item.csicp_gg008.GG008_CodgProduto.toString()}
                     children={<BodyCard item={item} />}
                 />)}
             />
-
+            <Pressable style={commonStyle.common_button_style}>
+                <Text style={commonStyle.common_text_button_style}>Solicitar</Text>
+            </Pressable>
         </SafeAreaView>
 
     );
