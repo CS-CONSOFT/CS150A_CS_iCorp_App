@@ -15,21 +15,26 @@ import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
+import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
+
+    // Estados para gerenciar a lista de produtos, status de carregamento, paginação, mensagens de erro e filtros de pesquisa
     const [productList, setProductList] = useState<IResGetProductItem[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const [showToast, setShowToast] = useState(false);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
     const { navigate } = useNavigation()
 
+
+    // Função para inserir produto na pré-venda
     function scInsertProductPv(product: IResGetProductItem) {
         setStatus(FETCH_STATUS.BTN_CLICK)
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
@@ -43,19 +48,24 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 undefined
             ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                setShowToast(true)
+                showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
             })
         })
     }
 
+    // Flags para determinar o estado atual do carregamento
     const isLoading = status == FETCH_STATUS.LOADING
     const isError = status == FETCH_STATUS.ERROR
     const openModal = status == FETCH_STATUS.MODAL
+    const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
 
+    // Função para abrir o modal de filtros
     function handleFilterClick() {
         setStatus(FETCH_STATUS.MODAL)
     }
 
+
+    // Função para realizar a busca de produtos
     const handleFormSubmitToSearch = (valueToSearch?: any, page?: number) => {
         /** caso a chamada seja feita por paginação, mudar o tipo de loading para manter a paginação mostrando em tela
          * enquanto o usuário estiver vendo uma lista de produto baseado nos filtros dele.
@@ -81,7 +91,10 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             cs_descricao_reduzida: valueToSearch || '',
             cs_is_com_saldo: valueToSearch.isSaldo
         }
+        //seta os valores para o filter values que sera enviado na chamada da api
         setProductAtributtesToSearch(_filterValues)
+
+        //chamada da api
         handleSearchProduct(_filterValues!).then((res) => {
             if (res.isOk) {
                 setProductList(res.productResponse?.List)
@@ -96,47 +109,41 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     };
 
-
-    const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
-
-
-    //Tela
+    // Renderização da tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>
             <Suspense fallback={<ActivityIndicator />}>
                 <View>
+                    {/* Componente de pesquisa */}
                     <CustomSearch
                         placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick} />
 
-
+                    {/* Carregamento da lista de produtos ou exibição da lista */}
                     {isLoading ? <ActivityIndicator /> :
                         <View>
-                            <FlatList
-                                data={productList}
-                                keyExtractor={(item) => item.Id!}
-                                ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
-                                renderItem={({ item }) => (
-                                    <CustomProduct
-                                        children={<ProductItem product={item} />}
-                                        image={<ImageProductItem />}
-                                        rightItem={<>
-                                            <RightItem
-                                                loadingClick={loadingBtnClickItem}
-                                                click={() => scInsertProductPv(item)}
-                                            />
-                                        </>}
-                                    />
-                                )}
+                            <CustomListWithPagination
+                                list={productList!}
+                                renderItemComponent={(item) => <CustomProduct
+                                    children={<ProductItem product={item} />}
+                                    image={<ImageProductItem />}
+                                    rightItem={<>
+                                        <RightItem
+                                            loadingClick={loadingBtnClickItem}
+                                            click={() => scInsertProductPv(item)}
+                                        />
+                                    </>}
+                                />}
+                                getPage={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                                paginationArray={paginationArray}
                             />
                         </View>
                     }
                 </View>
-                <Custom_Pagination
-                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch, page)}
-                    paginationArray={paginationArray} />
 
+
+                {/* Modal para filtros */}
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}
@@ -149,6 +156,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     );
 }
 
+// Componente de exibição da imagem do produto
 const ImageProductItem = () => {
     return (
         <Image style={commonStyle.productImage}
@@ -156,6 +164,7 @@ const ImageProductItem = () => {
     );
 }
 
+// Componente de exibição das informações do produto
 const ProductItem = ({ product }: { product: IResGetProductItem }) => {
     return (
         <View style={commonStyle.justify_content_space_btw}>
@@ -166,6 +175,7 @@ const ProductItem = ({ product }: { product: IResGetProductItem }) => {
     )
 }
 
+// Componente do botão direito para adicionar o produto à pré-venda
 const RightItem = ({ click, loadingClick }: { click: () => void, loadingClick: boolean }) => {
     return (
         <View style={stylesConsultaProduto.rightIcons}>
@@ -176,6 +186,7 @@ const RightItem = ({ click, loadingClick }: { click: () => void, loadingClick: b
     )
 }
 
+// Componente do modal de filtros com switches para promoção e saldo
 const ModalSwitchFilter = ({ titles, close, search }: { titles: string[], search: (filter: any) => void, close: () => void }) => {
     const [filter, setFilter] = useState({
         isPromo: false,
@@ -200,6 +211,5 @@ const ModalSwitchFilter = ({ titles, close, search }: { titles: string[], search
         </View>
     )
 }
-
 
 export default CS_SC_ConsultaProdutos;

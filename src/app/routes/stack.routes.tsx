@@ -6,11 +6,12 @@ import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
 import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
-import CS_SC_EnvorimentConfig from "../screens/config/CS_SC_EnvorimentConfig";
+import CS_SC_006__EnvorimentConfig from "../screens/006config/CS_SC_006__EnvorimentConfig";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
 import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
 import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
+import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisição";
 
 
 const StackNav = createNativeStackNavigator()
@@ -28,13 +29,14 @@ declare global {
             Pre_Venda: undefined,
             Obras: undefined,
             Obras_Solicitacao: { obraId: number }
+            Obras_Requisicao: { obraId: number }
         }
     }
 }
 
 export default function StackRoutes() {
     return (
-        <StackNav.Navigator>
+        <StackNav.Navigator initialRouteName="Config_Ambiente">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
             <StackNav.Screen name="Menu" component={CS_SC_002_Menu} options={{
@@ -57,17 +59,39 @@ export default function StackRoutes() {
                 title: "Consulta de Produto"
             }} />
 
-            <StackNav.Screen name="Config_Ambiente" component={CS_SC_EnvorimentConfig} options={{
+            <StackNav.Screen name="Config_Ambiente" component={CS_SC_006__EnvorimentConfig} options={{
                 title: "Configuração de Ambiente"
             }} />
 
             <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
-                title: "Obras"
+                title: "Obras",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="Obras_Solicitacao" component={CS_SC_005_02_Solicitação} options={{
-                title: "Solicitação"
-            }} />
+            <StackNav.Screen name="Obras_Solicitacao" component={CS_SC_005_02_Solicitação} options={({ route }: { route: any }) => ({
+                title: String(route.params.obraId),
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
+
+            <StackNav.Screen name="Obras_Requisicao" component={CS_SC_005_03_Requisição} options={({ route }: { route: any }) => ({
+                title: String(route.params.obraId),
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
 
             <StackNav.Screen name="Pre_Venda_Detalhes" component={TabRoutes002} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,

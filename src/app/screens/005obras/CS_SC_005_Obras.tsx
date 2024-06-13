@@ -1,65 +1,67 @@
-import { ActivityIndicator, Animated, FlatList, Pressable, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Dimensions, FlatList, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/containers/CustomCard_001";
-import CustomSearch from "../../components/search/CustomSearch";
-import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomIcon from "../../components/icon/CustomIcon";
-import { ICON_NAME } from "../../util/IconsName";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomVerticalSeparator from "../../components/lists/CustomVertticalSeparator";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import CustomSearch from "../../components/search/CustomSearch";
 import { Dd190_Obras } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import CustomEmpty from "../../components/lists/CustomEmpty";
+import { ICON_NAME } from "../../util/IconsName";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [listObras, setListObras] = useState<Dd190_Obras[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const [errorMsg, setErrorMsg] = useState();
+    const windowHeight = Dimensions.get('window').height;
 
     useEffect(() => {
         getListObras()
     }, [])
 
     function getListObras(page?: number) {
-        handleGetListObras({ currentPage: page, dataFim: '2024-06-11', dataInicio: '2023-01-01' }).then(async (res) => {
-            if (res === undefined) {
-                return
-            }
-            const pagesArray = await handleGetPagesArray(res.Contador.cs_list_total_itens)
-            setPaginationArray(pagesArray)
-            setListObras(res.dd190_Obras)
-        })
+        setStatus(FETCH_STATUS.LOADING)
+        try {
+            handleGetListObras({ currentPage: page, dataFim: '2024-06-11', dataInicio: '2023-01-01' }).then(async (res) => {
+                if (res === undefined) {
+                    return
+                }
+                const pagesArray = await handleGetPagesArray(res.Contador.cs_list_total_itens)
+                setPaginationArray(pagesArray)
+                setListObras(res.dd190_Obras)
+            })
+        } catch (error: any) {
+            showToast(ToastType.ERROR, "Error", error)
+        } finally {
+            setStatus(FETCH_STATUS.SUCCESS)
+        }
     }
 
     const isLoading = status == FETCH_STATUS.LOADING
     const isError = status == FETCH_STATUS.ERROR
+
+    if (isLoading) {
+        return (
+            <ActivityIndicator size={45} />
+        )
+    }
+
     return (
         <View>
-            <CustomSearch
-                placeholder="Pesquisar"
-                onSearchPress={() => { }}
-                onFilterClick={() => { }}
-            />
-
-            {isLoading ? <ActivityIndicator /> :
-                <View style={{ height: 650 }}>
-                    <FlatList
-                        data={listObras}
-                        keyExtractor={(item) => item.DD190_Obra.csicp_dd190.dd190_Id.toString()}
-                        ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
-                        renderItem={({ item }) => (<RenderItem item={item} />)}
-                    />
-                    <Custom_Pagination
-                        onPagePress={(page) => getListObras(page)}
-                        paginationArray={paginationArray} />
-                </View>
-            }
-
-
+            <View style={{ height: (windowHeight * 85) / 100 }}>
+                <CustomListWithPagination
+                    list={listObras!}
+                    renderItemComponent={(item) => <RenderItem item={item} />}
+                    paginationArray={paginationArray}
+                    getPage={(page) => getListObras(page)}
+                />
+            </View>
         </View>
     );
 }
@@ -87,9 +89,16 @@ const RightItem = ({ obraId }: { obraId: number }) => {
         <View style={[commonStyle.common_columnItem,
         { backgroundColor: "#95B5C7", flex: 1, padding: 8, paddingVertical: 16, borderTopRightRadius: 16, borderBottomRightRadius: 16 },
         commonStyle.justify_content_space_btw]}>
-            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => navigate('Obras_Solicitacao', { obraId: obraId })} />
+            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => {
+                console.log("sol");
+
+                navigate('Obras_Solicitacao', { obraId: obraId })
+            }} />
             <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { }} />
-            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => { }} />
+            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => {
+                console.log("req");
+                navigate('Obras_Requisicao', { obraId: obraId })
+            }} />
             <CustomIcon icon={ICON_NAME.ANEXO} onPress={() => { }} />
         </View>
     )

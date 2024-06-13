@@ -28,7 +28,7 @@ const Custom_Pagination = ({ paginationArray, onPagePress }:
 const PaginationItem = ({ currentPage, item, onPagePress, paginationArray }:
     { currentPage: number, paginationArray: number[], item: number, onPagePress: (item: number) => void }) => {
     return (
-        <View>
+        <View style={{ padding: 8 }}>
             {currentPage == paginationArray[item - 1]
                 ? <TouchableOpacity style={paginationStyles.clickedItem}>
                     <Text style={paginationStyles.text}>{item}</Text>

@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 const CS_SC_001_Login = () => {
     const { navigate } = useNavigation()
     function navigateToMenu() {
-        navigate('Config_Ambiente')
+        navigate('Menu')
     }
 
     useEffect(() => {

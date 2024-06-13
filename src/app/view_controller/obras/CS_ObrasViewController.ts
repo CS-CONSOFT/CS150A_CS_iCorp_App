@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { getListObras } from "../../services/api/endpoint/obras/CS_Obras";
+import { getListObras, getObraById } from "../../services/api/endpoint/obras/CS_Obras";
 import { IResGetListObras } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { getObject } from "../../services/storage/AsyncStorageConfig";
 import { testFormatDate } from "../../util/FormatText";
@@ -46,4 +46,14 @@ export async function handleGetPagesArray(totalItens: number): Promise<number[]>
         pageArray.push(index)
     }
     return pageArray
+}
+
+export async function handleGetObraById({ cs_obra_id }: { cs_obra_id: string }) {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = getObraById({ cs_tenant_id: currentUser.TenantId, cs_obra_id: cs_obra_id })
+        return response
+    } catch (error) {
+        throw error
+    }
 }
