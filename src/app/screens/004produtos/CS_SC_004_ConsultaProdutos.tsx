@@ -19,6 +19,7 @@ import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -108,10 +109,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     };
 
-
-
-
-
     // Renderização da tela
     return (
         <SafeAreaView style={stylesConsultaProduto.container}>
@@ -126,30 +123,25 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     {/* Carregamento da lista de produtos ou exibição da lista */}
                     {isLoading ? <ActivityIndicator /> :
                         <View>
-                            <FlatList
-                                data={productList}
-                                keyExtractor={(item) => item.Id!}
-                                ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
-                                renderItem={({ item }) => (
-                                    <CustomProduct
-                                        children={<ProductItem product={item} />}
-                                        image={<ImageProductItem />}
-                                        rightItem={<>
-                                            <RightItem
-                                                loadingClick={loadingBtnClickItem}
-                                                click={() => scInsertProductPv(item)}
-                                            />
-                                        </>}
-                                    />
-                                )}
+                            <CustomListWithPagination
+                                list={productList!}
+                                renderItemComponent={(item) => <CustomProduct
+                                    children={<ProductItem product={item} />}
+                                    image={<ImageProductItem />}
+                                    rightItem={<>
+                                        <RightItem
+                                            loadingClick={loadingBtnClickItem}
+                                            click={() => scInsertProductPv(item)}
+                                        />
+                                    </>}
+                                />}
+                                getPage={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                                paginationArray={paginationArray}
                             />
                         </View>
                     }
                 </View>
-                {/* Componente de paginação */}
-                <Custom_Pagination
-                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                    paginationArray={paginationArray} />
+
 
                 {/* Modal para filtros */}
                 <CustomAlertDialog

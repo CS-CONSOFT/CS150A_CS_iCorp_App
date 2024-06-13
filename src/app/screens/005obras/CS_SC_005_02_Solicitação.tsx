@@ -1,13 +1,11 @@
-import { View, Text, TextInput, SafeAreaView, FlatList, ActivityIndicator, Pressable } from "react-native";
-import CustomCard_001 from "../../components/containers/CustomCard_001";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, Text, TextInput, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
-import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
-import { useEffect, useMemo, useState } from "react";
+import CustomCard_001 from "../../components/containers/CustomCard_001";
 import { DD191_Produtos } from "../../services/api/interfaces/obras/CS_IResGetListObras";
-import { ToastType, showToast } from "../../util/ShowToast";
-import CustomEmpty from "../../components/lists/CustomEmpty";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
 
 const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
     const { obraId } = route.params
@@ -35,6 +33,10 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
         getObraById()
     }, [])
 
+    function requestProducts() {
+        showToast(ToastType.ERROR, "Estamos trabalhando!", "Esta funcionalidade ainda não foi implementada!")
+    }
+
     const isLoading = status == FETCH_STATUS.LOADING
     const isSuccess = status == FETCH_STATUS.SUCCESS
 
@@ -52,7 +54,7 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
                     children={<BodyCard item={item} />}
                 />)}
             />
-            <Pressable style={commonStyle.common_button_style}>
+            <Pressable style={commonStyle.common_button_style} onPress={requestProducts}>
                 <Text style={commonStyle.common_text_button_style}>Solicitar</Text>
             </Pressable>
         </SafeAreaView>

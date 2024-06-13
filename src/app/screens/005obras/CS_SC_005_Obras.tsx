@@ -13,6 +13,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
@@ -54,16 +55,13 @@ const CS_SC_005_Obras = () => {
     return (
         <View>
             <View style={{ height: (windowHeight * 85) / 100 }}>
-                <FlatList
-                    data={listObras}
-                    keyExtractor={(item) => item.DD190_Obra.csicp_dd190.dd190_Id.toString()}
-                    renderItem={({ item }) => (<RenderItem item={item} />)}
+                <CustomListWithPagination
+                    list={listObras!}
+                    renderItemComponent={(item) => <RenderItem item={item} />}
+                    paginationArray={paginationArray}
+                    getPage={(page) => getListObras(page)}
                 />
-
             </View>
-            <Custom_Pagination
-                onPagePress={(page) => getListObras(page)}
-                paginationArray={paginationArray} />
         </View>
     );
 }
@@ -91,9 +89,16 @@ const RightItem = ({ obraId }: { obraId: number }) => {
         <View style={[commonStyle.common_columnItem,
         { backgroundColor: "#95B5C7", flex: 1, padding: 8, paddingVertical: 16, borderTopRightRadius: 16, borderBottomRightRadius: 16 },
         commonStyle.justify_content_space_btw]}>
-            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => navigate('Obras_Solicitacao', { obraId: obraId })} />
+            <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => {
+                console.log("sol");
+
+                navigate('Obras_Solicitacao', { obraId: obraId })
+            }} />
             <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { }} />
-            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => { }} />
+            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => {
+                console.log("req");
+                navigate('Obras_Requisicao', { obraId: obraId })
+            }} />
             <CustomIcon icon={ICON_NAME.ANEXO} onPress={() => { }} />
         </View>
     )
