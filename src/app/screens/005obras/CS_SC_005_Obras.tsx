@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
-import CustomCard_001 from "../../components/containers/CustomCard_001";
+import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomVerticalSeparator from "../../components/lists/CustomVertticalSeparator";
@@ -32,36 +32,35 @@ const CS_SC_005_Obras = () => {
                 if (res === undefined) {
                     return
                 }
-                const pagesArray = await handleGetPagesArray(res.Contador.cs_list_total_itens)
+                const pagesArray = await handleGetPagesArray(res.Contador.cs_number_of_pages)
                 setPaginationArray(pagesArray)
                 setListObras(res.dd190_Obras)
+                setStatus(FETCH_STATUS.SUCCESS)
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Error", error)
-        } finally {
-            setStatus(FETCH_STATUS.SUCCESS)
         }
     }
 
-    const isLoading = status == FETCH_STATUS.LOADING
-    const isError = status == FETCH_STATUS.ERROR
-
-    if (isLoading) {
-        return (
-            <ActivityIndicator size={45} />
-        )
-    }
+    const isLoading = status === FETCH_STATUS.LOADING
+    const isSuccess = status === FETCH_STATUS.SUCCESS
+    const isError = status === FETCH_STATUS.ERROR
 
     return (
-        <View>
-            <View style={{ height: (windowHeight * 85) / 100 }}>
+        <View style={{ flex: 1 }}>
+            {isLoading && (
+                <ActivityIndicator size={45} />
+            )}
+            <View style={{ height: '100%' }}>
                 <CustomListWithPagination
                     list={listObras!}
                     renderItemComponent={(item) => <RenderItem item={item} />}
+                    emptyText="Nenhuma obra encontrada!"
                     paginationArray={paginationArray}
                     getPage={(page) => getListObras(page)}
                 />
             </View>
+
         </View>
     );
 }
@@ -90,16 +89,13 @@ const RightItem = ({ obraId }: { obraId: number }) => {
         { backgroundColor: "#95B5C7", flex: 1, padding: 8, paddingVertical: 16, borderTopRightRadius: 16, borderBottomRightRadius: 16 },
         commonStyle.justify_content_space_btw]}>
             <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => {
-                console.log("sol");
-
                 navigate('Obras_Solicitacao', { obraId: obraId })
             }} />
             <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { }} />
             <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => {
-                console.log("req");
                 navigate('Obras_Requisicao', { obraId: obraId })
             }} />
-            <CustomIcon icon={ICON_NAME.ANEXO} onPress={() => { }} />
+            <CustomIcon icon={ICON_NAME.ANEXO} onPress={() => { navigate('Obras_Anexos') }} />
         </View>
     )
 }

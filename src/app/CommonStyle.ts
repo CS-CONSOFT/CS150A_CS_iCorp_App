@@ -10,6 +10,10 @@ export const commonStyle = StyleSheet.create({
     border_radius_32: {
         borderRadius: 32
     },
+    border_right_radius_16: {
+        borderTopRightRadius: 16,
+        borderBottomRightRadius: 16
+    },
     margin_16: {
         margin: 16
     },

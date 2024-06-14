@@ -1,21 +1,22 @@
 import { ReactNode } from "react";
 import { FlatList, View } from "react-native";
 import Custom_Pagination from "../pagination/Custom_Pagination";
+import CustomEmpty from "./CustomEmpty";
 
 interface CustomListWithPaginationProps {
     list: any[];
     renderItemComponent: (item: any) => ReactNode;
     getPage: (page: number) => void;
-    totalItens?: number;
+    emptyText: string;
+    totalPages?: number;
     paginationArray?: number[]
 }
 
-const CustomListWithPagination = ({ list, renderItemComponent, getPage, totalItens, paginationArray }: CustomListWithPaginationProps) => {
-
+const CustomListWithPagination = ({ list, renderItemComponent, getPage, totalPages, paginationArray, emptyText }: CustomListWithPaginationProps) => {
     function getPaginationArray(): number[] {
-        if (totalItens) {
+        if (totalPages) {
             let pageArray: number[] = []
-            for (let index = 1; index <= totalItens; index++) {
+            for (let index = 1; index <= totalPages; index++) {
                 pageArray.push(index)
             }
             return pageArray
@@ -25,15 +26,18 @@ const CustomListWithPagination = ({ list, renderItemComponent, getPage, totalIte
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <FlatList
                 data={list}
                 keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={<CustomEmpty text={emptyText} />}
                 renderItem={({ item }) => <RenderItem children={renderItemComponent(item)} />}
             />
-            <Custom_Pagination
-                onPagePress={(page) => getPage(page)}
-                paginationArray={getPaginationArray()} />
+            {list !== undefined && list.length > 0 && (
+                <Custom_Pagination
+                    onPagePress={(page) => getPage(page)}
+                    paginationArray={getPaginationArray()} />
+            )}
         </View>
     );
 }

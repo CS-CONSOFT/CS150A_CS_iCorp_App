@@ -26,4 +26,6 @@ export const ICON_NAME = {
     BUG_ERROR: 'bug-outline',
     SUCCESS: 'checkmark-outline',
     ALERT: 'alert-outline',
+    IMAGE: 'image-outline',
+    DOCUMENT: 'document-attach-outline',
 }
