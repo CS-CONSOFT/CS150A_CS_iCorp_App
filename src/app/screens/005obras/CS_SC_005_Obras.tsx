@@ -1,19 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomIcon from "../../components/icon/CustomIcon";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomVerticalSeparator from "../../components/lists/CustomVertticalSeparator";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
-import CustomSearch from "../../components/search/CustomSearch";
 import { Dd190_Obras } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
-import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
@@ -60,7 +58,6 @@ const CS_SC_005_Obras = () => {
                     getPage={(page) => getListObras(page)}
                 />
             </View>
-
         </View>
     );
 }
@@ -91,7 +88,7 @@ const RightItem = ({ obraId }: { obraId: number }) => {
             <CustomIcon icon={ICON_NAME.ENVIAR} onPress={() => {
                 navigate('Obras_Solicitacao', { obraId: obraId })
             }} />
-            <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { }} />
+            <CustomIcon icon={ICON_NAME.CHAT} onPress={() => { navigate('Obras_Chat') }} />
             <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} onPress={() => {
                 navigate('Obras_Requisicao', { obraId: obraId })
             }} />

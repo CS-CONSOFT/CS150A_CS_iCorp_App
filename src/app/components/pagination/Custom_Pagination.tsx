@@ -13,15 +13,17 @@ const Custom_Pagination = ({ paginationArray, onPagePress }:
     }
 
     return (
-        <FlatList
-            horizontal
-            data={paginationArray}
-            keyExtractor={item => item.toString()}
-            renderItem={({ item }) => <PaginationItem
-                currentPage={currentPage!}
-                paginationArray={paginationArray}
-                item={item}
-                onPagePress={(item) => clickedPage(item)} />} />
+        <View>
+            <FlatList
+                horizontal
+                data={paginationArray}
+                keyExtractor={item => item.toString()}
+                renderItem={({ item }) => <PaginationItem
+                    currentPage={currentPage!}
+                    paginationArray={paginationArray}
+                    item={item}
+                    onPagePress={(item) => clickedPage(item)} />} />
+        </View >
     );
 }
 

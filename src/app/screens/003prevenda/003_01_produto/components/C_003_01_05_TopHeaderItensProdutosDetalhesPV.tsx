@@ -69,8 +69,8 @@ const DescontoItem = ({ save, dismiss }: { save: () => void, dismiss: () => void
                 keyboardType='decimal-pad'
             />
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
-                <Pressable style={styleProdutoPVDetalhe.btn_apply_desconto} onPress={save}>
-                    <Text style={styleProdutoPVDetalhe.btn_text_apply_desconto}>Salvar</Text>
+                <Pressable style={commonStyle.btn_gray} onPress={save}>
+                    <Text style={commonStyle.btn_text_gray}>Salvar</Text>
                 </Pressable>
                 <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={dismiss}>
                     <Text style={styleProdutoPVDetalhe.btn_text_cancel_desconto}>Cancelar</Text>

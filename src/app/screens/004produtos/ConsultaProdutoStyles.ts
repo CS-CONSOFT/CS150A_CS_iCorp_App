@@ -4,6 +4,7 @@ export const stylesConsultaProduto = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        height: '100%'
     },
     rightIcons: {
         backgroundColor: '#E3E3E3',

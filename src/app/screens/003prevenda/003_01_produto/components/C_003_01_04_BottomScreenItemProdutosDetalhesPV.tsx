@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import CustomBottomItem from "../../../../components/bottomItem/CustomBottomItem";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomTextValueWithTitleBoldHorizontal from "../../../../components/text/CustomTextValueWithTitleBoldHorizontal";
+import { useNavigation } from "@react-navigation/native";
 
 
 export interface IPreVendaData {
@@ -11,6 +12,7 @@ export interface IPreVendaData {
 }
 
 const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
+    const { navigate } = useNavigation()
     return (
         <CustomBottomItem height={160} >
             <View style={[styles.row, styles.padding_12, styles.space_between]}>
@@ -23,7 +25,7 @@ const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValid
                 <Text style={[styles.valor, styles.padding_12]}>{totalLiquido}</Text>
             </View>
             <TouchableHighlight
-                onPress={() => { }}
+                onPress={() => { navigate('Pagamento') }}
                 style={styles.btnStyle}
                 underlayColor='white'
             ><Text style={styles.txtBtnStyle}>Pagamento</Text></TouchableHighlight>
