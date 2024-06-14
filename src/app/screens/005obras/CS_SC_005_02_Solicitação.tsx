@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, SafeAreaView, Text, TextInput, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
-import CustomCard_001 from "../../components/containers/CustomCard_001";
+import CustomCard_001 from "../../components/cards/CustomCard_001";
 import { DD191_Produtos } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
     const { obraId } = route.params
@@ -14,19 +15,19 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
 
 
     function getObraById() {
+        console.log(obraId);
+
         setStatus(FETCH_STATUS.LOADING)
         try {
             handleGetObraById({ cs_obra_id: obraId }).then((res) => {
                 if (res !== undefined) {
                     setObraProdutos(res.DD191_Produtos)
+                    setStatus(FETCH_STATUS.SUCCESS)
                 }
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Error", error.message)
-        } finally {
-            setStatus(FETCH_STATUS.SUCCESS)
         }
-
     }
 
     useEffect(() => {
@@ -49,6 +50,7 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
             <FlatList
                 data={obraProdutos}
                 keyExtractor={(item) => item.csicp_dd191.dd191_ID.toString()}
+                ListEmptyComponent={<CustomEmpty text="Nenhuma solicitação encontrada" />}
                 renderItem={({ item }) => (<CustomCard_001
                     title={item.csicp_gg008.GG008_CodgProduto.toString()}
                     children={<BodyCard item={item} />}

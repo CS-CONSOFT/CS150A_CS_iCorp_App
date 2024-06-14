@@ -12,6 +12,7 @@ import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaPro
 import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
 import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
 import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisição";
+import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
 
 
 const StackNav = createNativeStackNavigator()
@@ -30,6 +31,7 @@ declare global {
             Obras: undefined,
             Obras_Solicitacao: { obraId: number }
             Obras_Requisicao: { obraId: number }
+            Obras_Anexos: undefined
         }
     }
 }
@@ -85,6 +87,17 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Obras_Requisicao" component={CS_SC_005_03_Requisição} options={({ route }: { route: any }) => ({
                 title: String(route.params.obraId),
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
+
+
+            <StackNav.Screen name="Obras_Anexos" component={CS_SC_005_04_Anexos} options={({
+                title: "Obra Anexos",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
