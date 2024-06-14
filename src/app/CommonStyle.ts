@@ -1,6 +1,8 @@
 import { StyleSheet } from "react-native"
 
+
 export const commonStyle = StyleSheet.create({
+
     common_container: {
         flex: 1,
         backgroundColor: '#fff',

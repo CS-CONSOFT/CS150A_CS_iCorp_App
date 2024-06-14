@@ -1,4 +1,4 @@
-import { Button, FlatList, SafeAreaView, Text, View } from "react-native";
+import { Button, FlatList, SafeAreaView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import CustomHeaderInput from "../components/header/CustomHeaderInput";
 import { ILoginResponse } from "../../001login/ILoginResponse";
@@ -11,6 +11,9 @@ import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfa
 import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
 
+//Componentes
+import CustomSearch from "../../../components/search/CustomSearch";
+import ButtonActionBlue from "../../../components/bottomItem/CustomBottomActionBlue";
 
 const CS_SC_Entrega = () => {
 
@@ -105,39 +108,38 @@ const CS_SC_Entrega = () => {
     if (error) return <Text style={stylesNotaEntrega.loadingText}>{errorMessage}</Text>
 
 
-    return <>
-        <SafeAreaView style={stylesNotaEntrega.modalContainer}>
-            <CustomHeaderInput
-                titleText="Chave Nota - Entrega Produtos"
-                setValue={setNoteTyped}
-                value={noteTyped}
-                onPress={searchNote}
-                buttonStyle={stylesNotaEntrega.button}
-                textStyle={stylesNotaEntrega.text}
+    return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
+        <CustomSearch
+            placeholder="Pesquisar Nota"
+            onSearchPress={searchNote}
+            onFilterClick={() => ""}
+        />
 
-            />
-        </SafeAreaView>
-
-        <SafeAreaView style={stylesNotaEntrega.container}>
-            {isSuccess && products && products.length > 0 && (
-                <View style={stylesNotaEntrega.productContainer}>
-                    <Button title="Confirmar Entrega" onPress={confirmDelivery} />
-                    <FlatList
-                        data={products}
-                        renderItem={({ item }) => <ProductItem product={item} />}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+        {isSuccess && products && products.length > 0 && (
+            <View style={stylesNotaEntrega.productContainer}>
+                <FlatList
+                    data={products}
+                    renderItem={({ item }) => <ProductItem product={item} />}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+                <View style={styles.btnContenier}>
+                    <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
                 </View>
-            )}
+            </View>
+        )}
 
-            {isSuccess && (messageList !== '') && (
-                <View style={stylesNotaEntrega.messageContainer}>
-                    <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
-                </View>
-            )}
-        </SafeAreaView>
+        {isSuccess && (messageList !== '') && (
+            <View style={stylesNotaEntrega.messageContainer}>
+                <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
+            </View>
+        )}
 
-    </>
+        
+        <View style={styles.btnContenier}>
+            <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
+        </View>
+        
+    </SafeAreaView>
 }
 
 
@@ -150,9 +152,22 @@ const ProductItem = ({ product }: { product: any }) => {
     );
 };
 
-
-
-
-
-
 export default CS_SC_Entrega;
+
+const styles = StyleSheet.create({
+    btnContenier:{
+        alignItems:"center",
+        justifyContent:"center",
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: "#CCCCCC",
+        height: "12%",
+        width: "100%",
+        
+    },
+    centerContenie:{
+        width: "100%",
+        height: "80%",
+        flexDirection: "column",
+    }
+})

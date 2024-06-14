@@ -137,6 +137,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                 />}
                                 getPage={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
                                 paginationArray={paginationArray}
+                                //verificar
+                                emptyText={""}
                             />
                         </View>
                     }
