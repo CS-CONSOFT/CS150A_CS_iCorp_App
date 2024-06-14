@@ -4,17 +4,28 @@ import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 
-const CustomSearch = ({ onSearchPress, onFilterClick, placeholder }:
-    {
-        onSearchPress: (atributes: any) => void,
-        onFilterClick: () => void,
-        placeholder: string
-    }) => {
+interface Props {
+    onSearchPress: (atributes: any) => void,
+    onFilterClick: () => void,
+    placeholder: string
+}
+
+const CustomSearch = ({ onSearchPress, onFilterClick, placeholder }: Props) => {
+
+
+
+
+
+
     const [valueSearch, setValueSearch] = useState('')
+
+
     const handleInputTyping = (value: string) => {
         setValueSearch(value)
         onSearchPress(value)
     };
+
+
     return (
         <View style={styles.searchContainer}>
             <TextInput

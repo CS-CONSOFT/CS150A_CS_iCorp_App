@@ -17,6 +17,15 @@ export const commonStyle = StyleSheet.create({
     margin_16: {
         margin: 16
     },
+    margin_8: {
+        margin: 8
+    },
+    font_size_18: {
+        fontSize: 18
+    },
+    font_size_16: {
+        fontSize: 16
+    },
     common_menuText: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -110,5 +119,21 @@ export const commonStyle = StyleSheet.create({
     },
     text_size_16: {
         fontSize: 16
+    },
+    text_aligment_center: {
+        textAlign: 'center'
+    },
+    btn_gray: {
+        backgroundColor: '#E3E3E3',
+        paddingHorizontal: 32,
+        paddingVertical: 8,
+        marginVertical: 8,
+        borderRadius: 32,
+        elevation: 3
+    },
+    btn_text_gray: {
+        color: '#000',
+        fontWeight: '600',
+        alignSelf: 'center'
     }
 });
