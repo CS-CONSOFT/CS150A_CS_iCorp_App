@@ -1,6 +1,5 @@
-import { Button, FlatList, SafeAreaView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, SafeAreaView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import CustomHeaderInput from "../components/header/CustomHeaderInput";
 import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";
 import { getObjectDataVc, getUserProperties } from "../../../view_controller/SharedViewController";
@@ -10,6 +9,8 @@ import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
+
+import ColorStyle from "../../../ColorStyle";
 
 //Componentes
 import CustomSearch from "../../../components/search/CustomSearch";
@@ -112,9 +113,10 @@ const CS_SC_Entrega = () => {
     return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
         <CustomSearch
             placeholder="Pesquisar Nota"
-            onSearchPress={searchNote}
-            onFilterClick={() => ""}
+            onSearchPress={searchNote} 
+            clickToSearch = {true} 
         />
+        
 
         {isSuccess && products && products.length > 0 && (
             <View style={stylesNotaEntrega.productContainer}>
@@ -132,11 +134,11 @@ const CS_SC_Entrega = () => {
         )}
 
         {isSuccess && (messageList !== '') && (
-            <View style={stylesNotaEntrega.messageContainer}>
-                <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
+            <View style={stylesEntregaCard.contentContanier}>
+                <Text style={styles.messageNot}>{messageList}</Text>
             </View>
         )}
-
+        
         <CustomCard_001
             title={"exemplo"}
             children={<EntregaCardLeft modo={"Balcão"} quantidade={1}/>}
@@ -193,11 +195,17 @@ const styles = StyleSheet.create({
         height: "80%",
         flexDirection: "column",
     },
-    
+    messageNot: {
+        color: ColorStyle.colorneutrais400,
+        fontSize: 16,
+        fontWeight: "600"
+    }
 })
 
 const stylesEntregaCard = StyleSheet.create({
     contentContanier:{
+        width: "100%",
+        height: "auto",
         flexDirection: "row",
         alignItems:"center",
         justifyContent:"space-around",

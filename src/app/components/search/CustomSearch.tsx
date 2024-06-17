@@ -43,6 +43,7 @@ const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, c
             {onFilterClick !== undefined && (
                 <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
             )}
+            <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onSearchPress}/>
         </View>
     );
 }
