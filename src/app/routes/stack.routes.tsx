@@ -13,6 +13,8 @@ import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
 import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
 import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisição";
 import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
+import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
+import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
 
 
 const StackNav = createNativeStackNavigator()
@@ -32,6 +34,8 @@ declare global {
             Obras_Solicitacao: { obraId: number }
             Obras_Requisicao: { obraId: number }
             Obras_Anexos: undefined
+            Obras_Chat: undefined
+            Pagamento: undefined
         }
     }
 }
@@ -112,6 +116,16 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             })} />
 
+            <StackNav.Screen name="Obras_Chat" component={CS_CS_005_05_Chat} options={({
+                title: "Chat",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
+
             <StackNav.Screen name="Pre_Venda_Detalhes" component={TabRoutes002} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,
                 headerTitleAlign: 'center',
@@ -124,6 +138,16 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Pre_Venda" component={TabRoutes001} options={{
                 title: "Pré Venda",
+                headerTitleAlign: 'center',
+                headerTintColor: "#c3c3c3",
+                headerStyle: {
+                    backgroundColor: "#104765"
+                },
+                headerBackVisible: true
+            }} />
+
+            <StackNav.Screen name="Pagamento" component={CS_SC_007_Pagamento} options={{
+                title: "Pagamento",
                 headerTitleAlign: 'center',
                 headerTintColor: "#c3c3c3",
                 headerStyle: {

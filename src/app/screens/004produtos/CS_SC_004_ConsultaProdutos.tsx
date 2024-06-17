@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
@@ -19,7 +19,6 @@ import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -31,6 +30,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
+    const cameFromPv = route.params.cameFromPv
     const { navigate } = useNavigation()
 
 
@@ -49,6 +49,14 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
+                if (cameFromPv) {
+                    navigate('Pre_Venda_Detalhes', {
+                        currentPv: pvId,
+                        emissao: '',
+                        validade: '',
+                        totalLiquido: ''
+                    })
+                }
             })
         })
     }
@@ -109,10 +117,15 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     };
 
+
+
+
+
     // Renderização da tela
     return (
-        <SafeAreaView style={stylesConsultaProduto.container}>
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             <Suspense fallback={<ActivityIndicator />}>
+
                 <View>
                     {/* Componente de pesquisa */}
                     <CustomSearch
@@ -153,8 +166,42 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         handleFormSubmitToSearch(filters)
                     }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
                 />
+
             </Suspense>
-        </SafeAreaView>
+            <FlatList
+                data={productList}
+                keyExtractor={(item) => item.Id!}
+                ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
+                renderItem={({ item }) => (
+                    <CustomProduct
+                        children={<ProductItem product={item} />}
+                        image={<ImageProductItem />}
+                        rightItem={<>
+                            <RightItem
+                                loadingClick={loadingBtnClickItem}
+                                click={() => scInsertProductPv(item)}
+                            />
+                        </>}
+                    />
+                )}
+            />
+
+
+            {/* Componente de paginação */}
+            <Custom_Pagination
+                onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                paginationArray={paginationArray} />
+
+            {/* Modal para filtros */}
+            <CustomAlertDialog
+                isVisible={openModal}
+                onDismiss={() => { }}
+                children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
+                    handleFormSubmitToSearch(filters)
+                }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+            />
+        </View>
+
     );
 }
 

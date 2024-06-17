@@ -9,6 +9,7 @@ import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
+import CustomSearch from "../../../components/search/CustomSearch";
 
 import ColorStyle from "../../../ColorStyle";
 
@@ -40,6 +41,8 @@ const CS_SC_Entrega = () => {
     async function searchNote() {
         //criando objeto para enviar
         const note = noteTyped;
+
+
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             //enviando o objeto
@@ -110,6 +113,7 @@ const CS_SC_Entrega = () => {
     if (error) return <Text style={stylesNotaEntrega.loadingText}>{errorMessage}</Text>
 
 
+
     return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
         <CustomSearch
             placeholder="Pesquisar Nota"
@@ -129,6 +133,7 @@ const CS_SC_Entrega = () => {
                 />
                 <View style={styles.btnContenier}>
                     <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
+
                 </View>
             </View>
         )}

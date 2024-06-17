@@ -7,12 +7,13 @@ import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_0
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { IResProductItemModel, IResProductsListPvModel } from "../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
+import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     const [productsPv, setProductsPv] = useState<IResProductItemModel[]>([])
+    const [pv, setPv] = useState<IResGetPv>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-    const { emissao: data_emissao, validade: data_validade, totalLiquido } = route.params
     const { navigate } = useNavigation()
 
     useEffect(() => {
@@ -24,18 +25,12 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
         setStatus(FETCH_STATUS.LOADING)
         //pega a pv
         handleGetPv().then((res) => {
-            console.log("Cliente Nome: " + res.Nome_Cliente);
-            console.log("Cliente Conta ID: " + res.ClienteId);
-
+            setPv(res)
             //depois pega os produtos
             handleGetProductsPv().then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 const response = res as IResProductsListPvModel
                 if (response.IsOk) {
-                    console.log("Produto Desc: " + res.List.at(0)?.Descricao);
-                    console.log("Produto Id: " + res.List.at(0)?.gg008_ID);
-                    console.log("Produto Codigo: " + res.List.at(0)?.Codigo);
-
                     setProductsPv(response.List)
                 }
             })
@@ -127,9 +122,9 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 />
 
                 <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                    dataEmissao={data_emissao}
-                    dataValidade={data_validade}
-                    totalLiquido={totalLiquido}
+                    dataEmissao={pv?.Data_Emissao}
+                    dataValidade={pv?.DataValidade}
+                    totalLiquido={pv?.TotalLiquido}
                 />
             </>}
 

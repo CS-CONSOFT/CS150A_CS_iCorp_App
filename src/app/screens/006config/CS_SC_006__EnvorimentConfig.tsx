@@ -47,7 +47,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                     setToken(response!.token);
                     storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString());
 
-
+                    //configura a url no axios
                     api.defaults.baseURL = response.urlBase;
 
                 } else {
