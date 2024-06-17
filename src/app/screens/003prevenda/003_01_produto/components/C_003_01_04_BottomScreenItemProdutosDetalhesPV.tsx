@@ -6,9 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 
 
 export interface IPreVendaData {
-    dataEmissao: string,
-    dataValidade: string,
-    totalLiquido: number
+    dataEmissao?: string,
+    dataValidade?: string,
+    totalLiquido?: number
 }
 
 const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
@@ -16,8 +16,8 @@ const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValid
     return (
         <CustomBottomItem height={160} >
             <View style={[styles.row, styles.padding_12, styles.space_between]}>
-                <CustomTextValueWithTitleBoldHorizontal title="Emissão" value={dataEmissao} />
-                <CustomTextValueWithTitleBoldHorizontal title="Validade" value={dataValidade} />
+                <CustomTextValueWithTitleBoldHorizontal title="Emissão" value={dataEmissao!} />
+                <CustomTextValueWithTitleBoldHorizontal title="Validade" value={dataValidade!} />
             </View>
             <CustomSeparator />
             <View style={[styles.row, styles.space_between]}>

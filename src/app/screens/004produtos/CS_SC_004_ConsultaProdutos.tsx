@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
@@ -30,6 +30,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
+    const cameFromPv = route.params.cameFromPv
     const { navigate } = useNavigation()
 
 
@@ -48,6 +49,14 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
+                if (cameFromPv) {
+                    navigate('Pre_Venda_Detalhes', {
+                        currentPv: pvId,
+                        emissao: '',
+                        validade: '',
+                        totalLiquido: ''
+                    })
+                }
             })
         })
     }

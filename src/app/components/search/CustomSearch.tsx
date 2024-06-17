@@ -11,12 +11,6 @@ interface Props {
 }
 
 const CustomSearch = ({ onSearchPress, onFilterClick, placeholder }: Props) => {
-
-
-
-
-
-
     const [valueSearch, setValueSearch] = useState('')
 
 
