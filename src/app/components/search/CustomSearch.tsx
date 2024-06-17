@@ -4,16 +4,33 @@ import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 
-const CustomSearch = ({ onSearchPress, onFilterClick, placeholder }:
+const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, clickToSearch = false }:
     {
         onSearchPress: (atributes: any) => void,
-        onFilterClick: () => void,
-        placeholder: string
+        /**
+         * funcao para definir o clique no icone de filtro
+         */
+        onFilterClick?: () => void,
+        placeholder: string,
+        /**
+         * variavel que define se a busca deve ser feita ao digitar ou apenas ao clicar em um botao
+         * de pesquisa. O botao de pesquisa deve ser implementado na tela pai e chamar a funcao
+         * onSearchPress
+         */
+        clickToSearch?: boolean
     }) => {
+
     const [valueSearch, setValueSearch] = useState('')
+
+    /**
+     * funcao que e chamada enquanto o usuario digita algo
+     */
     const handleInputTyping = (value: string) => {
+        //se nao for para pesquisar durante o clique, faça a pesquisa aqui
+        if (!clickToSearch) {
+            onSearchPress(value)
+        }
         setValueSearch(value)
-        onSearchPress(value)
     };
     return (
         <View style={styles.searchContainer}>
@@ -23,7 +40,9 @@ const CustomSearch = ({ onSearchPress, onFilterClick, placeholder }:
                 value={valueSearch}
                 placeholder={placeholder}
             />
-            <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
+            {onFilterClick !== undefined && (
+                <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
+            )}
         </View>
     );
 }
