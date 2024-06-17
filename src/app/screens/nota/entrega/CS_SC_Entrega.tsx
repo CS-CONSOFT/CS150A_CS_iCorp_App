@@ -14,6 +14,7 @@ import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqG
 //Componentes
 import CustomSearch from "../../../components/search/CustomSearch";
 import ButtonActionBlue from "../../../components/bottomItem/CustomBottomActionBlue";
+import CustomCard_001 from "../../../components/cards/CustomCard_001";
 
 const CS_SC_Entrega = () => {
 
@@ -119,7 +120,9 @@ const CS_SC_Entrega = () => {
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
                     data={products}
-                    renderItem={({ item }) => <ProductItem product={item} />}
+                    renderItem={(product: any) => <CustomCard_001 title={product.DD060_Descricao} children={
+                        <EntregaCardLeft modo={"Balcão"} quantidade={1}/>
+                    }/>}
                     keyExtractor={(item, index) => index.toString()}
                 />
                 <View style={styles.btnContenier}>
@@ -134,6 +137,10 @@ const CS_SC_Entrega = () => {
             </View>
         )}
 
+        <CustomCard_001
+            title={"exemplo"}
+            children={<EntregaCardLeft modo={"Balcão"} quantidade={1}/>}
+        />
         
         <View style={styles.btnContenier}>
             <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
@@ -143,6 +150,7 @@ const CS_SC_Entrega = () => {
 }
 
 
+export default CS_SC_Entrega;
 
 const ProductItem = ({ product }: { product: any }) => {
     return (
@@ -152,7 +160,22 @@ const ProductItem = ({ product }: { product: any }) => {
     );
 };
 
-export default CS_SC_Entrega;
+
+const EntregaCardLeft = ({modo, quantidade}: {modo: string, quantidade: number}) => {
+    return (
+        <View style={stylesEntregaCard.contentContanier}>
+            <View style={stylesEntregaCard.contentContenierSmall}>
+                <Text style={stylesEntregaCard.tituloCard}>Modo Entrega</Text>
+                <Text>{modo}</Text>
+            </View>
+            <View style={stylesEntregaCard.contentContenierSmall}>
+                <Text style={stylesEntregaCard.tituloCard}>Quantidade</Text>
+                <Text>{quantidade}</Text>
+            </View>
+        </View>
+    )
+}
+
 
 const styles = StyleSheet.create({
     btnContenier:{
@@ -169,5 +192,23 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "80%",
         flexDirection: "column",
+    },
+    
+})
+
+const stylesEntregaCard = StyleSheet.create({
+    contentContanier:{
+        flexDirection: "row",
+        alignItems:"center",
+        justifyContent:"space-around",
+        padding: 10
+    },
+    contentContenierSmall:{
+        alignItems:"center", 
+        justifyContent:"center"
+    },
+    tituloCard:{
+        fontWeight:"700",
+        marginBottom: 8
     }
 })
