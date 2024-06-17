@@ -1,6 +1,5 @@
-import { Button, FlatList, SafeAreaView, Text, View } from "react-native";
+import { FlatList, SafeAreaView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import CustomHeaderInput from "../components/header/CustomHeaderInput";
 import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";
 import { getObjectDataVc, getUserProperties } from "../../../view_controller/SharedViewController";
@@ -12,6 +11,12 @@ import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqS
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
 import CustomSearch from "../../../components/search/CustomSearch";
 
+import ColorStyle from "../../../ColorStyle";
+
+//Componentes
+import CustomSearch from "../../../components/search/CustomSearch";
+import ButtonActionBlue from "../../../components/bottomItem/CustomBottomActionBlue";
+import CustomCard_001 from "../../../components/cards/CustomCard_001";
 
 const CS_SC_Entrega = () => {
 
@@ -108,45 +113,51 @@ const CS_SC_Entrega = () => {
     if (error) return <Text style={stylesNotaEntrega.loadingText}>{errorMessage}</Text>
 
 
-    return <>
-        <SafeAreaView style={stylesNotaEntrega.modalContainer}>
 
+    return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
+        <CustomSearch
+            placeholder="Pesquisar Nota"
+            onSearchPress={searchNote} 
+            clickToSearch = {true} 
+        />
+        
 
+        {isSuccess && products && products.length > 0 && (
+            <View style={stylesNotaEntrega.productContainer}>
+                <FlatList
+                    data={products}
+                    renderItem={(product: any) => <CustomCard_001 title={product.DD060_Descricao} children={
+                        <EntregaCardLeft modo={"Balcão"} quantidade={1}/>
+                    }/>}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+                <View style={styles.btnContenier}>
+                    <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
 
-            <CustomHeaderInput
-                titleText="Chave Nota - Entrega Produtos"
-                setValue={setNoteTyped}
-                value={noteTyped}
-                onPress={searchNote}
-                buttonStyle={stylesNotaEntrega.button}
-                textStyle={stylesNotaEntrega.text}
-
-            />
-        </SafeAreaView>
-
-        <SafeAreaView style={stylesNotaEntrega.container}>
-            {isSuccess && products && products.length > 0 && (
-                <View style={stylesNotaEntrega.productContainer}>
-                    <Button title="Confirmar Entrega" onPress={confirmDelivery} />
-                    <FlatList
-                        data={products}
-                        renderItem={({ item }) => <ProductItem product={item} />}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
                 </View>
-            )}
+            </View>
+        )}
 
-            {isSuccess && (messageList !== '') && (
-                <View style={stylesNotaEntrega.messageContainer}>
-                    <Text style={stylesNotaEntrega.messageText}>{messageList}</Text>
-                </View>
-            )}
-        </SafeAreaView>
-
-    </>
+        {isSuccess && (messageList !== '') && (
+            <View style={stylesEntregaCard.contentContanier}>
+                <Text style={styles.messageNot}>{messageList}</Text>
+            </View>
+        )}
+        
+        <CustomCard_001
+            title={"exemplo"}
+            children={<EntregaCardLeft modo={"Balcão"} quantidade={1}/>}
+        />
+        
+        <View style={styles.btnContenier}>
+            <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
+        </View>
+        
+    </SafeAreaView>
 }
 
 
+export default CS_SC_Entrega;
 
 const ProductItem = ({ product }: { product: any }) => {
     return (
@@ -157,8 +168,60 @@ const ProductItem = ({ product }: { product: any }) => {
 };
 
 
+const EntregaCardLeft = ({modo, quantidade}: {modo: string, quantidade: number}) => {
+    return (
+        <View style={stylesEntregaCard.contentContanier}>
+            <View style={stylesEntregaCard.contentContenierSmall}>
+                <Text style={stylesEntregaCard.tituloCard}>Modo Entrega</Text>
+                <Text>{modo}</Text>
+            </View>
+            <View style={stylesEntregaCard.contentContenierSmall}>
+                <Text style={stylesEntregaCard.tituloCard}>Quantidade</Text>
+                <Text>{quantidade}</Text>
+            </View>
+        </View>
+    )
+}
 
 
+const styles = StyleSheet.create({
+    btnContenier:{
+        alignItems:"center",
+        justifyContent:"center",
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: "#CCCCCC",
+        height: "12%",
+        width: "100%",
+        
+    },
+    centerContenie:{
+        width: "100%",
+        height: "80%",
+        flexDirection: "column",
+    },
+    messageNot: {
+        color: ColorStyle.colorneutrais400,
+        fontSize: 16,
+        fontWeight: "600"
+    }
+})
 
-
-export default CS_SC_Entrega;
+const stylesEntregaCard = StyleSheet.create({
+    contentContanier:{
+        width: "100%",
+        height: "auto",
+        flexDirection: "row",
+        alignItems:"center",
+        justifyContent:"space-around",
+        padding: 10
+    },
+    contentContenierSmall:{
+        alignItems:"center", 
+        justifyContent:"center"
+    },
+    tituloCard:{
+        fontWeight:"700",
+        marginBottom: 8
+    }
+})

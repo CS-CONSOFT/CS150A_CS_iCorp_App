@@ -125,11 +125,48 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     return (
         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             <Suspense fallback={<ActivityIndicator />}>
-                {/* Componente de pesquisa */}
-                <CustomSearch
-                    placeholder="Pesquisar Produto"
-                    onSearchPress={handleFormSubmitToSearch}
-                    onFilterClick={handleFilterClick} />
+
+                <View>
+                    {/* Componente de pesquisa */}
+                    <CustomSearch
+                        placeholder="Pesquisar Produto"
+                        onSearchPress={handleFormSubmitToSearch}
+                        onFilterClick={handleFilterClick} />
+
+                    {/* Carregamento da lista de produtos ou exibição da lista */}
+                    {isLoading ? <ActivityIndicator /> :
+                        <View>
+                            <CustomListWithPagination
+                                list={productList!}
+                                renderItemComponent={(item) => <CustomProduct
+                                    children={<ProductItem product={item} />}
+                                    image={<ImageProductItem />}
+                                    rightItem={<>
+                                        <RightItem
+                                            loadingClick={loadingBtnClickItem}
+                                            click={() => scInsertProductPv(item)}
+                                        />
+                                    </>}
+                                />}
+                                getPage={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                                paginationArray={paginationArray}
+                                //verificar
+                                emptyText={""}
+                            />
+                        </View>
+                    }
+                </View>
+
+
+                {/* Modal para filtros */}
+                <CustomAlertDialog
+                    isVisible={openModal}
+                    onDismiss={() => { }}
+                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
+                        handleFormSubmitToSearch(filters)
+                    }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+                />
+
             </Suspense>
             <FlatList
                 data={productList}

@@ -4,6 +4,8 @@ export const stylesNotaEntrega = StyleSheet.create({
     modalContainer: {
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
+        width: "100%",
+        height: "100%",
     },
     separator: {
         height: 1,
@@ -37,8 +39,8 @@ export const stylesNotaEntrega = StyleSheet.create({
         color: "#333",
     },
     messageContainer: {
-        marginTop: 20,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     messageText: {
         fontSize: 16,

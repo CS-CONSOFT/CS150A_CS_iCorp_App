@@ -53,7 +53,13 @@ export default function StackRoutes() {
             }} />
 
             <StackNav.Screen name="Entrega" component={CS_SC_Entrega} options={{
-                headerTitle: "Entrega",
+                title: "Entrega",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
             <StackNav.Screen name="Serie" component={CS_SC_Serie} options={{
