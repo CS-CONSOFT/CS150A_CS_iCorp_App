@@ -23,19 +23,12 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     function getProductsToCurrentPv() {
         setStatus(FETCH_STATUS.LOADING)
         //pega a pv
-        handleGetPv().then((res) => {
-            console.log("Cliente Nome: " + res.Nome_Cliente);
-            console.log("Cliente Conta ID: " + res.ClienteId);
-
+        handleGetPv().then(() => {
             //depois pega os produtos
             handleGetProductsPv().then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 const response = res as IResProductsListPvModel
                 if (response.IsOk) {
-                    console.log("Produto Desc: " + res.List.at(0)?.Descricao);
-                    console.log("Produto Id: " + res.List.at(0)?.gg008_ID);
-                    console.log("Produto Codigo: " + res.List.at(0)?.Codigo);
-
                     setProductsPv(response.List)
                 }
             })

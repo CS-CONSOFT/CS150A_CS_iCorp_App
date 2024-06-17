@@ -3,7 +3,7 @@
  * INTERFACE RESPONSAVEL POR IDENTIFICAR QUAL FORMA DE PAGAMENTO
  * DEVE SER BUSCADA NA API
  */
-export enum PaymentForm {
+export enum PaymentType {
     VISTA = 0,
     DINHEIRO = 1,
     VALE_CREDITO = 2,
