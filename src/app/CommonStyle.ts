@@ -48,11 +48,17 @@ export const commonStyle = StyleSheet.create({
         letterSpacing: 0.25,
         color: 'white',
     },
+    common_padding_16: {
+        padding: 16
+    },
     common_rowItem: {
         flexDirection: 'row'
     },
     common_columnItem: {
         flexDirection: 'column'
+    },
+    common_fontWeight_800: {
+        fontWeight: '800'
     },
     common_fontWeight_600: {
         fontWeight: '600'
@@ -135,5 +141,16 @@ export const commonStyle = StyleSheet.create({
         color: '#000',
         fontWeight: '600',
         alignSelf: 'center'
-    }
+    },
+    btn_transparente: {
+        paddingHorizontal: 32,
+        paddingVertical: 8,
+        marginVertical: 8,
+        borderRadius: 32
+    },
+    btn_text_transparente: {
+        color: '#1068EB',
+        fontWeight: '600',
+        alignSelf: 'center'
+    },
 });

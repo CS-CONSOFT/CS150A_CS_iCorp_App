@@ -10,12 +10,35 @@ import { PaymentType } from "../../services/api/interfaces/pagamento/CS_IReqList
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListOfPaymentForm, handleGetPaymentTerm, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import CustomIcon from "../../components/icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
+import { formatMoneyValue } from "../../util/FormatText";
+import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../enum/DataKeys";
+import { handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
+import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 
 const CS_SC_007_Pagamento = () => {
-
+    const [currentPv, setCurrentPv] = useState<IResGetPv>()
+    function start() {
+        try {
+            handleGetPv().then((res) => {
+                if (res !== undefined) {
+                    setCurrentPv(res)
+                } else {
+                    showToast(ToastType.ERROR, "Algo deu errado!", "---")
+                }
+            })
+        } catch (error: any) {
+            showToast(ToastType.ERROR, "Algo deu errado!", error)
+        }
+    }
+    useEffect(() => {
+        start()
+    }, [])
     return (
         <SafeAreaView>
-            <TopOfScreen />
+            <TopOfScreen currentPv={currentPv?.Id} />
 
             <CustomSeparator />
 
@@ -24,17 +47,21 @@ const CS_SC_007_Pagamento = () => {
 
             <CustomCard_003 children={<ItemSelecao />} />
 
-            <Text>Detalhamento</Text>
-            <CustomCard_001 title="Forma - Condição - Valor" children={<ItemDetalhamento />} />
+            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
+                <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Detalhamento</Text>
+                <CustomIcon icon={ICON_NAME.LIXEIRA} />
+            </View>
+
+            <CustomCard_001 title="Forma    -    Condição    -    Valor" children={<ItemDetalhamento />} />
         </SafeAreaView>
     );
 }
 
-const TopOfScreen = () => {
+const TopOfScreen = ({ currentPv }: { currentPv?: string }) => {
     return (
         <View>
-            <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, commonStyle.margin_8, commonStyle.font_size_18, { color: '#0A3147' }]}>200400000000000</Text>
-            <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_16, { color: '#0A3147' }]}>99999 - Venda à  vista PDV-PA</Text>
+            <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, commonStyle.margin_8, commonStyle.font_size_18, { color: '#0A3147' }]}>{currentPv}</Text>
+            <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_16, { color: '#0A3147', fontWeight: 500 }]}>99999 - Venda à  vista PDV-PA</Text>
         </View>
     )
 }
@@ -43,28 +70,28 @@ const BuyValues = () => {
     return (
         <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.margin_8]}>
             <View style={commonStyle.common_columnItem}>
-                <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, , commonStyle.font_size_18, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_18, { color: '#0A3147' }]}>
                     Total da Compra
                 </Text>
-                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
                     RS125
                 </Text>
             </View>
 
             <View style={commonStyle.common_columnItem}>
-                <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, , commonStyle.font_size_18, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_18, { color: '#0A3147' }]}>
                     Valor Pago
                 </Text>
-                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
                     RS125
                 </Text>
             </View>
 
             <View style={commonStyle.common_columnItem}>
-                <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, , commonStyle.font_size_18, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_18, { color: '#0A3147' }]}>
                     Valor a Pagar
                 </Text>
-                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, { color: '#0A3147' }]}>
+                <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
                     RS125
                 </Text>
             </View>
@@ -105,10 +132,39 @@ const ItemSelecao = () => {
 
     return (
         <View style={commonStyle.common_columnItem}>
-            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                <Text onPress={() => setCurrentItem(PaymentStage.FORMA)}>Forma</Text>
-                <Text>Condição</Text>
-                <Text onPress={() => setCurrentItem(PaymentStage.PAGAMENTO)}>Pagamento</Text>
+            {/** topo onde fica as colunas de forma, condicao e pagamento */}
+            <View style={[commonStyle.common_columnItem, { padding: 16 }]}>
+                {/** numeros */}
+                <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
+                    <View style={[commonStyle.common_columnItem]}>
+                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
+                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>1</Text>
+                        </View>
+                    </View>
+
+                    <View style={commonStyle.common_columnItem}>
+                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
+                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>2</Text>
+                        </View>
+                    </View>
+
+                    <View style={commonStyle.common_columnItem}>
+                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
+                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>3</Text>
+                        </View>
+                    </View>
+
+                </View>
+
+                {/** texto */}
+                <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
+                    <Text style={[commonStyle.common_fontWeight_600]}>Forma</Text>
+
+                    <Text style={[commonStyle.common_fontWeight_600]}>Condição</Text>
+
+                    <Text style={[commonStyle.common_fontWeight_600]}>Pagamento</Text>
+
+                </View>
             </View>
 
             {/**esse ignore é porque o typescript estava achando que a comparação era nao intencional */}
@@ -170,22 +226,24 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
 
     return (
         <View>
-            <SelectList
-                placeholder="Escolha a forma de pagamento"
-                /** key == a chave do valor que foi selecionada, a chave é mapeada para receber o ID do valor na funcao
-                 * getFormaPagamento()
-                 */
-                setSelected={(key: string) => { setSelected(key) }}
-                data={paymentsForm || [{}]}
-                save="key"
-            />
+            <View style={{ padding: 16 }}>
+                <SelectList
+                    placeholder="Escolha a forma de pagamento"
+                    /** key == a chave do valor que foi selecionada, a chave é mapeada para receber o ID do valor na funcao
+                     * getFormaPagamento()
+                     */
+                    setSelected={(key: string) => { setSelected(key) }}
+                    data={paymentsForm || [{}]}
+                    save="key"
+                />
+            </View>
             {selected !== '' && !isEntrance && (
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
                     <Pressable style={[commonStyle.btn_gray]} onPress={() => onFormSelected(selected)}>
                         <Text style={commonStyle.btn_text_gray}>Continuar</Text>
                     </Pressable>
-                    <Pressable style={[commonStyle.btn_gray]} onPress={() => setSelected('')}>
-                        <Text style={commonStyle.btn_text_gray}>Cancelar</Text>
+                    <Pressable style={[commonStyle.btn_transparente]} onPress={() => setSelected('')}>
+                        <Text style={commonStyle.btn_text_transparente}>Cancelar</Text>
                     </Pressable>
                 </View>
             )}
@@ -306,12 +364,15 @@ const ItemPagamento = ({ paymentFormId, termId }: { paymentFormId: string, termI
     )
 }
 
+/**
+ * Item de detalhamento
+ */
 const ItemDetalhamento = () => {
     return (
-        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-            <Text>Forma</Text>
-            <Text>Condição</Text>
-            <Text>Pagamento</Text>
+        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
+            <Text>DINHEIRO</Text>
+            <Text>XXXXXXXX</Text>
+            <Text>{formatMoneyValue(12.9)} </Text>
         </View>
     )
 }
