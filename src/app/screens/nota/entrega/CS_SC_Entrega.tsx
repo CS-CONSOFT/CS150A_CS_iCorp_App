@@ -113,22 +113,22 @@ const CS_SC_Entrega = () => {
     return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
         <CustomSearch
             placeholder="Pesquisar Nota"
-            onSearchPress={searchNote} 
-            clickToSearch = {true} 
+            onSearchPress={searchNote}
+            clickToSearch={true}
         />
-        
+
 
         {isSuccess && products && products.length > 0 && (
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
                     data={products}
                     renderItem={(product: any) => <CustomCard_001 title={product.DD060_Descricao} children={
-                        <EntregaCardLeft modo={"Balcão"} quantidade={1}/>
-                    }/>}
+                        <EntregaCardLeft modo={"Balcão"} quantidade={1} />
+                    } />}
                     keyExtractor={(item, index) => index.toString()}
                 />
                 <View style={styles.btnContenier}>
-                    <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
+                    <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery} />
                 </View>
             </View>
         )}
@@ -138,16 +138,16 @@ const CS_SC_Entrega = () => {
                 <Text style={styles.messageNot}>{messageList}</Text>
             </View>
         )}
-        
+
         <CustomCard_001
             title={"exemplo"}
-            children={<EntregaCardLeft modo={"Balcão"} quantidade={1}/>}
+            children={<EntregaCardLeft modo={"Balcão"} quantidade={1} />}
         />
-        
+
         <View style={styles.btnContenier}>
-            <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery}/>
+            <ButtonActionBlue text={"Confirmar entrega!"} onPress={confirmDelivery} />
         </View>
-        
+
     </SafeAreaView>
 }
 
@@ -163,7 +163,7 @@ const ProductItem = ({ product }: { product: any }) => {
 };
 
 
-const EntregaCardLeft = ({modo, quantidade}: {modo: string, quantidade: number}) => {
+const EntregaCardLeft = ({ modo, quantidade }: { modo: string, quantidade: number }) => {
     return (
         <View style={stylesEntregaCard.contentContanier}>
             <View style={stylesEntregaCard.contentContenierSmall}>
@@ -180,17 +180,17 @@ const EntregaCardLeft = ({modo, quantidade}: {modo: string, quantidade: number})
 
 
 const styles = StyleSheet.create({
-    btnContenier:{
-        alignItems:"center",
-        justifyContent:"center",
+    btnContenier: {
+        alignItems: "center",
+        justifyContent: "center",
         position: 'absolute',
         bottom: 0,
         backgroundColor: "#CCCCCC",
         height: "12%",
         width: "100%",
-        
+
     },
-    centerContenie:{
+    centerContenie: {
         width: "100%",
         height: "80%",
         flexDirection: "column",
@@ -203,20 +203,20 @@ const styles = StyleSheet.create({
 })
 
 const stylesEntregaCard = StyleSheet.create({
-    contentContanier:{
+    contentContanier: {
         width: "100%",
         height: "auto",
         flexDirection: "row",
-        alignItems:"center",
-        justifyContent:"space-around",
+        alignItems: "center",
+        justifyContent: "space-around",
         padding: 10
     },
-    contentContenierSmall:{
-        alignItems:"center", 
-        justifyContent:"center"
+    contentContenierSmall: {
+        alignItems: "center",
+        justifyContent: "center"
     },
-    tituloCard:{
-        fontWeight:"700",
+    tituloCard: {
+        fontWeight: "700",
         marginBottom: 8
     }
 })
