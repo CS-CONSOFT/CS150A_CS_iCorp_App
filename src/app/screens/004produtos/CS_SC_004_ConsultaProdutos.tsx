@@ -19,6 +19,7 @@ import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
