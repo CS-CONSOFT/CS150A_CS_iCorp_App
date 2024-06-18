@@ -28,13 +28,13 @@ const CustomAccordion = ({ visibleChildren, hiddenChildren }: rProp) => {
 
     return (
         <Pressable onPress={() => downSwipe()}>
-            <Animated.View>
+            <Animated.View style={{backgroundColor: "#fff", borderStartStartRadius: 20, marginTop: 4}}>
                 {visibleChildren}
             </Animated.View>
 
             {/** CONTEUDO EXIBIDO AO ABRIR O ITEM */}
             {openBottom && (
-                <View>
+                <View style={{backgroundColor: "#fff", borderEndEndRadius: 20, marginBottom: 8}}>
                     {hiddenChildren}
                 </View>
             )}

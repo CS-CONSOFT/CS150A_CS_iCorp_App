@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, SafeAreaView, Text, View, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";

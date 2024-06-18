@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-
+import ColorStyle from "./ColorStyle";
 
 export const commonStyle = StyleSheet.create({
 
@@ -83,6 +83,12 @@ export const commonStyle = StyleSheet.create({
     common_margin_right_16: {
         marginRight: 16
     },
+    common_margin_horizontal: {
+        marginHorizontal: 15
+    },
+    common_margin_vertical:{
+        marginVertical: 12
+    },
     common_input: {
         margin: 4,
         borderWidth: 1,
@@ -155,4 +161,27 @@ export const commonStyle = StyleSheet.create({
         fontWeight: '600',
         alignSelf: 'center'
     },
+
+    avatar_nomeIniciais:{
+        width:80,
+        height:80,
+        backgroundColor: ColorStyle.colorPrimary200,
+        borderRadius: 100,
+        alignContent: "center",
+        justifyContent: "center",
+    },
+    title_nomeIniciais:{
+        fontSize: 20,
+        fontWeight: "700",
+        textAlign: "center",
+        color: ColorStyle.colorPrimary300,
+    },
+    align_centralizar:{
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    align_spacebetween_row: {
+        alignItems: "center",
+        justifyContent:"space-between",
+    }
 });
