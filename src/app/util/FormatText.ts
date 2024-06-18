@@ -30,6 +30,9 @@ export function formatDateToTracePattern(date: string): string {
     return `${year}-${month}-${day}`
 }
 
+/** formata um decimal para valor monetario
+ * ex. 1.9 = R$ 1,90
+ */
 export function formatMoneyValue(value: number): string {
     let formattedValue = value.toFixed(2);
     formattedValue = formattedValue.replace('.', ',');

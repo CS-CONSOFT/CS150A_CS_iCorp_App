@@ -4,6 +4,7 @@ import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 
+
 const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, clickToSearch = false }:
     {
         onSearchPress: (atributes: any) => void,
@@ -25,6 +26,7 @@ const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, c
     /**
      * funcao que e chamada enquanto o usuario digita algo
      */
+
     const handleInputTyping = (value: string) => {
         //se nao for para pesquisar durante o clique, faça a pesquisa aqui
         if (!clickToSearch) {
@@ -32,6 +34,8 @@ const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, c
         }
         setValueSearch(value)
     };
+
+
     return (
         <View style={styles.searchContainer}>
             <TextInput
