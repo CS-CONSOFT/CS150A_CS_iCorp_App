@@ -8,7 +8,7 @@ export function formatDateToSlashPattern(date: string): string {
     if (!dateValid) {
         throw new Error('Data Inválida. Formato esperado YYYY-MM-DD.');
     }
-    const [year, day, month] = date.split('-')
+    const [year, month, day] = date.split('-')
     return `${day}/${month}/${year}`
 }
 

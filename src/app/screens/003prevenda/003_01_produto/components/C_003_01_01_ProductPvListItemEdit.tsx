@@ -6,11 +6,13 @@ import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomSwitch from "../../../../components/switch/CustomSwitch";
 import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
+import { formatMoneyValue } from '../../../../util/FormatText';
 import { ICON_NAME } from "../../../../util/IconsName";
 import { moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
 import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { common003_01_styles } from "./CommonStyles";
 
+/** componente de edição dos valores do produto */
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
     {
         product: IResProductItemModel,
@@ -36,17 +38,15 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
 
     useEffect(() => {
-        console.log(product);
-
         setIsEntregar(product.IsEntregar)
         setIsMontar(product.IsMontar)
         setIsSaldoNegativo(product.IsSaldoNegativo)
         setIsRequisitar(product.IsRequisitar)
 
-        setTablePrice(moneyApplyMask(product.PrecoTabela.toString()));
-        setUnityPrice(moneyApplyMask(product.PrecoUnitario.toString()));
+        setTablePrice(formatMoneyValue(product.PrecoTabela));
+        setUnityPrice(formatMoneyValue(product.PrecoUnitario));
         setPercentDiscount(0.0);
-        setValueDiscount(moneyApplyMask(product.TotalDesconto.toString()));
+        setValueDiscount(formatMoneyValue(product.TotalDesconto));
     }, [product])
 
     /** ALTERA A QUANTIDADE */
@@ -78,38 +78,35 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
      * @param inputField o campo em si
      * @param isApply se é para aplicar ou nao mascara
      */
+    // Função para manipular ações de máscara
     function handleMaskAction(inputValue: string, inputField: number, isApply: boolean) {
-        /** RECEBE O VALOR DO HANDLE DE MASCARA */
-        const tratedValue = isApply ? moneyApplyMask(inputValue) : moneyRemoveMask(inputValue);
-        /** se for para aplicar mascara (isApply), o switch verifica qual foi o campo para salvar
-         * e envia o valor tratado. A logica funciona da mesma forma para exibir o dado em tela.
-         */
+        // Recebe o valor do handle de máscara
+        const tratedValue = isApply ? moneyApplyMask(moneyRemoveMask(inputValue)) : moneyRemoveMask(inputValue);
         if (isApply) {
             switch (inputField) {
                 case 1:
-                    /** seta o valor para mostrar em tela */
-                    setTablePrice(tratedValue as string);
+                    {
+                        setTablePrice(tratedValue as string);
+                    }
                     break;
                 case 2:
-                    setUnityPrice(tratedValue as string)
-                    break
+                    setUnityPrice(tratedValue as string);
+                    break;
                 case 3:
-                    setValueDiscount(tratedValue as string)
-                    break
+                    setValueDiscount(tratedValue as string);
+                    break;
             }
         } else {
             switch (inputField) {
                 case 1:
-                    /** pega o valor sem mascara para salvar */
-                    saveTablePrice(tratedValue as number, product.Id)
-                    break
+                    saveTablePrice(tratedValue as number, product.Id);
+                    break;
                 case 2:
-                    saveUnityPrice(tratedValue as number, product.Id)
-                    break
+                    saveUnityPrice(tratedValue as number, product.Id);
+                    break;
                 case 3:
-                    saveDiscountValue(tratedValue as number, product.Id)
-                    break
-
+                    saveDiscountValue(tratedValue as number, product.Id);
+                    break;
             }
         }
     }

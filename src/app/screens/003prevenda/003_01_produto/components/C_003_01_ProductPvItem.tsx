@@ -10,6 +10,7 @@ import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEd
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
 import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
+import { ToastType, showToast } from "../../../../util/ShowToast";
 
 
 
@@ -49,7 +50,7 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                 setLastSalesProduct(res.UltimasVendas)
                 downSwipeToLastSales()
             } else {
-                throw 'Fazer alert'
+                showToast(ToastType.ERROR, "Error", "Um erro ocorreu!")
             }
         })
     }

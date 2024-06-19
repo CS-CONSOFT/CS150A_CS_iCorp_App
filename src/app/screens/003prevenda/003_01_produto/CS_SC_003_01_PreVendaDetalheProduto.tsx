@@ -1,13 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
+import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { IResProductItemModel, IResProductsListPvModel } from "../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleDeleteProductFromPv, handleGetProductsPv, handleGetPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
-import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
-import { IResProductItemModel, IResProductsListPvModel } from "../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
-import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
+import { ToastType, showToast } from "../../../util/ShowToast";
+import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
@@ -15,6 +17,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
     const [pv, setPv] = useState<IResGetPv>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
+
 
     useEffect(() => {
         getProductsToCurrentPv()
@@ -55,7 +58,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 if (res.IsOk) {
                     getProductsToCurrentPv()
                 } else {
-                    Alert.alert(res.Msg)
+                    showToast(ToastType.ERROR, "Falha", res.Msg)
                 }
             });
     }
@@ -67,7 +70,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 if (res.IsOk) {
                     getProductsToCurrentPv()
                 } else {
-                    Alert.alert(res.Msg)
+                    showToast(ToastType.ERROR, "Falha", res.Msg)
+                    showToast(ToastType.ERROR, "Falha", res.Msg)
                 }
             });
     }
@@ -80,7 +84,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 if (res.IsOk) {
                     getProductsToCurrentPv()
                 } else {
-                    Alert.alert(res.Msg)
+                    showToast(ToastType.ERROR, "Falha", res.Msg)
                 }
             });
     }
@@ -93,7 +97,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 if (res.IsOk) {
                     getProductsToCurrentPv()
                 } else {
-                    Alert.alert(res.Msg)
+                    showToast(ToastType.ERROR, "Falha", res.Msg)
                 }
             });
     }
@@ -122,9 +126,10 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 />
 
                 <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                    dataEmissao={pv?.Data_Emissao}
-                    dataValidade={pv?.DataValidade}
-                    totalLiquido={pv?.TotalLiquido}
+                    dataEmissao={formatDateToSlashPattern(pv!.Data_Emissao)}
+                    dataValidade={formatDateToSlashPattern(pv!.DataValidade)}
+                    /** @ts-ignore */
+                    totalLiquido={formatMoneyValue(pv!.TotalLiquido)}
                 />
             </>}
 

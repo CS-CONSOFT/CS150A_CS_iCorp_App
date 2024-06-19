@@ -220,7 +220,6 @@ export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId,
         }
         return commonResponse
     } catch (error) {
-        console.log(error);
         throw error
 
     }
@@ -230,12 +229,24 @@ export async function getLastSalesProduct({ cs_tenant_id, cs_produto_id, cs_cont
     { cs_tenant_id: number, cs_produto_id: string, cs_conta_id: string }): Promise<IResUltimasVendaProduto> {
     const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_produto_id}/${cs_conta_id}`
     const response = await api.get(url)
-    console.log({ cs_tenant_id, cs_conta_id, cs_produto_id });
-
-    console.log(response.data);
 
     return response.data as IResUltimasVendaProduto
 }
+
+
+/**
+ * Salvar desconto global na pv
+ */
+export async function saveGlobalDiscount({ cs_tenant_id, cs_atendimento_id, cs_valor_percentual }:
+    { cs_tenant_id: number, cs_atendimento_id: string, cs_valor_percentual: number }): Promise<ICommonResponse> {
+
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}}/SalvarDescontoGlobal`
+    const response = await api.post(url, {
+        ValorPercentual: cs_valor_percentual
+    })
+    return response.data as ICommonResponse
+}
+
 
 
 

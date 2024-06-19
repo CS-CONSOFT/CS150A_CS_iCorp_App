@@ -7,6 +7,9 @@ import CustomItemIconTitleRoundedBlue from "../../../../components/items/CustomI
 import CustomAlertDialog from "../../../../components/modal/CustomAlertDialog";
 import CustomTopItem from "../../../../components/topItem/CustomTopItem";
 import { ICON_NAME } from "../../../../util/IconsName";
+import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
+import { ToastType, showToast } from "../../../../util/ShowToast";
+import { formatMoneyValue } from "../../../../util/FormatText";
 
 const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
     const { navigate } = useNavigation()
@@ -44,16 +47,23 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
             <CustomAlertDialog
                 isVisible={isModalVisible}
                 onDismiss={() => { }}
-                children={<DescontoItem save={() => setIsModalVisible(false)} dismiss={() => setIsModalVisible(false)} />}
+                children={<DescontoItem save={(discountValue) => {
+                    handleSaveGlobalDiscount({ cs_valor_percentual: discountValue }).then((res) => {
+                        if (res.IsOk) {
+                            showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                        } else {
+                            showToast(ToastType.ERROR, "Erro", res.Msg)
+                        }
+                        setIsModalVisible(false)
+                    })
+                }} dismiss={() => setIsModalVisible(false)} />}
             />
         </View>
     );
 }
 
-const DescontoItem = ({ save, dismiss }: { save: () => void, dismiss: () => void }) => {
-    const [desc1, setDesc1] = useState('')
-    const [desc2, setDesc2] = useState('')
-
+const DescontoItem = ({ save, dismiss }: { save: (discountValue: number) => void, dismiss: () => void }) => {
+    const [desc1, setDesc1] = useState(formatMoneyValue(0))
     return (
         <View style={commonStyle.modal_common_container}>
             <Text>1° Desconto</Text>
@@ -61,15 +71,9 @@ const DescontoItem = ({ save, dismiss }: { save: () => void, dismiss: () => void
                 onChangeText={setDesc1}
                 value={desc1}
                 keyboardType='decimal-pad' />
-            <Text>2° Desconto</Text>
-            <TextInput
-                style={commonStyle.common_input}
-                onChangeText={setDesc2}
-                value={desc2}
-                keyboardType='decimal-pad'
-            />
+
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
-                <Pressable style={commonStyle.btn_gray} onPress={save}>
+                <Pressable style={commonStyle.btn_gray} onPress={() => save(Number(desc1))}>
                     <Text style={commonStyle.btn_text_gray}>Salvar</Text>
                 </Pressable>
                 <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={dismiss}>

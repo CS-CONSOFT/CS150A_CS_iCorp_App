@@ -132,7 +132,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     <CustomSearch
                         placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
-                        onFilterClick={handleFilterClick} />
+                        onFilterClick={handleFilterClick}
+                        clickToSearch={true} />
 
                     {/* Carregamento da lista de produtos ou exibição da lista */}
                     {isLoading ? <ActivityIndicator /> :
