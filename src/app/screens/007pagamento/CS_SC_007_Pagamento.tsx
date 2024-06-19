@@ -9,7 +9,7 @@ import CustomSeparator from "../../components/lists/CustomSeparator";
 import { PaymentType } from "../../services/api/interfaces/pagamento/CS_IReqListFormPayment";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleGetListOfPaymentForm, handleGetPaymentTerm, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleGetListOfPaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import { formatMoneyValue } from "../../util/FormatText";
@@ -129,6 +129,12 @@ const ItemSelecao = () => {
         setCurrentItem(PaymentStage.PAGAMENTO)
     }
 
+    const stages = [
+        { stage: PaymentStage.FORMA, number: 1, label: "Forma" },
+        { stage: PaymentStage.CONDICAO, number: 2, label: "Condição" },
+        { stage: PaymentStage.PAGAMENTO, number: 3, label: "Pagamento" }
+    ];
+
 
     return (
         <View style={commonStyle.common_columnItem}>
@@ -136,34 +142,12 @@ const ItemSelecao = () => {
             <View style={[commonStyle.common_columnItem, { padding: 16 }]}>
                 {/** numeros */}
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    <View style={[commonStyle.common_columnItem]}>
-                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
-                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>1</Text>
-                        </View>
-                    </View>
-
-                    <View style={commonStyle.common_columnItem}>
-                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
-                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>2</Text>
-                        </View>
-                    </View>
-
-                    <View style={commonStyle.common_columnItem}>
-                        <View style={{ borderWidth: 1, borderRadius: 32, padding: 8 }}>
-                            <Text style={[commonStyle.common_fontWeight_600, commonStyle.text_aligment_center]}>3</Text>
-                        </View>
-                    </View>
-
+                    {stages.map(({ stage, number }) => renderStageItem(stage, number, currentItem))}
                 </View>
 
                 {/** texto */}
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    <Text style={[commonStyle.common_fontWeight_600]}>Forma</Text>
-
-                    <Text style={[commonStyle.common_fontWeight_600]}>Condição</Text>
-
-                    <Text style={[commonStyle.common_fontWeight_600]}>Pagamento</Text>
-
+                    {stages.map(({ stage, label }) => renderStageLabel(stage, label, currentItem))}
                 </View>
             </View>
 
@@ -188,6 +172,25 @@ const ItemSelecao = () => {
     )
 }
 
+const renderStageItem = (stage: PaymentStage, number: number, currentItem: PaymentStage) => (
+    <View style={commonStyle.common_columnItem} key={number}>
+        <View style={[{ borderWidth: 1, borderRadius: 32, padding: 8 }, currentItem === stage ? { borderColor: "#1068EB" } : { borderColor: "#CED4DA" }]}>
+            <Text style={[
+                commonStyle.common_fontWeight_600,
+                commonStyle.text_aligment_center,
+                currentItem === stage ? { color: "#1068EB" } : { color: "#CED4DA" }
+            ]}>{number}</Text>
+        </View>
+    </View>
+);
+
+const renderStageLabel = (stage: PaymentStage, label: string, currentItem: PaymentStage) => (
+    <Text style={[
+        commonStyle.common_fontWeight_600,
+        currentItem === stage ? { color: "#1068EB" } : { color: "#CED4DA" }
+    ]} key={label}>{label}</Text>
+);
+
 /**
  * 
  * @param onFormSelected funcao de callback que ira retornar o valor da forma selecionada
@@ -200,19 +203,21 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
     const [paymentsForm, setPaymentsForm] = useState<{ key: string, value: string }[]>();
 
     useEffect(() => {
-        getFormaPagamento()
+        getFormaPagamento002()
     }, [])
 
     /**
-     * Funcao que busca as formas de pagamento
-     */
-    function getFormaPagamento() {
+      * Funcao que busca as formas de pagamento
+      */
+    function getFormaPagamento002() {
         try {
-            handleGetListOfPaymentForm({ paymentForm: PaymentType.DINHEIRO }).then((res) => {
+            handleGetListOfPaymentForm002().then((res) => {
                 if (res !== undefined) {
-                    const transformedData = res.List!.map(item => ({
-                        key: item.Id,
-                        value: item.Value
+                    console.log(res);
+
+                    const transformedData = res.csicp_bb026!.map(item => ({
+                        key: item.ID,
+                        value: item.BB026_FormaPagamento
                     }));
                     setPaymentsForm(transformedData)
                 } else {
@@ -222,6 +227,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
         } catch (error: any) {
             showToast(ToastType.ERROR, "ERROR", error)
         }
+
     }
 
     return (
