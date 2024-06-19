@@ -44,10 +44,10 @@ const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, c
                 value={valueSearch}
                 placeholder={placeholder}
             />
+            <CustomIcon icon={ICON_NAME.BUSCA_CONTORNADO} iconSize={44} onPress={() => onSearchPress(valueSearch)} />
             {onFilterClick !== undefined && (
                 <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
             )}
-            <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={() => onSearchPress(valueSearch)} />
         </View>
     );
 }

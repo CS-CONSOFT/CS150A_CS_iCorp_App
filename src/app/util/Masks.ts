@@ -1,22 +1,19 @@
-export function moneyApplyMask(value: string) {
-    // Remove todos os caracteres que não são dígitos
-    let cleanedValue = value.replace(/\D/g, "");
-
-    // Adiciona os zeros necessários se o valor não tiver pelo menos 3 dígitos
-    while (cleanedValue.length < 3) {
-        cleanedValue = "0" + cleanedValue;
+// Aplica máscara de dinheiro
+export function moneyApplyMask(value: number) {
+    // Verifica se o valor é um número
+    if (isNaN(value)) {
+        throw new Error('Valor não é um número válido');
     }
 
-    const integerPart = cleanedValue.slice(0, -2);
-    const decimalPart = cleanedValue.slice(-2);
-
-    const withThousandSeparators = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    const formattedValue = `R$ ${withThousandSeparators},${decimalPart}`;
-
-    return formattedValue;
+    // Formata o número para valor monetário em reais
+    const valorEmReais = (value).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+    return valorEmReais;
 }
 
+// Remove máscara de dinheiro
 export function moneyRemoveMask(value: string) {
     // Remove o símbolo R$, os pontos e a vírgula
     let cleanedValue = value.replace(/[^0-9,-]+/g, "");
@@ -25,5 +22,5 @@ export function moneyRemoveMask(value: string) {
 
     let numberValue = parseFloat(cleanedValue);
 
-    return Number(numberValue.toFixed(1));
+    return Number(numberValue.toFixed(2));
 }

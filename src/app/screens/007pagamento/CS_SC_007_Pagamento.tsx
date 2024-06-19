@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native";
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomCard_003 from "../../components/cards/CustomCard_003";
-import CustomSeparator from "../../components/lists/CustomSeparator";
-import { PaymentType } from "../../services/api/interfaces/pagamento/CS_IReqListFormPayment";
-import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
-import { ToastType, showToast } from "../../util/ShowToast";
-import { handleGetListOfPaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import CustomIcon from "../../components/icon/CustomIcon";
-import { ICON_NAME } from "../../util/IconsName";
-import { formatMoneyValue } from "../../util/FormatText";
-import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
-import { DataKey } from "../../enum/DataKeys";
-import { handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
+import CustomSeparator from "../../components/lists/CustomSeparator";
+import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { formatMoneyValue } from "../../util/FormatText";
+import { ICON_NAME } from "../../util/IconsName";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
+import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
 
 const CS_SC_007_Pagamento = () => {
     const [currentPv, setCurrentPv] = useState<IResGetPv>()
@@ -38,11 +36,11 @@ const CS_SC_007_Pagamento = () => {
     }, [])
     return (
         <SafeAreaView>
-            <TopOfScreen currentPv={currentPv?.Id} />
+            <TopOfScreen currentPv={currentPv?.Id} clientPv={currentPv?.Codigo + "-" + currentPv?.Nome_Cliente} />
 
             <CustomSeparator />
 
-            <BuyValues />
+            <BuyValues TotalLiquido={currentPv?.TotalLiquido} Pagamento_ValorAPagar={currentPv?.Pagamento_ValorAPagar} Pagamento_ValorPago={currentPv?.Pagamento_ValorPago} />
 
 
             <CustomCard_003 children={<ItemSelecao />} />
@@ -57,16 +55,17 @@ const CS_SC_007_Pagamento = () => {
     );
 }
 
-const TopOfScreen = ({ currentPv }: { currentPv?: string }) => {
+const TopOfScreen = ({ currentPv, clientPv }: { currentPv?: string, clientPv: string }) => {
+
     return (
         <View>
             <Text style={[commonStyle.text_aligment_center, commonStyle.common_fontWeight_600, commonStyle.margin_8, commonStyle.font_size_18, { color: '#0A3147' }]}>{currentPv}</Text>
-            <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_16, { color: '#0A3147', fontWeight: 500 }]}>99999 - Venda à  vista PDV-PA</Text>
+            <Text style={[commonStyle.text_aligment_center, commonStyle.font_size_16, { color: '#0A3147', fontWeight: 500 }]}>{clientPv}</Text>
         </View>
     )
 }
 
-const BuyValues = () => {
+const BuyValues = ({ TotalLiquido, Pagamento_ValorPago, Pagamento_ValorAPagar }: { TotalLiquido?: number, Pagamento_ValorPago?: number, Pagamento_ValorAPagar?: number }) => {
     return (
         <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.margin_8]}>
             <View style={commonStyle.common_columnItem}>
@@ -74,7 +73,7 @@ const BuyValues = () => {
                     Total da Compra
                 </Text>
                 <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
-                    RS125
+                    {formatMoneyValue(TotalLiquido || 0)}
                 </Text>
             </View>
 
@@ -83,7 +82,7 @@ const BuyValues = () => {
                     Valor Pago
                 </Text>
                 <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
-                    RS125
+                    {formatMoneyValue(Pagamento_ValorPago || 0)}
                 </Text>
             </View>
 
@@ -92,7 +91,7 @@ const BuyValues = () => {
                     Valor a Pagar
                 </Text>
                 <Text style={[commonStyle.text_aligment_center, , commonStyle.font_size_16, commonStyle.common_fontWeight_800, { color: '#0A3147' }]}>
-                    RS125
+                    {formatMoneyValue(Pagamento_ValorAPagar || 0)}
                 </Text>
             </View>
 
@@ -108,7 +107,7 @@ enum PaymentStage {
 }
 const ItemSelecao = () => {
     /** o item atual correspondente a forma, condicao ou pagamento, para mostrar em tela */
-    const [currentItem, setCurrentItem] = useState(PaymentStage.FORMA)
+    const [currentStage, setCurrentStage] = useState(PaymentStage.FORMA)
     const [formaId, setFormaId] = useState('')
     const [condicaoId, setCondicaoId] = useState('')
     /**
@@ -116,7 +115,7 @@ const ItemSelecao = () => {
      * @param key id da forma selecionada
     */
     function onFormSelected(key: string) {
-        setCurrentItem(PaymentStage.CONDICAO)
+        setCurrentStage(PaymentStage.CONDICAO)
         setFormaId(key)
     }
 
@@ -126,7 +125,7 @@ const ItemSelecao = () => {
      */
     function onTermSelected(key: string) {
         setCondicaoId(key)
-        setCurrentItem(PaymentStage.PAGAMENTO)
+        setCurrentStage(PaymentStage.PAGAMENTO)
     }
 
     const stages = [
@@ -135,42 +134,64 @@ const ItemSelecao = () => {
         { stage: PaymentStage.PAGAMENTO, number: 3, label: "Pagamento" }
     ];
 
+    function finishPayment() {
+        setCurrentStage(PaymentStage.FORMA)
+    }
+
 
     return (
         <View style={commonStyle.common_columnItem}>
             {/** topo onde fica as colunas de forma, condicao e pagamento */}
             <View style={[commonStyle.common_columnItem, { padding: 16 }]}>
-                {/** numeros */}
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    {stages.map(({ stage, number }) => renderStageItem(stage, number, currentItem))}
-                </View>
-
-                {/** texto */}
-                <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    {stages.map(({ stage, label }) => renderStageLabel(stage, label, currentItem))}
+                    {stages.map(({ stage, number, label }) => (
+                        <View key={stage} style={{ alignItems: 'center' }}>
+                            <Text style={[styles.number, stage === currentStage ? styles.active : {}]}>
+                                {number}
+                            </Text>
+                            <Text style={[styles.text, stage === currentStage ? styles.active : {}]}>
+                                {label}
+                            </Text>
+                        </View>
+                    ))}
                 </View>
             </View>
 
             {/**esse ignore é porque o typescript estava achando que a comparação era nao intencional */}
             {/**@ts-ignore */}
-            {currentItem === PaymentStage.FORMA && (
+            {currentStage === PaymentStage.FORMA && (
                 <View style={[commonStyle.justify_content_space_evl, commonStyle.margin_8]}>
                     <ItemFormaPagamento onFormSelected={(key) => onFormSelected(key)} />
                 </View>
             )}
 
             {/**@ts-ignore */}
-            {currentItem === PaymentStage.CONDICAO && (
+            {currentStage === PaymentStage.CONDICAO && (
                 <ItemCondicao onTermSelected={onTermSelected} formaId={formaId} />
             )}
 
             {/**@ts-ignore */}
-            {currentItem === PaymentStage.PAGAMENTO && (
-                <ItemPagamento paymentFormId={formaId} termId={condicaoId} />
+            {currentStage === PaymentStage.PAGAMENTO && (
+                <ItemPagamento finishPayment={finishPayment} paymentFormId={formaId} termId={condicaoId} />
             )}
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    number: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#CED4DA',
+    },
+    text: {
+        fontSize: 14,
+        color: '#CED4DA',
+    },
+    active: {
+        color: '#1068EB',
+    },
+});
 
 const renderStageItem = (stage: PaymentStage, number: number, currentItem: PaymentStage) => (
     <View style={commonStyle.common_columnItem} key={number}>
@@ -278,11 +299,17 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
         try {
             handleGetPaymentTermList({ paymentFormKey: formaId }).then((res) => {
                 if (res !== undefined) {
-                    const transformedData = res.List!.map(item => ({
-                        key: item.Id,
-                        value: item.Value
-                    }));
-                    setPaymentTerms(transformedData)
+                    //tem condicao de pagamento e ela nao e fixa?
+                    if (res.formByIdWithConditions) {
+                        const transformedData = res.formByIdWithConditions.FatoresAcrescimos!.map(item => ({
+                            key: item.csicp_bb008.ID,
+                            value: item.csicp_bb008.BB008_Condicao_Pagto
+                        }));
+                        setPaymentTerms(transformedData)
+                    } else {
+                        onTermSelected(res.formByIdWithFixConditions?.csicp_bb026.csicp_bb026.BB026_CondPagtoFixoID!)
+                    }
+
                 } else {
                     showToast(ToastType.ERROR, "Lista vazia", "Não foi possivel recuperar a forma de pagamento!")
                 }
@@ -317,7 +344,7 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
     )
 }
 
-const ItemPagamento = ({ paymentFormId, termId }: { paymentFormId: string, termId: string }) => {
+const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
     const [paymentValue, setPaymentValue] = useState('')
 
@@ -343,6 +370,30 @@ const ItemPagamento = ({ paymentFormId, termId }: { paymentFormId: string, termI
         }
     }
 
+    /** funcao para inserir forma de pagamento */
+    function scInsertPaymentForm() {
+        try {
+            const iReqInsertPaymentForm: IReqInsertPaymentForm = {
+                FormaPagamentoId: paymentFormId,
+                CondicaoPagamentoId: termId,
+                FormaPagamentoEntradaId: paymentFormId,
+                Valor: Number(paymentValue),
+                ValorEntrada: Number(paymentValue) - 1
+            }
+            handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
+                if (res.IsOk) {
+                    showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                } else {
+                    showToast(ToastType.ERROR, "Erro", res.Msg)
+                }
+                finishPayment()
+            })
+
+        } catch (error: any) {
+            showToast(ToastType.ERROR, error, "")
+        }
+    }
+
 
     return (
         <GestureHandlerRootView style={[commonStyle.common_columnItem, commonStyle.margin_8]}>
@@ -350,7 +401,7 @@ const ItemPagamento = ({ paymentFormId, termId }: { paymentFormId: string, termI
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
                 <TextInput value={paymentValue} onChangeText={setPaymentValue} style={commonStyle.common_input} />
 
-                {!termItem?.PermiteEntrada && (
+                {termItem?.PermiteEntrada && (
                     <View>
                         <ItemFormaPagamento isEntrance={true} onFormSelected={(key: string) => { }} />
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
@@ -358,10 +409,13 @@ const ItemPagamento = ({ paymentFormId, termId }: { paymentFormId: string, termI
                     </View>
                 )}
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    <Pressable style={[commonStyle.btn_gray]} onPress={() => { }}>
+                    <Pressable style={[commonStyle.btn_gray]} onPress={() => scInsertPaymentForm()}>
                         <Text style={commonStyle.btn_text_gray}>Continuar</Text>
                     </Pressable>
-                    <Pressable style={[commonStyle.btn_gray]} onPress={() => { }}>
+                    <Pressable style={[commonStyle.btn_gray]} onPress={() => {
+                        showToast(ToastType.INFO, "Cancelado", "Inserção de forma pagamento cancelada!")
+                        finishPayment()
+                    }}>
                         <Text style={commonStyle.btn_text_gray}>Cancelar</Text>
                     </Pressable>
                 </View>
