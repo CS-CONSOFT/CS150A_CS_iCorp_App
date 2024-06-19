@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native";
-import { SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from "react-native-dropdown-select-list";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
