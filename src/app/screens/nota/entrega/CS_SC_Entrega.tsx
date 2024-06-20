@@ -132,10 +132,7 @@ const CS_SC_Entrega = () => {
                     keyExtractor={(item, index) => index.toString()}
                 />
                 <View style={styles.btnContenier}>
-
                     <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery} />
-
-
                 </View>
             </View>
         )}

@@ -1,5 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Animated, Pressable, View } from "react-native";
+import { Animated, Pressable, View, StyleSheet } from "react-native";
+import ColorStyle from "../../ColorStyle";
 
 interface rProp {
     visibleChildren: ReactNode
@@ -27,14 +28,14 @@ const CustomAccordion = ({ visibleChildren, hiddenChildren }: rProp) => {
 
 
     return (
-        <Pressable onPress={() => downSwipe()}>
-            <Animated.View style={{backgroundColor: "#fff", borderStartStartRadius: 20, marginTop: 4}}>
+        <Pressable onPress={() => downSwipe()}  style={styles.accordion}>
+            <Animated.View>
                 {visibleChildren}
             </Animated.View>
 
             {/** CONTEUDO EXIBIDO AO ABRIR O ITEM */}
             {openBottom && (
-                <View style={{backgroundColor: "#fff", borderEndEndRadius: 20, marginBottom: 8}}>
+                <View>
                     {hiddenChildren}
                 </View>
             )}
@@ -44,3 +45,13 @@ const CustomAccordion = ({ visibleChildren, hiddenChildren }: rProp) => {
 }
 
 export default CustomAccordion;
+
+export const styles = StyleSheet.create({
+    accordion:{
+        borderRadius: 10,
+        borderColor: ColorStyle.colorneutrais200,
+        borderWidth: 2,
+        padding: 5,
+        marginBottom: 10,
+    }
+});

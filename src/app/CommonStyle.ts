@@ -161,10 +161,16 @@ export const commonStyle = StyleSheet.create({
         fontWeight: '600',
         alignSelf: 'center'
     },
-
+    avatar_Imagem:{
+        width:60,
+        height:60,
+        borderRadius: 100,
+        alignContent: "center",
+        justifyContent: "center",
+    },
     avatar_nomeIniciais:{
-        width:80,
-        height:80,
+        width:60,
+        height:60,
         backgroundColor: ColorStyle.colorPrimary200,
         borderRadius: 100,
         alignContent: "center",
@@ -176,6 +182,11 @@ export const commonStyle = StyleSheet.create({
         textAlign: "center",
         color: ColorStyle.colorPrimary300,
     },
+    title_accordion:{
+        fontWeight: "700",
+        color: ColorStyle.colorPrimary300,
+        fontSize: 16,
+    },
     align_centralizar:{
         alignItems: "center",
         justifyContent: "center",
@@ -183,5 +194,5 @@ export const commonStyle = StyleSheet.create({
     align_spacebetween_row: {
         alignItems: "center",
         justifyContent:"space-between",
-    }
+    },
 });
