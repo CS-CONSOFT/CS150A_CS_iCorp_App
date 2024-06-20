@@ -12,7 +12,7 @@ export const data = [
     {
         id: 2,
         title: "Lista Comanda",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
+        onPress: (navigate: any) => { navigate('ComandaLista') },
         iconName: "newspaper-outline"
     },
     {

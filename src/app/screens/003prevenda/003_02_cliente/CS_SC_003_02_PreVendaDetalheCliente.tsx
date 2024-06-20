@@ -5,6 +5,7 @@ import CustomAccordion from "../../../components/accordion/CustomAccordion";
 import { ICON_NAME } from "../../../util/IconsName";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ClienteStyles } from "./ClienteStyles";
+import { ButtonLink } from "../../../components/button/CustomButtonLink";
 
 
 interface Avatar {
@@ -46,12 +47,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({img: string, name = "Agnaldo"}: Av
                     
                     <Text style={commonStyle.title_nomeIniciais}>{name}</Text>
                     <Text>{"00001"}</Text>
-                    <TouchableOpacity
-                        style={[commonStyle.common_rowItem, {width: 60, height:40}, commonStyle.align_centralizar]}
-                        onPress={() => ("")}
-                    >
-                        <Text style={[commonStyle.font_size_16, {textDecorationLine: "underline"}]}>Alterar</Text>
-                    </TouchableOpacity>
+                    <ButtonLink onPress={() => ("")} label="Alterar"/>
                 </View>
 
                 <View style={[commonStyle.common_rowItem, commonStyle.common_margin_vertical]}>
