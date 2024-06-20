@@ -15,6 +15,7 @@ import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisi�
 import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
 import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
 import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
+import CS_SC_008_ListaComandas from "../screens/008ListaComandas/CS_SC_008_ListaComandas";
 
 
 const StackNav = createNativeStackNavigator()
@@ -36,6 +37,7 @@ declare global {
             Obras_Anexos: undefined
             Obras_Chat: undefined
             Pagamento: undefined
+            ComandaLista: undefined
         }
     }
 }
@@ -62,9 +64,15 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
+            <StackNav.Screen name="ComandaLista" component={CS_SC_008_ListaComandas} options={{
+                title: "Lista de Comandas"
+            }} />
+
+
             <StackNav.Screen name="Serie" component={CS_SC_Serie} options={{
                 title: "Serie"
             }} />
+
 
 
             <StackNav.Screen name="Consulta_Produtos" component={CS_SC_ConsultaProdutos} options={{

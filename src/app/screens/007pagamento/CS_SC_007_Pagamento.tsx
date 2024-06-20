@@ -12,19 +12,23 @@ import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPre
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handleListPaymentFormSaved } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
 import { ItemListPaymentForm } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CS_SC_007_Pagamento = () => {
     const [currentPv, setCurrentPv] = useState<IResGetPv>()
     const [toDeleteForm, setToDeleteForm] = useState(false)
+    const [listOfPaymentSaved, setListOfPaymentSaved] = useState<ItemListPaymentForm[]>()
+
     function start() {
         try {
             handleGetPv().then((res) => {
                 if (res !== undefined) {
                     setCurrentPv(res)
+                    getListOfPaymentSavedForm()
                 } else {
                     showToast(ToastType.ERROR, "Algo deu errado!", "---")
                 }
@@ -38,10 +42,28 @@ const CS_SC_007_Pagamento = () => {
         start()
     }, [])
 
-
-    function deletePaymentForm() {
-
+    function getListOfPaymentSavedForm() {
+        handleListPaymentFormSaved().then((res) => {
+            if (res !== undefined && res.IsOk) {
+                setListOfPaymentSaved(res.List)
+            } else {
+                showToast(ToastType.ERROR, "Error", res.Msg)
+            }
+        })
     }
+
+
+    function deletePaymentForm(formaPgtoAtendimentoId: string) {
+        handleDeletePaymentForm({ formaPgtoAtendimentoId: formaPgtoAtendimentoId }).then((res) => {
+            if (res !== undefined && res.IsOk) {
+                showToast(ToastType.SUCCESS, "Forma deletada!", res.Msg)
+                getListOfPaymentSavedForm()
+            } else {
+                showToast(ToastType.ERROR, "Error", res.Msg)
+            }
+        })
+    }
+
 
     return (
         <SafeAreaView>
@@ -59,7 +81,11 @@ const CS_SC_007_Pagamento = () => {
                 <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => setToDeleteForm(!toDeleteForm)} />
             </View>
 
-            <CustomCard_001 title="Forma    -    Condição    -    Valor" children={<ListDetalhamentoFormasPagamento toDeleteForm={toDeleteForm} deletePaymentForm={deletePaymentForm} />} />
+            <CustomCard_001 title="Forma    -    Condição    -    Valor"
+                children={<ListDetalhamentoFormasPagamento
+                    list={listOfPaymentSaved!}
+                    toDeleteForm={toDeleteForm}
+                    deletePaymentForm={(formaPgtoAtendimentoId) => deletePaymentForm(formaPgtoAtendimentoId)} />} />
         </SafeAreaView>
     );
 }
@@ -391,6 +417,8 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId
                 if (res.IsOk) {
                     showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
                 } else {
+                    console.log(res.Msg);
+
                     showToast(ToastType.ERROR, "Erro", res.Msg)
                 }
                 finishPayment()
@@ -431,13 +459,14 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId
     )
 }
 
-const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm }: { list: ItemListPaymentForm[], toDeleteForm: boolean, deletePaymentForm: () => void }) => {
+const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm }: { list: ItemListPaymentForm[], toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void }) => {
     return (
         <View>
             <FlatList
                 data={list}
                 keyExtractor={(item) => item.Id.toString()}
-                renderItem={({ item }) => <ItemDetalhamento toDeleteForm={toDeleteForm} deletePaymentForm={deletePaymentForm} />}
+                renderItem={({ item }) => <ItemDetalhamento toDeleteForm={toDeleteForm} deletePaymentForm={(formaPgtoAtendimentoId) => deletePaymentForm(formaPgtoAtendimentoId)} item={item} />}
+                ListEmptyComponent={<CustomEmpty text="Nenhuma forma de pagamento salva!" />}
             />
         </View>
     )
@@ -446,12 +475,12 @@ const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm
 /**
  * Item de detalhamento
  */
-const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm }: { toDeleteForm: boolean, deletePaymentForm: () => void }) => {
+const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm, item }: { toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void, item: ItemListPaymentForm }) => {
     return (
         <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16, toDeleteForm && { backgroundColor: "#141414CC" }]}>
-            <Text>DINHEIRO</Text>
-            {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm()} /> : <Text>XXXXXXXX</Text>}
-            <Text>{formatMoneyValue(12.9)} </Text>
+            <Text>{item.FormaPagamentoDesc}</Text>
+            {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm(item.Id)} /> : <Text>{item.CondicaoPagamentoDesc}</Text>}
+            <Text>{formatMoneyValue(item.ValorPagamento)} </Text>
         </View>
     )
 }
