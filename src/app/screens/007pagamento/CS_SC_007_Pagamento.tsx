@@ -15,9 +15,11 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
+import { ItemListPaymentForm } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
 
 const CS_SC_007_Pagamento = () => {
     const [currentPv, setCurrentPv] = useState<IResGetPv>()
+    const [toDeleteForm, setToDeleteForm] = useState(false)
     function start() {
         try {
             handleGetPv().then((res) => {
@@ -31,9 +33,16 @@ const CS_SC_007_Pagamento = () => {
             showToast(ToastType.ERROR, "Algo deu errado!", error)
         }
     }
+
     useEffect(() => {
         start()
     }, [])
+
+
+    function deletePaymentForm() {
+
+    }
+
     return (
         <SafeAreaView>
             <TopOfScreen currentPv={currentPv?.Id} clientPv={currentPv?.Codigo + "-" + currentPv?.Nome_Cliente} />
@@ -47,10 +56,10 @@ const CS_SC_007_Pagamento = () => {
 
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
                 <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Detalhamento</Text>
-                <CustomIcon icon={ICON_NAME.LIXEIRA} />
+                <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => setToDeleteForm(!toDeleteForm)} />
             </View>
 
-            <CustomCard_001 title="Forma    -    Condição    -    Valor" children={<ItemDetalhamento />} />
+            <CustomCard_001 title="Forma    -    Condição    -    Valor" children={<ListDetalhamentoFormasPagamento toDeleteForm={toDeleteForm} deletePaymentForm={deletePaymentForm} />} />
         </SafeAreaView>
     );
 }
@@ -234,8 +243,6 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
         try {
             handleGetListOfPaymentForm002().then((res) => {
                 if (res !== undefined) {
-                    console.log(res);
-
                     const transformedData = res.csicp_bb026!.map(item => ({
                         key: item.ID,
                         value: item.BB026_FormaPagamento
@@ -424,14 +431,26 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId
     )
 }
 
+const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm }: { list: ItemListPaymentForm[], toDeleteForm: boolean, deletePaymentForm: () => void }) => {
+    return (
+        <View>
+            <FlatList
+                data={list}
+                keyExtractor={(item) => item.Id.toString()}
+                renderItem={({ item }) => <ItemDetalhamento toDeleteForm={toDeleteForm} deletePaymentForm={deletePaymentForm} />}
+            />
+        </View>
+    )
+}
+
 /**
  * Item de detalhamento
  */
-const ItemDetalhamento = () => {
+const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm }: { toDeleteForm: boolean, deletePaymentForm: () => void }) => {
     return (
-        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
+        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16, toDeleteForm && { backgroundColor: "#141414CC" }]}>
             <Text>DINHEIRO</Text>
-            <Text>XXXXXXXX</Text>
+            {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm()} /> : <Text>XXXXXXXX</Text>}
             <Text>{formatMoneyValue(12.9)} </Text>
         </View>
     )

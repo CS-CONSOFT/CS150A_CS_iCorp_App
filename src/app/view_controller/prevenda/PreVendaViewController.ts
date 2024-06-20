@@ -74,7 +74,6 @@ export async function handleGetProductsPv(): Promise<IResProductsListPvModel> {
     const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
     const result = getPreSaleProducts({
         cs_tenant_id: currentUser.TenantId,
-        cs_empresa_id: currentUser.EstabelecimentoId,
         cs_atendimento_id: currentPvId
     })
     return result

@@ -14,11 +14,10 @@ const TopTab = createMaterialTopTabNavigator();
  * Assim conseguimos aninhar as rotas
  */
 export default function TabRoutes002({ route }: { route: any }) {
-    const { emissao, validade, totalLiquido } = route.params;
     return (
         <BottomTab.Navigator tabBar={() => <CustomPvBottomMenu_002 />} screenOptions={{ headerShown: false }}>
 
-            <TopTab.Screen name="TopTabPreVendaDetalhes" component={TopTab001} initialParams={{ emissao, validade, totalLiquido }} />
+            <TopTab.Screen name="TopTabPreVendaDetalhes" component={TopTab001} />
 
             <BottomTab.Screen name='Produto' component={CS_SC_Serie} />
         </BottomTab.Navigator >

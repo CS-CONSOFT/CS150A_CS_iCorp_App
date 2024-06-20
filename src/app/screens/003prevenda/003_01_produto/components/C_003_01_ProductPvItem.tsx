@@ -43,8 +43,6 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
 
 
     function showLastSales(Id: string) {
-        console.log(product.Id);
-
         handleGetLastSalesProduct({ cs_produto_id: Id }).then((res) => {
             if (res.IsOk) {
                 setLastSalesProduct(res.UltimasVendas)

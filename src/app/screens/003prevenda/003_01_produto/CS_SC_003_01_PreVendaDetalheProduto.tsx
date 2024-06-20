@@ -10,13 +10,13 @@ import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import { ToastType, showToast } from "../../../util/ShowToast";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
+import CustomEmpty from "../../../components/lists/CustomEmpty";
 
 
-const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
+const CS_SC_003_01_PreVendaDetalheProduto = () => {
     const [productsPv, setProductsPv] = useState<IResProductItemModel[]>([])
     const [pv, setPv] = useState<IResGetPv>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-    const { navigate } = useNavigation()
 
 
     useEffect(() => {
@@ -26,17 +26,20 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
 
     function getProductsToCurrentPv() {
         setStatus(FETCH_STATUS.LOADING)
+
         //pega a pv
         handleGetPv().then((res) => {
-            setPv(res)
-            //depois pega os produtos
-            handleGetProductsPv().then((res) => {
-                setStatus(FETCH_STATUS.SUCCESS)
-                const response = res as IResProductsListPvModel
-                if (response.IsOk) {
-                    setProductsPv(response.List)
-                }
-            })
+            if (res !== undefined) {
+                setPv(res)
+                //depois pega os produtos
+                handleGetProductsPv().then((res) => {
+                    const response = res as IResProductsListPvModel
+                    if (response.IsOk) {
+                        setProductsPv(response.List)
+                    }
+                    setStatus(FETCH_STATUS.SUCCESS)
+                })
+            }
         })
     }
 
@@ -112,6 +115,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                     keyExtractor={(item) => item.Id!}
                     refreshing={isLoading}
                     onRefresh={handleRefreshProducts}
+                    ListEmptyComponent={<CustomEmpty text="Essa PV não tem produtos!" />}
                     ListHeaderComponent={C_003_01_05_TopHeaderItensProdutosDetalhesPV}
                     renderItem={({ item }) => (
                         <C_003_01_ProductPvItem
@@ -126,10 +130,9 @@ const CS_SC_003_01_PreVendaDetalheProduto = ({ route }: { route: any }) => {
                 />
 
                 <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                    dataEmissao={formatDateToSlashPattern(pv!.Data_Emissao)}
-                    dataValidade={formatDateToSlashPattern(pv!.DataValidade)}
-                    /** @ts-ignore */
-                    totalLiquido={formatMoneyValue(pv!.TotalLiquido)}
+                    dataEmissao={formatDateToSlashPattern(pv?.Data_Emissao || '1999-01-01')}
+                    dataValidade={formatDateToSlashPattern(pv?.DataValidade || '1999-01-01')}
+                    totalLiquido={formatMoneyValue(pv?.TotalLiquido || 0)}
                 />
             </>}
 

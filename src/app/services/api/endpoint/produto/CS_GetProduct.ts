@@ -87,7 +87,6 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IReqUpd
             IsOk: result.data.IsOk,
             Msg: result.data.Msg
         }
-        console.log(commonResponse);
         return commonResponse
     } catch (error) {
         throw error
@@ -144,8 +143,6 @@ export async function updateTablePrice({ pvTenant, updatePrice }: IReqUpdateTabl
         return commonResponse
 
     } catch (error) {
-        console.log(error);
-
         throw error
     }
 }
@@ -179,9 +176,7 @@ export async function updateProductAmount({ pvTenant, AtendimentoProdutoId, prod
         }
         return commonResponse
     } catch (error) {
-        console.log(error);
         throw error
-
     }
 }
 

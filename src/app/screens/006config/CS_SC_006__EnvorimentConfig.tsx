@@ -72,7 +72,6 @@ const CS_SC_006__EnvorimentConfig = () => {
                 get(); // Buscar dados atualizados após a criação
             });
         } catch (error) {
-            console.log(error);
             Alert.alert("Error", "Deu erro, cheque o log");
         }
     }
