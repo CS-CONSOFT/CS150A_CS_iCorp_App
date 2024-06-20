@@ -8,19 +8,23 @@ export const paginationStyles = StyleSheet.create({
         paddingVertical: 10,
     },
     item: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#0A3147',
         padding: 10,
         marginHorizontal: 5,
         borderRadius: 5,
     },
     clickedItem: {
-        backgroundColor: '#c3c3c3',
+        backgroundColor: '#A3C5D9',
         padding: 10,
         marginHorizontal: 5,
         borderRadius: 5,
     },
     text: {
-        color: '#fff',
+        color: '#0A3147',
+        fontSize: 16,
+    },
+    textClicked: {
+        color: '#FFF',
         fontSize: 16,
     }
 });

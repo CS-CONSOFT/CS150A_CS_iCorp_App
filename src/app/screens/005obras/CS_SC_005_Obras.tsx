@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -12,6 +12,8 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
+import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
@@ -49,15 +51,18 @@ const CS_SC_005_Obras = () => {
             {isLoading && (
                 <ActivityIndicator size={45} />
             )}
-            <View style={{ height: '100%' }}>
-                <CustomListWithPagination
-                    list={listObras!}
-                    renderItemComponent={(item) => <RenderItem item={item} />}
-                    emptyText="Nenhuma obra encontrada!"
-                    paginationArray={paginationArray}
-                    getPage={(page) => getListObras(page)}
-                />
+            <FlatList
+                data={listObras}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={<CustomEmpty text={"Nenhuma obra encontrada!"} />}
+                renderItem={({ item }) => <RenderItem item={item} />}
+            />
+            <View style={commonStyle.common_margin_bottom_8}>
+                <Custom_Pagination
+                    onPagePress={(page) => getListObras(page)}
+                    paginationArray={paginationArray} />
             </View>
+
         </View>
     );
 }
