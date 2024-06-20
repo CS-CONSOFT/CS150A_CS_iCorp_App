@@ -55,8 +55,8 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({img: string, name = "Agnaldo"}: Av
                 </View>
 
                 <View style={[commonStyle.common_rowItem, commonStyle.common_margin_vertical]}>
-                    <Ionicons name="location-outline" size={36}/>
-                    <Text style={[commonStyle.text_size_20]}>Endereços</Text>
+                    <Ionicons name="location-outline" size={30}/>
+                    <Text style={[commonStyle.text_size_20, {fontWeight: "600"}]}>Endereços</Text>
                 </View>
 
                 {/** CORRESPONDENCIA */}
@@ -98,28 +98,28 @@ const VisibleAccordionItem = ({ title, icon }: { title: string, icon: any }) => 
 
 const EnderecoItem = () => {
     return (
-        <View style={[commonStyle.common_columnItem, { padding: 8 }]}>
-            <View style={[commonStyle.common_rowItem]}>
+        <View style={[commonStyle.common_columnItem, { padding: 8}]}>
+            <View style={[commonStyle.common_rowItem, commonStyle.common_margin_bottom_8]}>
                 <Text style={[commonStyle.common_fontWeight_600]}>CEP: </Text>
                 <Text>687454-30</Text>
             </View>
 
-            <View style={[commonStyle.common_rowItem]}>
+            <View style={[commonStyle.common_rowItem, commonStyle.common_margin_bottom_8]}>
                 <Text style={[commonStyle.common_fontWeight_600]}>Logradouro: </Text>
                 <Text>Almirante Barroso, 90</Text>
             </View>
 
-            <View style={[commonStyle.common_rowItem]}>
+            <View style={[commonStyle.common_rowItem, commonStyle.common_margin_bottom_8]}>
                 <Text style={[commonStyle.common_fontWeight_600]}>Bairro: </Text>
                 <Text>Marco</Text>
             </View>
 
-            <View style={[commonStyle.common_rowItem]}>
+            <View style={[commonStyle.common_rowItem, commonStyle.common_margin_bottom_8]}>
                 <Text style={[commonStyle.common_fontWeight_600]}>Cidade: </Text>
                 <Text>Belém</Text>
             </View>
 
-            <View style={[commonStyle.common_rowItem, { justifyContent: 'space-between' }, commonStyle.common_margin_right_16]}>
+            <View style={[commonStyle.common_rowItem, { justifyContent: 'space-between' }, commonStyle.common_margin_right_16, commonStyle.common_margin_bottom_8]}>
                 <View style={[commonStyle.common_rowItem]}>
                     <Text style={[commonStyle.common_fontWeight_600]}>UF: </Text>
                     <Text>PA</Text>
