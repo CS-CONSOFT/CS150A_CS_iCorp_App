@@ -52,10 +52,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
                 if (cameFromPv) {
                     navigate('Pre_Venda_Detalhes', {
-                        currentPv: pvId,
-                        emissao: '',
-                        validade: '',
-                        totalLiquido: ''
+                        currentPv: pvId
                     })
                 }
             })
