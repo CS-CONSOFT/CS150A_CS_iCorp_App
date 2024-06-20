@@ -121,7 +121,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     // Renderização da tela
     return (
-        <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
             <Suspense fallback={<ActivityIndicator />}>
 
                 <View>
@@ -135,9 +135,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     {/* Carregamento da lista de produtos ou exibição da lista */}
                     {isLoading ? <ActivityIndicator /> :
                         <View>
-                            <CustomListWithPagination
-                                list={productList!}
-                                renderItemComponent={(item) => <CustomProduct
+                            <FlatList
+                                data={productList}
+                                keyExtractor={(item) => item.Id!.toString()}
+                                ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrado!"} />}
+                                renderItem={({ item }) => <CustomProduct
                                     children={<ProductItem product={item} />}
                                     image={<ImageProductItem />}
                                     rightItem={<>
@@ -147,14 +149,12 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                         />
                                     </>}
                                 />}
-                                getPage={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                                paginationArray={paginationArray}
-                                //verificar
-                                emptyText={""}
                             />
+
                         </View>
                     }
                 </View>
+
 
 
                 {/* Modal para filtros */}
@@ -167,29 +167,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 />
 
             </Suspense>
-            <FlatList
-                data={productList}
-                keyExtractor={(item) => item.Id!}
-                ListEmptyComponent={() => <CustomEmpty text={isError ? errorMsg! : "Nenhum item encontrado"} />}
-                renderItem={({ item }) => (
-                    <CustomProduct
-                        children={<ProductItem product={item} />}
-                        image={<ImageProductItem />}
-                        rightItem={<>
-                            <RightItem
-                                loadingClick={loadingBtnClickItem}
-                                click={() => scInsertProductPv(item)}
-                            />
-                        </>}
-                    />
-                )}
-            />
-
-
-            {/* Componente de paginação */}
-            <Custom_Pagination
-                onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                paginationArray={paginationArray} />
 
             {/* Modal para filtros */}
             <CustomAlertDialog
@@ -199,6 +176,12 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     handleFormSubmitToSearch(filters)
                 }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
             />
+
+            <View>
+                <Custom_Pagination
+                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                    paginationArray={paginationArray} />
+            </View>
         </View>
 
     );

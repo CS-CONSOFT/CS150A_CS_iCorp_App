@@ -65,22 +65,46 @@ export default function StackRoutes() {
             }} />
 
             <StackNav.Screen name="ComandaLista" component={CS_SC_008_ListaComandas} options={{
-                title: "Lista de Comandas"
+                title: "Lista de Comandas",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
 
             <StackNav.Screen name="Serie" component={CS_SC_Serie} options={{
-                title: "Serie"
+                title: "Serie",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
 
 
             <StackNav.Screen name="Consulta_Produtos" component={CS_SC_ConsultaProdutos} options={{
-                title: "Consulta de Produto"
+                title: "Consulta de Produto",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
             <StackNav.Screen name="Config_Ambiente" component={CS_SC_006__EnvorimentConfig} options={{
-                title: "Configuração de Ambiente"
+                title: "Configuração de Ambiente",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
             }} />
 
             <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
