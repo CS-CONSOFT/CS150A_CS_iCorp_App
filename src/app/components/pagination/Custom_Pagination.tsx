@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { paginationStyles } from "./PaginationStyles";
+import { commonStyle } from "../../CommonStyle";
+import CustomVerticalSeparator from "../lists/CustomVertticalSeparator";
 
 const Custom_Pagination = ({ paginationArray, onPagePress }:
     { paginationArray: number[], onPagePress: (page: number) => void }) => {
@@ -13,7 +15,7 @@ const Custom_Pagination = ({ paginationArray, onPagePress }:
     }
 
     return (
-        <View>
+        <View style={[{ backgroundColor: "#0A3147", padding: 2, elevation: 2 }, commonStyle.margin_8, commonStyle.border_radius_32]}>
             <FlatList
                 horizontal
                 data={paginationArray}
@@ -37,10 +39,9 @@ const PaginationItem = ({ currentPage, item, onPagePress, paginationArray }:
                 </TouchableOpacity> :
 
                 <TouchableOpacity style={paginationStyles.item} onPress={() => onPagePress(item)}>
-                    <Text style={paginationStyles.text}>{item}</Text>
+                    <Text style={paginationStyles.textClicked}>{item}</Text>
                 </TouchableOpacity>
             }
-
         </View >
 
     );
