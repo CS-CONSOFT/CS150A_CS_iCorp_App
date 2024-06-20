@@ -15,8 +15,6 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
 
 
     function getObraById() {
-        console.log(obraId);
-
         setStatus(FETCH_STATUS.LOADING)
         try {
             handleGetObraById({ cs_obra_id: obraId }).then((res) => {

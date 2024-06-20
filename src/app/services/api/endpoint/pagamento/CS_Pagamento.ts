@@ -5,6 +5,7 @@ import { PaymentType } from "../../interfaces/pagamento/CS_IReqListFormPayment";
 import { IResPaymentResponse } from "../../interfaces/pagamento/CS_IResListFormPayment";
 import { IResFormPaymentComplete } from '../../interfaces/pagamento/CS_IResListFormPaymentComplete';
 import { IResPaymentFormByIdComplete } from '../../interfaces/pagamento/CS_IResPaymentFormByIdComplete';
+import { IResListPaymentFormSaved } from "../../interfaces/pagamento/IResListPaymentFormSaved";
 import { TermItem } from './../../interfaces/pagamento/IResPaymentTerm';
 
 export async function getListOfPaymentForm({ tenantId, paymentForm }: { tenantId: number, paymentForm: PaymentType }): Promise<IResPaymentResponse> {
@@ -120,6 +121,19 @@ export async function insertPaymentForm({ tenantId, pvId, insertPaymentBody }: {
     try {
         const response = await api.post(url, body)
         return response.data as ICommonResponse
+    } catch (error) {
+        throw error
+    }
+}
+
+
+/** A NOVA API APONTA PRA ESSA FUNCAO */
+export async function listPaymentForm({ tenantId, pvId }: { tenantId: number, pvId: string }):
+    Promise<IResListPaymentFormSaved> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${tenantId}/${pvId}/Pagamento_ListarPagamentos`
+    try {
+        const response = await api.get(url)
+        return response.data as IResListPaymentFormSaved
     } catch (error) {
         throw error
     }

@@ -11,6 +11,7 @@ import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../util/FormatText";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -64,10 +65,7 @@ const CS_SC_003_PreVenda = () => {
     function goToDetails(currentPv: IResPreVendaItemListModel) {
         storeSimpleData(DataKey.CurrentPV, currentPv.ID)
         navigate('Pre_Venda_Detalhes', {
-            currentPv: currentPv.ID,
-            emissao: formatDateToSlashPattern(currentPv.Data_Emissao),
-            validade: formatDateToSlashPattern(currentPv.DataValidade),
-            totalLiquido: formatMoneyValue(currentPv.Total!)
+            currentPv: currentPv.ID
         })
     }
 
@@ -78,7 +76,7 @@ const CS_SC_003_PreVenda = () => {
             <CustomSearch
                 placeholder="Protocolo/Conta"
                 onSearchPress={_fetchPV}
-                onFilterClick={handleFilterClick} />
+                clickToSearch={true} />
             {isLoading ? <>
                 <ActivityIndicator />
             </> :
@@ -87,6 +85,7 @@ const CS_SC_003_PreVenda = () => {
                     <FlatList
                         data={pvList}
                         refreshing={isLoading}
+                        ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                         onRefresh={handleRefreshList}
                         renderItem={({ item }) => <PreVendaRenderItem item={item}
                             onPress={() => goToDetails(item)} />}

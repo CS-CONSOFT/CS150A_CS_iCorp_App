@@ -9,7 +9,7 @@ import { formatDateToSlashPattern, formatMoneyValue } from "../../../../util/For
 export interface IPreVendaData {
     dataEmissao?: string,
     dataValidade?: string,
-    totalLiquido?: number
+    totalLiquido?: string
 }
 
 const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {

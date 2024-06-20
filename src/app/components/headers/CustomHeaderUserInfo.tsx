@@ -28,17 +28,22 @@ const CustomHeaderUserInfo = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 32,
-        marginTop: 12,
-        alignContent: 'center'
+        justifyContent: 'center',
+        padding: 32,
+        alignItems: 'center'
     },
     txtEstabName: {
         textAlign: 'left',
         fontSize: 18,
-        fontWeight: '900'
+        fontWeight: '900',
+        color: '#FFF',
+        elevation: 1,
+
     },
     txtUsername: {
-        textAlign: 'left'
+        textAlign: 'left',
+        color: '#FFF',
+        elevation: 1
     }
 })
 

@@ -254,9 +254,9 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             <View style={[common003_01_styles.extraBottomStyleContainer, common003_01_styles.extraBottomStyleRow, common003_01_styles.extraBottomStyleJustify]}>
                 <TouchableHighlight
                     onPress={downSwipe}
-                    style={commonStyle.common_button_style}
+                    style={commonStyle.btn_transparente}
                     underlayColor='white'
-                ><Text style={commonStyle.common_text_button_style}>Cancelar</Text></TouchableHighlight>
+                ><Text style={commonStyle.btn_text_transparente}>Cancelar</Text></TouchableHighlight>
             </View>
         </View>
     );

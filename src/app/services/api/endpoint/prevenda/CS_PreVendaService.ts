@@ -64,10 +64,10 @@ export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): P
 /**
  * Busca os produtos da pv
  */
-export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atendimento_id }:
-    { cs_tenant_id: number, cs_empresa_id: string, cs_atendimento_id: string }): Promise<IResProductsListPvModel> {
+export async function getPreSaleProducts({ cs_tenant_id, cs_atendimento_id }:
+    { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResProductsListPvModel> {
 
-    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/ListarProdutos`
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}/ListarProdutos`
 
 
     /** RESPONSE DE PRODUTOS */
@@ -79,9 +79,7 @@ export async function getPreSaleProducts({ cs_tenant_id, cs_empresa_id, cs_atend
 export async function getPv({ cs_tenant_id, cs_atendimento_id }: { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResGetPv> {
     const url_get_pv = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/GetPV/${cs_atendimento_id}`
     const response = await api.get(url_get_pv)
-
     await storeSimpleData(DataKey.CurrentContaId, response.data.Model.ClienteId)
-
     return response.data.Model
 }
 
