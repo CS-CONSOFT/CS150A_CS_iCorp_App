@@ -138,3 +138,15 @@ export async function listPaymentForm({ tenantId, pvId }: { tenantId: number, pv
         throw error
     }
 }
+
+/** A NOVA API APONTA PRA ESSA FUNCAO */
+export async function deletePaymentForm({ tenantId, formaPgtoAtendimentoId }: { tenantId: number, formaPgtoAtendimentoId: string }):
+    Promise<ICommonResponse> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${tenantId}/Pagamento_DeleteVinculo/${formaPgtoAtendimentoId}`
+    try {
+        const response = await api.delete(url)
+        return response.data as ICommonResponse
+    } catch (error) {
+        throw error
+    }
+}

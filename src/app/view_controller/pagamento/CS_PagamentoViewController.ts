@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, listPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, listPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
@@ -82,7 +82,7 @@ export async function handleSaveGlobalDiscount({ cs_valor_percentual }: { cs_val
     }
 }
 
-export async function handleListPaymentForm(): Promise<IResListPaymentFormSaved> {
+export async function handleListPaymentFormSaved(): Promise<IResListPaymentFormSaved> {
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
         let currentPvId: any = ''
@@ -90,6 +90,16 @@ export async function handleListPaymentForm(): Promise<IResListPaymentFormSaved>
         currentPvId = res
 
         const response = listPaymentForm({ tenantId: currentUser.TenantId, pvId: currentPvId })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function handleDeletePaymentForm({ formaPgtoAtendimentoId }: { formaPgtoAtendimentoId: string }): Promise<ICommonResponse> {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = deletePaymentForm({ tenantId: currentUser.TenantId, formaPgtoAtendimentoId: formaPgtoAtendimentoId })
         return response
     } catch (error) {
         throw error
