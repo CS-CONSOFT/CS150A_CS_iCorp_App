@@ -1,4 +1,14 @@
-export const DataListaComando = [
+
+export interface Produto {
+    id: number,
+    numero: string,
+    descricao: string,
+    quantidade: number,
+    unitario: number,
+    total: number,
+}
+
+export const DataListaComando: Produto[] = [
     {
         id: 1,
         numero: "2000079632222222",
