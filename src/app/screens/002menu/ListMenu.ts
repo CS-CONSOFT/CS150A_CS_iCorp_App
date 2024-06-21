@@ -29,18 +29,6 @@ export const data = [
         iconName: "person-add-outline"
     },
     {
-        id: 5,
-        title: "Carga",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
-        iconName: "archive-outline"
-    },
-    {
-        id: 6,
-        title: "Consulta Preços",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
-        iconName: "search-outline"
-    },
-    {
         id: 7,
         title: "Série Produto",
         onPress: (navigate: any) => { navigate('Serie') },

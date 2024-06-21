@@ -38,15 +38,15 @@ const CS_SC_Entrega = () => {
 
 
     //funcao para pesquisar nota
-    async function searchNote() {
+    async function searchNote(value: string) {
         //criando objeto para enviar
-        const note = noteTyped;
+        setNoteTyped(value)
 
 
         const tenant = (await getUserProperties()).tenantId;
         if (tenant != undefined) {
             //enviando o objeto
-            const iEntregaGet: IReqGetDelivery = { note, tenant }
+            const iEntregaGet: IReqGetDelivery = { note: noteTyped, tenant }
             //setando loading
             setStatus(FETCH_STATUS.LOADING)
             //buscando notas
@@ -99,7 +99,7 @@ const CS_SC_Entrega = () => {
             const iSetEntrega: IReqSetDelivery = { dd40id, tenant, userIdentifier }
             setEntrNotaVc(iSetEntrega).then((ok) => {
                 if (ok) {
-                    searchNote()
+                    searchNote(noteTyped)
                 }
             })
         }
@@ -117,7 +117,7 @@ const CS_SC_Entrega = () => {
     return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
         <CustomSearch
             placeholder="Pesquisar Nota"
-            onSearchPress={searchNote}
+            onSearchPress={(value) => searchNote(value)}
             clickToSearch={true}
         />
 
