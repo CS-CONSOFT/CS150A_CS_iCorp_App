@@ -1,6 +1,7 @@
-import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image, ActivityIndicator } from "react-native";
-import { ButtonLink } from "../../components/button/CustomButtonLink";
+import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image } from "react-native";
+
 //Componentes
+import { ButtonLink } from "../../components/button/CustomButtonLink";
 import CustomProduct from "../../components/product/CustomProduct";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -12,27 +13,46 @@ import { stylesConsultaProduto } from "../004produtos/ConsultaProdutoStyles";
 import { ICON_NAME } from "../../util/IconsName";
 //DataFake
 import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
+//Navegação
+import { useNavigation } from "@react-navigation/native";
+
 
 interface Nota {
+    id: number,
     nome: string;
     numero: number;
     data: Date;
 }
 
 
-const CS_SC_008_ListaComandas = ({ nome, numero, data }: Nota) => {
+                                    //Para teste
+const CS_SC_008_ListaComandas = ({ id = 1, numero, data }: Nota) => {
 
+    const navigation = useNavigation();
 
 
     return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
         <View style={[commonStyle.common_columnItem, commonStyle.align_centralizar, commonStyle.common_margin_horizontal, { borderBottomColor: ColorStyle.colorPrimary200, borderBottomWidth: 2, padding: 10 }]}>
-            <Text style={commonStyle.title_accordion}>{"CS-Consoft (DFIX)"}</Text>
-            <Text>{"Nª 20240000000020"}</Text>
-            <Text>{"20/06/24"}</Text>
+            {
+                id 
+                ?
+                    <>
+                        <Text style={commonStyle.title_accordion}>{"CS-Consoft (DFIX)"}</Text>
+                        <Text>{"Nª 20240000000020"}</Text>
+                        <Text>{"20/06/24"}</Text>
+                    </>
+                :
+                    <Text>Nota</Text>
+            }
         </View>
         <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_horizontal]}>
             <Text style={[commonStyle.title_accordion, commonStyle.font_size_18]}>Produtos</Text>
-            <ButtonLink onPress={() => ("")} label={"Adicionar"} />
+            <ButtonLink 
+                onPress={
+                    () => navigation.navigate("Consulta_Produtos", { cameFromPv: false })
+                } 
+                label={"Adicionar"} 
+            />
         </View>
         <FlatList
             data={DataListaComando}
@@ -48,10 +68,11 @@ const CS_SC_008_ListaComandas = ({ nome, numero, data }: Nota) => {
                     image={<ImageProductItem />}
                     rightItem={
                         <RightItem
-                            loadingClick={false}
                             click={() => Alert.alert('Em construção')}
-
                         />
+                    }
+                    onClickItem = {
+                        () => Alert.alert('Em construção')
                     }
                 />
             }
@@ -85,11 +106,11 @@ const ProductItem = ({ product }: { product: Produto }) => {
 }
 
 // Componente do botão direito para adicionar o produto à pré-venda
-const RightItem = ({ click, loadingClick }: { click: () => void, loadingClick: boolean }) => {
+const RightItem = ({ click }: { click: () => void}) => {
     return (
         <View style={stylesConsultaProduto.rightIcons}>
             <Pressable onPress={click}>
-                {loadingClick ? <ActivityIndicator size={32} color={"#000"} /> : <CustomIcon icon={ICON_NAME.LIXEIRA} />}
+                <CustomIcon icon={ICON_NAME.LIXEIRA} />
             </Pressable>
         </View>
     )
