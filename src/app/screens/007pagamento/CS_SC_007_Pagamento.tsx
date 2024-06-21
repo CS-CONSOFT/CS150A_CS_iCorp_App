@@ -292,7 +292,12 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
                     /** key == a chave do valor que foi selecionada, a chave é mapeada para receber o ID do valor na funcao
                      * getFormaPagamento()
                      */
-                    setSelected={(key: string) => { setSelected(key) }}
+                    setSelected={(key: string) => {
+                        setSelected(key)
+                        if (isEntrance) {
+                            onFormSelected(selected)
+                        }
+                    }}
                     data={paymentsForm || [{}]}
                     save="key"
                 />
@@ -380,6 +385,8 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
 const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
     const [paymentValue, setPaymentValue] = useState('')
+    const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState('0')
+    const [entranceFormId, setEntranceFormId] = useState('')
 
 
     useEffect(() => {
@@ -409,20 +416,23 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId
             const iReqInsertPaymentForm: IReqInsertPaymentForm = {
                 FormaPagamentoId: paymentFormId,
                 CondicaoPagamentoId: termId,
-                FormaPagamentoEntradaId: paymentFormId,
+                FormaPagamentoEntradaId: entranceFormId || undefined,
                 Valor: Number(paymentValue),
-                ValorEntrada: Number(paymentValue) - 1
+                ValorEntrada: Number(paymentValueEntranceValue) || 0
             }
-            handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
-                if (res.IsOk) {
-                    showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
-                } else {
-                    console.log(res.Msg);
 
-                    showToast(ToastType.ERROR, "Erro", res.Msg)
-                }
-                finishPayment()
-            })
+            if (iReqInsertPaymentForm.FormaPagamentoEntradaId === undefined) {
+                showToast(ToastType.ERROR, "Selecione", "Forma de entrada!")
+            } else {
+                handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
+                    if (res.IsOk) {
+                        showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                    } else {
+                        showToast(ToastType.ERROR, "Erro", res.Msg)
+                    }
+                    finishPayment()
+                })
+            }
 
         } catch (error: any) {
             showToast(ToastType.ERROR, error, "")
@@ -438,9 +448,11 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment }: { paymentFormId
 
                 {termItem?.PermiteEntrada && (
                     <View>
-                        <ItemFormaPagamento isEntrance={true} onFormSelected={(key: string) => { }} />
+                        <ItemFormaPagamento isEntrance={true} onFormSelected={(key: string) => {
+                            setEntranceFormId(key)
+                        }} />
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
-                        <TextInput value={paymentValue} onChangeText={setPaymentValue} style={commonStyle.common_input} />
+                        <TextInput value={paymentValueEntranceValue} onChangeText={setPaymentValueEntranceValue} style={commonStyle.common_input} />
                     </View>
                 )}
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
