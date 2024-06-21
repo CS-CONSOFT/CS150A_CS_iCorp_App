@@ -99,7 +99,12 @@ export async function handleListPaymentFormSaved(): Promise<IResListPaymentFormS
 export async function handleDeletePaymentForm({ formaPgtoAtendimentoId }: { formaPgtoAtendimentoId: string }): Promise<ICommonResponse> {
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-        const response = deletePaymentForm({ tenantId: currentUser.TenantId, formaPgtoAtendimentoId: formaPgtoAtendimentoId })
+
+        let currentPvId: any = ''
+        const res = await getSimpleData(DataKey.CurrentPV)
+        currentPvId = res
+
+        const response = deletePaymentForm({ tenantId: currentUser.TenantId, pvId: currentPvId, formaPgtoAtendimentoId: formaPgtoAtendimentoId })
         return response
     } catch (error) {
         throw error
