@@ -20,7 +20,7 @@ const CustomProduct = ({ children, image, rightItem, onClickItem, loadingClick }
             onClickItem!()
         }}>
             <View style={[common003_01_styles.containerRenderItem,
-            common003_01_styles.boxShadow]}>
+            common003_01_styles.boxShadow, {marginBottom: 5}]}>
                 {/** IMAGEM */}
                 <View style={common003_01_styles.productContainerLeft}>
                     {image}
