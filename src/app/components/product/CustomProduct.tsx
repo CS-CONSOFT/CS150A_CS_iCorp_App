@@ -27,10 +27,14 @@ const CustomProduct = ({ children, image, rightItem, onClickItem, loadingClick }
                 </View>
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>
-                    {children}
+                    {
+                        children
+                    }
                 </View>
                 <View>
-                    {rightItem}
+                    {/*Btn*/ 
+                        rightItem
+                    }
                 </View>
             </View>
         </Pressable>
