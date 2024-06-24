@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import ColorStyle from "../../ColorStyle";
 //estilos
 export const stylesConsultaProduto = StyleSheet.create({
     container: {
@@ -10,20 +11,21 @@ export const stylesConsultaProduto = StyleSheet.create({
         backgroundColor: '#E3E3E3',
         paddingVertical: 5,
         paddingHorizontal: 5,
-        borderRadius: 5,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
         flex: 1,
         justifyContent: 'center',
     },
     productCode: {
-        fontWeight: '600',
-        fontSize: 16
+        fontWeight: '700',
+        fontSize: 14,
     },
     productDesc: {
         fontWeight: '400'
     },
     productPrice: {
-        fontSize: 24,
-        color: '#333333',
+        fontSize: 18,
+        color: ColorStyle.colorPrimary300,
         fontWeight: 'bold'
     },
     searchContainer: {

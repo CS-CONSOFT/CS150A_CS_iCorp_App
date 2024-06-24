@@ -1,10 +1,14 @@
 import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image } from "react-native";
-
+import { useState } from "react";
+//Rota
+import { deletePaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 //Componentes
 import { ButtonLink } from "../../components/button/CustomButtonLink";
 import CustomProduct from "../../components/product/CustomProduct";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomIcon from "../../components/icon/CustomIcon";
+import { CardQuantidade } from "./components/cardQuantidade";
+import { CustomBottomTotal } from "../../components/bottomItem/CustomBottomTotal";
 //Estilo
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
@@ -15,20 +19,33 @@ import { ICON_NAME } from "../../util/IconsName";
 import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
 //Navegação
 import { useNavigation } from "@react-navigation/native";
-
+//Interface
+import { IResProductItemModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 
 interface Nota {
     id: number,
     nome: string;
     numero: number;
     data: Date;
+    total: number;
 }
 
 
                                     //Para teste
-const CS_SC_008_ListaComandas = ({ id = 1, numero, data }: Nota) => {
+const CS_SC_008_ListaComandas = ({ id = 1, numero, data, total }: Nota) => {
 
     const navigation = useNavigation();
+
+    const [products, setProducts] = useState<Produto[]>(DataListaComando)
+    const [somaComanda, setSomaComanda] = useState<Number>();
+
+    const SomaTotal = () => {
+        let totalLiquido = 0;
+        products.forEach((product: any) => {
+          totalLiquido += product.total;
+        });
+        setSomaComanda(totalLiquido);
+    };
 
 
     return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
@@ -68,15 +85,35 @@ const CS_SC_008_ListaComandas = ({ id = 1, numero, data }: Nota) => {
                     image={<ImageProductItem />}
                     rightItem={
                         <RightItem
-                            click={() => Alert.alert('Em construção')}
+                            click={
+                                () => Alert.alert('Em construção')
+                            }
                         />
                     }
                     onClickItem = {
-                        () => Alert.alert('Em construção')
+                       () => Alert.alert('Em construção')
                     }
                 />
             }
+            
         />
+        <View>
+            {
+                id
+                ?
+                    
+                    <CustomBottomTotal
+                        total={1000}
+                    />
+                    
+                :
+                    <CustomBottomTotal
+                        total={0}
+                    />
+            }
+        </View>
+
+        
 
     </SafeAreaView>
 }
@@ -100,7 +137,7 @@ const ProductItem = ({ product }: { product: Produto }) => {
             <Text>{"Kit Facil Everyday L’oreal"}</Text>
             <Text>{`Quant.: ${product.quantidade}`}</Text>
             <Text style={stylesConsultaProduto.productDesc}>{`Unitário: ${product.unitario}`}</Text>
-            <Text style={stylesConsultaProduto.productPrice}>{`Total: ${product.total}`}</Text>
+            <Text style={stylesConsultaProduto.productPrice}>{`Total: ${product.total.toFixed(2)}`}</Text>
         </View>
     )
 }
@@ -116,4 +153,7 @@ const RightItem = ({ click }: { click: () => void}) => {
     )
 }
 
+/*
+({item}) => <CardQuantidade product={item}/>
+*/
 
