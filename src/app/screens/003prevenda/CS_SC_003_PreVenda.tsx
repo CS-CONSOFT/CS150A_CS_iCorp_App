@@ -6,7 +6,7 @@ import { stylesPreVenda } from "./PreVendaStyles";
 
 import { useNavigation } from "@react-navigation/native";
 import { DataKey } from "../../enum/DataKeys";
-import { IResPreVendaItemListModel } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
+import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../util/FormatText";
@@ -17,7 +17,7 @@ const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
 
 const CS_SC_003_PreVenda = () => {
-    const [pvList, setPvList] = useState<IResPreVendaItemListModel[]>([]);
+    const [pvList, setPvList] = useState<Csicp_dd070_Completo[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
 
@@ -39,9 +39,9 @@ const CS_SC_003_PreVenda = () => {
     const memorizeFetchPV = useMemo(() => {
         return async (preSaleSearch: string) => {
             setStatus(FETCH_STATUS.LOADING)
-            handleFetchPv(initialDateString, finalDateString, preSaleSearch).then((res) => {
+            handleFetchPv(initialDateString, finalDateString, 10, 1).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                setPvList(res.List)
+                setPvList(res.csicp_dd070_Completo)
             })
         };
     }, [initialDate, finalDate])
@@ -62,10 +62,10 @@ const CS_SC_003_PreVenda = () => {
     }
 
 
-    function goToDetails(currentPv: IResPreVendaItemListModel) {
-        storeSimpleData(DataKey.CurrentPV, currentPv.ID)
+    function goToDetails(currentPv: Csicp_dd070_Completo) {
+        storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
         navigate('Pre_Venda_Detalhes', {
-            currentPv: currentPv.ID
+            currentPv: currentPv.DD070_Nota.csicp_dd070.DD070_Id
         })
     }
 
@@ -89,7 +89,7 @@ const CS_SC_003_PreVenda = () => {
                         onRefresh={handleRefreshList}
                         renderItem={({ item }) => <PreVendaRenderItem item={item}
                             onPress={() => goToDetails(item)} />}
-                        keyExtractor={(item) => item.ID.toString()}
+                        keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
                         extraData={pvList}
                     />
                 </>

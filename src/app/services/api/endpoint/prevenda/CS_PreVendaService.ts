@@ -16,13 +16,14 @@ import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdut
 export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
         const urlParams = {
-            UsuarioId: IGetPreVendaList.cs_usuario_id,
-            SituacaoId: IGetPreVendaList.cs_situacao_id,
-            DataInicial: IGetPreVendaList.cs_data_inicial,
-            DataFinal: IGetPreVendaList.cs_data_final,
-            Pesquisa: IGetPreVendaList.cs_pesquisa
+            In_Tenant_Id: IGetPreVendaList.cs_tenant_id,
+            In_IsCount: IGetPreVendaList.cs_is_count,
+            in_currentPage: IGetPreVendaList.cs_current_page,
+            in_pageSize: IGetPreVendaList.cs_page_size,
+            In_DataInicio: IGetPreVendaList.cs_data_inicial,
+            In_DataFinal: IGetPreVendaList.cs_data_final
         }
-        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${IGetPreVendaList.cs_tenant_id}/${IGetPreVendaList.cs_empresa_id}/ListPV`;
+        const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`
         const response = await api.get(url, { params: urlParams })
         return response.data as IResPreVenda
     } catch (error) {
