@@ -15,7 +15,7 @@ import ColorStyle from "../../../ColorStyle";
 
 //Componentes
 import CustomSearch from "../../../components/search/CustomSearch";
-import ButtonActionBlue from "../../../components/bottomItem/CustomBottomActionBlue";
+import ButtonActionBlue from "../../../components/button/CustomButtonActionBlue";
 import CustomCard_001 from "../../../components/cards/CustomCard_001";
 
 const CS_SC_Entrega = () => {

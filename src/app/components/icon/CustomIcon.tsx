@@ -8,7 +8,7 @@ export interface ICustomIcon {
     onPress?: (prop?: any) => void
 }
 
-const CustomIcon = ({ onPress, icon, style = { alignSelf: 'center' }, iconColor = '#000', iconSize = 32 }: ICustomIcon) => {
+const CustomIcon = ({ onPress, icon, style = { alignSelf: 'center' }, iconColor = '#000', iconSize = 25 }: ICustomIcon) => {
     return (
         <FontAwesome size={iconSize} style={style} name={icon} color={iconColor} onPress={onPress} />
     );

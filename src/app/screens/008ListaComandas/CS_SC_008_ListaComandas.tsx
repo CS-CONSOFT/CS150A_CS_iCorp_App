@@ -1,120 +1,57 @@
-import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image } from "react-native";
+import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useState } from "react";
 //Rota
-import { deletePaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+
 //Componentes
-import { ButtonLink } from "../../components/button/CustomButtonLink";
-import CustomProduct from "../../components/product/CustomProduct";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomIcon from "../../components/icon/CustomIcon";
-import { CardQuantidade } from "./components/cardQuantidade";
-import { CustomBottomTotal } from "../../components/bottomItem/CustomBottomTotal";
+ 
 //Estilo
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import { stylesPreVenda } from "../003prevenda/PreVendaStyles";
 import { stylesConsultaProduto } from "../004produtos/ConsultaProdutoStyles";
 //Icons
 import { ICON_NAME } from "../../util/IconsName";
 //DataFake
-import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
+import { ListaComanda, Comanda } from "./ListaComanda";
 //Navegação
 import { useNavigation } from "@react-navigation/native";
+import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";
 //Interface
-import { IResProductItemModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
-
-interface Nota {
-    id: number,
-    nome: string;
-    numero: number;
-    data: Date;
-    total: number;
-}
 
 
-                                    //Para teste
-const CS_SC_008_ListaComandas = ({ id = 1, numero, data, total }: Nota) => {
+
+const CS_SC_008_ListaComandas = () => {
 
     const navigation = useNavigation();
+    const isLoading: boolean = false;
 
-    const [products, setProducts] = useState<Produto[]>(DataListaComando)
-    const [somaComanda, setSomaComanda] = useState<Number>();
-
-    const SomaTotal = () => {
-        let totalLiquido = 0;
-        products.forEach((product: any) => {
-          totalLiquido += product.total;
-        });
-        setSomaComanda(totalLiquido);
-    };
-
-
-    return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
-        <View style={[commonStyle.common_columnItem, commonStyle.align_centralizar, commonStyle.common_margin_horizontal, { borderBottomColor: ColorStyle.colorPrimary200, borderBottomWidth: 2, padding: 10 }]}>
-            {
-                id 
-                ?
-                    <>
-                        <Text style={commonStyle.title_accordion}>{"CS-Consoft (DFIX)"}</Text>
-                        <Text>{"Nª 20240000000020"}</Text>
-                        <Text>{"20/06/24"}</Text>
-                    </>
-                :
-                    <Text>Nota</Text>
-            }
-        </View>
-        <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_horizontal]}>
-            <Text style={[commonStyle.title_accordion, commonStyle.font_size_18]}>Produtos</Text>
-            <ButtonLink 
-                onPress={
-                    () => navigation.navigate("Consulta_Produtos", { cameFromPv: false })
-                } 
-                label={"Adicionar"} 
-            />
-        </View>
-        <FlatList
-            data={DataListaComando}
-            ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrada"} />}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) =>
-                <CustomProduct
-                    children={
-                        <ProductItem
-                            product={item}
-                        />
-                    }
-                    image={<ImageProductItem />}
-                    rightItem={
-                        <RightItem
-                            click={
-                                () => Alert.alert('Em construção')
-                            }
-                        />
-                    }
-                    onClickItem = {
-                       () => Alert.alert('Em construção')
-                    }
-                />
-            }
-            
-        />
-        <View>
-            {
-                id
-                ?
-                    
-                    <CustomBottomTotal
-                        total={1000}
-                    />
-                    
-                :
-                    <CustomBottomTotal
-                        total={0}
-                    />
-            }
-        </View>
-
+    return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%", paddingVertical: 10 }}>
         
-
+        {isLoading
+            ? 
+            <ActivityIndicator style={[commonStyle.align_centralizar, {height: "100%"}]} size="large" color={ColorStyle.colorPrimary200}/>
+            :
+            <>
+            
+            
+                <FlatList
+                    data={ListaComanda}
+                    ListEmptyComponent={<CustomEmpty text={"Nenhuma comanda encontrada"} />}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) =>
+                        <ComandaItem 
+                            item={item}
+                            onPress={() => Alert.alert("Em construção")}
+                        />
+                    }
+                    
+                />
+                
+            </>
+            
+        }
     </SafeAreaView>
 }
 
@@ -122,38 +59,45 @@ export default CS_SC_008_ListaComandas;
 
 
 // Componente de exibição da imagem do produto
-const ImageProductItem = () => {
+function ComandaItem({item, onPress}: { item: Comanda, onPress: () => void }) {
+    //const [year, month, day] = item.Data_Emissao.split('-')
     return (
-        <Image style={commonStyle.productImage}
-            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnT98rwKfnZngX2pDhX4EkbW-y0pUOCz9iCg&s' }} />
-    );
-}
+        <Pressable onPress={onPress} style={[stylesPreVenda.containerRenderItem]}>
+  
 
-// Componente de exibição das informações do produto
-const ProductItem = ({ product }: { product: Produto }) => {
-    return (
-        <View style={commonStyle.justify_content_space_btw}>
-            <Text style={stylesConsultaProduto.productCode}>{`Nº ${product.numero}`}</Text>
-            <Text>{"Kit Facil Everyday L’oreal"}</Text>
-            <Text>{`Quant.: ${product.quantidade}`}</Text>
-            <Text style={stylesConsultaProduto.productDesc}>{`Unitário: ${product.unitario}`}</Text>
-            <Text style={stylesConsultaProduto.productPrice}>{`Total: ${product.total.toFixed(2)}`}</Text>
-        </View>
+                <View style={stylesPreVenda.containerRenderItemLeft}>
+                    <Text style={stylesPreVenda.containerRenderItemLeftText}>{"05"}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemLeftText}>{"Jun"}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemLeftText}>{"2024"}</Text>
+                </View>
+
+
+                <View style={[stylesPreVenda.containerRenderItemRight, commonStyle.common_rowItem]}>
+                    <View style={[{width: "85%"}, commonStyle.align_start_spaceAround_collumn]}>
+
+                        <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.protocolo}</Text>
+                        <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.total}</Text>
+                        <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>
+                            {
+                                item.status
+                                ?
+                                "Aberto"
+                                :
+                                "Fechado"
+                            }
+                        </Text>
+                    </View>
+                    <Pressable onPress={onPress} style={[stylesConsultaProduto.rightIcons]}>
+                    
+                        <CustomIcon icon={ICON_NAME.ENVIAR} />
+                    </Pressable>    
+                </View>
+                
+                
+        </Pressable>
+            
+        
     )
 }
 
-// Componente do botão direito para adicionar o produto à pré-venda
-const RightItem = ({ click }: { click: () => void}) => {
-    return (
-        <View style={stylesConsultaProduto.rightIcons}>
-            <Pressable onPress={click}>
-                <CustomIcon icon={ICON_NAME.LIXEIRA} />
-            </Pressable>
-        </View>
-    )
-}
-
-/*
-({item}) => <CardQuantidade product={item}/>
-*/
 
