@@ -11,11 +11,12 @@ import { ICON_NAME } from "../../../../util/IconsName";
 import { moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
 import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { common003_01_styles } from "./CommonStyles";
+import { DD080_Produtos } from '../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista';
 
 /** componente de edição dos valores do produto */
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
     {
-        product: IResProductItemModel,
+        product: DD080_Produtos,
         saveTablePrice: (tablePrice: number, productId: string) => void
         saveUnityPrice: (unityPrice: number, productId: string) => void
         saveDiscountPercent: (discountPercent: number, productId: string) => void
@@ -29,7 +30,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [isMontar, setIsMontar] = useState(false);
     const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
     const [isRequisitar, setIsRequisitar] = useState(false);
-    const [productAmount, setProductAmount] = useState(product.Quantidade);
+    const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Quantidade);
 
     const [tablePrice, setTablePrice] = useState('');
     const [unityPrice, setUnityPrice] = useState('');
@@ -38,21 +39,21 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
 
     useEffect(() => {
-        setIsEntregar(product.IsEntregar)
-        setIsMontar(product.IsMontar)
-        setIsSaldoNegativo(product.IsSaldoNegativo)
-        setIsRequisitar(product.IsRequisitar)
+        setIsEntregar(product.csicp_dd080.DD080_Entregar)
+        setIsMontar(product.csicp_dd080.DD080_IsMontar)
+        setIsSaldoNegativo(product.csicp_dd080.DD080_Solicita_NS_Negativa)
+        setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
 
-        setTablePrice(formatMoneyValue(product.PrecoTabela));
-        setUnityPrice(formatMoneyValue(product.PrecoUnitario));
+        setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela));
+        setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario));
         setPercentDiscount(0.0);
-        setValueDiscount(formatMoneyValue(product.TotalDesconto));
+        setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto));
     }, [product])
 
     /** ALTERA A QUANTIDADE */
     function alterAmount(isIncrement: boolean) {
         const newAmount = isIncrement ? productAmount + 1 : productAmount - 1
-        handleUpdateProductAmount(product.Id, { Quantidade: newAmount }).then((res) => {
+        handleUpdateProductAmount(product.csicp_dd080.DD080_Id, { Quantidade: newAmount }).then((res) => {
             if (res.IsOk) {
                 setProductAmount(newAmount)
                 setAmountProduct(newAmount)
@@ -99,13 +100,13 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         } else {
             switch (inputField) {
                 case 1:
-                    saveTablePrice(tratedValue as number, product.Id);
+                    saveTablePrice(tratedValue as number, product.csicp_dd080.DD080_Id);
                     break;
                 case 2:
-                    saveUnityPrice(tratedValue as number, product.Id);
+                    saveUnityPrice(tratedValue as number, product.csicp_dd080.DD080_Id);
                     break;
                 case 3:
-                    saveDiscountValue(tratedValue as number, product.Id);
+                    saveDiscountValue(tratedValue as number, product.csicp_dd080.DD080_Id);
                     break;
             }
         }
@@ -117,19 +118,19 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         switch (currentSwitch) {
             case 1:
                 setIsEntregar(value)
-                handleUpdateProductSwtichs(product.Id, { IsEntregar: value });
+                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsEntregar: value });
                 break
             case 2:
                 setIsRequisitar(value)
-                handleUpdateProductSwtichs(product.Id, { IsRequisitar: value });
+                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsRequisitar: value });
                 break
             case 3:
                 setIsSaldoNegativo(value)
-                handleUpdateProductSwtichs(product.Id, { IsSaldoNegativo: value });
+                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsSaldoNegativo: value });
                 break
             case 4:
                 setIsMontar(value)
-                handleUpdateProductSwtichs(product.Id, { IsMontar: value, });
+                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsMontar: value, });
                 break
         }
     }
@@ -215,7 +216,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                 value={percentDiscount.toString()}
                                 keyboardType='decimal-pad'
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.Id)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
 

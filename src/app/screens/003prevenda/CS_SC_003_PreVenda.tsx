@@ -1,17 +1,13 @@
 import { lazy, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
-
-
 import { stylesPreVenda } from "./PreVendaStyles";
-
 import { useNavigation } from "@react-navigation/native";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 import { DataKey } from "../../enum/DataKeys";
 import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { formatDateToSlashPattern, formatMoneyValue } from "../../util/FormatText";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
-import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -57,11 +53,6 @@ const CS_SC_003_PreVenda = () => {
         })
     }
 
-    function handleFilterClick(): void {
-        throw new Error("Function not implemented.");
-    }
-
-
     function goToDetails(currentPv: Csicp_dd070_Completo) {
         storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
         navigate('Pre_Venda_Detalhes', {
@@ -101,8 +92,8 @@ export default CS_SC_003_PreVenda;
 
 
 /** RENDER ITEM */
-function PreVendaRenderItem({ item, onPress }: { item: IResPreVendaItemListModel, onPress: () => void }) {
-    const [year, month, day] = item.Data_Emissao.split('-')
+function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onPress: () => void }) {
+    const [year, month, day] = item.DD070_Nota.csicp_dd070.DD070_Data_Emissao.split('-')
     return (
         <Pressable onPress={onPress}>
             <View style={stylesPreVenda.containerRenderItem}>
@@ -115,10 +106,10 @@ function PreVendaRenderItem({ item, onPress }: { item: IResPreVendaItemListModel
 
 
                 <View style={stylesPreVenda.containerRenderItemRight}>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.ProtocolNumber}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.Codigo}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.Nome_Cliente}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.NomeUsuario}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.DD070_Nota.csicp_dd070.DD070_ProtocolNumber}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.DD070_Nota.csicp_bb012.BB012_Nome_Cliente}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.DD070_Nota.csicp_sy001_Atendente.SY001_Usuario}</Text>
                 </View>
             </View>
         </Pressable>
