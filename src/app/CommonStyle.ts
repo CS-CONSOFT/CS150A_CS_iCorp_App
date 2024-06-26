@@ -195,4 +195,12 @@ export const commonStyle = StyleSheet.create({
         alignItems: "center",
         justifyContent:"space-between",
     },
+    align_start_spaceAround_collumn:{
+        alignItems: "flex-start",
+        justifyContent: "space-around",
+    },
+    align_start_spaceAround_center:{
+        alignItems: "center",
+        justifyContent: "space-around",
+    }
 });
