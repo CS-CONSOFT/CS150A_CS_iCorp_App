@@ -2,6 +2,11 @@ import { View, Text } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import { ReactNode } from "react";
 
+
+/**
+ * TOPO DO CARD TODO AZUL, UM TEXTO NO MEIO, O CORPO É DESENHADO CONFORME O DESIGN E PASSADO AO CHILDREN
+ * Ref: OBRA LISTA
+ */
 const CustomCard_001 = ({ title, children, rightChildren, showRightChildren = false }: { title: string, children: ReactNode, rightChildren?: ReactNode, showRightChildren?: boolean }) => {
     return (
         <View style={[commonStyle.margin_16, commonStyle.common_rowItem, { backgroundColor: '#95B5C7', borderRadius: 32 }]}>

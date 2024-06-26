@@ -29,7 +29,7 @@ export async function handleGetListConta({ currentPage, pageSize, modRelacaoID }
         const commonReq: ICommonReq = {
             Tenant_id: currentUser.TenantId,
             In_IsActive: true,
-            In_IsCount: false,
+            In_IsCount: false ? 0 : 1,
             in_currentPage: currentPage,
             in_pageSize: pageSize
         }

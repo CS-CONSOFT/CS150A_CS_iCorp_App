@@ -4,7 +4,11 @@ import { paginationStyles } from "./PaginationStyles";
 import { commonStyle } from "../../CommonStyle";
 import CustomVerticalSeparator from "../lists/CustomVertticalSeparator";
 
-const Custom_Pagination = ({ paginationArray, onPagePress }:
+const Custom_Pagination = ({
+    /** array que ira mostrar na paginacao */
+    paginationArray,
+    /** lida com o clique da pagina pressionada, retorna o valor da pagina para ser enviada a chamada da API */
+    onPagePress }:
     { paginationArray: number[], onPagePress: (page: number) => void }) => {
 
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -15,7 +19,7 @@ const Custom_Pagination = ({ paginationArray, onPagePress }:
     }
 
     return (
-        <View style={[{ backgroundColor: "#0A3147", padding: 2, elevation: 2 }, commonStyle.margin_8, commonStyle.border_radius_32]}>
+        <View style={[{ backgroundColor: "#0A3147", padding: 12, elevation: 2 }, commonStyle.margin_8, commonStyle.border_radius_32]}>
             <FlatList
                 horizontal
                 data={paginationArray}
@@ -32,7 +36,7 @@ const Custom_Pagination = ({ paginationArray, onPagePress }:
 const PaginationItem = ({ currentPage, item, onPagePress, paginationArray }:
     { currentPage: number, paginationArray: number[], item: number, onPagePress: (item: number) => void }) => {
     return (
-        <View style={{ padding: 8 }}>
+        <View>
             {currentPage == paginationArray[item - 1]
                 ? <TouchableOpacity style={paginationStyles.clickedItem}>
                     <Text style={paginationStyles.text}>{item}</Text>

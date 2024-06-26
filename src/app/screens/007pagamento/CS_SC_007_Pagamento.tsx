@@ -227,26 +227,6 @@ const styles = StyleSheet.create({
         color: '#1068EB',
     },
 });
-
-const renderStageItem = (stage: PaymentStage, number: number, currentItem: PaymentStage) => (
-    <View style={commonStyle.common_columnItem} key={number}>
-        <View style={[{ borderWidth: 1, borderRadius: 32, padding: 8 }, currentItem === stage ? { borderColor: "#1068EB" } : { borderColor: "#CED4DA" }]}>
-            <Text style={[
-                commonStyle.common_fontWeight_600,
-                commonStyle.text_aligment_center,
-                currentItem === stage ? { color: "#1068EB" } : { color: "#CED4DA" }
-            ]}>{number}</Text>
-        </View>
-    </View>
-);
-
-const renderStageLabel = (stage: PaymentStage, label: string, currentItem: PaymentStage) => (
-    <Text style={[
-        commonStyle.common_fontWeight_600,
-        currentItem === stage ? { color: "#1068EB" } : { color: "#CED4DA" }
-    ]} key={label}>{label}</Text>
-);
-
 /**
  * 
  * @param onFormSelected funcao de callback que ira retornar o valor da forma selecionada
