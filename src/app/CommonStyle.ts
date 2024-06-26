@@ -77,6 +77,12 @@ export const commonStyle = StyleSheet.create({
     common_margin_top_8: {
         marginTop: 8
     },
+    common_margin_top_64: {
+        marginTop: 64
+    },
+    common_margin_top_32: {
+        marginTop: 32
+    },
     common_margin_left_16: {
         marginLeft: 16
     },
@@ -86,7 +92,7 @@ export const commonStyle = StyleSheet.create({
     common_margin_horizontal: {
         marginHorizontal: 15
     },
-    common_margin_vertical:{
+    common_margin_vertical: {
         marginVertical: 12
     },
     common_input: {
@@ -94,7 +100,8 @@ export const commonStyle = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         borderRadius: 32,
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        borderColor: "#B0B0B0"
     },
     productImage: {
         height: '100%',
@@ -137,6 +144,9 @@ export const commonStyle = StyleSheet.create({
     text_aligment_center: {
         textAlign: 'center'
     },
+    text_aligment_left: {
+        textAlign: 'left'
+    },
     btn_gray: {
         backgroundColor: '#E3E3E3',
         paddingHorizontal: 32,
@@ -161,45 +171,45 @@ export const commonStyle = StyleSheet.create({
         fontWeight: '600',
         alignSelf: 'center'
     },
-    avatar_Imagem:{
-        width:60,
-        height:60,
+    avatar_Imagem: {
+        width: 60,
+        height: 60,
         borderRadius: 100,
         alignContent: "center",
         justifyContent: "center",
     },
-    avatar_nomeIniciais:{
-        width:60,
-        height:60,
+    avatar_nomeIniciais: {
+        width: 60,
+        height: 60,
         backgroundColor: ColorStyle.colorPrimary200,
         borderRadius: 100,
         alignContent: "center",
         justifyContent: "center",
     },
-    title_nomeIniciais:{
+    title_nomeIniciais: {
         fontSize: 20,
         fontWeight: "700",
         textAlign: "center",
         color: ColorStyle.colorPrimary300,
     },
-    title_accordion:{
+    title_accordion: {
         fontWeight: "700",
         color: ColorStyle.colorPrimary300,
         fontSize: 16,
     },
-    align_centralizar:{
+    align_centralizar: {
         alignItems: "center",
         justifyContent: "center",
     },
     align_spacebetween_row: {
         alignItems: "center",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
     },
-    align_start_spaceAround_collumn:{
+    align_start_spaceAround_collumn: {
         alignItems: "flex-start",
         justifyContent: "space-around",
     },
-    align_start_spaceAround_center:{
+    align_start_spaceAround_center: {
         alignItems: "center",
         justifyContent: "space-around",
     }

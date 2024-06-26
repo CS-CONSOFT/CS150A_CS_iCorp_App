@@ -4,6 +4,7 @@ import { getListObras, getObraById } from "../../services/api/endpoint/obras/CS_
 import { IResGetListObras } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { getObject } from "../../services/storage/AsyncStorageConfig";
 import { testFormatDate } from "../../util/FormatText";
+import { getPaginationList } from "../../util/GetPaginationArray";
 
 export async function handleGetListObras({ currentPage, dataInicio, dataFim }: {
     currentPage?: number,
@@ -41,11 +42,7 @@ function getCurrentDate() {
 }
 
 export async function handleGetPagesArray(totalItens: number): Promise<number[]> {
-    let pageArray: number[] = []
-    for (let index = 1; index <= totalItens; index++) {
-        pageArray.push(index)
-    }
-    return pageArray
+    return getPaginationList(totalItens)
 }
 
 export async function handleGetObraById({ cs_obra_id }: { cs_obra_id: string }) {

@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { FlatList, View } from "react-native";
 import Custom_Pagination from "../pagination/Custom_Pagination";
 import CustomEmpty from "./CustomEmpty";
+import { getPaginationList } from "../../util/GetPaginationArray";
 
 interface CustomListWithPaginationProps {
     list: any[];
@@ -14,15 +15,7 @@ interface CustomListWithPaginationProps {
 
 const CustomListWithPagination = ({ list, renderItemComponent, getPage, totalPages, paginationArray, emptyText }: CustomListWithPaginationProps) => {
     function getPaginationArray(): number[] {
-        if (totalPages) {
-            let pageArray: number[] = []
-            for (let index = 1; index <= totalPages; index++) {
-                pageArray.push(index)
-            }
-            return pageArray
-        } else {
-            return paginationArray!
-        }
+        return getPaginationList(totalPages!)
     }
 
     return (

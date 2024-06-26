@@ -3,20 +3,23 @@ import CustomHeaderLogo from "../components/headers/CustomHeaderLogo";
 import CustomLoggoutTitle from "../components/headers/CustomLoggoutTitle";
 import CS_SC_001_Login from "../screens/001login/CS_SC_001_Login";
 import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
-import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
-import TabRoutes001 from "./tab-001.routes";
-import TabRoutes002 from "./tab-002.routes";
-import CS_SC_006__EnvorimentConfig from "../screens/006config/CS_SC_006__EnvorimentConfig";
-import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
-import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
+import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
 import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
 import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisição";
 import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
-import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
+import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
+import CS_SC_006__EnvorimentConfig from "../screens/006config/CS_SC_006__EnvorimentConfig";
 import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
-import CS_SC_008_ListaComandas from "../screens/008ListaComandas/CS_SC_008_ListaComandas";
-import CS_SC_008_NovaComanda from "../screens/008ListaComandas/CS_SC_008_NovaComanda";
+import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
+import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
+import TabRoutes001 from "./tab-001.routes";
+import TabRoutes002 from "./tab-002.routes";
+import TabRoutes008 from "./tab-008.routes";
+import TabRoutes009 from "./tab-009.routes";
+import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
+import CS_SC_009_CadastroEndCliente from "../screens/009Cliente/CS_SC_009_CadastroEndCliente";
+import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
 
 
 const StackNav = createNativeStackNavigator()
@@ -39,6 +42,10 @@ declare global {
             Obras_Chat: undefined
             Pagamento: undefined
             ComandaLista: undefined
+            CadastroCliente: undefined
+            Cadastro_001: undefined
+            Cadastro_002_End: undefined
+            Cadastro_003_Perf: undefined
         }
     }
 }
@@ -55,6 +62,36 @@ export default function StackRoutes() {
                 headerLeft: () => <CustomLoggoutTitle />
             }} />
 
+            <StackNav.Screen name="Cadastro_001" component={CS_SC_009_CadastroCliente} options={{
+                title: "Cadastro Cliente",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndCliente} options={{
+                title: "Endereço",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="Cadastro_003_Perf" component={CS_SC_003_02_PreVendaDetalheCliente} options={{
+                title: "Perfil",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
             <StackNav.Screen name="Entrega" component={CS_SC_Entrega} options={{
                 title: "Entrega",
                 headerTitleAlign: 'center',
@@ -65,18 +102,8 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="ComandaLista" component={CS_SC_008_ListaComandas} options={{
+            <StackNav.Screen name="ComandaLista" component={TabRoutes008} options={{
                 title: "Lista de Comandas",
-                headerTitleAlign: 'center',
-                headerTintColor: "#fff",
-                headerStyle: {
-                    backgroundColor: "#0A3147"
-                },
-                headerBackVisible: true,
-            }} />
-
-            <StackNav.Screen name="NovaComanda" component={CS_SC_008_NovaComanda} options={{
-                title: "Nova Comanda",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
@@ -95,6 +122,17 @@ export default function StackRoutes() {
                 },
                 headerBackVisible: true,
             }} />
+
+            <StackNav.Screen name="Clientes" component={TabRoutes009} options={{
+                title: "Clientes",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
 
 
 

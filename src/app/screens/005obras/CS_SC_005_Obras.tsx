@@ -19,7 +19,6 @@ const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [listObras, setListObras] = useState<Dd190_Obras[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const windowHeight = Dimensions.get('window').height;
 
     useEffect(() => {
         getListObras()
