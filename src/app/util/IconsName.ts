@@ -28,4 +28,5 @@ export const ICON_NAME = {
     ALERT: 'alert-outline',
     IMAGE: 'image-outline',
     DOCUMENT: 'document-attach-outline',
+    DOCUMENT_EMPTY: "document-outline",
 }

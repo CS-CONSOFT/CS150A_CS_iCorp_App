@@ -17,6 +17,7 @@ import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
 import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
 import CS_SC_008_ListaComandas from "../screens/008ListaComandas/CS_SC_008_ListaComandas";
 import CS_SC_008_NovaComanda from "../screens/008ListaComandas/CS_SC_008_NovaComanda";
+import TabRoutes008 from "./tab-008.routes";
 
 
 const StackNav = createNativeStackNavigator()
@@ -65,7 +66,7 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="ComandaLista" component={CS_SC_008_ListaComandas} options={{
+            <StackNav.Screen name="ComandaLista" component={TabRoutes008} options={{
                 title: "Lista de Comandas",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
@@ -73,16 +74,7 @@ export default function StackRoutes() {
                     backgroundColor: "#0A3147"
                 },
                 headerBackVisible: true,
-            }} />
-
-            <StackNav.Screen name="NovaComanda" component={CS_SC_008_NovaComanda} options={{
-                title: "Nova Comanda",
-                headerTitleAlign: 'center',
-                headerTintColor: "#fff",
-                headerStyle: {
-                    backgroundColor: "#0A3147"
-                },
-                headerBackVisible: true,
+                
             }} />
 
 

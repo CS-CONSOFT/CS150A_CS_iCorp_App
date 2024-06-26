@@ -9,7 +9,7 @@ import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
-
+import CustomEmpty from "../../../components/lists/CustomEmpty";
 
 import ColorStyle from "../../../ColorStyle";
 
@@ -17,6 +17,7 @@ import ColorStyle from "../../../ColorStyle";
 import CustomSearch from "../../../components/search/CustomSearch";
 import ButtonActionBlue from "../../../components/button/CustomButtonActionBlue";
 import CustomCard_001 from "../../../components/cards/CustomCard_001";
+import { CustomBottomContanier } from "../../../components/bottomItem/CustomBottomContanier";
 
 const CS_SC_Entrega = () => {
 
@@ -114,7 +115,7 @@ const CS_SC_Entrega = () => {
 
 
 
-    return <SafeAreaView style={stylesNotaEntrega.modalContainer}>
+    return <SafeAreaView style={[stylesNotaEntrega.modalContainer, {height: "100%"}]}>
         <CustomSearch
             placeholder="Pesquisar Nota"
             onSearchPress={(value) => searchNote(value)}
@@ -126,14 +127,18 @@ const CS_SC_Entrega = () => {
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
                     data={products}
+                    ListEmptyComponent={<CustomEmpty text={"Nenhuma entrega encontrada"} />}
                     renderItem={(product: any) => <CustomCard_001 title={product.DD060_Descricao} children={
                         <EntregaCardLeft modo={"Balcão"} quantidade={1} />
                     } />}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <View style={styles.btnContenier}>
-                    <ButtonActionBlue text={"Confirmar entrega"} onPress={confirmDelivery} />
-                </View>
+                <CustomBottomContanier
+                    show={false}
+                    text={"Confirmar entrega"}
+                    onPress={confirmDelivery}
+            
+                />
             </View>
         )}
 
@@ -142,16 +147,16 @@ const CS_SC_Entrega = () => {
                 <Text style={styles.messageNot}>{messageList}</Text>
             </View>
         )}
-
+        {/* RETIRAR!! SO PARA VISUALIZAR ENQUANTO NAO POPULA OS DADOS */}
         <CustomCard_001
             title={"exemplo"}
             children={<EntregaCardLeft modo={"Balcão"} quantidade={1} />}
         />
-
+            
         <View style={styles.btnContenier}>
             <ButtonActionBlue text={"Confirmar entrega!"} onPress={confirmDelivery} />
         </View>
-
+        {/*************************************************************/}
     </SafeAreaView>
 }
 

@@ -7,6 +7,8 @@ import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
 import { stylesNotaSerie } from "./StylesNotaSerie";
 import { commonStyle } from "../../../CommonStyle";
+import { ButtonActionSecondary } from "../../../components/button/CustonButtonActionSecondary";
+import ColorStyle from "../../../ColorStyle";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
 const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
@@ -77,11 +79,13 @@ const CS_SC_Serie = () => {
                 >
                 </CustomHeaderInput>
             </Suspense>
-            <Text>Insira uma nota para buscar produtos</Text>
+            
 
             {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={CustomSeparator}
+                    ListEmptyComponent={ <Text>Nota não encontrada</Text>
+                    }
                     data={products}
                     renderItem={({ item }) => (
                         <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />
@@ -96,7 +100,7 @@ const CS_SC_Serie = () => {
             <CustomAlertDialog
                 isVisible={showPopUp}
                 onDismiss={() => setShowPopUp(false)}
-                title={currentProductSelected?.DD060_Cor_Serie_Merc || ''}
+
                 children={<AlertDialog />}
             />
         </Suspense>
@@ -121,22 +125,16 @@ interface ProductItemProps {
 const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps }) => {
     return (
 
-        <View>
-            <View style={stylesNotaSerie.container}>
-                <Text style={stylesNotaSerie.text}>{productItemProps.product.DD060_Descricao}</Text>
+        <View style={[commonStyle.common_margin_horizontal, commonStyle.card_white_shadow]}>
+                <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
                 <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
-                <TouchableHighlight
-                    onPress={() => productItemProps.onPress(productItemProps.product)}
-                    style={stylesNotaSerie.buttonStyleList}
-                    underlayColor='white'
-                ><Text style={stylesNotaSerie.textStyle}>Alterar Cor Série</Text></TouchableHighlight>
-            </View>
+                <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)}/>
         </View>
 
     );
 };
 
-
-
+/*VER ISSO TA DANDO ERRO EM CustomAlertDialog*/
+/*title={currentProductSelected?.DD060_Cor_Serie_Merc || ''} */
 
 export default CS_SC_Serie;
