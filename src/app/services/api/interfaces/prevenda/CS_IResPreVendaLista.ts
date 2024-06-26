@@ -11,7 +11,7 @@ export interface Contador {
 }
 
 export interface Csicp_dd070_Completo {
-    DD070_Nota: DD070_Nota
+    DD070_Nota: DD070_Nota //
     DD071_Enderecos: DD071_Enderecos[]
     DD072_FormaPagtos: DD072_FormaPagtos[]
     DD074_InfoAdicionais: DD074_InfoAdicionais[]
