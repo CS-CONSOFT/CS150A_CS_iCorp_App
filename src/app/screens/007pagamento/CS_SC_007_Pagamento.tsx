@@ -67,11 +67,11 @@ const CS_SC_007_Pagamento = () => {
 
     return (
         <SafeAreaView>
-            <TopOfScreen currentPv={currentPv?.Id} clientPv={currentPv?.Codigo + "-" + currentPv?.Nome_Cliente} />
+            <TopOfScreen currentPv={currentPv?.DD070_Nota.csicp_dd070.DD070_Id} clientPv={currentPv?.DD070_Nota.csicp_dd070.DD070_Codg_CCusto + "-" + currentPv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente} />
 
             <CustomSeparator />
 
-            <BuyValues TotalLiquido={currentPv?.TotalLiquido} Pagamento_ValorAPagar={currentPv?.Pagamento_ValorAPagar} Pagamento_ValorPago={currentPv?.Pagamento_ValorPago} />
+            <BuyValues TotalLiquido={currentPv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido} Pagamento_ValorAPagar={currentPv?.DD070_Nota.csicp_dd070.DD070_VlrAFinanciar} Pagamento_ValorPago={currentPv?.DD070_Nota.csicp_dd070.DD070_Valor_Entrada} />
 
 
             <CustomCard_003 children={<ItemSelecao />} />

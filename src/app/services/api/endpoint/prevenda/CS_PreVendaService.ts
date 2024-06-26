@@ -15,16 +15,16 @@ import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdut
  */
 export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
-        const urlParams = {
+        const params = {
             In_Tenant_Id: IGetPreVendaList.cs_tenant_id,
-            In_IsCount: IGetPreVendaList.cs_is_count,
+            In_IsCount: 0,
             in_currentPage: IGetPreVendaList.cs_current_page,
             in_pageSize: IGetPreVendaList.cs_page_size,
             In_DataInicio: IGetPreVendaList.cs_data_inicial,
             In_DataFinal: IGetPreVendaList.cs_data_final
         }
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`
-        const response = await api.get(url, { params: urlParams })
+        const response = await api.get(url, { headers: params })
         return response.data as IResPreVenda
     } catch (error) {
         throw error;
@@ -78,10 +78,15 @@ export async function getPreSaleProducts({ cs_tenant_id, cs_atendimento_id }:
 }
 
 export async function getPv({ cs_tenant_id, cs_atendimento_id }: { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResGetPv> {
-    const url_get_pv = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/GetPV/${cs_atendimento_id}`
-    const response = await api.get(url_get_pv)
-    await storeSimpleData(DataKey.CurrentContaId, response.data.Model.ClienteId)
-    return response.data.Model
+    const headerParams = {
+        In_Tenant_Id: cs_tenant_id,
+        In_DD070_id: cs_atendimento_id
+    }
+
+    const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVenda_PorID`
+    const response = (await api.get(url, { headers: headerParams })).data as IResGetPv
+    await storeSimpleData(DataKey.CurrentContaId, response.DD070_Nota.csicp_bb012.ID)
+    return response
 }
 
 /**

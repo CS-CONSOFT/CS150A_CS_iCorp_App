@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Animated, Image, Pressable, Text, View } from "react-native";
 import CustomIcon from "../../../../components/icon/CustomIcon";
-import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
-import { IProdutoItemUltimasVendas, IResUltimasVendaProduto } from "../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
+import { IProdutoItemUltimasVendas } from "../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
 import { formatMoneyValue } from "../../../../util/FormatText";
 import { ICON_NAME } from "../../../../util/IconsName";
+import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleGetLastSalesProduct } from "../../../../view_controller/produto/ProductViewController";
+import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
-import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
-import { ToastType, showToast } from "../../../../util/ShowToast";
+import { Csicp_dd080, DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 
 
 
@@ -18,7 +18,7 @@ import { ToastType, showToast } from "../../../../util/ShowToast";
 //Item de produto que aparece na listagem
 export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
     {
-        product: IResProductItemModel,
+        product: DD080_Produtos,
         onDeleteProductClick: (productId: string) => void,
         saveTablePrice: (tablePrice: number, productId: string) => void
         saveUnityPrice: (unityPrice: number, productId: string) => void
@@ -30,7 +30,7 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
     const [lastSalesProduct, setLastSalesProduct] = useState<IProdutoItemUltimasVendas[]>()
 
     useEffect(() => {
-        setProductAmount(product.Quantidade)
+        setProductAmount(product.csicp_dd080.DD080_Quantidade)
     }, [product])
 
     const [dragX] = useState(new Animated.Value(0));
@@ -118,11 +118,11 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                 </View>
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>
-                    <Text style={common003_01_styles.productName}>N° {product.Codigo}</Text>
-                    <Text style={common003_01_styles.productInfo}>{product.Descricao.slice(0, 20)}</Text>
+                    <Text style={common003_01_styles.productName}>N° {product.csicp_dd080.DD080_Codigo_Produto}</Text>
+                    <Text style={common003_01_styles.productInfo}>{product.csicp_dd080.DD080_DescProduto.slice(0, 20)}</Text>
                     <Text style={common003_01_styles.productInfo}>{`Qtd: ${productAmount}`}</Text>
-                    <Text style={common003_01_styles.productInfo}>{`Unitário: ${formatMoneyValue(product.PrecoUnitario)}`}</Text>
-                    <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.TotalLiquido)}`}</Text>
+                    <Text style={common003_01_styles.productInfo}>{`Unitário: ${formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario)}`}</Text>
+                    <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
                 </View>
 
                 {/** CLIQUE DO LADO DIREITO */}
@@ -135,9 +135,9 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                 {/** CONTEUDO EXIBIDO A DIREITA DE CADA ITEM DA LISTA */}
                 {extraIconsRightOpen && (
                     <Pressable style={common003_01_styles.iconsRight}>
-                        <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.Id)} />
-                        <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.gg008_ID)} />
-                        <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.gg008_ID)} />
+                        <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
+                        <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
+                        <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
                     </Pressable>
                 )}
             </Animated.View>
