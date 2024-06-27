@@ -1,7 +1,7 @@
 import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image } from "react-native";
 import { useState } from "react";
 //Rota
-import { deletePaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+
 //Componentes
 import { ButtonLink } from "../../components/button/CustomButtonLink";
 import CustomProduct from "../../components/product/CustomProduct";
@@ -21,8 +21,8 @@ import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
 //Navegação
 import { useNavigation } from "@react-navigation/native";
 //Interface
-import { IResProductItemModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 import { ContainerQuantidade } from "../../components/Quantidade/containerQuantidade";
+import BottomContanier from "../../components/BottomContanier/bottomContanier";
 
 
                                     
@@ -73,8 +73,7 @@ const CS_SC_008_NovaComanda = () => {
             ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrada"} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
-                <CustomProduct
-                    onClickItem={(item) => <BottomQuatidade/>}
+                <BottomContanier
                     children={
                         <ProductItem
                             product={item}
@@ -88,12 +87,13 @@ const CS_SC_008_NovaComanda = () => {
                             }
                         />
                     }
-                    
+                    bottomItem={
+                        <BottomQuatidade/>
+                    }
                 />
             }
-            
+                
         />
-        
         <CustomBottomContanier
             total={somaComanda}
             show={true}
@@ -146,11 +146,11 @@ const RightItem = ({ click }: { click: () => void}) => {
 
 const BottomQuatidade = () => {
     return(
-        <View style={commonStyle.common_margin_horizontal}>
+        <View>
             <ContainerQuantidade/>
             <View style={[commonStyle.common_rowItem, commonStyle.align_start_spaceAround_center]}>
                 <ButtonActionSecondary label={"Salvar"} onPress={() => ""}/>
-                <ButtonActionTransparent label={"Salvar"} onPress={() => ""}/>
+                <ButtonActionTransparent label={"Cancela"} onPress={() => ""}/>
             </View>
         </View>
     )

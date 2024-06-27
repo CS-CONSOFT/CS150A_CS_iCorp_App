@@ -220,5 +220,18 @@ export const commonStyle = StyleSheet.create({
         paddingBottom: 15,
         height: "auto",
         width: "auto",
+    },
+    card_bottom_shadow:{
+        backgroundColor: ColorStyle.colorwhite,
+        borderBottomEndRadius: 20,
+        borderBottomStartRadius:20,
+        elevation: 2,
+        paddingBottom: 15,
+        paddingHorizontal: 10,
+        height: "auto",
+        width: "auto",
+        marginBottom: 10,
+        borderColor: ColorStyle.colorneutrais100
+        
     }
 });

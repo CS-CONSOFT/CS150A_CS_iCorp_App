@@ -5,7 +5,7 @@ export interface Comanda {
     status: boolean,
 }
 
-export const ListaComanda: Comanda[] = [
+export const DataListaComanda: Comanda[] = [
     {
         id: 1,
         protocolo: "2000079632222222",

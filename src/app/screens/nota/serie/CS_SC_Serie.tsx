@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import CustomSeparator from "../../../components/lists/CustomSeparator";
@@ -8,7 +7,6 @@ import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/seri
 import { stylesNotaSerie } from "./StylesNotaSerie";
 import { commonStyle } from "../../../CommonStyle";
 import { ButtonActionSecondary } from "../../../components/button/CustonButtonActionSecondary";
-import ColorStyle from "../../../ColorStyle";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
 const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
@@ -100,7 +98,6 @@ const CS_SC_Serie = () => {
             <CustomAlertDialog
                 isVisible={showPopUp}
                 onDismiss={() => setShowPopUp(false)}
-
                 children={<AlertDialog />}
             />
         </Suspense>
@@ -134,7 +131,5 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
     );
 };
 
-/*VER ISSO TA DANDO ERRO EM CustomAlertDialog*/
-/*title={currentProductSelected?.DD060_Cor_Serie_Merc || ''} */
 
 export default CS_SC_Serie;
