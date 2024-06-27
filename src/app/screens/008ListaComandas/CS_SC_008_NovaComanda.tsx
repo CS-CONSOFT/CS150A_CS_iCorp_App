@@ -88,6 +88,7 @@ const CS_SC_008_NovaComanda = () => {
                         />
                     }
                     bottomItem={
+                        /* Container que abre embaixo ao pressionar o componente */
                         <BottomQuatidade/>
                     }
                 />
