@@ -39,14 +39,6 @@ const CS_SC_Serie = () => {
         })
     }
 
-
-    const showDialog = () => setShowPopUp(true);
-
-    function switchShowPopUp(product: IResNotaProdutoItem) {
-        showDialog()
-        setCurrentProductSelected(product)
-    }
-
     async function setNewCorSerie(newSerie: string) {
         const productId = currentProductSelected?.DD060_Id
         const newCorSerie = newSerie;
@@ -79,16 +71,16 @@ const CS_SC_Serie = () => {
                 >
                 </CustomHeaderInput>
             </Suspense>
-            
+
 
             {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={CustomSeparator}
-                    ListEmptyComponent={ <Text>Nota não encontrada</Text>
+                    ListEmptyComponent={<Text>Nota não encontrada</Text>
                     }
                     data={products}
                     renderItem={({ item }) => (
-                        <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />
+                        <ProductItem productItemProps={{ product: item, onPress: () => { } }} />
                     )}
                     keyExtractor={(index) => index.toString()}
                 />
@@ -96,14 +88,6 @@ const CS_SC_Serie = () => {
             )}
         </SafeAreaView>
 
-        <Suspense fallback={<ActivityIndicator />}>
-            <CustomAlertDialog
-                isVisible={showPopUp}
-                onDismiss={() => setShowPopUp(false)}
-
-                children={<AlertDialog />}
-            />
-        </Suspense>
     </>
 }
 
@@ -126,9 +110,9 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
     return (
 
         <View style={[commonStyle.common_margin_horizontal, commonStyle.card_white_shadow]}>
-                <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
-                <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
-                <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)}/>
+            <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
+            <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
+            <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)} />
         </View>
 
     );

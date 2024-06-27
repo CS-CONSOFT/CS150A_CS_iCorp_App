@@ -78,6 +78,8 @@ const CS_SC_006__EnvorimentConfig = () => {
 
     // Função assíncrona para excluir uma entrada do banco de dados
     async function exclude() {
+        setHasValue(false);
+        /**
         try {
             await db.exclude().then(() => {
                 get(); // Buscar dados atualizados após a exclusão
@@ -85,40 +87,39 @@ const CS_SC_006__EnvorimentConfig = () => {
         } catch (error) {
             // Tratar erros (pode ser aprimorado com um alerta ou log)
         }
+             */
     }
 
     // Renderização do componente
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             {hasValue && (
                 // Se houver valores, exibir dados e botões de ações
                 <View>
-                    <Text>{`Tenant: ${tenant}`}</Text>
-                    <Text>{`URL: ${urlBase}`}</Text>
-                    <Text>{`Token: ${token}`}</Text>
-                    <TouchableHighlight
-                        onPress={get}
-                        style={commonStyle.common_button_style}
-                        underlayColor='white'
-                    >
-                        <Text style={commonStyle.common_text_button_style}>Buscar</Text>
-                    </TouchableHighlight>
 
-                    <TouchableHighlight
-                        onPress={exclude}
-                        style={commonStyle.common_button_style}
-                        underlayColor='white'
-                    >
-                        <Text style={commonStyle.common_text_button_style}>Deletar</Text>
-                    </TouchableHighlight>
+                    <View style={commonStyle.align_centralizar}>
+                        <Text style={commonStyle.text_size_20}>{`Tenant: ${tenant}`}</Text>
+                        <Text style={commonStyle.text_size_20}>{`URL: ${urlBase}`}</Text>
+                        <Text style={commonStyle.text_size_20}>{`Token: ${token}`}</Text>
+                    </View>
 
-                    <TouchableHighlight
-                        onPress={init}
-                        style={commonStyle.common_button_style}
-                        underlayColor='white'
-                    >
-                        <Text style={commonStyle.common_text_button_style}>Iniciar</Text>
-                    </TouchableHighlight>
+                    <View style={[commonStyle.justify_content_space_btw, commonStyle.common_rowItem]}>
+                        <TouchableHighlight
+                            onPress={exclude}
+                            style={commonStyle.common_button_style}
+                            underlayColor='white'
+                        >
+                            <Text style={commonStyle.common_text_button_style}>Editar</Text>
+                        </TouchableHighlight>
+
+                        <TouchableHighlight
+                            onPress={init}
+                            style={commonStyle.common_button_style}
+                            underlayColor='white'
+                        >
+                            <Text style={commonStyle.common_text_button_style}>Iniciar</Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
             )}
 

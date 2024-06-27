@@ -6,6 +6,7 @@ import { IReqSave1201 } from "../../interfaces/contas/CS_IReqSave1201";
 import { IResGetContaById } from "../../interfaces/contas/CS_IResGetContaById";
 import { IResGetListConta } from "../../interfaces/contas/CS_IResGetListConta";
 import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
+import { IResPadraoConta } from "./IResPadraoConta";
 
 export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<IResGetContaById> {
     try {
@@ -22,7 +23,7 @@ export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id
     }
 }
 
-export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id: number, cs_save_conta: IReqSaveConta }) {
+export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id: number, cs_save_conta: IReqSaveConta }): Promise<IResPadraoConta> {
     try {
         const data = {
             Tenant_id: cs_tenant_id
@@ -75,7 +76,7 @@ export async function deleteConta({ cs_tenant_id, cs_conta_id }: { cs_tenant_id:
 }
 
 
-export async function saveEndereco({ cs_tenant_id, cs_req_save }: { cs_tenant_id: number, cs_req_save: IReqSave1201 }) {
+export async function save1201({ cs_tenant_id, cs_req_save }: { cs_tenant_id: number, cs_req_save: IReqSave1201 }) {
     try {
         const data = {
             Tenant_id: cs_tenant_id
@@ -108,7 +109,7 @@ export async function save1206({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
             Tenant_id: cs_tenant_id
         }
 
-        const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01206_Save_Updatee', cs_req_save, { headers: data });
+        const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01206_Save_Update', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {
         throw err;

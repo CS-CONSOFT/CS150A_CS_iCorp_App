@@ -1,18 +1,17 @@
-import { SafeAreaView, View, FlatList, Text, Alert, Pressable, Image } from "react-native";
 import { useState } from "react";
+import { Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 //Rota
-import { deletePaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 //Componentes
-import { ButtonLink } from "../../components/button/CustomButtonLink";
-import CustomProduct from "../../components/product/CustomProduct";
-import CustomEmpty from "../../components/lists/CustomEmpty";
-import CustomIcon from "../../components/icon/CustomIcon";
 import { CustomBottomContanier } from "../../components/bottomItem/CustomBottomContanier";
-import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";
 import { ButtonActionTransparent } from "../../components/button/CustomButtonAcyionTransparent";
+import { ButtonLink } from "../../components/button/CustomButtonLink";
+import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";
+import CustomIcon from "../../components/icon/CustomIcon";
+import CustomEmpty from "../../components/lists/CustomEmpty";
+import CustomProduct from "../../components/product/CustomProduct";
 //Estilo
-import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 import { stylesConsultaProduto } from "../004produtos/ConsultaProdutoStyles";
 //Icons
 import { ICON_NAME } from "../../util/IconsName";
@@ -21,11 +20,10 @@ import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
 //Navegação
 import { useNavigation } from "@react-navigation/native";
 //Interface
-import { IResProductItemModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 import { ContainerQuantidade } from "../../components/Quantidade/containerQuantidade";
 
 
-                                    
+
 const CS_SC_008_NovaComanda = () => {
     const id = 1;
 
@@ -38,34 +36,34 @@ const CS_SC_008_NovaComanda = () => {
     const SomaTotal = () => {
         let totalLiquido: number = 0;
         products.forEach((product: any) => {
-          totalLiquido += product.total;
+            totalLiquido += product.total;
         });
         setSomaComanda(totalLiquido);
     };
 
 
 
-    return <SafeAreaView style={{ backgroundColor: "#fff", height:"100%"}}>
+    return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
         <View style={[commonStyle.common_columnItem, commonStyle.align_centralizar, commonStyle.common_margin_horizontal, { borderBottomColor: ColorStyle.colorPrimary200, borderBottomWidth: 2, padding: 10 }]}>
             {
-                id 
-                ?
+                id
+                    ?
                     <>
                         <Text style={commonStyle.title_accordion}>{"CS-Consoft (DFIX)"}</Text>
                         <Text>{"Nª 20240000000020"}</Text>
                         <Text>{"20/06/24"}</Text>
                     </>
-                :
+                    :
                     <Text>Nota</Text>
             }
         </View>
         <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_horizontal]}>
             <Text style={[commonStyle.title_accordion, commonStyle.font_size_18]}>Produtos</Text>
-            <ButtonLink 
+            <ButtonLink
                 onPress={
                     () => navigation.navigate("Consulta_Produtos", { cameFromPv: false })
-                } 
-                label={"Adicionar"} 
+                }
+                label={"Adicionar"}
             />
         </View>
         <FlatList
@@ -74,7 +72,7 @@ const CS_SC_008_NovaComanda = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
                 <CustomProduct
-                    onClickItem={(item) => <BottomQuatidade/>}
+                    onClickItem={(item) => <BottomQuatidade />}
                     children={
                         <ProductItem
                             product={item}
@@ -88,19 +86,19 @@ const CS_SC_008_NovaComanda = () => {
                             }
                         />
                     }
-                    
+
                 />
             }
-            
+
         />
-        
+
         <CustomBottomContanier
             total={somaComanda}
             show={true}
             text={"Salvar"}
             onPress={() => ""}
         />
-    
+
 
     </SafeAreaView>
 }
@@ -130,7 +128,7 @@ const ProductItem = ({ product }: { product: Produto }) => {
 }
 
 // Componente do botão direito para adicionar o produto à pré-venda
-const RightItem = ({ click }: { click: () => void}) => {
+const RightItem = ({ click }: { click: () => void }) => {
     return (
         <View style={stylesConsultaProduto.rightIcons}>
             <Pressable onPress={click}>
@@ -145,12 +143,12 @@ const RightItem = ({ click }: { click: () => void}) => {
 */
 
 const BottomQuatidade = () => {
-    return(
+    return (
         <View style={commonStyle.common_margin_horizontal}>
-            <ContainerQuantidade/>
+            <ContainerQuantidade />
             <View style={[commonStyle.common_rowItem, commonStyle.align_start_spaceAround_center]}>
-                <ButtonActionSecondary label={"Salvar"} onPress={() => ""}/>
-                <ButtonActionTransparent label={"Salvar"} onPress={() => ""}/>
+                <ButtonActionSecondary label={"Salvar"} onPress={() => ""} />
+                <ButtonActionTransparent label={"Salvar"} onPress={() => ""} />
             </View>
         </View>
     )

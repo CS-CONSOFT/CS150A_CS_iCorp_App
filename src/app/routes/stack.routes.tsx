@@ -16,7 +16,7 @@ import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
 
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
-import CS_SC_009_CadastroEndCliente from "../screens/009Cliente/CS_SC_009_CadastroEndCliente";
+import CS_SC_009_CadastroEndereco from "../screens/009Cliente/CS_SC_009_CadastroEndereco";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import TabRoutes001 from "./tab-001.routes";
@@ -48,7 +48,7 @@ declare global {
             ComandaLista: undefined
             CadastroCliente: undefined
             Cadastro_001: undefined
-            Cadastro_002_End: undefined
+            Cadastro_002_End: { isPreVendaEditEnd: boolean, endId?: string }
             Cadastro_003_Perf: undefined
         }
     }
@@ -77,7 +77,7 @@ export default function StackRoutes() {
             }} />
 
 
-            <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndCliente} options={{
+            <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndereco} options={{
                 title: "Endereço",
 
                 headerTitleAlign: 'center',
