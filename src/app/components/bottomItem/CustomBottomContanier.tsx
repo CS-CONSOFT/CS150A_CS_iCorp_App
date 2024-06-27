@@ -1,19 +1,33 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomBottomItem from "./CustomBottomItem";
 import { commonStyle } from "../../CommonStyle";
+import ButtonActionBlue from "../button/CustomButtonActionBlue";
+
 
 export interface IListaComando {
-    total: number;
+    total?: number;
+    text: string;
+    onPress: () => void;
+    show: boolean;
 }
 
-export const CustomBottomTotal = ({total }: IListaComando) => {
+export const CustomBottomContanier = ({total, show, text, onPress }: IListaComando) => {
 
 
     return (
-        <CustomBottomItem height={80}>
-            <View style={[styles.row, styles.space_between, commonStyle.common_margin_horizontal]}>
-                <Text style={[styles.total_liquido_text, styles.padding_12]}>Total</Text>
-                <Text style={[styles.valor, styles.padding_12]}>{total}</Text>
+        <CustomBottomItem height={120}>
+            <View style={{alignItems:"center"}}>
+
+                {
+                    show && (
+                    <View style={[styles.row, styles.space_between, commonStyle.common_margin_horizontal, {width: "100%"}]}>
+                        <Text style={[styles.total_liquido_text, styles.padding_12]}>Total</Text>
+                        <Text style={[styles.valor, styles.padding_12]}>{total}</Text>
+                    </View>
+                    )
+                }
+                
+                <ButtonActionBlue text={text} onPress={onPress}/>
             </View>
         </CustomBottomItem>
     );

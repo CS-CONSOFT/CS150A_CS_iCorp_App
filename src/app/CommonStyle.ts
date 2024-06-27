@@ -212,5 +212,13 @@ export const commonStyle = StyleSheet.create({
     align_start_spaceAround_center: {
         alignItems: "center",
         justifyContent: "space-around",
+    },
+    card_white_shadow:{
+        backgroundColor: ColorStyle.colorwhite,
+        borderRadius: 20,
+        elevation: 2,
+        paddingBottom: 15,
+        height: "auto",
+        width: "auto",
     }
 });

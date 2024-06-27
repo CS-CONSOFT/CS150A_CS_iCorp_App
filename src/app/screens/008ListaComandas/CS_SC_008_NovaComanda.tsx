@@ -7,7 +7,7 @@ import { ButtonLink } from "../../components/button/CustomButtonLink";
 import CustomProduct from "../../components/product/CustomProduct";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomIcon from "../../components/icon/CustomIcon";
-import { CustomBottomTotal } from "../../components/bottomItem/CustomBottomTotal";
+import { CustomBottomContanier } from "../../components/bottomItem/CustomBottomContanier";
 import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";
 import { ButtonActionTransparent } from "../../components/button/CustomButtonAcyionTransparent";
 //Estilo
@@ -45,7 +45,7 @@ const CS_SC_008_NovaComanda = () => {
 
 
 
-    return <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
+    return <SafeAreaView style={{ backgroundColor: "#fff", height:"100%"}}>
         <View style={[commonStyle.common_columnItem, commonStyle.align_centralizar, commonStyle.common_margin_horizontal, { borderBottomColor: ColorStyle.colorPrimary200, borderBottomWidth: 2, padding: 10 }]}>
             {
                 id 
@@ -74,7 +74,7 @@ const CS_SC_008_NovaComanda = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
                 <CustomProduct
-                    onClickItem={() => ""}
+                    onClickItem={(item) => <BottomQuatidade/>}
                     children={
                         <ProductItem
                             product={item}
@@ -93,13 +93,14 @@ const CS_SC_008_NovaComanda = () => {
             }
             
         />
-        <View>
-            <CustomBottomTotal
-                total={somaComanda}
-            />
-        </View>
-
         
+        <CustomBottomContanier
+            total={somaComanda}
+            show={true}
+            text={"Salvar"}
+            onPress={() => ""}
+        />
+    
 
     </SafeAreaView>
 }

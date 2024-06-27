@@ -1,14 +1,25 @@
 import { StyleSheet } from "react-native";
+import ColorStyle from "../../../ColorStyle";
 /** ESTILOS */
 export const stylesNotaSerie = StyleSheet.create({
     container: {
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
+     
+    },
+    titleNota:{
+        marginBottom: 10, 
+        backgroundColor: ColorStyle.colorPrimary200, 
+        borderTopRightRadius: 20, 
+        borderTopLeftRadius: 20, 
+        paddingHorizontal: 8, 
+        paddingVertical: 8,
+        color: ColorStyle.colorPrimary300,
+        fontSize: 16,
+        fontWeight: "bold",
     },
     text: {
         fontSize: 16,
-        fontWeight: "bold",
+        fontWeight: 700,
         color: "#333",
     }, buttonStyle: {
         alignItems: 'center',

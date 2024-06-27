@@ -11,6 +11,11 @@ import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
 import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
 import CS_SC_006__EnvorimentConfig from "../screens/006config/CS_SC_006__EnvorimentConfig";
 import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
+
+import CS_SC_008_ListaComandas from "../screens/008ListaComandas/CS_SC_008_ListaComandas";
+import CS_SC_008_NovaComanda from "../screens/008ListaComandas/CS_SC_008_NovaComanda";
+
+
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import TabRoutes001 from "./tab-001.routes";
@@ -20,6 +25,7 @@ import TabRoutes009 from "./tab-009.routes";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
 import CS_SC_009_CadastroEndCliente from "../screens/009Cliente/CS_SC_009_CadastroEndCliente";
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
+
 
 
 const StackNav = createNativeStackNavigator()
@@ -72,14 +78,20 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
+
+            <StackNav.Screen name="ComandaLista" component={TabRoutes008} options={{
+                title: "Lista de Comandas",
+
             <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndCliente} options={{
                 title: "Endereço",
+
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
                     backgroundColor: "#0A3147"
                 },
                 headerBackVisible: true,
+
             }} />
 
             <StackNav.Screen name="Cadastro_003_Perf" component={CS_SC_003_02_PreVendaDetalheCliente} options={{
@@ -110,6 +122,7 @@ export default function StackRoutes() {
                     backgroundColor: "#0A3147"
                 },
                 headerBackVisible: true,
+
             }} />
 
 

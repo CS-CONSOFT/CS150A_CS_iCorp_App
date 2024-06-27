@@ -1,11 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native'
 import StackRoutes from './stack.routes'
-import { SafeAreaView } from 'react-native'
+
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export default function Routes() {
     return (
-        <NavigationContainer>
-            <StackRoutes />
-        </NavigationContainer>
+        <SafeAreaProvider>
+            <NavigationContainer>
+                <StackRoutes />
+            </NavigationContainer>
+        </SafeAreaProvider>
     )
 }
