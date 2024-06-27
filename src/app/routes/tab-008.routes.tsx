@@ -4,12 +4,6 @@ import CS_SC_008_ListaComandas from '../screens/008ListaComandas/CS_SC_008_Lista
 import CS_SC_008_NovaComanda from '../screens/008ListaComandas/CS_SC_008_NovaComanda';
 import { Ionicons } from "@expo/vector-icons";
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
-
-
-
-
 
 const BottomTab = createBottomTabNavigator()
 
@@ -20,31 +14,31 @@ export default function TabRoutes008() {
             <BottomTab.Screen
                 name='Comanda Lista'
                 component={CS_SC_008_ListaComandas}
-                options={{ 
+                options={{
                     headerShown: false,
-                    tabBarIcon: ({color, size, focused}) => {
-                        if(focused){
-                            return <Ionicons color={color} size={size} name={"list-outline"}/>
+                    tabBarIcon: ({ color, size, focused }) => {
+                        if (focused) {
+                            return <Ionicons color={color} size={size} name={"list-outline"} />
                         }
-                        return <Ionicons color={color} size={size} name={"list-outline"}/>
+                        return <Ionicons color={color} size={size} name={"list-outline"} />
                     },
-                }} 
+                }}
             />
 
 
             <BottomTab.Screen
-                name='Nova Comanda' 
+                name='Nova Comanda'
                 component={CS_SC_008_NovaComanda}
-                options={{ 
+                options={{
                     headerShown: false,
-                    tabBarIcon: ({color, size, focused}) => {
-                        if(focused){
-                            return <Ionicons color={color} size={size} name={"document-outline"}/>
+                    tabBarIcon: ({ color, size, focused }) => {
+                        if (focused) {
+                            return <Ionicons color={color} size={size} name={"document-outline"} />
                         }
-                        return <Ionicons color={color} size={size} name={"document-outline"}/>
+                        return <Ionicons color={color} size={size} name={"document-outline"} />
                     },
-                    
-                }} 
+
+                }}
             />
 
             <BottomTab.Screen options={{ headerShown: false }} name='ComandaLista' component={CS_SC_008_ListaComandas} />
