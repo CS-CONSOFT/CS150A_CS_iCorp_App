@@ -3,6 +3,7 @@ export const ICON_NAME = {
     CARRINHO_CONTORNADO: 'cart-outline',
     PAPEL_LISTA_CONTORNADO: 'newspaper-outline',
     ADICIONAR_PESSOA_CONTORNADO: 'person-add-outline',
+    LOCALIZACAO: 'location-outline',
     CAIXA_ARQUIVO_CONTORNADO: 'archive-outline',
     CODIGO_BARRA_CONTORNADO: 'barcode-outline',
     OBRA_CONTORNADO: 'construct-outline',

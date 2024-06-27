@@ -7,7 +7,7 @@ export interface ICommonResponse {
 export interface ICommonReq {
     Tenant_id: number,
     In_IsActive: boolean,
-    In_IsCount: boolean,
+    In_IsCount: number,
     in_currentPage: number,
     in_pageSize: number,
 }

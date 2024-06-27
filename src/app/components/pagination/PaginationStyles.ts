@@ -26,5 +26,6 @@ export const paginationStyles = StyleSheet.create({
     textClicked: {
         color: '#FFF',
         fontSize: 16,
+        borderRadius: 16
     }
 });
