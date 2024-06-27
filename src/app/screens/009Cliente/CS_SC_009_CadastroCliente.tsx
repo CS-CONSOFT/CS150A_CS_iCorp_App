@@ -4,24 +4,37 @@ import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import { useNavigation } from "@react-navigation/native";
+import { cpfCnpjMask } from "../../util/Masks";
 
 const CS_SC_009_CadastroCliente = () => {
+    const { navigate } = useNavigation()
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         username: 'Comercial',
         fantasyName: 'Barros',
-        CPF: 'ba',
-        RG: 'ba'
+        CPF_CNPJ: 'ba',
+        RG: 'ba',
+        codigo: '',
     });
 
-    const { navigate } = useNavigation()
 
-
-    function onPagePress(page: number): void {
-        throw new Error("Function not implemented.");
+    function handleInputTyping(id: string, value: string): void {
+        if (id === 'CPF_CNPJ') {
+            setAttributesMap((prev) => {
+                return { ...prev, [id]: cpfCnpjMask(value) }
+            })
+        } else {
+            setAttributesMap((prev) => {
+                return { ...prev, [id]: value }
+            })
+        }
     }
 
-    function handleInputTyping(arg0: string, value: string): void {
-        throw new Error("Function not implemented.");
+    function saveCliente() {
+        if (attributesMap.CPF_CNPJ.length === 14) {
+            console.log('CPF');
+        } else if (attributesMap.CPF_CNPJ.length === 18) {
+            console.log('CNPJ');
+        }
     }
 
     return (
@@ -47,12 +60,14 @@ const CS_SC_009_CadastroCliente = () => {
                 placeholder="Nome Fantasia"
             />
 
-            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CPF</Text>
+            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CPF/CNPJ</Text>
             <TextInput
                 style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                onChangeText={(value) => handleInputTyping('CPF', value)}
-                value={attributesMap.Domínio}
-                placeholder="CPF"
+                onChangeText={(value) => handleInputTyping('CPF_CNPJ', value)}
+                value={attributesMap.CPF_CNPJ}
+                placeholder="CPF_CNPJ"
+                keyboardType='numeric'
+                maxLength={18}
             />
 
             <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>RG</Text>
@@ -61,6 +76,7 @@ const CS_SC_009_CadastroCliente = () => {
                 onChangeText={(value) => handleInputTyping('RG', value)}
                 value={attributesMap.Domínio}
                 placeholder="RG"
+                keyboardType='numeric'
             />
 
             <TouchableHighlight

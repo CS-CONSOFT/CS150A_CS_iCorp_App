@@ -19,19 +19,16 @@ export async function handleGetContaById() {
     }
 }
 
-export async function handleGetListConta({ currentPage, pageSize, modRelacaoID }: { currentPage: number, pageSize: number, modRelacaoID: number }) {
+export async function handleGetListConta({ currentPage, pageSize, cs_search, modRelacaoID }: { currentPage: number, pageSize: number, modRelacaoID: number, cs_search?: string }) {
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-        let currentContaId: any = ''
-        await getSimpleData(DataKey.CurrentContaId).then((res) => {
-            currentContaId = res
-        })
         const commonReq: ICommonReq = {
             Tenant_id: currentUser.TenantId,
             In_IsActive: true,
             In_IsCount: false ? 0 : 1,
             in_currentPage: currentPage,
-            in_pageSize: pageSize
+            in_pageSize: pageSize,
+            in_search: cs_search
         }
         const response = await getListConta({ commonReq: commonReq, cs_mod_relacao_id: modRelacaoID })
         return response

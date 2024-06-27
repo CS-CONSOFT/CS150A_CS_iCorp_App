@@ -24,3 +24,42 @@ export function moneyRemoveMask(value: string) {
 
     return Number(numberValue.toFixed(2));
 }
+
+export function cpfCnpjMask(value: string) {
+    // Limpa o valor removendo tudo que não é dígito
+    const cleanedValue = value.replace(/\D/g, '');
+
+    // Verifica se tem 11 ou 14 dígitos
+    if (cleanedValue.length <= 11) {
+        // Formata CPF: 000.000.000-00
+        let formattedValue = '';
+        for (let i = 0; i < cleanedValue.length; i++) {
+            if (i === 3 || i === 6) {
+                formattedValue += '.';
+            } else if (i === 9) {
+                formattedValue += '-';
+            }
+            formattedValue += cleanedValue.charAt(i);
+        }
+        return formattedValue;
+    } else if (cleanedValue.length > 11 && cleanedValue.length <= 14) {
+        // Formata CNPJ: 99.999.999/9999-99
+        let formattedValue = '';
+        for (let i = 0; i < cleanedValue.length; i++) {
+            if (i === 2 || i === 5) {
+                formattedValue += '.';
+            } else if (i === 8) {
+                formattedValue += '/';
+            } else if (i === 12) {
+                formattedValue += '-';
+            }
+            formattedValue += cleanedValue.charAt(i);
+        }
+        return formattedValue;
+    } else {
+        // Retorna o valor original se tiver mais de 14 dígitos (não deveria acontecer)
+        return value.slice(0, 14);
+    }
+}
+
+

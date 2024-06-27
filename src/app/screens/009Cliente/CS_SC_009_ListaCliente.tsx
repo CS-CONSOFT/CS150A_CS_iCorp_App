@@ -15,9 +15,9 @@ const CS_SC_009_ListaCliente = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
 
-    function getClientesList(page: number) {
+    function getClientesList(page?: number, searchValue?: string) {
         setStatus(FETCH_STATUS.LOADING)
-        handleGetListConta({ currentPage: page, pageSize: 10, modRelacaoID: 1 }).then((res) => {
+        handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 1, cs_search: searchValue === undefined ? undefined : searchValue }).then((res) => {
             try {
                 if (res !== undefined) {
                     setClientList(res.csicp_bb012)
@@ -43,8 +43,8 @@ const CS_SC_009_ListaCliente = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
             {!isLoading ? <>
-                <CustomSearch onSearchPress={() => { }} placeholder="Pesquisar" clickToSearch={true} />
                 <FlatList
                     data={clientList}
                     keyExtractor={(item) => item.csicp_bb012.ID.toString()}

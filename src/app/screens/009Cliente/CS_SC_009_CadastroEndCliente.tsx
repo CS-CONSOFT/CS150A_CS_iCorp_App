@@ -64,6 +64,7 @@ const CS_SC_009_CadastroEndCliente = () => {
                         onChangeText={(value) => handleInputTyping('CEP', value)}
                         value={attributesMap.Domínio}
                         placeholder="CEP"
+                        keyboardType='numeric'
                     />
                 </View>
                 <TouchableHighlight
@@ -89,6 +90,7 @@ const CS_SC_009_CadastroEndCliente = () => {
                         onChangeText={(value) => handleInputTyping('N', value)}
                         value={attributesMap.Domínio}
                         placeholder="N"
+                        keyboardType='numeric'
                     />
                 </View>
 
