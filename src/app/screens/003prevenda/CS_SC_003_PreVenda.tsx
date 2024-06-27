@@ -8,6 +8,8 @@ import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
+import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -69,7 +71,7 @@ const CS_SC_003_PreVenda = () => {
                 onSearchPress={_fetchPV}
                 clickToSearch={true} />
             {isLoading ? <>
-                <ActivityIndicator />
+                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
             </> :
                 <>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>

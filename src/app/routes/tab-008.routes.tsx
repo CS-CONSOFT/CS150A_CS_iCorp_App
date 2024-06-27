@@ -40,10 +40,6 @@ export default function TabRoutes008() {
 
                 }}
             />
-
-            <BottomTab.Screen options={{ headerShown: false }} name='ComandaLista' component={CS_SC_008_ListaComandas} />
-            <BottomTab.Screen options={{ headerShown: false }} name='NovaComanda' component={CS_SC_008_NovaComanda} />
-
         </BottomTab.Navigator >
     )
 }

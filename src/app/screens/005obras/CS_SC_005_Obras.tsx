@@ -14,6 +14,7 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListObras, handleGetPagesArray } from "../../view_controller/obras/CS_ObrasViewController";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import CustomEmpty from "../../components/lists/CustomEmpty";
+import ColorStyle from "../../ColorStyle";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
@@ -48,7 +49,7 @@ const CS_SC_005_Obras = () => {
     return (
         <View style={{ flex: 1 }}>
             {isLoading && (
-                <ActivityIndicator size={45} />
+                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
             )}
             <FlatList
                 data={listObras}
