@@ -1,11 +1,5 @@
 import { useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { paginationStyles } from "./PaginationStyles";
-import { commonStyle } from "../../CommonStyle";
-import CustomVerticalSeparator from "../lists/CustomVertticalSeparator";
-
-import { useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import { paginationStyles } from "./PaginationStyles";
 
@@ -88,7 +82,4 @@ const PaginationItem = ({ currentPage, item, onPagePress, paginationArray }: {
 }
 
 export default Custom_Pagination;
-
-
-
 

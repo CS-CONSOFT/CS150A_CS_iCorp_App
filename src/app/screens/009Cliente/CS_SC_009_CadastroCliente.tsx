@@ -8,7 +8,8 @@ import { IReqSaveConta } from "../../services/api/interfaces/contas/CS_IReqSaveC
 import { ICON_NAME } from "../../util/IconsName";
 import { cpfCnpjMask, removeCpfCnpjMask } from "../../util/Masks";
 import { ClactaEnum, GruEnum } from "./ListaEnumClasseGrupo";
-import { handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
+import { handleSave1201, handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
+import { IReqSave1201 } from "../../services/api/interfaces/contas/CS_IReqSave1201";
 
 
 const CS_SC_009_CadastroCliente = () => {
@@ -60,6 +61,7 @@ const CS_SC_009_CadastroCliente = () => {
         //BB1201
         let reqSaveConta: IReqSaveConta = {}
         let reqSave1202: CS_IReqSave1202 = {}
+        let reqSave1201: IReqSave1201 = {}
 
         reqSaveConta.BB012_Nome_Cliente = attributesMap.username
         reqSaveConta.BB012_Nome_Fantasia = attributesMap.fantasyName
@@ -84,10 +86,16 @@ const CS_SC_009_CadastroCliente = () => {
         }
 
         handleSaveConta(reqSaveConta).then((res) => {
-            console.log(res.bb012_ID);
-            handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
-                navigate('Cadastro_002_End', {
-                    isPreVendaEditEnd: false
+            console.log(res);
+
+            reqSave1202.Id = res.bb012_ID
+            reqSave1201.Id = res.bb012_ID
+
+            handleSave1201({ cs_req_save: reqSave1201 }).then(() => {
+                handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
+                    navigate('Cadastro_002_End', {
+                        isPreVendaEditEnd: false
+                    })
                 })
             })
         })
@@ -124,7 +132,7 @@ const CS_SC_009_CadastroCliente = () => {
             <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Nome Fantasia</Text>
             <TextInput
                 style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                onChangeText={(value) => handleInputTyping('NomeFantasia', value)}
+                onChangeText={(value) => handleInputTyping('fantasyName', value)}
                 value={attributesMap.fantasyName}
                 placeholder="Nome Fantasia"
             />
