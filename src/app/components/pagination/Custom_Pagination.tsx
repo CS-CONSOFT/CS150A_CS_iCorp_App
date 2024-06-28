@@ -83,4 +83,3 @@ const PaginationItem = ({ currentPage, item, onPagePress, paginationArray }: {
 
 export default Custom_Pagination;
 
-
