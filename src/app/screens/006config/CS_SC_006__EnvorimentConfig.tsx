@@ -92,7 +92,7 @@ const CS_SC_006__EnvorimentConfig = () => {
 
     // Renderização do componente
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, padding: 16 }}>
             {hasValue && (
                 // Se houver valores, exibir dados e botões de ações
                 <View>

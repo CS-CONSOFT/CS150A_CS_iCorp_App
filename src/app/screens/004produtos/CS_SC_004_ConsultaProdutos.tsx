@@ -142,7 +142,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                 ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrado!"} />}
                                 renderItem={({ item }) => <CustomProduct
                                     children={<ProductItem product={item} />}
-                                    image={<ImageProductItem />}
+                                    image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
                                     rightItem={<>
                                         <RightItem
                                             loadingClick={loadingBtnClickItem}
@@ -189,10 +189,23 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 }
 
 // Componente de exibição da imagem do produto
-const ImageProductItem = () => {
+const ImageProductItem = ({ descProd, image }: { descProd: string, image?: string }) => {
     return (
-        <Image style={commonStyle.productImage}
-            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnT98rwKfnZngX2pDhX4EkbW-y0pUOCz9iCg&s' }} />
+        <>{image !== undefined && (
+            <Image style={commonStyle.productImage}
+                source={{ uri: image }} />
+        )}
+
+            {image === undefined && (
+                <Text style={[commonStyle.align_centralizar, {
+                    width: 111,
+                    backgroundColor: '#A3C5D9',
+                    borderTopLeftRadius: 12,
+                    borderBottomLeftRadius: 12
+                }]}>{descProd.substring(0, 3)}</Text>
+            )}
+
+        </>
     );
 }
 
