@@ -71,11 +71,7 @@ const CS_SC_008_NovaComanda = () => {
             ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrada"} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
-
                 <BottomContanier
-
-                <CustomProduct
-                    onClickItem={(item) => <BottomQuatidade />}
 
                     children={
                         <ProductItem

@@ -1,138 +1,71 @@
 import { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
-import CustomSeparator from "../../../components/lists/CustomSeparator";
 import { IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
-import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
+
 import { stylesNotaSerie } from "./StylesNotaSerie";
 import { commonStyle } from "../../../CommonStyle";
 import { ButtonActionSecondary } from "../../../components/button/CustonButtonActionSecondary";
-
-const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
-const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
+import CustomSearch from "../../../components/search/CustomSearch";
+import ColorStyle from "../../../ColorStyle";
+import CustomEmpty from "../../../components/lists/CustomEmpty";
+import { DataListaSerie, SerieProduct } from "./DataListSerie";
 
 
 
 const CS_SC_SerieProduto = () => {
 
-    const [noteTyped, setNoteTyped] = useState("20240100000000108")
-    const [products, setProducts] = useState(Object)
-    const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const [showPopUp, setShowPopUp] = useState(false)
-    const [currentProductSelected, setCurrentProductSelected] = useState<IResNotaProdutoItem>()
-    const [errorMessage, setErrorMessage] = useState('');
 
 
-    async function search() {
-        const note = noteTyped;
-        setStatus(FETCH_STATUS.LOADING)
-        getNoteSeriesVc(note).then((res) => {
-            if (res !== undefined && res.Produtos != undefined) {
-                setStatus(FETCH_STATUS.SUCCESS)
-                setProducts(res.Produtos)
-            } else {
-                setStatus(FETCH_STATUS.ERROR)
-                setErrorMessage("Falha ao buscar a nota")
-            }
-        })
-    }
+    const loadingProducts = false
 
-
-    const showDialog = () => setShowPopUp(true);
-
-    function switchShowPopUp(product: IResNotaProdutoItem) {
-        showDialog()
-        setCurrentProductSelected(product)
-    }
-
-    async function setNewCorSerie(newSerie: string) {
-        const productId = currentProductSelected?.DD060_Id
-        const newCorSerie = newSerie;
-        setNewCorSerieVc(productId!, newCorSerie).then(() => {
-            search()
-            setShowPopUp(false);
-        })
-
-    }
-
-
-    const loadingProducts = status == FETCH_STATUS.LOADING
-    /*const isSuccess = status == FETCH_STATUS.SUCCESS*/
-    const error = status == FETCH_STATUS.ERROR
 
     /*TESTE */
     const isSuccess = true;
 
-    if (loadingProducts) return <Text>Carregando produtos...</Text>
-    if (error) return <Text>{errorMessage}</Text>
 
-
-    return <>
-        <SafeAreaView>
-            <Suspense fallback={<ActivityIndicator />}>
-                <CustomHeaderInput
-                    titleText="Chave Nota"
-                    setValue={setNoteTyped}
-                    value={noteTyped}
-                    onPress={search}
-                    buttonStyle={stylesNotaSerie.buttonStyle}
-                    textStyle={stylesNotaSerie.textStyle}
-                >
-                </CustomHeaderInput>
-            </Suspense>
-            
-
-            {isSuccess && products.length > 0 && (
-                <FlatList
-                    ItemSeparatorComponent={CustomSeparator}
-                    ListEmptyComponent={ <Text>Nota não encontrada</Text>
-                    }
-                    data={products}
-                    renderItem={({ item }) => (
-                        <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />
-                    )}
-                    keyExtractor={(index) => index.toString()}
-                />
-
-            )}
-        </SafeAreaView>
-
-        <Suspense fallback={<ActivityIndicator />}>
-            <CustomAlertDialog
-                isVisible={showPopUp}
-                onDismiss={() => setShowPopUp(false)}
-                children={<AlertDialog />}
+    return <SafeAreaView>
+            <CustomSearch
+                onSearchPress={() => ""}
+                onFilterClick={() => ""}
+                placeholder={"Nota"} 
+                clickToSearch={true}    
             />
-        </Suspense>
-    </>
+            {
+                loadingProducts 
+                ?
+                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+                :
+                <>
+                    <FlatList
+                        data={DataListaSerie}
+                        ListEmptyComponent={<CustomEmpty text={"Nenhuma comanda encontrada"} />}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({item}) =>
+                            <ProductItem product={item}/>
+                        }
+        
+                    />
+    
+                </>
+
+            }
+
+    </SafeAreaView>
 }
 
-const AlertDialog = () => {
-    return (
-        <View style={stylesNotaSerie.dialog}>
-            <></>
-        </View>
-    )
-}
+export default CS_SC_SerieProduto;   
 
 
-/** ITEM DA LISTA */
-interface ProductItemProps {
-    product: IResNotaProdutoItem;
-    onPress: (product: IResNotaProdutoItem) => void;
-}
-
-const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps }) => {
+const ProductItem = ({product}: {product: SerieProduct}) => {
     return (
 
         <View style={[commonStyle.common_margin_horizontal, commonStyle.card_white_shadow]}>
-                <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
-                <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
-                <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)}/>
+                <Text style={stylesNotaSerie.titleNota}>{product.descricao}</Text>
+                <Text style={stylesNotaSerie.text}>Cor Série {product.cor}</Text>
+                <ButtonActionSecondary label={"Alterar cor série"} onPress={() => ""}/>
         </View>
 
     );
 };
 
 
-export default CS_SC_SerieProduto;
