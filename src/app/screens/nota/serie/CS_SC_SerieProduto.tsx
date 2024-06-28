@@ -13,7 +13,7 @@ const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAle
 
 
 
-const CS_SC_Serie = () => {
+const CS_SC_SerieProduto = () => {
 
     const [noteTyped, setNoteTyped] = useState("20240100000000108")
     const [products, setProducts] = useState(Object)
@@ -37,6 +37,14 @@ const CS_SC_Serie = () => {
         })
     }
 
+
+    const showDialog = () => setShowPopUp(true);
+
+    function switchShowPopUp(product: IResNotaProdutoItem) {
+        showDialog()
+        setCurrentProductSelected(product)
+    }
+
     async function setNewCorSerie(newSerie: string) {
         const productId = currentProductSelected?.DD060_Id
         const newCorSerie = newSerie;
@@ -49,8 +57,11 @@ const CS_SC_Serie = () => {
 
 
     const loadingProducts = status == FETCH_STATUS.LOADING
-    const isSuccess = status == FETCH_STATUS.SUCCESS
+    /*const isSuccess = status == FETCH_STATUS.SUCCESS*/
     const error = status == FETCH_STATUS.ERROR
+
+    /*TESTE */
+    const isSuccess = true;
 
     if (loadingProducts) return <Text>Carregando produtos...</Text>
     if (error) return <Text>{errorMessage}</Text>
@@ -69,23 +80,22 @@ const CS_SC_Serie = () => {
                 >
                 </CustomHeaderInput>
             </Suspense>
-
+            
 
             {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={CustomSeparator}
-                    ListEmptyComponent={<Text>Nota não encontrada</Text>
+                    ListEmptyComponent={ <Text>Nota não encontrada</Text>
                     }
                     data={products}
                     renderItem={({ item }) => (
-                        <ProductItem productItemProps={{ product: item, onPress: () => { } }} />
+                        <ProductItem productItemProps={{ product: item, onPress: switchShowPopUp }} />
                     )}
                     keyExtractor={(index) => index.toString()}
                 />
 
             )}
         </SafeAreaView>
-
 
         <Suspense fallback={<ActivityIndicator />}>
             <CustomAlertDialog
@@ -94,7 +104,6 @@ const CS_SC_Serie = () => {
                 children={<AlertDialog />}
             />
         </Suspense>
-
     </>
 }
 
@@ -117,13 +126,13 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
     return (
 
         <View style={[commonStyle.common_margin_horizontal, commonStyle.card_white_shadow]}>
-            <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
-            <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
-            <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)} />
+                <Text style={stylesNotaSerie.titleNota}>{productItemProps.product.DD060_Descricao}</Text>
+                <Text style={stylesNotaSerie.text}>Cor Série {productItemProps.product.DD060_Cor_Serie_Merc}</Text>
+                <ButtonActionSecondary label={"Alterar cor série"} onPress={() => productItemProps.onPress(productItemProps.product)}/>
         </View>
 
     );
 };
 
 
-export default CS_SC_Serie;
+export default CS_SC_SerieProduto;

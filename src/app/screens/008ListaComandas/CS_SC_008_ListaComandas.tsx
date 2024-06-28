@@ -14,7 +14,7 @@ import { stylesConsultaProduto } from "../004produtos/ConsultaProdutoStyles";
 //Icons
 import { ICON_NAME } from "../../util/IconsName";
 //DataFake
-import { ListaComanda, Comanda } from "./ListaComanda";
+import { DataListaComanda, Comanda } from "./ListaComanda";
 //Navegação
 import { useNavigation } from "@react-navigation/native";
 import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";

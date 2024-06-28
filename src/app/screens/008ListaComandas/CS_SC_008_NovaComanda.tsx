@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
-//Rota
 //Componentes
 import { CustomBottomContanier } from "../../components/bottomItem/CustomBottomContanier";
 import { ButtonActionTransparent } from "../../components/button/CustomButtonAcyionTransparent";
@@ -21,6 +20,7 @@ import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
 import { useNavigation } from "@react-navigation/native";
 //Interface
 import { ContainerQuantidade } from "../../components/Quantidade/containerQuantidade";
+import BottomContanier from "../../components/BottomContanier/bottomContanier";
 
 
 
@@ -71,8 +71,12 @@ const CS_SC_008_NovaComanda = () => {
             ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrada"} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
+
+                <BottomContanier
+
                 <CustomProduct
                     onClickItem={(item) => <BottomQuatidade />}
+
                     children={
                         <ProductItem
                             product={item}
@@ -87,11 +91,14 @@ const CS_SC_008_NovaComanda = () => {
                         />
                     }
 
+                    bottomItem={
+                        /* Container que abre embaixo ao pressionar o componente */
+                        <BottomQuatidade/>
+                    }
                 />
             }
-
+                
         />
-
         <CustomBottomContanier
             total={somaComanda}
             show={true}
@@ -143,12 +150,13 @@ const RightItem = ({ click }: { click: () => void }) => {
 */
 
 const BottomQuatidade = () => {
-    return (
-        <View style={commonStyle.common_margin_horizontal}>
-            <ContainerQuantidade />
+
+    return(
+        <View>
+            <ContainerQuantidade/>
             <View style={[commonStyle.common_rowItem, commonStyle.align_start_spaceAround_center]}>
-                <ButtonActionSecondary label={"Salvar"} onPress={() => ""} />
-                <ButtonActionTransparent label={"Salvar"} onPress={() => ""} />
+                <ButtonActionSecondary label={"Salvar"} onPress={() => ""}/>
+                <ButtonActionTransparent label={"Cancela"} onPress={() => ""}/>
             </View>
         </View>
     )
