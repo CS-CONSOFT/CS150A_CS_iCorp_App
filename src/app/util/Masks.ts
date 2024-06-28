@@ -62,4 +62,10 @@ export function cpfCnpjMask(value: string) {
     }
 }
 
+export function removeCpfCnpjMask(value: string): number {
+    // Remove tudo que não é dígito
+    const cleanedValue = value.replace(/\D/g, '');
+    return Number(cleanedValue);
+}
+
 

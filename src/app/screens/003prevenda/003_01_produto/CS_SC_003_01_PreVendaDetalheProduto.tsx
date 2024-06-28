@@ -11,6 +11,8 @@ import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import { ToastType, showToast } from "../../../util/ShowToast";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
+import { commonStyle } from "../../../CommonStyle";
+import ColorStyle from "../../../ColorStyle";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {
@@ -100,7 +102,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     const isLoading = status === FETCH_STATUS.LOADING
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
-            {isLoading ? <ActivityIndicator /> : <>
+            {isLoading ? <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} /> : <>
                 <FlatList
                     data={pv?.DD080_Produtos}
                     keyExtractor={(item) => item.csicp_dd080.DD080_Id}

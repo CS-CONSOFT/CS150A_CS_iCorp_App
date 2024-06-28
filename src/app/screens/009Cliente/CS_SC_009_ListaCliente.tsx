@@ -9,6 +9,7 @@ import CustomSearch from "../../components/search/CustomSearch";
 import CustomCard004 from "../../components/cards/CustomCard_004";
 import { commonStyle } from "../../CommonStyle";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import ColorStyle from "../../ColorStyle";
 
 const CS_SC_009_ListaCliente = () => {
     const [clientList, setClientList] = useState<Csicp_bb012[]>()
@@ -50,7 +51,7 @@ const CS_SC_009_ListaCliente = () => {
                     keyExtractor={(item) => item.csicp_bb012.ID.toString()}
                     renderItem={({ item }) => <RenderItemCliente item={item} />}
                 />
-            </> : <ActivityIndicator />}
+            </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}
             <Custom_Pagination
                 paginationArray={paginationArray!}
                 onPagePress={getClientesList}

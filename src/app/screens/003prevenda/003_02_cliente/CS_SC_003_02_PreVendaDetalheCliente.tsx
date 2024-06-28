@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, ScrollView, Image, Pressable} from "react-native";
+import { Text, View, TouchableOpacity, ScrollView, Image, Pressable } from "react-native";
 import C_003_02_01_HeaderClient from "./components/C_003_02_01_HeaderClient";
 import { commonStyle } from "../../../CommonStyle";
 import CustomAccordion from "../../../components/accordion/CustomAccordion";
@@ -6,79 +6,80 @@ import { ICON_NAME } from "../../../util/IconsName";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ClienteStyles } from "./ClienteStyles";
 import { ButtonLink } from "../../../components/button/CustomButtonLink";
+import { useNavigation } from "@react-navigation/native";
 
 
 interface Avatar {
     img?: string;
     name?: string; //? Para teste
 }
-                                                    //Valor padrão Para teste
-const CS_SC_003_02_PreVendaDetalheCliente = ({img: string, name = "Agnaldo"}: Avatar) => {
+//Valor padrão Para teste
+const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: Avatar) => {
 
     const img: string = "";
 
-    function ExtrairIniciais(name: string){
+    function ExtrairIniciais(name: string) {
         const nome = name;
         const iniciais = nome.substring(0, 2)
-        return iniciais;        
+        return iniciais;
     }
 
 
     return (
-        <View style={{backgroundColor: "#fff", height:"100%"}}>
+        <View style={{ backgroundColor: "#fff", height: "100%" }}>
             <C_003_02_01_HeaderClient />
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{marginHorizontal: 15}}
+                style={{ marginHorizontal: 15 }}
             >
                 <View style={[commonStyle.common_columnItem, commonStyle.common_margin_vertical, commonStyle.align_spacebetween_row, commonStyle.common_margin_horizontal]}>
-                        
+
                     {
-                        img && (img !== "") 
-                        ? 
-                        <Image source={{uri: img}} style={commonStyle.avatar_Imagem}/> 
-                        : 
-                        <View style={commonStyle.avatar_nomeIniciais}>
-                            <Text style={commonStyle.title_nomeIniciais}>
-                                {ExtrairIniciais(name.toUpperCase())}
-                            </Text>
-                        </View>
+                        img && (img !== "")
+                            ?
+                            <Image source={{ uri: img }} style={commonStyle.avatar_Imagem} />
+                            :
+                            <View style={commonStyle.avatar_nomeIniciais}>
+                                <Text style={commonStyle.title_nomeIniciais}>
+                                    {ExtrairIniciais(name.toUpperCase())}
+                                </Text>
+                            </View>
                     }
-                    
+
                     <Text style={commonStyle.title_nomeIniciais}>{name}</Text>
                     <Text>{"00001"}</Text>
-                    <ButtonLink onPress={() => ("")} label="Alterar"/>
+                    <ButtonLink onPress={() => ("")} label="Alterar" />
                 </View>
 
                 <View style={[commonStyle.common_rowItem, commonStyle.common_margin_vertical]}>
-                    <Ionicons name="location-outline" size={30}/>
-                    <Text style={[commonStyle.text_size_20, {fontWeight: "600"}]}>Endereços</Text>
+                    <Ionicons name="location-outline" size={30} />
+                    <Text style={[commonStyle.text_size_20, { fontWeight: "600" }]}>Endereços</Text>
                 </View>
 
                 {/** CORRESPONDENCIA */}
-                
-                    <CustomAccordion 
-                        visibleChildren={
-                            <VisibleAccordionItem title={"Correspondência"} icon={ICON_NAME.FLECHA_DIRETA} />
-                        }
-                        hiddenChildren={
-                            <EnderecoItem />
-                        }
-                        
-                    />
 
-                    {/** ENTREGA */}
-                    <CustomAccordion visibleChildren={
-                        <VisibleAccordionItem title={"Entrega"} icon={ICON_NAME.FLECHA_DIRETA} />
+                <CustomAccordion
+                    visibleChildren={
+                        <VisibleAccordionItem title={"Correspondência"} icon={ICON_NAME.FLECHA_DIRETA} />
                     }
-                        hiddenChildren={<EnderecoItem />} />
+                    hiddenChildren={
+                        <EnderecoItem />
+                    }
 
-                    {/** RETIRADA */}
-                    <CustomAccordion visibleChildren={
-                        <VisibleAccordionItem title={"Retirada"} icon={ICON_NAME.FLECHA_DIRETA} />
-                    } hiddenChildren={<EnderecoItem />} />
+                />
+
+                {/** ENTREGA */}
+                <CustomAccordion visibleChildren={
+                    <VisibleAccordionItem title={"Entrega"} icon={ICON_NAME.FLECHA_DIRETA} />
+                }
+                    hiddenChildren={<EnderecoItem />} />
+
+                {/** RETIRADA */}
+                <CustomAccordion visibleChildren={
+                    <VisibleAccordionItem title={"Retirada"} icon={ICON_NAME.FLECHA_DIRETA} />
+                } hiddenChildren={<EnderecoItem />} />
             </ScrollView>
-       
+
         </View>
     );
 }
@@ -93,8 +94,16 @@ const VisibleAccordionItem = ({ title, icon }: { title: string, icon: any }) => 
 }
 
 const EnderecoItem = () => {
+    const { navigate } = useNavigation()
+    function editEndereco(): void {
+        navigate('Cadastro_002_End', {
+            isPreVendaEditEnd: true,
+            endId: ''
+        })
+    }
+
     return (
-        <View style={[commonStyle.common_columnItem, { padding: 8}]}>
+        <View style={[commonStyle.common_columnItem, { padding: 8 }]}>
             <View style={[commonStyle.common_rowItem, commonStyle.common_margin_bottom_8]}>
                 <Text style={[commonStyle.common_fontWeight_600]}>CEP: </Text>
                 <Text>687454-30</Text>
@@ -127,9 +136,9 @@ const EnderecoItem = () => {
                 </View>
 
             </View>
-            <Pressable style={[commonStyle.common_columnItem, commonStyle.align_centralizar, ClienteStyles.btn_squad]}>
+            <Pressable onPress={() => editEndereco()} style={[commonStyle.common_columnItem, commonStyle.align_centralizar, ClienteStyles.btn_squad]}>
                 <Ionicons name="create-outline" size={24} />
-            </Pressable>    
+            </Pressable>
         </View>
 
     )

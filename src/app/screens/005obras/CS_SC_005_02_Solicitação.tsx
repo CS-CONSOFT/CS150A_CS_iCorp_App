@@ -7,6 +7,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
 import CustomEmpty from "../../components/lists/CustomEmpty";
+import ColorStyle from "../../ColorStyle";
 
 const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
     const { obraId } = route.params
@@ -40,7 +41,7 @@ const CS_SC_005_02_Solicitação = ({ route }: { route: any }) => {
     const isSuccess = status == FETCH_STATUS.SUCCESS
 
     if (isLoading) {
-        return <ActivityIndicator size={52} />
+        return <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
     }
 
     return (

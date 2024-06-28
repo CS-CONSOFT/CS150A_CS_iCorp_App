@@ -114,9 +114,9 @@ export const commonStyle = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
-        borderRadius: 4,
+        borderRadius: 32,
         elevation: 3,
-        backgroundColor: 'green',
+        backgroundColor: '#A3C5D9',
         margin: 16
     },
     common_text_button_style: {
@@ -124,7 +124,7 @@ export const commonStyle = StyleSheet.create({
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
-        color: 'white',
+        color: '#0A3147',
     },
     justify_content_space_btw: {
         justifyContent: 'space-between'
@@ -213,7 +213,7 @@ export const commonStyle = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-around",
     },
-    card_white_shadow:{
+    card_white_shadow: {
         backgroundColor: ColorStyle.colorwhite,
         borderRadius: 20,
         elevation: 2,

@@ -20,6 +20,7 @@ import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaVi
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
+import ColorStyle from "../../ColorStyle";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -122,7 +123,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     // Renderização da tela
     return (
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-            <Suspense fallback={<ActivityIndicator />}>
+            <Suspense fallback={<ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}>
 
                 <View>
                     {/* Componente de pesquisa */}
@@ -133,7 +134,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         clickToSearch={true} />
 
                     {/* Carregamento da lista de produtos ou exibição da lista */}
-                    {isLoading ? <ActivityIndicator /> :
+                    {isLoading ? <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} /> :
                         <View>
                             <FlatList
                                 data={productList}
