@@ -1,18 +1,20 @@
-import { useState } from "react";
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View } from "react-native";
-import { commonStyle } from "../../CommonStyle";
-import CustomIcon from "../../components/icon/CustomIcon";
-import { ICON_NAME } from "../../util/IconsName";
-import { SelectList } from "react-native-dropdown-select-list";
-import { handleGetCep } from "../../view_controller/endereco/EnderecoViewController";
-import { ToastType, showToast } from "../../util/ShowToast";
 import { useNavigation } from "@react-navigation/native";
-import estados from "./ListaEstados";
-import { CS_IReqSaveEndereco } from "../../services/api/interfaces/contas/CS_IReqSaveEndereco";
-import { handleSave1206 } from "../../view_controller/conta/ContaViewController";
-import ColorStyle from "../../ColorStyle";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { handleGetCep } from "../../../../view_controller/endereco/EnderecoViewController";
+import { ToastType, showToast } from "../../../../util/ShowToast";
+import { CS_IReqSaveEndereco } from "../../../../services/api/interfaces/contas/CS_IReqSaveEndereco";
+import { handleSave1206 } from "../../../../view_controller/conta/ContaViewController";
+import { commonStyle } from "../../../../CommonStyle";
+import CustomIcon from "../../../../components/icon/CustomIcon";
+import { ICON_NAME } from "../../../../util/IconsName";
+import { SelectList } from "react-native-dropdown-select-list";
+import estados from "../../../009Cliente/ListaEstados";
+import ColorStyle from "../../../../ColorStyle";
+import { DD071_Enderecos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 
-const CS_SC_009_CadastroEndereco = () => {
+
+const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         CEP: '',
         Logradouro: '',
@@ -24,9 +26,32 @@ const CS_SC_009_CadastroEndereco = () => {
         Perímetro: ''
     });
 
+    const [enderecamento, setEnderecamento] = useState<DD071_Enderecos>()
+
     const { navigate } = useNavigation()
     const [isBtnCepLoading, setIsBtnCepLoading] = useState(false)
+    const { DD071_JSON } = route.params
 
+    useEffect(() => {
+        setEnderecamento(JSON.parse(DD071_JSON))
+        console.log(enderecamento);
+        console.log(DD071_JSON);
+
+        /*
+        if (enderecamento) {
+            handleInputTyping('CEP', enderecamento!.csicp_dd071.DD071_CEP.toString())
+            handleInputTyping('Logradouro', enderecamento!.csicp_dd071.DD071_Logradouro.toString())
+            handleInputTyping('Bairro', enderecamento!.csicp_dd071.DD071_NomeBairro.toString())
+            handleInputTyping('Complemento', enderecamento!.csicp_dd071.DD071_Complemento.toString())
+            handleInputTyping('UF', enderecamento!.csicp_aa027.AA027_Sigla.toString())
+            handleInputTyping('Cidade', enderecamento!.csicp_aa028.AA028_Cidade.toString())
+            handleInputTyping('Numero', enderecamento!.csicp_dd071.DD071_Numero.toString())
+            handleInputTyping('Perímetro', enderecamento!.csicp_dd071.DD071_Perimetro.toString())
+        }
+            */
+
+
+    }, [DD071_JSON])
 
     function handleInputTyping(id: string, value: string): void {
         setAttributesMap((prevAttributesMap) => {
@@ -190,4 +215,4 @@ const CS_SC_009_CadastroEndereco = () => {
     );
 }
 
-export default CS_SC_009_CadastroEndereco;
+export default CS_SC_003_02_01_PreVendaEditEnd;

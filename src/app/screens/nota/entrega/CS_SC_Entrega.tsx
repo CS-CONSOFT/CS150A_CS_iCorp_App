@@ -22,7 +22,7 @@ import { CustomBottomContanier } from "../../../components/bottomItem/CustomBott
 
 const CS_SC_Entrega = () => {
 
-    const [noteTyped, setNoteTyped] = useState("20240100000000108")
+    const [noteTyped, setNoteTyped] = useState("")
     const [products, setProducts] = useState<IResNotaProdutoItem[] | null>(null)
     const [noteInfo, setNoteInfo] = useState<IResInfoNota | null>(null)
     const [messageList, setMessageList] = useState('')
@@ -109,6 +109,7 @@ const CS_SC_Entrega = () => {
 
     const loadingProducts = status == FETCH_STATUS.LOADING
     const isSuccess = status == FETCH_STATUS.SUCCESS
+    const isIdle = status == FETCH_STATUS.IDLE
     const error = status == FETCH_STATUS.ERROR
 
     if (loadingProducts) return <Text style={stylesNotaEntrega.loadingText}>Carregando produtos...</Text>
@@ -116,7 +117,7 @@ const CS_SC_Entrega = () => {
 
 
 
-    return <SafeAreaView style={[stylesNotaEntrega.modalContainer, {height: "100%"}]}>
+    return <SafeAreaView style={[stylesNotaEntrega.modalContainer, { height: "100%" }]}>
         <CustomSearch
             placeholder="Pesquisar Nota"
             onSearchPress={(value) => searchNote(value)}
@@ -124,7 +125,8 @@ const CS_SC_Entrega = () => {
         />
 
 
-        {isSuccess && products && products.length > 0 && (
+
+        {isSuccess && (
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
                     data={products}
@@ -134,29 +136,13 @@ const CS_SC_Entrega = () => {
                     } />}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <CustomBottomContanier
-                    show={false}
-                    text={"Confirmar entrega"}
-                    onPress={confirmDelivery}
-            
-                />
+                <View style={styles.btnContenier}>
+                    <ButtonActionBlue text={"Confirmar entrega!"} onPress={() => confirmDelivery()} />
+                </View>
+
             </View>
         )}
 
-        {isSuccess && (messageList !== '') && (
-            <View style={stylesEntregaCard.contentContanier}>
-                <Text style={styles.messageNot}>{messageList}</Text>
-            </View>
-        )}
-        {/* RETIRAR!! SO PARA VISUALIZAR ENQUANTO NAO POPULA OS DADOS */}
-        <CustomCard_001
-            title={"exemplo"}
-            children={<EntregaCardLeft modo={"Balcão"} quantidade={1} />}
-        />
-     
-        <View style={styles.btnContenier}>
-            <ButtonActionBlue text={"Confirmar entrega!"} onPress={confirmDelivery} />
-        </View>
         {/*************************************************************/}
     </SafeAreaView>
 }

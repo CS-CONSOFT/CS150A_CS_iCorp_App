@@ -10,6 +10,8 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
+import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import { getPaginationList } from "../../util/GetPaginationArray";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -18,10 +20,11 @@ const CS_SC_003_PreVenda = () => {
     const [pvList, setPvList] = useState<Csicp_dd070_Completo[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
+    const [paginationArray, setPaginationArray] = useState<number[]>([])
 
 
     useEffect(() => {
-        _fetchPV('')
+        _fetchPV(1)
     }, [])
 
 
@@ -29,28 +32,25 @@ const CS_SC_003_PreVenda = () => {
     const finalDate: Date = new Date()
 
     const initialDate: Date = new Date()
-    initialDate.setDate(initialDate.getDate() - 128)
+    initialDate.setDate(initialDate.getDate() - 500)
 
     const initialDateString: string = finalDate.toISOString().slice(0, 10);
     const finalDateString: string = finalDate.toISOString().slice(0, 10);
     /**Formatando data */
-    const memorizeFetchPV = useMemo(() => {
-        return async (preSaleSearch: string) => {
-            setStatus(FETCH_STATUS.LOADING)
-            handleFetchPv(initialDateString, finalDateString, 10, 1).then((res) => {
-                setStatus(FETCH_STATUS.SUCCESS)
-                setPvList(res.csicp_dd070_Completo)
-            })
-        };
-    }, [initialDate, finalDate])
+    const _fetchPV = async (page: number) => {
+        setStatus(FETCH_STATUS.LOADING)
+        handleFetchPv(initialDateString, finalDateString, page, 5).then((res) => {
+            setStatus(FETCH_STATUS.SUCCESS)
+            setPvList(res.csicp_dd070_Completo)
 
-    const _fetchPV = async (preSaleSearch: string) => {
-        await memorizeFetchPV(preSaleSearch)
+            const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
+            setPaginationArray(pagesArray)
+        })
     }
 
     function handleRefreshList(): void {
         setStatus(FETCH_STATUS.LOADING)
-        _fetchPV("").then(() => {
+        _fetchPV(1).then(() => {
             setStatus(FETCH_STATUS.SUCCESS)
         })
     }
@@ -65,15 +65,11 @@ const CS_SC_003_PreVenda = () => {
     const isLoading = status === FETCH_STATUS.LOADING
 
     return (
-        <View>
-            <CustomSearch
-                placeholder="Protocolo/Conta"
-                onSearchPress={_fetchPV}
-                clickToSearch={true} />
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
             {isLoading ? <>
                 <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
             </> :
-                <>
+                <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
                     <FlatList
                         data={pvList}
@@ -85,8 +81,15 @@ const CS_SC_003_PreVenda = () => {
                         keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
                         extraData={pvList}
                     />
-                </>
+                </View>
             }
+            {paginationArray.length > 1 && (
+                <View>
+                    <Custom_Pagination
+                        onPagePress={(page) => _fetchPV(page)}
+                        paginationArray={paginationArray} />
+                </View>
+            )}
         </View>
     );
 }

@@ -36,6 +36,8 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
                         iconName={ICON_NAME.ADICIONAR_CONTORNADO}
                     />
                 </View>
+
+                {/**
                 <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
                     <CustomItemIconTitleRoundedBlue
                         title={"Requisição"}
@@ -43,6 +45,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
                         iconName={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO}
                     />
                 </View>
+                 */}
             </CustomTopItem>
             <CustomAlertDialog
                 isVisible={isModalVisible}
@@ -92,7 +95,7 @@ export const styleProdutoPVDetalhe = StyleSheet.create({
     topHeaderStyle: {
         margin: 4,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly'
     },
     topHeaderItemStyle: {
         elevation: 1,

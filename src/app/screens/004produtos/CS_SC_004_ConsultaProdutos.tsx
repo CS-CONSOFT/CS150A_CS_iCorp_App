@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { lazy, Suspense, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, Text, View } from "react-native";
+import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
@@ -19,8 +20,6 @@ import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import CustomListWithPagination from "../../components/lists/CustomListWithPagination";
-import ColorStyle from "../../ColorStyle";
 
 const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
 
@@ -30,7 +29,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [productList, setProductList] = useState<IResGetProductItem[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
-    const [errorMsg, setErrorMsg] = useState();
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
     const cameFromPv = route.params.cameFromPv
     const { navigate } = useNavigation()
@@ -62,7 +60,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     // Flags para determinar o estado atual do carregamento
     const isLoading = status == FETCH_STATUS.LOADING
-    const isError = status == FETCH_STATUS.ERROR
     const openModal = status == FETCH_STATUS.MODAL
     const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
 
@@ -94,10 +91,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         setStatus(FETCH_STATUS.LOADING)
         const _filterValues: IReqGetProductSearch = {
             cs_page: page || 1,
-            cs_codigo_produto: valueToSearch || '',
-            cs_descricao_reduzida: valueToSearch || '',
+            /** testa se tem apenas numeros, se sim, preenche o codigo, se nao, preenche a descricao */
+            cs_codigo_produto: /^\d+$/.test(valueToSearch) ? valueToSearch : undefined,
+            cs_descricao_reduzida: /^\d+$/.test(valueToSearch) ? undefined : valueToSearch,
             cs_is_com_saldo: valueToSearch.isSaldo
-        }
+        };
         //seta os valores para o filter values que sera enviado na chamada da api
         setProductAtributtesToSearch(_filterValues)
 
@@ -109,7 +107,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 setStatus(FETCH_STATUS.SUCCESS)
             } else {
                 // @ts-ignore
-                setErrorMsg(res.error)
                 setStatus(FETCH_STATUS.ERROR)
             }
         })
@@ -141,6 +138,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                 keyExtractor={(item) => item.Id!.toString()}
                                 ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrado!"} />}
                                 renderItem={({ item }) => <CustomProduct
+                                    onClickItem={() => { }}
                                     children={<ProductItem product={item} />}
                                     image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
                                     rightItem={<>
@@ -178,11 +176,13 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
             />
 
-            <View>
-                <Custom_Pagination
-                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                    paginationArray={paginationArray} />
-            </View>
+            {paginationArray.length > 1 && (
+                <View>
+                    <Custom_Pagination
+                        onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                        paginationArray={paginationArray} />
+                </View>
+            )}
         </View>
 
     );
@@ -213,8 +213,8 @@ const ImageProductItem = ({ descProd, image }: { descProd: string, image?: strin
 const ProductItem = ({ product }: { product: IResGetProductItem }) => {
     return (
         <View style={commonStyle.justify_content_space_btw}>
-            <Text style={stylesConsultaProduto.productCode}>{`N° ${product.CodgProduto}`}</Text>
-            <Text style={stylesConsultaProduto.productDesc}>{`${product.DescReduzida}`}</Text>
+            <Text style={stylesConsultaProduto.productCode}>{`Código:  ${product.CodgProduto}`}</Text>
+            <Text style={stylesConsultaProduto.productDesc}>{`${product.DescArtigo}`}</Text>
             <Text style={stylesConsultaProduto.productPrice}>{`${formatMoneyValue(product.Preco!)}`}</Text>
         </View>
     )
