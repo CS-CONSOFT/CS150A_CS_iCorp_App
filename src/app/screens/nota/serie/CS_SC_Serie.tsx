@@ -70,7 +70,6 @@ const CS_SC_Serie = () => {
                 </CustomHeaderInput>
             </Suspense>
 
-
             {isSuccess && products.length > 0 && (
                 <FlatList
                     ItemSeparatorComponent={CustomSeparator}

@@ -19,6 +19,7 @@ import ButtonActionBlue from "../../../components/button/CustomButtonActionBlue"
 import CustomCard_001 from "../../../components/cards/CustomCard_001";
 import { CustomBottomContanier } from "../../../components/bottomItem/CustomBottomContanier";
 
+
 const CS_SC_Entrega = () => {
 
     const [noteTyped, setNoteTyped] = useState("20240100000000108")
@@ -152,7 +153,7 @@ const CS_SC_Entrega = () => {
             title={"exemplo"}
             children={<EntregaCardLeft modo={"Balcão"} quantidade={1} />}
         />
-            
+     
         <View style={styles.btnContenier}>
             <ButtonActionBlue text={"Confirmar entrega!"} onPress={confirmDelivery} />
         </View>

@@ -11,14 +11,13 @@ import CS_SC_005_04_Anexos from "../screens/005obras/CS_SC_005_04_Anexos";
 import CS_SC_005_Obras from "../screens/005obras/CS_SC_005_Obras";
 import CS_SC_006__EnvorimentConfig from "../screens/006config/CS_SC_006__EnvorimentConfig";
 import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
-
+import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 
 
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
 import CS_SC_009_CadastroEndereco from "../screens/009Cliente/CS_SC_009_CadastroEndereco";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
-import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
