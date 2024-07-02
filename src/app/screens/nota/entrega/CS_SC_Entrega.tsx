@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, Text, View, StyleSheet } from "react-native";
+import { FlatList, SafeAreaView, Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { ILoginResponse } from "../../001login/ILoginResponse";
 import { DataKey } from "../../../enum/DataKeys";
@@ -18,20 +18,23 @@ import CustomSearch from "../../../components/search/CustomSearch";
 import ButtonActionBlue from "../../../components/button/CustomButtonActionBlue";
 import CustomCard_001 from "../../../components/cards/CustomCard_001";
 import { CustomBottomContanier } from "../../../components/bottomItem/CustomBottomContanier";
+import { commonStyle } from "../../../CommonStyle";
 
 
 const CS_SC_Entrega = () => {
 
     const [noteTyped, setNoteTyped] = useState("")
-    const [products, setProducts] = useState<IResNotaProdutoItem[] | null>(null)
-    const [noteInfo, setNoteInfo] = useState<IResInfoNota | null>(null)
+    const [products, setProducts] = useState<IResNotaProdutoItem[]>()
+    const [noteInfo, setNoteInfo] = useState<IResInfoNota>()
     const [messageList, setMessageList] = useState('')
     const [userId, setUserId] = useState('')
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isBtnLoading, setIsBtnLoading] = useState(false)
 
 
     useEffect(() => {
+        setIsBtnLoading(false)
         getObjectDataVc(DataKey.LoginResponse).then((res) => {
             const result = res as ILoginResponse
             setUserId(result.UserID.toString())
@@ -87,20 +90,22 @@ const CS_SC_Entrega = () => {
                 setMessageList("Nota não encontrada.")
                 break;
             default:
+                setMessageList('')
                 break;
         }
     }
 
     //funcao para confirmar entrega dos produtos da nota
     async function confirmDelivery() {
+        setIsBtnLoading(true)
         const dd40id = noteInfo?.dd040_id;
         const tenant = (await getUserProperties()).tenantId;
         const userIdentifier = userId;
         if (tenant != undefined) {
-            setStatus(FETCH_STATUS.LOADING)
             const iSetEntrega: IReqSetDelivery = { dd40id, tenant, userIdentifier }
             setEntrNotaVc(iSetEntrega).then((ok) => {
                 if (ok) {
+                    setIsBtnLoading(false)
                     searchNote(noteTyped)
                 }
             })
@@ -109,10 +114,8 @@ const CS_SC_Entrega = () => {
 
     const loadingProducts = status == FETCH_STATUS.LOADING
     const isSuccess = status == FETCH_STATUS.SUCCESS
-    const isIdle = status == FETCH_STATUS.IDLE
     const error = status == FETCH_STATUS.ERROR
 
-    if (loadingProducts) return <Text style={stylesNotaEntrega.loadingText}>Carregando produtos...</Text>
     if (error) return <Text style={stylesNotaEntrega.loadingText}>{errorMessage}</Text>
 
 
@@ -124,21 +127,39 @@ const CS_SC_Entrega = () => {
             clickToSearch={true}
         />
 
+        {loadingProducts && (
+            <>
+                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+            </>
+        )}
+
+        {messageList !== '' && products?.length === undefined && (
+            <CustomEmpty text={messageList} />
+        )}
+
+
+        {messageList === '' && products?.length === undefined && (
+            <CustomEmpty text={"Pesquise por uma nota"} />
+        )}
+
 
 
         {isSuccess && (
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
                     data={products}
-                    ListEmptyComponent={<CustomEmpty text={"Nenhuma entrega encontrada"} />}
-                    renderItem={(product: any) => <CustomCard_001 title={product.DD060_Descricao} children={
-                        <EntregaCardLeft modo={"Balcão"} quantidade={1} />
+                    ListEmptyComponent={products !== undefined ? <CustomEmpty text={"Nenhuma entrega encontrada"} /> : <></>}
+                    renderItem={({ item }) => <CustomCard_001 title={item.DD060_Descricao} children={
+                        <EntregaCardLeft modo={item.DD060_mod_Entrega} quantidade={item.DD060_Quantidade} />
                     } />}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item) => item.DD060_Id.toString()}
                 />
-                <View style={styles.btnContenier}>
-                    <ButtonActionBlue text={"Confirmar entrega!"} onPress={() => confirmDelivery()} />
-                </View>
+
+                {products !== undefined && (
+                    <View style={styles.btnContenier}>
+                        {isBtnLoading ? <ActivityIndicator /> : <ButtonActionBlue text={"Confirmar entrega!"} onPress={() => confirmDelivery()} />}
+                    </View>
+                )}
 
             </View>
         )}
