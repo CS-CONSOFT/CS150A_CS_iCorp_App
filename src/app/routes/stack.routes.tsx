@@ -14,6 +14,7 @@ import CS_SC_007_Pagamento from "../screens/007pagamento/CS_SC_007_Pagamento";
 import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 
 
+import CS_SC_003_02_01_PreVendaEditEnd from "../screens/003prevenda/003_02_cliente/003_02_01_end/CS_SC_003_02_01_PreVendaEditEnd";
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
 import CS_SC_009_CadastroEndereco from "../screens/009Cliente/CS_SC_009_CadastroEndereco";
@@ -22,9 +23,6 @@ import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
-import CS_SC_SerieProduto from "../screens/nota/serie/CS_SC_SerieProduto";
-import CS_SC_003_02_01_PreVendaEditEnd from "../screens/003prevenda/003_02_cliente/003_02_01_end/CS_SC_003_02_01_PreVendaEditEnd";
-import CS_SC_010BipeCamera from "../screens/010BipeCamera/CS_SC_010BipeCamera";
 
 
 
@@ -93,17 +91,6 @@ export default function StackRoutes() {
 
             }} />
 
-            <StackNav.Screen name="BipeCamera" component={CS_SC_010BipeCamera} options={{
-                title: "Camera",
-
-                headerTitleAlign: 'center',
-                headerTintColor: "#fff",
-                headerStyle: {
-                    backgroundColor: "#0A3147"
-                },
-                headerBackVisible: true,
-
-            }} />
 
             <StackNav.Screen name="Cadastro_003_Perf" component={CS_SC_003_02_PreVendaDetalheCliente} options={{
                 title: "Perfil",
