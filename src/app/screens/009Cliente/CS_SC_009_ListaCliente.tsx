@@ -47,6 +47,8 @@ const CS_SC_009_ListaCliente = () => {
             <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
             {!isLoading ? <>
                 <FlatList
+                    refreshing={isLoading}
+                    onRefresh={getClientesList}
                     data={clientList}
                     keyExtractor={(item) => item.csicp_bb012.ID.toString()}
                     renderItem={({ item }) => <RenderItemCliente item={item} />}
