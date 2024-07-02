@@ -30,4 +30,7 @@ export const ICON_NAME = {
     IMAGE: 'image-outline',
     DOCUMENT: 'document-attach-outline',
     DOCUMENT_EMPTY: "document-outline",
+    EDITAR: "create-outline",
+    FECHAR: "close-circle-outline",
+
 }

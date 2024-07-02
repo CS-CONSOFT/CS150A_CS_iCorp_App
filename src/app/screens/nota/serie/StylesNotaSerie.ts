@@ -4,14 +4,14 @@ import ColorStyle from "../../../ColorStyle";
 export const stylesNotaSerie = StyleSheet.create({
     container: {
         padding: 10,
-     
+
     },
-    titleNota:{
-        marginBottom: 10, 
-        backgroundColor: ColorStyle.colorPrimary200, 
-        borderTopRightRadius: 20, 
-        borderTopLeftRadius: 20, 
-        paddingHorizontal: 8, 
+    titleNota: {
+        marginBottom: 10,
+        backgroundColor: ColorStyle.colorPrimary200,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        paddingHorizontal: 8,
         paddingVertical: 8,
         color: ColorStyle.colorPrimary300,
         fontSize: 16,
@@ -51,8 +51,7 @@ export const stylesNotaSerie = StyleSheet.create({
     dialog: {
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: 20,
-        alignItems: 'center'
+        padding: 20
     },
     title: {
         fontSize: 20,
