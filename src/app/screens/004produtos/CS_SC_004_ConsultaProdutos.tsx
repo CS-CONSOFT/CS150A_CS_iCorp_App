@@ -41,11 +41,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             const pvId = currentPv as string
             handleInsertProductPv(
                 product.CodgProduto!.toString(),
-                false,
-                1,
-                1,
-                pvId || undefined,
-                undefined
+                false, // is entrega
+                1, // quantidade
+                1, // tipo atendimento
+                pvId || undefined, // pv id
+                undefined // conta id
             ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
@@ -113,7 +113,9 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     };
 
-
+    function handleRefreshList(): void {
+        handleFormSubmitToSearch('', 1)
+    }
 
 
 
@@ -135,6 +137,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         <View>
                             <FlatList
                                 data={productList}
+                                refreshing={isLoading}
+                                onRefresh={handleRefreshList}
                                 keyExtractor={(item) => item.Id!.toString()}
                                 ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrado!"} />}
                                 renderItem={({ item }) => <CustomProduct

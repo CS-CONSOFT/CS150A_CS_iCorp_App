@@ -120,6 +120,10 @@ const CS_SC_Entrega = () => {
 
 
 
+    function handleRefreshList(): void {
+        searchNote(noteTyped)
+    }
+
     return <SafeAreaView style={[stylesNotaEntrega.modalContainer, { height: "100%" }]}>
         <CustomSearch
             placeholder="Pesquisar Nota"
@@ -148,6 +152,8 @@ const CS_SC_Entrega = () => {
         {isSuccess && (
             <View style={stylesNotaEntrega.productContainer}>
                 <FlatList
+                    refreshing={loadingProducts}
+                    onRefresh={handleRefreshList}
                     data={products}
                     ListEmptyComponent={products !== undefined ? <CustomEmpty text={"Nenhuma entrega encontrada"} /> : <></>}
                     renderItem={({ item }) => <CustomCard_001 title={item.DD060_Descricao} children={
@@ -171,15 +177,6 @@ const CS_SC_Entrega = () => {
 
 
 export default CS_SC_Entrega;
-
-const ProductItem = ({ product }: { product: any }) => {
-    return (
-        <View style={stylesNotaEntrega.container}>
-            <Text style={stylesNotaEntrega.productName}>{product.DD060_Descricao}</Text>
-        </View>
-    );
-};
-
 
 const EntregaCardLeft = ({ modo, quantidade }: { modo: string, quantidade: number }) => {
     return (

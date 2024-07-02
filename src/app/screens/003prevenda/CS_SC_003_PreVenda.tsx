@@ -74,8 +74,8 @@ const CS_SC_003_PreVenda = () => {
                     <FlatList
                         data={pvList}
                         refreshing={isLoading}
-                        ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                         onRefresh={handleRefreshList}
+                        ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                         renderItem={({ item }) => <PreVendaRenderItem item={item}
                             onPress={() => goToDetails(item)} />}
                         keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}

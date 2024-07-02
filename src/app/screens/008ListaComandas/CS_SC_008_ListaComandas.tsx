@@ -56,6 +56,8 @@ const CS_SC_008_ListaComandas = () => {
             <>
                 <FlatList
                     data={listaComanda}
+                    refreshing={isLoading}
+                    onRefresh={getListComanda}
                     ListEmptyComponent={<CustomEmpty text={"Nenhuma comanda encontrada"} />}
                     keyExtractor={(item) => item.tt010_Id.toString()}
                     renderItem={({ item }) =>

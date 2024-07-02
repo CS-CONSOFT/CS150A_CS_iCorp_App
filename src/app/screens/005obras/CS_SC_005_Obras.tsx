@@ -53,6 +53,8 @@ const CS_SC_005_Obras = () => {
             )}
             <FlatList
                 data={listObras}
+                refreshing={isLoading}
+                onRefresh={getListObras}
                 keyExtractor={(item, index) => index.toString()}
                 ListEmptyComponent={<CustomEmpty text={"Nenhuma obra encontrada!"} />}
                 renderItem={({ item }) => <RenderItem item={item} />}

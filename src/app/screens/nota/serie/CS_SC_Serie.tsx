@@ -51,6 +51,10 @@ const CS_SC_Serie = () => {
 
     const loadingProducts = status == FETCH_STATUS.LOADING
 
+    function handleRefreshList(): void {
+        search(currentNoteTyped)
+    }
+
     return <SafeAreaView>
         <CustomSearch
             placeholder="Chave Nota"
@@ -76,6 +80,8 @@ const CS_SC_Serie = () => {
         <View style={stylesNotaEntrega.productContainer}>
             <FlatList
                 data={nota?.Produtos}
+                refreshing={loadingProducts}
+                onRefresh={handleRefreshList}
                 ListEmptyComponent={<CustomEmpty text={"Nenhuma entrega encontrada"} />}
                 renderItem={({ item }) => (
                     <CustomCard_001 title={item.DD060_Descricao} children={
