@@ -5,7 +5,15 @@ import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 
 
-const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, clickToSearch = false }:
+const CustomSearch = ({
+    /** Funcao responsavel por realizar a busca em si */
+    onSearchPress,
+    /** variavel que define se havera ou nao clique de filtros */
+    onFilterClick = undefined,
+    /** placeholder do input */
+    placeholder,
+    /** variavel que define se a pesquisa deve ser feita ao clicar no icone de pesquisa ou enquanto digita o campo */
+    clickToSearch = false }:
     {
         onSearchPress: (atributes: any) => void,
         /**
@@ -44,7 +52,9 @@ const CustomSearch = ({ onSearchPress, onFilterClick = undefined, placeholder, c
                 value={valueSearch}
                 placeholder={placeholder}
             />
-            <CustomIcon icon={ICON_NAME.BUSCA_CONTORNADO} iconSize={44} onPress={() => onSearchPress(valueSearch)} />
+            {clickToSearch && (
+                <CustomIcon icon={ICON_NAME.BUSCA_CONTORNADO} iconSize={44} onPress={() => onSearchPress(valueSearch)} />
+            )}
             {onFilterClick !== undefined && (
                 <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
             )}

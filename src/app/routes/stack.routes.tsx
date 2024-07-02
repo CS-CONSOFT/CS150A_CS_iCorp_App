@@ -87,7 +87,7 @@ export default function StackRoutes() {
                 headerStyle: {
                     backgroundColor: "#0A3147"
                 },
-                headerBackVisible: true,
+                headerBackVisible: false,
 
             }} />
 
@@ -99,7 +99,7 @@ export default function StackRoutes() {
                 headerStyle: {
                     backgroundColor: "#0A3147"
                 },
-                headerBackVisible: true,
+                headerBackVisible: false,
             }} />
 
             <StackNav.Screen name="Entrega" component={CS_SC_Entrega} options={{

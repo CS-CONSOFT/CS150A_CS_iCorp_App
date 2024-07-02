@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight } from "react-native";
+import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight, ActivityIndicator } from "react-native";
 import { DataKey } from "../../enum/DataKeys";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
@@ -16,6 +16,7 @@ const CS_SC001_LoginForm = () => {
         Senha: 'ba'
     });
     const { navigate } = useNavigation()
+    const [isBtnLoading, setIsBtnLoading] = useState(false)
     //fim variaveis
 
     function navigateToMenu() {
@@ -23,6 +24,7 @@ const CS_SC001_LoginForm = () => {
     }
 
     useEffect(() => {
+        setIsBtnLoading(false)
         checkIfUserIsLogged().then((isLogged) => {
             if (isLogged) {
                 navigateToMenu()
@@ -81,10 +83,16 @@ const CS_SC001_LoginForm = () => {
 
 
             <TouchableHighlight
-                onPress={onClickLogin}
+                onPress={() => {
+                    isBtnLoading ? {} : onClickLogin()
+                }}
                 style={commonStyle.common_button_style}
                 underlayColor='white'
-            ><Text style={commonStyle.common_text_button_style}>Logar</Text></TouchableHighlight>
+            >
+                {isBtnLoading ? <ActivityIndicator /> : <Text style={commonStyle.common_text_button_style}>Logar</Text>}
+
+
+            </TouchableHighlight>
         </SafeAreaView>
     );
 }
