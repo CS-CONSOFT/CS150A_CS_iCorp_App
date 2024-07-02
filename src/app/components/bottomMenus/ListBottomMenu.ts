@@ -1,4 +1,3 @@
-import { Alert } from "react-native"
 import { ICON_NAME } from "../../util/IconsName"
 
 /**001 */
@@ -9,12 +8,7 @@ export const listBottomMenu001 = [
         onPress: (navigate: any) => { navigate('Menu') },
         iconName: ICON_NAME.ESTATISTICA_CONTORNADO
     },
-    {
-        id: 2,
-        title: "Lista",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
-        iconName: ICON_NAME.LISTA_CONTORNADO
-    },
+
     {
         id: 'special-button',
         title: "Lista",
@@ -24,15 +18,8 @@ export const listBottomMenu001 = [
     {
         id: 4,
         title: "Leitor",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
+        onPress: (navigate: any) => { navigate('BipeCamera') },
         iconName: ICON_NAME.CODIGO_BARRA_CONTORNADO
-
-    },
-    {
-        id: 5,
-        title: "Cesta",
-        onPress: (navigate: any) => { Alert.alert("Falta fazer") },
-        iconName: ICON_NAME.CESTA_CONTORNADO
     }
 ]
 

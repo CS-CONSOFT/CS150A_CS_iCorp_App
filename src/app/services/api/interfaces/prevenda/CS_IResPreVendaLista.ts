@@ -1092,6 +1092,26 @@ export interface DD080_Produtos {
     DD061_CfgImpostos: DD061_CfgImpostos[]
     DD080_Combustivel: DD080_Combustivel[]
     csicp_sy001_UsuVendedor: Csicp_sy001_UsuVendedor
+    csicp_gg008c_Imagens: gg008_img[]
+}
+
+export interface gg008_img {
+    Id: string
+    GG008c_FilialID: string
+    GG008c_ProdutoID: string
+    GG008c_Filial: number
+    GG008c_CodgProduto: number
+    GG008c_Descricao: string
+    GG008c_Ordem: number
+    GG008c_TipoRegistro: string
+    GG008c_Objeto: string
+    GG008c_FileType: string
+    GG008c_Texto: string
+    FILENAME: string
+    GG008c_IsPadrao: boolean
+    gg008c_Path: string
+    gg008c_Size: number
+    gg008c_CDNId: number
 }
 
 export interface Csicp_dd080 {

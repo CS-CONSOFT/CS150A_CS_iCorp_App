@@ -1,12 +1,14 @@
-import { lazy, Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
-import CustomSeparator from "../../../components/lists/CustomSeparator";
+import React, { lazy, useState } from "react";
+import { FlatList, SafeAreaView, Text, View } from "react-native";
+import { commonStyle } from "../../../CommonStyle";
+import { ButtonActionSecondary } from "../../../components/button/CustonButtonActionSecondary";
+import CustomEmpty from "../../../components/lists/CustomEmpty";
+import CustomSearch from "../../../components/search/CustomSearch";
 import { IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { getNoteSeriesVc, setNewCorSerieVc } from "../../../view_controller/serie/SerieNotaViewController";
+import { stylesNotaEntrega } from "../entrega/StylesNotaEntrega";
 import { stylesNotaSerie } from "./StylesNotaSerie";
-import { commonStyle } from "../../../CommonStyle";
-import { ButtonActionSecondary } from "../../../components/button/CustonButtonActionSecondary";
 
 const CustomHeaderInput = lazy(() => import("../components/header/CustomHeaderInput"))
 const CustomAlertDialog = lazy(() => import("../../../components/modal/CustomAlertDialog"))
@@ -23,8 +25,8 @@ const CS_SC_Serie = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
 
-    async function search() {
-        const note = noteTyped;
+    async function search(value: string) {
+        const note = value;
         setStatus(FETCH_STATUS.LOADING)
         getNoteSeriesVc(note).then((res) => {
             if (res !== undefined && res.Produtos != undefined) {
@@ -41,60 +43,45 @@ const CS_SC_Serie = () => {
         const productId = currentProductSelected?.DD060_Id
         const newCorSerie = newSerie;
         setNewCorSerieVc(productId!, newCorSerie).then(() => {
-            search()
+            search('')
             setShowPopUp(false);
         })
-
     }
 
 
     const loadingProducts = status == FETCH_STATUS.LOADING
-    const isSuccess = status == FETCH_STATUS.SUCCESS
     const error = status == FETCH_STATUS.ERROR
 
     if (loadingProducts) return <Text>Carregando produtos...</Text>
     if (error) return <Text>{errorMessage}</Text>
 
 
-    return <>
-        <SafeAreaView>
-            <Suspense fallback={<ActivityIndicator />}>
-                <CustomHeaderInput
-                    titleText="Chave Nota"
-                    setValue={setNoteTyped}
-                    value={noteTyped}
-                    onPress={search}
-                    buttonStyle={stylesNotaSerie.buttonStyle}
-                    textStyle={stylesNotaSerie.textStyle}
-                >
-                </CustomHeaderInput>
-            </Suspense>
+    return <SafeAreaView>
+        <CustomSearch
+            placeholder="Chave Nota"
+            onSearchPress={(value) => search(value)}
+            clickToSearch={true}
+        />
 
-            {isSuccess && products.length > 0 && (
-                <FlatList
-                    ItemSeparatorComponent={CustomSeparator}
-                    ListEmptyComponent={<Text>Nota não encontrada</Text>
-                    }
-                    data={products}
-                    renderItem={({ item }) => (
-                        <ProductItem productItemProps={{ product: item, onPress: () => { } }} />
-                    )}
-                    keyExtractor={(index) => index.toString()}
-                />
-
-            )}
-        </SafeAreaView>
-
-
-        <Suspense fallback={<ActivityIndicator />}>
-            <CustomAlertDialog
-                isVisible={showPopUp}
-                onDismiss={() => setShowPopUp(false)}
-                children={<AlertDialog />}
+        <View style={stylesNotaEntrega.productContainer}>
+            <FlatList
+                data={products}
+                ListEmptyComponent={<CustomEmpty text={"Nenhuma entrega encontrada"} />}
+                renderItem={({ item }) => (
+                    <ProductItem productItemProps={{ product: item, onPress: () => { } }} />
+                )}
+                keyExtractor={(index) => index.toString()}
             />
-        </Suspense>
+        </View>
 
-    </>
+        <CustomAlertDialog
+            isVisible={showPopUp}
+            onDismiss={() => setShowPopUp(false)}
+            children={<AlertDialog />}
+        />
+
+    </SafeAreaView>
+
 }
 
 const AlertDialog = () => {

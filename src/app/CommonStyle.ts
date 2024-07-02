@@ -53,6 +53,9 @@ export const commonStyle = StyleSheet.create({
     common_padding_16: {
         padding: 16
     },
+    common_padding_08: {
+        padding: 8
+    },
     common_rowItem: {
         flexDirection: 'row'
     },
@@ -221,10 +224,10 @@ export const commonStyle = StyleSheet.create({
         height: "auto",
         width: "auto",
     },
-    card_bottom_shadow:{
+    card_bottom_shadow: {
         backgroundColor: ColorStyle.colorwhite,
         borderBottomEndRadius: 20,
-        borderBottomStartRadius:20,
+        borderBottomStartRadius: 20,
         elevation: 2,
         paddingBottom: 15,
         paddingHorizontal: 10,
@@ -232,6 +235,6 @@ export const commonStyle = StyleSheet.create({
         width: "auto",
         marginBottom: 10,
         borderColor: ColorStyle.colorneutrais100
-        
+
     }
 });

@@ -22,12 +22,28 @@ export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Prom
             cs_empresa_id: IGetProdutoSearch.cs_empresa_id
         }
 
-        const urlParams = {
-            cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto,
-            cs_page_size: IGetProdutoSearch.cs_page_size,
-            cs_page: IGetProdutoSearch.cs_page,
-            cs_itens_per_page: 5
+        let urlParams = {}
+        /**
+         * se tiver descricao do produto, ira pesquisar pela descricao, se nao
+         * ira pesquisar pelo codigo
+         */
+        if (IGetProdutoSearch.cs_codigo_produto) {
+            urlParams = {
+                cs_page_size: IGetProdutoSearch.cs_page_size,
+                cs_page: IGetProdutoSearch.cs_page,
+                cs_itens_per_page: 5,
+                cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto
+            }
+        } else if (IGetProdutoSearch.cs_descricao_reduzida) {
+            urlParams = {
+                cs_page_size: IGetProdutoSearch.cs_page_size,
+                cs_page: IGetProdutoSearch.cs_page,
+                cs_itens_per_page: 5,
+                cs_descricao_artigo: IGetProdutoSearch.cs_descricao_reduzida
+            }
         }
+
+
 
         const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/PesquisaProdutos3`;
         const response = await api.get(url, { headers: headerParams, params: urlParams })

@@ -1,18 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, SafeAreaView } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView } from "react-native";
+import ColorStyle from "../../../ColorStyle";
+import { commonStyle } from "../../../CommonStyle";
+import CustomEmpty from "../../../components/lists/CustomEmpty";
 import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
-import { IResProductItemModel, IResProductsListPvModel } from "../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { handleDeleteProductFromPv, handleGetProductsPv, handleGetPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
+import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
+import { ToastType, showToast } from "../../../util/ShowToast";
+import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, handleUpdateTablePrice, handleUpdateUnityPrice, handleUpdateValueDiscount } from "../../../view_controller/prevenda/PreVendaViewController";
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
-import { ToastType, showToast } from "../../../util/ShowToast";
-import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
-import CustomEmpty from "../../../components/lists/CustomEmpty";
-import { commonStyle } from "../../../CommonStyle";
-import ColorStyle from "../../../ColorStyle";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {

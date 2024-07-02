@@ -10,7 +10,7 @@ import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvIte
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
-import { Csicp_dd080, DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
+import { DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 
 
 
@@ -114,7 +114,7 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                 {/** IMAGEM */}
                 <View style={common003_01_styles.productContainerLeft}>
                     <Image style={common003_01_styles.productImage}
-                        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnT98rwKfnZngX2pDhX4EkbW-y0pUOCz9iCg&s' }} />
+                        source={{ uri: product.csicp_gg008c_Imagens.at(0)?.gg008c_Path }} />
                 </View>
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>

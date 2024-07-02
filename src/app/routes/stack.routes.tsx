@@ -22,6 +22,9 @@ import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
+import CS_SC_SerieProduto from "../screens/nota/serie/CS_SC_SerieProduto";
+import CS_SC_003_02_01_PreVendaEditEnd from "../screens/003prevenda/003_02_cliente/003_02_01_end/CS_SC_003_02_01_PreVendaEditEnd";
+import CS_SC_010BipeCamera from "../screens/010BipeCamera/CS_SC_010BipeCamera";
 
 
 
@@ -47,8 +50,10 @@ declare global {
             ComandaLista: undefined
             CadastroCliente: undefined
             Cadastro_001: undefined
-            Cadastro_002_End: { isPreVendaEditEnd: boolean, endId?: string }
+            Cadastro_002_End: undefined
             Cadastro_003_Perf: undefined
+            BipeCamera: undefined
+            PreVendaEnd: { DD071_JSON: string }
         }
     }
 }
@@ -78,6 +83,18 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndereco} options={{
                 title: "Endereço",
+
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+
+            }} />
+
+            <StackNav.Screen name="BipeCamera" component={CS_SC_010BipeCamera} options={{
+                title: "Camera",
 
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
@@ -130,7 +147,7 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="Clientes" component={TabRoutes009} options={{
+            <StackNav.Screen name="CadastroCliente" component={TabRoutes009} options={{
                 title: "Clientes",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
@@ -140,6 +157,17 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
+
+
+            <StackNav.Screen name="PreVendaEnd" component={CS_SC_003_02_01_PreVendaEditEnd} options={{
+                title: "Endereçamento",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
 
 
 
