@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import { CS_IReqSave1202 } from "../../services/api/interfaces/contas/CS_IReqSave1202";
@@ -31,9 +31,27 @@ const CS_SC_009_CadastroCliente = () => {
         NO_ONE: -1
     }
     const [documentType, setDocumentType] = useState(DOCUMENT_TYPE.NO_ONE)
+    const [isSavingLoading, setIsSavingLoading] = useState(false)
 
 
-    function handleInputTyping(id: string, value: string): void {
+    function resetForm() {
+        setAttributesMap({
+            username: '',
+            fantasyName: '',
+            CPF_CNPJ: '',
+            RG: '',
+            codigo: '',
+            INSCES: '',
+        });
+        setIsSavingLoading(false)
+        setDocumentType(DOCUMENT_TYPE.NO_ONE);
+    }
+
+    useEffect(() => {
+        resetForm()
+    }, [])
+
+    function saveValuesToObjectForm(id: string, value: string): void {
         if (id === 'CPF_CNPJ') {
             setAttributesMap((prev) => {
                 return { ...prev, [id]: cpfCnpjMask(value) }
@@ -59,6 +77,7 @@ const CS_SC_009_CadastroCliente = () => {
     }
 
     function saveCliente() {
+        setIsSavingLoading(true)
         //BB1201
         let reqSaveConta: IReqSaveConta = {}
         let reqSave1202: CS_IReqSave1202 = {}
@@ -122,19 +141,18 @@ const CS_SC_009_CadastroCliente = () => {
         }
 
 
-
-
         handleSaveConta(reqSaveConta).then((res) => {
-            console.log(reqSave1202);
             reqSave1202.Id = res.bb012_ID
             reqSave1201.Id = res.bb012_ID
 
             handleSave1201({ cs_req_save: reqSave1201 }).then(() => {
                 handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
+                    resetForm()
                     navigate('Cadastro_002_End')
                 })
             })
         })
+
 
     }
 
@@ -149,7 +167,7 @@ const CS_SC_009_CadastroCliente = () => {
                 <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CPF/CNPJ</Text>
                 <TextInput
                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                    onChangeText={(value) => handleInputTyping('CPF_CNPJ', value)}
+                    onChangeText={(value) => saveValuesToObjectForm('CPF_CNPJ', value)}
                     value={attributesMap.CPF_CNPJ}
                     placeholder="CPF/CNPJ"
                     keyboardType='numeric'
@@ -161,7 +179,7 @@ const CS_SC_009_CadastroCliente = () => {
                 <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Nome</Text>
                 <TextInput
                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                    onChangeText={(value) => handleInputTyping('username', value)}
+                    onChangeText={(value) => saveValuesToObjectForm('username', value)}
                     value={attributesMap.username}
                     placeholder="Nome"
                 />
@@ -169,7 +187,7 @@ const CS_SC_009_CadastroCliente = () => {
                 <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Nome Fantasia</Text>
                 <TextInput
                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                    onChangeText={(value) => handleInputTyping('fantasyName', value)}
+                    onChangeText={(value) => saveValuesToObjectForm('fantasyName', value)}
                     value={attributesMap.fantasyName}
                     placeholder="Nome Fantasia"
                 />
@@ -179,7 +197,7 @@ const CS_SC_009_CadastroCliente = () => {
                         <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>RG</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                            onChangeText={(value) => handleInputTyping('RG', value)}
+                            onChangeText={(value) => saveValuesToObjectForm('RG', value)}
                             value={attributesMap.RG}
                             placeholder="RG"
                             keyboardType='numeric'
@@ -192,7 +210,7 @@ const CS_SC_009_CadastroCliente = () => {
                         <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Inscrição Estadual</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                            onChangeText={(value) => handleInputTyping('INSCES', value)}
+                            onChangeText={(value) => saveValuesToObjectForm('INSCES', value)}
                             value={attributesMap.RG}
                             placeholder="Inscrição Estadual"
                             keyboardType='numeric'
@@ -201,10 +219,12 @@ const CS_SC_009_CadastroCliente = () => {
                 )}
 
                 <TouchableHighlight
-                    onPress={() => saveCliente()}
+                    onPress={() => isSavingLoading ? showToast(ToastType.INFO, "Carregando!", "Aguarde") : saveCliente()}
                     style={commonStyle.common_button_style}
                     underlayColor='white'
-                ><Text style={commonStyle.common_text_button_style}>Continuar</Text></TouchableHighlight>
+                >
+                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Continuar</Text>}
+                </TouchableHighlight>
             </ScrollView>
         </SafeAreaView >
     );

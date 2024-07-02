@@ -2,7 +2,7 @@ name: Build and Deploy Android APK to AWS EC2
 
 on:
   push:
-    branches: [ "TESTE-001" ]
+    branches: [ "desenvolvimento" ]
   workflow_dispatch:
 
 env:

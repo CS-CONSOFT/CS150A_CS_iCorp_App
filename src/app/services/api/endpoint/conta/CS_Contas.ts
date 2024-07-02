@@ -30,7 +30,6 @@ export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id:
         }
 
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Save_Conta', cs_save_conta, { params: data });
-
         return response.data;
     } catch (err) {
         throw err;
@@ -82,6 +81,7 @@ export async function save1201({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
             Tenant_id: cs_tenant_id
         }
 
+        console.log("REQ DATA SAVE 1201: " + JSON.stringify(cs_req_save));
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01201_Save', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {
@@ -95,6 +95,7 @@ export async function save1202({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
             Tenant_id: cs_tenant_id
         }
 
+        console.log("REQ DATA SAVE 1202: " + JSON.stringify(cs_req_save));
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01202_Save', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {
