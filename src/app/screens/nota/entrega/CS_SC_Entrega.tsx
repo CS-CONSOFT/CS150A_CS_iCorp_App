@@ -6,7 +6,6 @@ import { getObjectDataVc, getUserProperties } from "../../../view_controller/Sha
 import { getEntrgNotaVc, setEntrNotaVc } from "../../../view_controller/entrega/EntregaViewController";
 import { stylesNotaEntrega } from "./StylesNotaEntrega";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
-import { IResInfoNota, IResNotaProdutoItem } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { IReqSetDelivery } from "../../../services/api/interfaces/notas/CS_IReqSetDelivery";
 import { IReqGetDelivery } from "../../../services/api/interfaces/notas/CS_IReqGetDelivery";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
@@ -19,13 +18,14 @@ import ButtonActionBlue from "../../../components/button/CustomButtonActionBlue"
 import CustomCard_001 from "../../../components/cards/CustomCard_001";
 import { CustomBottomContanier } from "../../../components/bottomItem/CustomBottomContanier";
 import { commonStyle } from "../../../CommonStyle";
+import { Info_Nota, Produtos } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 
 
 const CS_SC_Entrega = () => {
 
     const [noteTyped, setNoteTyped] = useState("")
-    const [products, setProducts] = useState<IResNotaProdutoItem[]>()
-    const [noteInfo, setNoteInfo] = useState<IResInfoNota>()
+    const [products, setProducts] = useState<Produtos[]>()
+    const [noteInfo, setNoteInfo] = useState<Info_Nota>()
     const [messageList, setMessageList] = useState('')
     const [userId, setUserId] = useState('')
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
@@ -125,6 +125,7 @@ const CS_SC_Entrega = () => {
             placeholder="Pesquisar Nota"
             onSearchPress={(value) => searchNote(value)}
             clickToSearch={true}
+            keyboartType='numeric'
         />
 
         {loadingProducts && (

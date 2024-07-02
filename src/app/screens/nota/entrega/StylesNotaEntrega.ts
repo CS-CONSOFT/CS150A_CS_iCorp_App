@@ -21,7 +21,7 @@ export const stylesNotaEntrega = StyleSheet.create({
         marginTop: 20,
     },
     productContainer: {
-        flex: 1,
+
     },
     productName: {
         fontSize: 18,
