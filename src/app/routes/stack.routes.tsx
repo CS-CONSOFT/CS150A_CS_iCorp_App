@@ -44,6 +44,7 @@ declare global {
             Obras_Requisicao: { obraId: number }
             Obras_Anexos: undefined
             Obras_Chat: undefined
+            Obras_PDF: undefined
             Pagamento: undefined
             ComandaLista: undefined
             TabListCliente: undefined
@@ -229,6 +230,8 @@ export default function StackRoutes() {
                 },
                 headerBackVisible: true,
             })} />
+
+        
 
             <StackNav.Screen name="Obras_Chat" component={CS_CS_005_05_Chat} options={({
                 title: "Chat",
