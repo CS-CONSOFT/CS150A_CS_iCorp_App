@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Animated, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Animated, Image, Pressable, Text, View } from "react-native";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import { IProdutoItemUltimasVendas } from "../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
 import { formatMoneyValue } from "../../../../util/FormatText";
@@ -11,6 +11,7 @@ import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEd
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
 import { DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { commonStyle } from "../../../../CommonStyle";
 
 
 
@@ -40,9 +41,11 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
     const [extraBottomOpenEdit, setExtraBottomOpenEdit] = useState(false);
     const [extraBottomOpenLastSales, setExtraBottomOpenLastSales] = useState(false);
     const [extraBottomOpenGuarantee, setExtraBottomOpenGuarantee] = useState(false);
+    const [loadingRightItens, setLoadingRightItens] = useState(false)
 
 
     function showLastSales(Id: string) {
+        setLoadingRightItens(true)
         handleGetLastSalesProduct({ cs_produto_id: Id }).then((res) => {
             if (res.IsOk) {
                 setLastSalesProduct(res.UltimasVendas)
@@ -50,11 +53,13 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
             } else {
                 showToast(ToastType.ERROR, "Error", "Um erro ocorreu!")
             }
+            setLoadingRightItens(false)
         })
     }
 
+
     function showGuarantee(Id: string): void {
-        downSwipeToGuarantee()
+        //downSwipeToGuarantee()
     }
 
     /** FUNCOES QUE LIDAM COM AS ANIMACOES EM TELA */
@@ -134,11 +139,14 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
 
                 {/** CONTEUDO EXIBIDO A DIREITA DE CADA ITEM DA LISTA */}
                 {extraIconsRightOpen && (
-                    <Pressable style={common003_01_styles.iconsRight}>
-                        <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
-                        <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
-                        <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
-                    </Pressable>
+                    <View style={common003_01_styles.iconsRight}>
+                        {loadingRightItens ? <ActivityIndicator color={"#fff"} style={commonStyle.align_centralizar} /> : <>
+                            <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
+                            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
+                            <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
+                        </>}
+
+                    </View>
                 )}
             </Animated.View>
 

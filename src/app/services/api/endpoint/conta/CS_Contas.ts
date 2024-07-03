@@ -7,6 +7,7 @@ import { IResGetContaById } from "../../interfaces/contas/CS_IResGetContaById";
 import { IResGetListConta } from "../../interfaces/contas/CS_IResGetListConta";
 import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
 import { IResPadraoConta } from "./IResPadraoConta";
+import { CS_IResGetConta } from "../../interfaces/contas/CS_IResGetConta";
 
 export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<IResGetContaById> {
     try {
@@ -28,7 +29,6 @@ export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id:
         const data = {
             Tenant_id: cs_tenant_id
         }
-
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Save_Conta', cs_save_conta, { params: data });
         return response.data;
     } catch (err) {
@@ -37,7 +37,6 @@ export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id:
 }
 
 export async function getListConta({ commonReq, cs_mod_relacao_id }: { commonReq: ICommonReq, cs_mod_relacao_id: number }): Promise<IResGetListConta> {
-    console.log(commonReq);
     try {
         const data = {
             Tenant_id: commonReq.Tenant_id,
@@ -46,19 +45,30 @@ export async function getListConta({ commonReq, cs_mod_relacao_id }: { commonReq
             in_currentPage: commonReq.in_currentPage,
             in_pageSize: commonReq.in_pageSize,
             In_ModRelacaoID: cs_mod_relacao_id,
-            in_search: commonReq.in_search === undefined ? '' : commonReq.in_search
+            in_search: commonReq.in_search
         }
 
         const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_List_Contas', { headers: data });
-
-
-
-
         return response.data;
     } catch (err) {
         throw err;
     }
 }
+
+export async function getConta({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<CS_IResGetConta> {
+    try {
+        const urlParams = {
+            Tenant_id: cs_tenant_id,
+            In_BB012_ID: cs_conta_id
+        }
+        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_Conta', { params: urlParams });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 
 export async function deleteConta({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }) {
     try {
@@ -80,8 +90,6 @@ export async function save1201({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
         const data = {
             Tenant_id: cs_tenant_id
         }
-
-        console.log("REQ DATA SAVE 1201: " + JSON.stringify(cs_req_save));
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01201_Save', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {
@@ -94,8 +102,6 @@ export async function save1202({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
         const data = {
             Tenant_id: cs_tenant_id
         }
-
-        console.log("REQ DATA SAVE 1202: " + JSON.stringify(cs_req_save));
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01202_Save', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {
@@ -109,7 +115,6 @@ export async function save1206({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
         const data = {
             Tenant_id: cs_tenant_id
         }
-
         const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb01206_Save_Update', cs_req_save, { headers: data });
         return response.data;
     } catch (err) {

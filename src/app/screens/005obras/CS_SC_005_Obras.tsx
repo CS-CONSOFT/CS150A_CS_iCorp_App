@@ -15,17 +15,20 @@ import { handleGetListObras, handleGetPagesArray } from "../../view_controller/o
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import ColorStyle from "../../ColorStyle";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const CS_SC_005_Obras = () => {
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [listObras, setListObras] = useState<Dd190_Obras[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
+    const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(() => {
         getListObras()
     }, [])
 
     function getListObras(page?: number) {
+        setCurrentPage(page || 1)
         setStatus(FETCH_STATUS.LOADING)
         try {
             handleGetListObras({ currentPage: page, dataFim: '2024-06-11', dataInicio: '2023-01-01' }).then(async (res) => {
@@ -54,8 +57,8 @@ const CS_SC_005_Obras = () => {
             <FlatList
                 data={listObras}
                 refreshing={isLoading}
-                onRefresh={getListObras}
-                keyExtractor={(item, index) => index.toString()}
+                onRefresh={() => getListObras(currentPage)}
+                keyExtractor={(item) => item.DD190_Obra.csicp_dd190.dd190_Id.toString()}
                 ListEmptyComponent={<CustomEmpty text={"Nenhuma obra encontrada!"} />}
                 renderItem={({ item }) => <RenderItem item={item} />}
             />
