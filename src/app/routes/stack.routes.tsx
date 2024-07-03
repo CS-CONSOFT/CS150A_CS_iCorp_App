@@ -46,9 +46,9 @@ declare global {
             Obras_Chat: undefined
             Pagamento: undefined
             ComandaLista: undefined
-            CadastroCliente: undefined
-            Cadastro_001: undefined
-            Cadastro_002_End: undefined
+            TabListCliente: undefined
+            EditCliente: { bb12id?: string }
+            Cadastro_002_End: { bb12id: string, isEdit: boolean }
             Cadastro_003_Perf: undefined
             BipeCamera: undefined
             PreVendaEnd: { DD071_JSON: string }
@@ -134,7 +134,7 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             }} />
 
-            <StackNav.Screen name="CadastroCliente" component={TabRoutes009} options={{
+            <StackNav.Screen name="TabListCliente" component={TabRoutes009} options={({
                 title: "Clientes",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
@@ -142,7 +142,18 @@ export default function StackRoutes() {
                     backgroundColor: "#0A3147"
                 },
                 headerBackVisible: true,
-            }} />
+            })} />
+
+            <StackNav.Screen name="EditCliente" component={CS_SC_009_CadastroCliente} options={({
+                title: "Editar Cliente",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
+
 
 
 

@@ -5,13 +5,13 @@ import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomSwitch from "../../../../components/switch/CustomSwitch";
-import { IResProductItemModel } from "../../../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
-import { formatMoneyValue } from '../../../../util/FormatText';
+import { DD080_Produtos } from '../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista';
+import { FETCH_STATUS } from '../../../../util/FETCH_STATUS';
 import { ICON_NAME } from "../../../../util/IconsName";
-import { moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
+import { formatPercentInput, moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
 import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { common003_01_styles } from "./CommonStyles";
-import { DD080_Produtos } from '../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista';
+import { formatMoneyValue } from '../../../../util/FormatText';
 
 /** componente de edição dos valores do produto */
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
@@ -34,8 +34,10 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
     const [tablePrice, setTablePrice] = useState('');
     const [unityPrice, setUnityPrice] = useState('');
-    const [percentDiscount, setPercentDiscount] = useState(0.0);
+    const [percentDiscount, setPercentDiscount] = useState('');
     const [valueDiscount, setValueDiscount] = useState('');
+
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
 
     useEffect(() => {
@@ -43,12 +45,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setIsMontar(product.csicp_dd080.DD080_IsMontar)
         setIsSaldoNegativo(product.csicp_dd080.DD080_Solicita_NS_Negativa)
         setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
-
-        setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela));
-        setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario));
-        setPercentDiscount(0.0);
-        setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto));
-    }, [product])
+        setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela || 0));
+        setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario || 0));
+        setPercentDiscount('');
+        setPercentDiscount(formatPercentInput(product.csicp_dd080.DD080_Perc_DescProduto.toString() || '0'));
+        setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto || 0));
+    }, [])
 
     /** ALTERA A QUANTIDADE */
     function alterAmount(isIncrement: boolean) {
@@ -57,6 +59,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             if (res.IsOk) {
                 setProductAmount(newAmount)
                 setAmountProduct(newAmount)
+                setStatus(FETCH_STATUS.SUCCESS)
             }
         })
     }
@@ -83,6 +86,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     function handleMaskAction(inputValue: string, inputField: number, isApply: boolean) {
         // Recebe o valor do handle de máscara
         const tratedValue = isApply ? moneyApplyMask(moneyRemoveMask(inputValue)) : moneyRemoveMask(inputValue);
+        //se for para aplicar o valor sera passado como string
         if (isApply) {
             switch (inputField) {
                 case 1:
@@ -115,30 +119,26 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
     /** FUNCAO PARA ALTERAR OS VALORES EM SWITCH */
     function handleSwitchChange(value: boolean, currentSwitch: number): void {
+        /** a chamada da api foi comentada para refatoração, primeiro iremos montar toda a estrutura e entao enviar para a api */
         switch (currentSwitch) {
             case 1:
                 setIsEntregar(value)
-                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsEntregar: value });
+                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsEntregar: value });
                 break
             case 2:
                 setIsRequisitar(value)
-                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsRequisitar: value });
+                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsRequisitar: value });
                 break
             case 3:
                 setIsSaldoNegativo(value)
-                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsSaldoNegativo: value });
+                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsSaldoNegativo: value });
                 break
             case 4:
                 setIsMontar(value)
-                handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsMontar: value, });
+                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsMontar: value, });
                 break
         }
     }
-
-
-
-
-
 
     return (
         <View style={{ backgroundColor: "#fffafa" }}>
@@ -170,7 +170,11 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]}
-                                onChangeText={(value) => applyMaskAndDisplay(value, 1)}
+                                onChangeText={(value) => {
+                                    if (value !== undefined) {
+                                        applyMaskAndDisplay(value, 1)
+                                    }
+                                }}
                                 value={tablePrice}
                                 keyboardType='decimal-pad'
                             />
@@ -188,7 +192,11 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]}
-                                onChangeText={(value) => applyMaskAndDisplay(value, 2)}
+                                onChangeText={(value) => {
+                                    if (value !== undefined) {
+                                        applyMaskAndDisplay(value, 2)
+                                    }
+                                }}
                                 value={unityPrice}
                                 keyboardType='decimal-pad'
                             />
@@ -212,11 +220,13 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]}
-                                onChangeText={(value) => setPercentDiscount(Number(value))}
+                                onChangeText={(value) => {
+                                    setPercentDiscount(formatPercentInput(value))
+                                }}
                                 value={percentDiscount.toString()}
                                 keyboardType='decimal-pad'
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(percentDiscount, product.csicp_dd080.DD080_Id)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount), product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
 
@@ -228,7 +238,11 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]}
-                                onChangeText={(value) => applyMaskAndDisplay(value, 3)}
+                                onChangeText={(value) => {
+                                    if (value !== undefined) {
+                                        applyMaskAndDisplay(value, 3)
+                                    }
+                                }}
                                 value={valueDiscount}
                                 keyboardType='decimal-pad'
                             />
@@ -257,7 +271,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     onPress={downSwipe}
                     style={commonStyle.btn_transparente}
                     underlayColor='white'
-                ><Text style={commonStyle.btn_text_transparente}>Cancelar</Text></TouchableHighlight>
+                ><Text style={commonStyle.btn_text_transparente}>Sair</Text></TouchableHighlight>
             </View>
         </View>
     );

@@ -1,9 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import CS_SC_008_ListaComandas from '../screens/008ListaComandas/CS_SC_008_ListaComandas'
-import CS_SC_008_NovaComanda from '../screens/008ListaComandas/CS_SC_008_NovaComanda'
-import CS_SC_009_ListaCliente from '../screens/009Cliente/CS_SC_009_ListaCliente'
-import CS_SC_009_CadastroCliente from '../screens/009Cliente/CS_SC_009_CadastroCliente'
 import CustomIcon from '../components/icon/CustomIcon'
+import CS_SC_009_CadastroCliente from '../screens/009Cliente/CS_SC_009_CadastroCliente'
+import CS_SC_009_ListaCliente from '../screens/009Cliente/CS_SC_009_ListaCliente'
 import { ICON_NAME } from '../util/IconsName'
 
 

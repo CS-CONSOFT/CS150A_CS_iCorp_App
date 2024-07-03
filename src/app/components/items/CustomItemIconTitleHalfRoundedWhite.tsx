@@ -7,7 +7,7 @@ const CustomItemIconTitleHalfRoundedWhite = ({ title, onPress = () => { }, iconN
     return (
         <Pressable style={styles.containerItem} onPress={onPress}>
             <View>
-                <CustomIcon icon={iconName} />
+                <CustomIcon icon={iconName} iconSize={36} />
                 <Text style={styles.preVendaText}>{title}</Text>
             </View>
         </Pressable>
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF',
         alignItems: 'center',
-        margin: 12,
-        padding: 16,
+        margin: 8,
+        padding: 12,
         borderRadius: 16,
 
     },

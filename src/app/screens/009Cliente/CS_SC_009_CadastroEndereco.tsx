@@ -1,22 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View, StyleSheet, Pressable, FlatList } from "react-native";
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import { CS_IReqSaveEndereco } from "../../services/api/interfaces/contas/CS_IReqSaveEndereco";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleSave1206 } from "../../view_controller/conta/ContaViewController";
+import { handleGetContaById, handleSave1206 } from "../../view_controller/conta/ContaViewController";
 import { handleGetCep, handleGetCityList, handleGetUfList } from "../../view_controller/endereco/EnderecoViewController";
-import CustomSeparator from "../../components/lists/CustomSeparator";
-import CustomSearch from "../../components/search/CustomSearch";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
-import { getPaginationList } from "../../util/GetPaginationArray";
+import { IResGetContaById } from "../../services/api/interfaces/contas/CS_IResGetContaById";
+import ColorStyle from "../../ColorStyle";
 
 
-const CS_SC_009_CadastroEndereco = () => {
+const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         CEP: '',
         Logradouro: '',
@@ -34,6 +31,11 @@ const CS_SC_009_CadastroEndereco = () => {
     const [ufList, setUfList] = useState<{ key: string, value: string }[]>()
     const [cityList, setCityList] = useState<{ key: string, value: string }[]>()
     const [isSavingLoading, setIsSavingLoading] = useState(false)
+    const [userToEdit, setUserToEdit] = useState<IResGetContaById>()
+    const [isLoadingData, setIsLoadingData] = useState(false)
+
+    const { bb12id, isEdit } = route.params
+
 
     function resetForm() {
         setAttributesMap({
@@ -52,6 +54,7 @@ const CS_SC_009_CadastroEndereco = () => {
 
 
     useEffect(() => {
+        console.log(isEdit);
         resetForm()
         try {
             handleGetUfList().then((res) => {
@@ -67,7 +70,34 @@ const CS_SC_009_CadastroEndereco = () => {
         } catch (error: any) {
             showToast(ToastType.ERROR, "Falha", "Ao recuperar os estados")
         }
+
+        if (isEdit) {
+            setIsLoadingData(true)
+            getContaByIdToEdit(bb12id)
+        }
+
+
     }, [])
+
+
+    function getContaByIdToEdit(bb012_id: string) {
+        handleGetContaById({ cs_conta_id: bb012_id }).then((res) => {
+            //seta o usuario para editar
+            setUserToEdit(res)
+            setSelectedUf(res.BB01206_Endereco.csicp_aa028.UFId)
+            setAttributesMap({
+                CEP: (res.BB01206_Endereco.csicp_bb01206.BB012_CEP).toString(),
+                Logradouro: res.BB01206_Endereco.csicp_bb01206.BB012_Logradouro,
+                Bairro: res.BB01206_Endereco.csicp_bb01206.BB012_Bairro,
+                Complemento: res.BB01206_Endereco.csicp_bb01206.BB012_Complemento,
+                UF: res.BB01206_Endereco.csicp_aa027.AA027_Export_UFId,
+                Cidade: res.BB01206_Endereco.csicp_aa028.Id,
+                Numero: res.BB01206_Endereco.csicp_bb01206.BB012_Numero,
+                Perimetro: res.BB01206_Endereco.csicp_bb01206.BB012_Perimetro
+            });
+            setIsLoadingData(false)
+        })
+    }
 
 
     /**
@@ -107,9 +137,9 @@ const CS_SC_009_CadastroEndereco = () => {
      */
     function saveEndereco() {
 
-        let iSaveEndereco: CS_IReqSaveEndereco = {}
+        let iSaveEndereco: CS_IReqSaveEndereco = userToEdit?.BB01206_Endereco.csicp_bb01206 || {}
 
-        if (!attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero || !attributesMap.Complemento || !attributesMap.Perimetro) {
+        if (!attributesMap.Cidade || !attributesMap.UF || !attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero || !attributesMap.Complemento || !attributesMap.Perimetro) {
             showToast(ToastType.ERROR, "Campos Faltando", "Preencha corretamente todos")
             return;
         }
@@ -122,11 +152,15 @@ const CS_SC_009_CadastroEndereco = () => {
         iSaveEndereco.BB012_Perimetro = attributesMap.Perimetro
         iSaveEndereco.BB012_UF = attributesMap.UF
         iSaveEndereco.BB012_Codigo_Cidade = attributesMap.Cidade
-
-        handleSave1206({ cs_req_save: iSaveEndereco }).then(() => {
-            resetForm()
-            navigate('CadastroCliente')
-        })
+        iSaveEndereco.BB012_ID = isEdit ? userToEdit?.csicp_bb012.csicp_bb012.ID : bb12id
+        try {
+            handleSave1206({ cs_req_save: iSaveEndereco }).then(() => {
+                resetForm()
+                navigate('TabListCliente')
+            })
+        } catch (error: any) {
+            showToast(ToastType.ERROR, "Error", error)
+        }
     }
 
     /**
@@ -136,25 +170,29 @@ const CS_SC_009_CadastroEndereco = () => {
     function setSelectedUf(key: string) {
         setValueToObjectWhenInputTyped('Cidade', '')
         setValueToObjectWhenInputTyped('UF', key)
-        getCities()
+        getCities(key, undefined)
     }
 
     /**
      * funcao que busca as cidades
      * @param valor o valor de pesquisa
+     * @param ufId id da UF
      */
-    function getCities(valor?: string) {
-        handleGetCityList(attributesMap.UF, valor).then((res) => {
+    function getCities(ufId: string, valor?: string) {
+        handleGetCityList(ufId, valor).then((res) => {
             const list = res.csicp_aa028
-            const mappedList = list.map(item =>
-            (
-                {
-                    key: item.csicp_aa028.Id,
-                    value: item.csicp_aa028.AA028_Cidade
-                }
-            )
-            )
-            setCityList(mappedList)
+            console.log(list);
+            if (list !== undefined) {
+                const mappedList = list.map(item =>
+                (
+                    {
+                        key: item.csicp_aa028.Id,
+                        value: item.csicp_aa028.AA028_Cidade
+                    }
+                )
+                )
+                setCityList(mappedList)
+            }
         })
     }
 
@@ -167,6 +205,16 @@ const CS_SC_009_CadastroEndereco = () => {
         setValueToObjectWhenInputTyped('CidadeNome', value)
     }
 
+    function sair() {
+        navigate('TabListCliente')
+    }
+
+
+
+    if (isLoadingData) {
+        return <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+    }
+
     return (
         <SafeAreaView style={{ padding: 8 }}>
             <ScrollView>
@@ -177,11 +225,11 @@ const CS_SC_009_CadastroEndereco = () => {
 
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
                     <View style={[commonStyle.common_columnItem]}>
-                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CEP</Text>
+                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>{bb12id} - {userToEdit?.csicp_bb012.csicp_bb012.ID}</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 230 }]}
                             onChangeText={(value) => setValueToObjectWhenInputTyped('CEP', value)}
-                            value={attributesMap.Domínio}
+                            value={attributesMap.CEP}
                             placeholder="CEP"
                             keyboardType='numeric'
                         />
@@ -250,6 +298,7 @@ const CS_SC_009_CadastroEndereco = () => {
                         save="key"
                         search={false}
                         dropdownItemStyles={styles.dropdownStyle}
+                        defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Export_UFId, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
                     />
 
                     {cityList === undefined && attributesMap.UF !== '' && (
@@ -266,39 +315,16 @@ const CS_SC_009_CadastroEndereco = () => {
                                 setSelected={(key: string) => { setSelectedCity(key, '') }}
                                 data={cityList!}
                                 save="key"
+                                defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa028.Id, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade }}
                             />
 
                         </View>
                     )}
-
-                    {/**
-                    {cityList !== undefined && attributesMap.Cidade === '' && (
-                        <View style={[commonStyle.common_columnItem, { width: 230 }]}>
-                            <CustomSearch
-                                clickToSearch={false}
-                                onSearchPress={(valor) => { getCities(valor) }}
-                                placeholder="Cidade"
-                            />
-                            <View style={{ flexDirection: 'column', height: 140, borderWidth: 1, padding: 12, borderRadius: 20, borderColor: "#949494" }}>
-                                <FlatList data={cityList}
-                                    keyExtractor={(item) => item.key}
-                                    renderItem={(item) => <RenderItemCondicao onCitySelected={(valor, key) => setSelectedCity(key, valor)} id={item.item.key} title={item.item.value} />}
-                                />
-                            </View>
-                        </View>
-                    )}
-                         */}
 
                     {attributesMap.Cidade !== '' && (
                         <Text>{attributesMap.CidadeNome}</Text>
                     )}
-
-
-
-
                 </View>
-
-
 
                 <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Bairro</Text>
                 <TextInput
@@ -313,7 +339,15 @@ const CS_SC_009_CadastroEndereco = () => {
                     style={commonStyle.common_button_style}
                     underlayColor='white'
                 >
-                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Continuar</Text>}
+                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Finalizar</Text>}
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    onPress={() => { isSavingLoading ? showToast(ToastType.INFO, "Carregando!", "Aguarde") : sair() }}
+                    style={[{ margin: 16 }]}
+                    underlayColor='white'
+                >
+                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.btn_text_transparente}>Cancelar/Sair</Text>}
                 </TouchableHighlight>
             </ScrollView>
         </SafeAreaView >
