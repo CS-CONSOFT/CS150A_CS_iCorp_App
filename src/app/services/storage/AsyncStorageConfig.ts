@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 
 export const storeSimpleData = async (key: string, value: string) => {
     try {
-        await AsyncStorage.setItem(key, value);
+        await SecureStore.setItemAsync(key, value);
     } catch (e) {
         return e
     }
@@ -10,7 +10,7 @@ export const storeSimpleData = async (key: string, value: string) => {
 
 export const getSimpleData = async (key: string) => {
     try {
-        return await AsyncStorage.getItem(key)
+        return await SecureStore.getItemAsync(key)
     } catch (e) {
         return e
     }
@@ -20,7 +20,7 @@ export const getSimpleData = async (key: string) => {
 export const storeObject = async (key: string, value: object) => {
     try {
         const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem(key, jsonValue)
+        await SecureStore.setItemAsync(key, jsonValue)
     } catch (e) {
         return e
     }
@@ -28,7 +28,7 @@ export const storeObject = async (key: string, value: object) => {
 
 export const getObject = async (key: string) => {
     try {
-        const jsonValue = await AsyncStorage.getItem(key);
+        const jsonValue = await SecureStore.getItemAsync(key);
         return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
         return e
@@ -37,7 +37,7 @@ export const getObject = async (key: string) => {
 
 export const removeValueFromStorage = async (key: string) => {
     try {
-        await AsyncStorage.removeItem(key)
+        await SecureStore.deleteItemAsync(key)
     } catch (e) {
         return e
     }

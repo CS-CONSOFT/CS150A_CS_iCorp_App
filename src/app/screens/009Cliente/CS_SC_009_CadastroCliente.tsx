@@ -8,12 +8,14 @@ import { IReqSaveConta } from "../../services/api/interfaces/contas/CS_IReqSaveC
 import { ICON_NAME } from "../../util/IconsName";
 import { cpfCnpjMask, removeCpfCnpjMask } from "../../util/Masks";
 import { ClactaEnum, GruEnum } from "./ListaEnumClasseGrupo";
-import { handleSave1201, handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
+import { handleGetContaById, handleSave1201, handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
 import { IReqSave1201 } from "../../services/api/interfaces/contas/CS_IReqSave1201";
 import { ToastType, showToast } from "../../util/ShowToast";
+import ColorStyle from "../../ColorStyle";
+import { IResGetContaById } from "../../services/api/interfaces/contas/CS_IResGetContaById";
 
 
-const CS_SC_009_CadastroCliente = () => {
+const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
     const { navigate } = useNavigation()
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         username: '',
@@ -32,6 +34,12 @@ const CS_SC_009_CadastroCliente = () => {
     }
     const [documentType, setDocumentType] = useState(DOCUMENT_TYPE.NO_ONE)
     const [isSavingLoading, setIsSavingLoading] = useState(false)
+    const [isLoadingData, setIsLoadingData] = useState(false)
+    const [userToEdit, setUserToEdit] = useState<IResGetContaById>()
+    /**
+     * ID da bb012 id, so tem valor quando a conta é pra ser editada
+     */
+    const bb012id_when_edit_cliente = route?.params?.bb12id || undefined;
 
 
     function resetForm() {
@@ -49,7 +57,33 @@ const CS_SC_009_CadastroCliente = () => {
 
     useEffect(() => {
         resetForm()
-    }, [])
+        if (bb012id_when_edit_cliente) {
+            setIsLoadingData(true)
+            getContaByIdToEdit(bb012id_when_edit_cliente)
+        }
+    }, [bb012id_when_edit_cliente])
+
+    function getContaByIdToEdit(bb012_id: string) {
+        handleGetContaById({ cs_conta_id: bb012_id }).then((res) => {
+            //seta o usuario para editar
+            setUserToEdit(res)
+            //se for cpf
+            if (res.BB01202.csicp_bb01202.BB012_CPF !== undefined) {
+                setDocumentType(DOCUMENT_TYPE.IS_CPF)
+                saveValuesToObjectForm('CPF_CNPJ', (res.BB01202.csicp_bb01202.BB012_CPF || 0).toString())
+                saveValuesToObjectForm('RG', (res.BB01202.csicp_bb01202.BB012_RG || 0).toString())
+            } else {
+                setDocumentType(DOCUMENT_TYPE.IS_CNPJ)
+                saveValuesToObjectForm('CPF_CNPJ', (res.BB01202.csicp_bb01202.BB012_CNPJ || 0).toString())
+                saveValuesToObjectForm('INSCES', (res.BB01202.csicp_bb01202.BB012_InscEstadual || 0).toString())
+            }
+            saveValuesToObjectForm('username', res.csicp_bb012.csicp_bb012.BB012_Nome_Cliente)
+            saveValuesToObjectForm('fantasyName', res.csicp_bb012.csicp_bb012.BB012_Nome_Fantasia)
+            saveValuesToObjectForm('codigo', (res.csicp_bb012.csicp_bb012.BB012_Codigo || 0).toString())
+
+            setIsLoadingData(false)
+        })
+    }
 
     function saveValuesToObjectForm(id: string, value: string): void {
         if (id === 'CPF_CNPJ') {
@@ -79,7 +113,7 @@ const CS_SC_009_CadastroCliente = () => {
     function saveCliente() {
         setIsSavingLoading(true)
         //BB1201
-        let reqSaveConta: IReqSaveConta = {}
+        let reqSaveConta: IReqSaveConta = userToEdit?.csicp_bb012.csicp_bb012 || {}
         let reqSave1202: CS_IReqSave1202 = {}
         let reqSave1201: IReqSave1201 = {}
 
@@ -142,18 +176,25 @@ const CS_SC_009_CadastroCliente = () => {
 
 
         handleSaveConta(reqSaveConta).then((res) => {
-            reqSave1202.Id = res.bb012_ID
-            reqSave1201.Id = res.bb012_ID
+            reqSave1202.Id = bb012id_when_edit_cliente || res.bb012_ID
+            reqSave1201.Id = bb012id_when_edit_cliente || res.bb012_ID
 
             handleSave1201({ cs_req_save: reqSave1201 }).then(() => {
                 handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
                     resetForm()
-                    navigate('Cadastro_002_End')
+                    navigate('Cadastro_002_End', {
+                        bb12id: bb012id_when_edit_cliente || res.bb012_ID,
+                        isEdit: bb012id_when_edit_cliente ? true : false
+                    })
                 })
             })
         })
 
 
+    }
+
+    if (isLoadingData) {
+        return <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
     }
 
     return (
@@ -211,7 +252,7 @@ const CS_SC_009_CadastroCliente = () => {
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                             onChangeText={(value) => saveValuesToObjectForm('INSCES', value)}
-                            value={attributesMap.RG}
+                            value={attributesMap.INSCES}
                             placeholder="Inscrição Estadual"
                             keyboardType='numeric'
                         />

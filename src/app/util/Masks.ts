@@ -68,4 +68,18 @@ export function removeCpfCnpjMask(value: string): number {
     return Number(cleanedValue);
 }
 
+export function formatPercentInput(value: string): string {
+    // Remove todos os caracteres não numéricos
+    const numericValue = value.replace(/\D/g, '');
+
+    // Converte para número e divide por 100 para obter o formato correto
+    let numValue = parseFloat(numericValue) / 100;
+
+    // Limita o valor a 1.00
+    if (numValue > 1) numValue = 100;
+
+    // Formata com duas casas decimais
+    return numValue.toFixed(2);
+}
+
 

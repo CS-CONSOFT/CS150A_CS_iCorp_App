@@ -1,24 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
-import { Csicp_bb012 } from "../../services/api/interfaces/contas/CS_IResGetListConta";
-import { ToastType, showToast } from "../../util/ShowToast";
 import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from "react-native";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
-import { getPaginationList } from "../../util/GetPaginationArray";
-import CustomSearch from "../../components/search/CustomSearch";
-import CustomCard004 from "../../components/cards/CustomCard_004";
-import { commonStyle } from "../../CommonStyle";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
+import CustomCard004 from "../../components/cards/CustomCard_004";
+import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import CustomSearch from "../../components/search/CustomSearch";
+import { Csicp_bb012 } from "../../services/api/interfaces/contas/CS_IResGetListConta";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { getPaginationList } from "../../util/GetPaginationArray";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
 
 const CS_SC_009_ListaCliente = () => {
     const [clientList, setClientList] = useState<Csicp_bb012[]>()
     const [paginationArray, setPaginationArray] = useState<number[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
+    const { navigate } = useNavigation()
 
     function getClientesList(page?: number, searchValue?: string) {
         setStatus(FETCH_STATUS.LOADING)
-        handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 1, cs_search: searchValue === undefined ? undefined : searchValue }).then((res) => {
+        handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 3, cs_search: searchValue === undefined ? undefined : searchValue }).then((res) => {
             try {
                 if (res !== undefined) {
                     setClientList(res.csicp_bb012)
@@ -51,7 +53,7 @@ const CS_SC_009_ListaCliente = () => {
                     onRefresh={getClientesList}
                     data={clientList}
                     keyExtractor={(item) => item.csicp_bb012.ID.toString()}
-                    renderItem={({ item }) => <RenderItemCliente item={item} />}
+                    renderItem={({ item }) => <RenderItemCliente item={item} edit={(bb12id) => navigate('EditCliente', { bb12id: bb12id })} />}
                 />
             </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}
             <Custom_Pagination
@@ -62,17 +64,17 @@ const CS_SC_009_ListaCliente = () => {
     );
 }
 
-const RenderItemCliente = ({ item }: { item: Csicp_bb012 }) => {
+const RenderItemCliente = ({ item, edit }: { item: Csicp_bb012, edit: (id: string) => void }) => {
     return (
-        <View>
-            <CustomCard004 children={
+        <CustomCard004
+            onClickItem={() => edit(item.csicp_bb012.ID)}
+            children={
                 <View style={commonStyle.common_columnItem}>
                     <Text style={commonStyle.common_fontWeight_800}>{item.csicp_bb012.BB012_Codigo}</Text>
                     <Text style={commonStyle.common_fontWeight_800}>{item.csicp_bb012.BB012_Nome_Cliente}</Text>
                     <Text style={commonStyle.common_fontWeight_800}>{item.csicp_bb012.BB012_Is_Active}</Text>
                 </View>
             } title={item.csicp_bb012.BB012_Nome_Cliente} />
-        </View>
     )
 }
 

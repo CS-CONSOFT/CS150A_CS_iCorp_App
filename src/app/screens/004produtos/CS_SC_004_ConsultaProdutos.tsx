@@ -114,7 +114,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     };
 
     function handleRefreshList(): void {
-        handleFormSubmitToSearch('', 1)
+        handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, productAtributtesToSearch?.cs_page)
     }
 
 

@@ -25,7 +25,7 @@ export const data = [
     {
         id: 4,
         title: "Cadastro Cliente",
-        onPress: (navigate: any) => { navigate('CadastroCliente') },
+        onPress: (navigate: any) => { navigate('TabListCliente') },
         iconName: "person-add-outline"
     },
     {

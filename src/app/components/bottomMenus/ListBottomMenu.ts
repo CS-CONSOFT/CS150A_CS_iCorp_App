@@ -30,18 +30,5 @@ export const listBottomMenu002 = [
         title: "Home",
         onPress: (navigate: any) => { navigate('Menu') },
         iconName: ICON_NAME.ESTATISTICA_CONTORNADO
-    },
-    {
-        id: 'special-button',
-        title: "Produto",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
-        iconName: ICON_NAME.LISTA_CONTORNADO
-    },
-    {
-        id: 4,
-        title: "Pré Venda",
-        onPress: (navigate: any) => { navigate('Pre_Venda') },
-        iconName: ICON_NAME.CODIGO_BARRA_CONTORNADO
-
     }
 ]
