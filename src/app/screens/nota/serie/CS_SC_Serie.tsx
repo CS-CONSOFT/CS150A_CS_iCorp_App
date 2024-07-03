@@ -27,6 +27,7 @@ const CS_SC_Serie = () => {
 
     async function search(value: string) {
         const note = value;
+
         setStatus(FETCH_STATUS.LOADING)
         try {
             getNoteSeriesVc(note).then((res) => {
@@ -77,7 +78,7 @@ const CS_SC_Serie = () => {
         )}
 
 
-        <View style={stylesNotaEntrega.productContainer}>
+        <View>
             <FlatList
                 data={nota?.Produtos}
                 refreshing={loadingProducts}
@@ -134,7 +135,7 @@ const AlertDialog = ({ item, onClose }: { item: Produtos, onClose: (produto: Pro
                 <View style={[stylesEntregaCard.contentContanier, commonStyle.common_columnItem]}>
                     <View style={stylesEntregaCard.contentContenierSmall}>
                         <Text style={[stylesEntregaCard.itemCard, commonStyle.font_size_16]}>{item.DD060_Descricao}</Text>
-                        <Text style={[stylesEntregaCard.tituloCard, commonStyle.font_size_16]}>Número Cor/Série atual: {item.DD060_Cor_Serie_Merc}</Text>
+                        <Text style={[stylesEntregaCard.tituloCard, commonStyle.font_size_16]}>Número Cor/Série atual: {item.DD060_Cor_Serie_Merc || '-'}</Text>
                         <TextInput
                             style={commonStyle.common_input}
                             placeholder="Novo Cor/Série --- Ex. 267"
@@ -169,7 +170,7 @@ const ProductItem = ({ productItemProps }: { productItemProps: ProductItemProps 
                 <View style={stylesEntregaCard.contentContenierSmall}>
                     <Text style={[stylesEntregaCard.tituloCard]}>Número Cor/Série</Text>
                 </View>
-                <Text style={[stylesEntregaCard.tituloCard, commonStyle.font_size_18]}>{productItemProps.product.DD060_Cor_Serie_Merc}</Text>
+                <Text style={[stylesEntregaCard.tituloCard, commonStyle.font_size_18]}>{productItemProps.product.DD060_Cor_Serie_Merc || '-'}</Text>
             </View>
             <View style={commonStyle.align_centralizar}>
                 <CustomIcon icon={ICON_NAME.EDITAR} onPress={() => productItemProps.onPress(productItemProps.product)} />

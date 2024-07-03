@@ -1,4 +1,4 @@
-import { TouchableOpacity, StyleSheet, Text} from "react-native";
+import { TouchableOpacity, StyleSheet, Text } from "react-native";
 import ColorStyle from "../../ColorStyle";
 
 interface ButtonProps {
@@ -6,11 +6,11 @@ interface ButtonProps {
     onPress: () => void;
 }
 
-const ButtonActionBlue = ({text, onPress}: ButtonProps) => {
+const ButtonActionBlue = ({ text, onPress }: ButtonProps) => {
     return <TouchableOpacity
         onPress={onPress}
         style={styles.btn}
-        >
+    >
         <Text style={styles.txtBtnStyle}>{text}</Text>
     </TouchableOpacity>
 }
@@ -18,7 +18,7 @@ const ButtonActionBlue = ({text, onPress}: ButtonProps) => {
 export default ButtonActionBlue;
 
 const styles = StyleSheet.create({
-    btn:{
+    btn: {
         alignItems: "center",
         justifyContent: "center",
         width: 250,
@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         shadowColor: "#000",
         shadowOffset: {
-	        width: 0,
-	        height: 2,
+            width: 0,
+            height: 2,
         },
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
         elevation: 4,
-        marginBottom:15
+        marginBottom: 15
     },
     txtBtnStyle: {
         color: ColorStyle.colorPrimary300,

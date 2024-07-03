@@ -198,7 +198,6 @@ const styles = StyleSheet.create({
     btnContenier: {
         alignItems: "center",
         justifyContent: "center",
-        position: 'absolute',
         bottom: 0,
         backgroundColor: "#CCCCCC",
         height: "12%",
