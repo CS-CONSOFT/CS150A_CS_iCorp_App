@@ -79,7 +79,6 @@ async function getTypeMRel(mRelType: MREL_TYPE): Promise<number> {
 
         // Filtra o ID do tipo de relacionamento baseado no label fornecido
         const idFiltered = res.csicp_bb012_MRel.find((item) => item.Label === mRelType)?.Id;
-        console.log(res.csicp_bb012_MRel.find((item) => item.Label === mRelType));
 
         // Se o ID filtrado não for indefinido, atualiza a variável idType
         if (idFiltered !== undefined) {
@@ -89,7 +88,6 @@ async function getTypeMRel(mRelType: MREL_TYPE): Promise<number> {
         console.error("Erro ao obter as estaticas:", error);
     }
 
-    console.log(idType);
     return idType;
 }
 
@@ -106,7 +104,6 @@ export async function handleSaveConta(cs_save_conta: IReqSaveConta) {
         cs_save_conta.bb012_EstabCadID = currentUser.EstabelecimentoId;
         cs_save_conta.BB012_ModRelacao_ID = idMRel;
 
-        console.log(JSON.stringify(cs_save_conta));
 
         // Faz uma requisição para salvar a conta com os dados fornecidos
         const response = await saveConta({ cs_save_conta: cs_save_conta, cs_tenant_id: currentUser.TenantId });

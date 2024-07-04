@@ -1,4 +1,4 @@
-name: Build and Deploy Android APK to AWS EC2
+name: Gerar APK para Testes!
 
 on:
   push:

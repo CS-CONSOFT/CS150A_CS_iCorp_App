@@ -54,7 +54,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
 
     useEffect(() => {
-        console.log(isEdit);
         resetForm()
         try {
             handleGetUfList().then((res) => {
@@ -181,7 +180,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
     function getCities(ufId: string, valor?: string) {
         handleGetCityList(ufId, valor).then((res) => {
             const list = res.csicp_aa028
-            console.log(list);
             if (list !== undefined) {
                 const mappedList = list.map(item =>
                 (
