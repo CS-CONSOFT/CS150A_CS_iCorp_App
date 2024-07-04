@@ -10,8 +10,9 @@ import { ICON_NAME } from "../../../../util/IconsName";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
 import { ToastType, showToast } from "../../../../util/ShowToast";
 import { formatMoneyValue } from "../../../../util/FormatText";
+import { formatPercentInput } from "../../../../util/Masks";
 
-const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
+const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false }: { isConsulta?: boolean }) => {
     const { navigate } = useNavigation()
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -21,52 +22,46 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = () => {
 
     return (
         <View>
-            <CustomTopItem>
-                <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                    <CustomItemIconTitleRoundedBlue
-                        title={"Descontos"}
-                        onPress={showModal}
-                        iconName={ICON_NAME.PAPEL_LISTA_CONTORNADO}
+            {isConsulta && (
+                <>
+                    <CustomTopItem>
+                        <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
+                            <CustomItemIconTitleRoundedBlue
+                                title={"Descontos"}
+                                onPress={showModal}
+                                iconName={ICON_NAME.PAPEL_LISTA_CONTORNADO}
+                            />
+                        </View>
+                        <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
+                            <CustomItemIconTitleRoundedBlue
+                                title={"Código"}
+                                onPress={() => navigate('Consulta_Produtos', { cameFromPv: true })}
+                                iconName={ICON_NAME.ADICIONAR_CONTORNADO}
+                            />
+                        </View>
+                    </CustomTopItem>
+                    <CustomAlertDialog
+                        isVisible={isModalVisible}
+                        onDismiss={() => { }}
+                        children={<DescontoItem save={(discountValue) => {
+                            handleSaveGlobalDiscount({ cs_valor_percentual: discountValue }).then((res) => {
+                                if (res.IsOk) {
+                                    showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                                } else {
+                                    showToast(ToastType.ERROR, "Erro", res.Msg)
+                                }
+                                setIsModalVisible(false)
+                            })
+                        }} dismiss={() => setIsModalVisible(false)} />}
                     />
-                </View>
-                <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                    <CustomItemIconTitleRoundedBlue
-                        title={"Código"}
-                        onPress={() => navigate('Consulta_Produtos', { cameFromPv: true })}
-                        iconName={ICON_NAME.ADICIONAR_CONTORNADO}
-                    />
-                </View>
-
-                {/**
-                <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
-                    <CustomItemIconTitleRoundedBlue
-                        title={"Requisição"}
-                        onPress={() => Alert.alert("Falta fazer")}
-                        iconName={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO}
-                    />
-                </View>
-                 */}
-            </CustomTopItem>
-            <CustomAlertDialog
-                isVisible={isModalVisible}
-                onDismiss={() => { }}
-                children={<DescontoItem save={(discountValue) => {
-                    handleSaveGlobalDiscount({ cs_valor_percentual: discountValue }).then((res) => {
-                        if (res.IsOk) {
-                            showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
-                        } else {
-                            showToast(ToastType.ERROR, "Erro", res.Msg)
-                        }
-                        setIsModalVisible(false)
-                    })
-                }} dismiss={() => setIsModalVisible(false)} />}
-            />
+                </>
+            )}
         </View>
     );
 }
 
 const DescontoItem = ({ save, dismiss }: { save: (discountValue: number) => void, dismiss: () => void }) => {
-    const [desc1, setDesc1] = useState(formatMoneyValue(0))
+    const [desc1, setDesc1] = useState(formatPercentInput('0'))
     return (
         <View style={commonStyle.modal_common_container}>
             <Text>1° Desconto</Text>

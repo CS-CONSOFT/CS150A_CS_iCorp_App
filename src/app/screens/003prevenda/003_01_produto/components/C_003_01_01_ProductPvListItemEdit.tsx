@@ -48,7 +48,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela || 0));
         setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario || 0));
         setPercentDiscount('');
-        setPercentDiscount(formatPercentInput(product.csicp_dd080.DD080_Perc_DescProduto.toString() || '0'));
+        setPercentDiscount(formatPercentInput((product.csicp_dd080.DD080_Perc_DescProduto || 0).toString() || '0'));
         setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto || 0));
     }, [])
 

@@ -51,12 +51,12 @@ export async function getPaymentFormByIdWithConditions({ tenantId, paymentFormKe
 
         let iResPaymentFormComplete: IResPaymentFormByIdComplete = {
             formByIdWithConditions: undefined,
-            formByIdWithFixConditions: undefined
+            formByIdWithFixedConditions: undefined
         }
         //se houver condicao fixa
         if (condFixId !== undefined) {
             iResPaymentFormComplete = {
-                formByIdWithFixConditions: response.data
+                formByIdWithFixedConditions: response.data
             }
             //caso nao
         } else {

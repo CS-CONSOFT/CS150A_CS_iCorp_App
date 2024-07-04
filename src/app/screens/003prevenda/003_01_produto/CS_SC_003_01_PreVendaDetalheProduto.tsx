@@ -101,35 +101,111 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
             {isLoading ? <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} /> : <>
-                <FlatList
-                    data={pv?.DD080_Produtos}
-                    keyExtractor={(item) => item.csicp_dd080.DD080_Id}
-                    refreshing={isLoading}
-                    onRefresh={handleRefreshProducts}
-                    ListEmptyComponent={<CustomEmpty text="Essa PV não tem produtos!" />}
-                    ListHeaderComponent={C_003_01_05_TopHeaderItensProdutosDetalhesPV}
-                    renderItem={({ item }) => (
-                        <C_003_01_ProductPvItem
-                            product={item}
-                            onDeleteProductClick={(productId) => { deleteProduct(productId) }}
-                            saveDiscountPercent={(discountPercent, productId) => updateDiscountPercent(productId, discountPercent, getCurrentPv)}
-                            saveDiscountValue={(valueDiscount, productId) => updateValueDiscount(productId, valueDiscount)}
-                            saveTablePrice={(tablePrice, productId) => updateTablePrice(productId, tablePrice)}
-                            saveUnityPrice={(unityPrice, productId) => updateUnityPrice(productId, unityPrice)}
-                        />
-                    )}
-                />
+                {pv?.DD070_Nota.csicp_dd070_Sit.Label === 'Consulta' && (
+                    <ScreenWhenIsConsulta
+                        pv={pv}
+                        isLoading={isLoading}
+                        handleRefreshProducts={handleRefreshProducts}
+                        deleteProduct={deleteProduct}
+                        updateDiscountPercent={(productId, discountPercent) => updateDiscountPercent(productId, discountPercent, getCurrentPv)}
+                        updateValueDiscount={updateValueDiscount}
+                        updateUnityPrice={updateTablePrice}
+                        updateTablePrice={updateUnityPrice}
 
-                <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                    dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
-                    dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
-                    totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
-                />
+
+                    />
+                )}
+
+
+                {pv?.DD070_Nota.csicp_dd070_Sit.Label !== 'Consulta' && (
+                    <ScreenWhenIsNotConsulta
+                        pv={pv}
+                        isLoading={isLoading}
+                        handleRefreshProducts={handleRefreshProducts}
+                    />
+                )}
             </>}
 
         </SafeAreaView>
     );
+}
 
+const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProduct, updateDiscountPercent, updateUnityPrice, updateValueDiscount, updateTablePrice }: {
+    pv?: IResGetPv,
+    isLoading: boolean,
+    handleRefreshProducts: () => void,
+    deleteProduct: (productId: string) => void,
+    updateDiscountPercent: (productId: string, discountPercent: number) => void,
+    updateValueDiscount: (productId: string, valueDiscount: number) => void,
+    updateUnityPrice: (productId: string, unityPrice: number) => void,
+    updateTablePrice: (productId: string, tablePrice: number) => void,
+}) => {
+    return (
+        <>
+            <FlatList
+                data={pv?.DD080_Produtos}
+                keyExtractor={(item) => item.csicp_dd080.DD080_Id}
+                refreshing={isLoading}
+                onRefresh={handleRefreshProducts}
+                ListEmptyComponent={<CustomEmpty text="Essa PV não tem produtos!" />}
+                ListHeaderComponent={<C_003_01_05_TopHeaderItensProdutosDetalhesPV isConsulta={true} />}
+                renderItem={({ item }) => (
+                    <C_003_01_ProductPvItem
+                        isConsulta={true}
+                        product={item}
+                        onDeleteProductClick={(productId) => { deleteProduct(productId) }}
+                        saveDiscountPercent={(discountPercent, productId) => updateDiscountPercent(productId, discountPercent)}
+                        saveDiscountValue={(valueDiscount, productId) => updateValueDiscount(productId, valueDiscount)}
+                        saveTablePrice={(tablePrice, productId) => updateTablePrice(productId, tablePrice)}
+                        saveUnityPrice={(unityPrice, productId) => updateUnityPrice(productId, unityPrice)}
+                    />
+                )}
+            />
+
+            <C_003_01_04_BottomScreenItemProdutosDetalhesPV
+                dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
+                dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
+                totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
+                isConsulta={true}
+            />
+        </>
+    )
+}
+
+const ScreenWhenIsNotConsulta = ({ pv, isLoading, handleRefreshProducts }: {
+    pv?: IResGetPv,
+    isLoading: boolean,
+    handleRefreshProducts: () => void
+}) => {
+    return (
+        <>
+            <FlatList
+                data={pv?.DD080_Produtos}
+                keyExtractor={(item) => item.csicp_dd080.DD080_Id}
+                refreshing={isLoading}
+                onRefresh={handleRefreshProducts}
+                ListEmptyComponent={<CustomEmpty text="Essa PV não tem produtos!" />}
+                ListHeaderComponent={C_003_01_05_TopHeaderItensProdutosDetalhesPV}
+                renderItem={({ item }) => (
+                    <C_003_01_ProductPvItem
+                        product={item}
+                        onDeleteProductClick={() => { }}
+                        saveDiscountPercent={() => { }}
+                        saveDiscountValue={() => { }}
+                        saveTablePrice={() => { }}
+                        saveUnityPrice={() => { }}
+                    />
+                )}
+            />
+
+
+            <C_003_01_04_BottomScreenItemProdutosDetalhesPV
+                dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
+                dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
+                totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
+            />
+        </>
+    )
 }
 
 export default CS_SC_003_01_PreVendaDetalheProduto;

@@ -201,3 +201,27 @@ export async function handleUpdateProductSwtichs(productId: string, productAmoun
     return result
 }
 
+
+export interface INotaPagamentosValores {
+    valorPago: number
+    valorAPagar: number
+}
+export function handleCalculateValuesPayedAndToPay(item: IResGetPv): INotaPagamentosValores {
+    console.log(item);
+
+    const totalLiquido = item.DD070_Nota.csicp_dd070.DD070_Total_Liquido
+    let valorSomaTotalPagoFormaPagamentos: number = 0
+
+    if (item.DD072_FormaPagtos) {
+        item.DD072_FormaPagtos.forEach((item) => {
+            valorSomaTotalPagoFormaPagamentos = item.csicp_dd072.DD072_Valor_Pago + valorSomaTotalPagoFormaPagamentos
+        })
+    }
+
+    return {
+        valorPago: valorSomaTotalPagoFormaPagamentos,
+        valorAPagar: totalLiquido - valorSomaTotalPagoFormaPagamentos
+    }
+
+}
+

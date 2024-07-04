@@ -28,7 +28,7 @@ const CustomCard004 = ({ children, rightItem, onClickItem, loadingClick, title }
                     borderTopLeftRadius: 12,
                     borderBottomLeftRadius: 12
                 }]}>
-                    <Text style={[commonStyle.common_fontWeight_800, commonStyle.font_size_18]}>{title.substring(0, 4)}</Text>
+                    <Text style={[commonStyle.common_fontWeight_800, commonStyle.font_size_18]}>{(title || '').replace(".", "").replace(" ", "").substring(0, 2)}</Text>
                 </View>
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>

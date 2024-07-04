@@ -6,5 +6,5 @@ import { IResPaymentFormWithFixCondition } from "./CS_IResPaymentFormWithFixCond
  */
 export interface IResPaymentFormByIdComplete {
     formByIdWithConditions?: IResPaymentFormById,
-    formByIdWithFixConditions?: IResPaymentFormWithFixCondition
+    formByIdWithFixedConditions?: IResPaymentFormWithFixCondition
 }
