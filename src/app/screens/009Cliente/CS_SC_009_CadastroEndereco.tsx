@@ -83,13 +83,12 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         handleGetContaById({ cs_conta_id: bb012_id }).then((res) => {
             //seta o usuario para editar
             setUserToEdit(res)
-            setSelectedUf(res.BB01206_Endereco.csicp_aa028.UFId)
+            setSelectedUf(res.BB01206_Endereco.csicp_aa027.Id)
             setAttributesMap({
                 CEP: (res.BB01206_Endereco.csicp_bb01206.BB012_CEP).toString(),
                 Logradouro: res.BB01206_Endereco.csicp_bb01206.BB012_Logradouro,
                 Bairro: res.BB01206_Endereco.csicp_bb01206.BB012_Bairro,
                 Complemento: res.BB01206_Endereco.csicp_bb01206.BB012_Complemento,
-                UF: res.BB01206_Endereco.csicp_aa027.AA027_Export_UFId,
                 Cidade: res.BB01206_Endereco.csicp_aa028.Id,
                 Numero: res.BB01206_Endereco.csicp_bb01206.BB012_Numero,
                 Perimetro: res.BB01206_Endereco.csicp_bb01206.BB012_Perimetro
@@ -223,7 +222,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
                     <View style={[commonStyle.common_columnItem]}>
-                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>{bb12id} - {userToEdit?.csicp_bb012.csicp_bb012.ID}</Text>
+                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CEP</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 230 }]}
                             onChangeText={(value) => setValueToObjectWhenInputTyped('CEP', value)}
@@ -296,7 +295,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                         save="key"
                         search={false}
                         dropdownItemStyles={styles.dropdownStyle}
-                        defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Export_UFId, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
+                        defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa027.Id, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
                     />
 
                     {cityList === undefined && attributesMap.UF !== '' && (
