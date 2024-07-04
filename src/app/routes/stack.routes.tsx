@@ -44,6 +44,7 @@ declare global {
             Obras_Requisicao: { obraId: number }
             Obras_Anexos: undefined
             Obras_Chat: undefined
+            Obras_PDF: undefined
             Pagamento: undefined
             ComandaLista: undefined
             TabListCliente: undefined
@@ -77,6 +78,7 @@ export default function StackRoutes() {
                 },
                 headerBackVisible: true,
             }} />
+
 
 
             <StackNav.Screen name="Cadastro_002_End" component={CS_SC_009_CadastroEndereco} options={{
