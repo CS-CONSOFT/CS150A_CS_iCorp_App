@@ -1,8 +1,8 @@
-name: Build and Deploy Android APK to AWS EC2
+name: Gerar APK
 
 on:
   push:
-    branches: [ "desenvolvimento" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
