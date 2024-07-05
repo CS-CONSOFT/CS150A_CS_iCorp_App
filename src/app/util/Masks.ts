@@ -70,13 +70,13 @@ export function removeCpfCnpjMask(value: string): number {
 
 export function formatPercentInput(value: string): string {
     // Remove todos os caracteres não numéricos
-    const numericValue = value.replace(/\D/g, '');
+    const numericValue = value.replace(/[^\d]/g, '');
 
     // Converte para número e divide por 100 para obter o formato correto
-    let numValue = parseFloat(numericValue) / 100;
+    let numValue = parseInt(numericValue, 10) / 100;
 
-    // Limita o valor a 1.00
-    if (numValue > 1) numValue = 0.99;
+    // Limita o valor a 0.99
+
 
     // Formata com duas casas decimais
     return numValue.toFixed(2);
