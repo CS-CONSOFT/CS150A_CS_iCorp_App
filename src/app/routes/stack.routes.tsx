@@ -52,7 +52,7 @@ declare global {
             Cadastro_002_End: { bb12id: string, isEdit: boolean }
             Cadastro_003_Perf: undefined
             BipeCamera: undefined
-            PreVendaEnd: { DD071_JSON: string }
+            PreVendaEnd: { enderecoId: string }
         }
     }
 }

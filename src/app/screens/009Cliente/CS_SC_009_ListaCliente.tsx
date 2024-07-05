@@ -52,7 +52,7 @@ const CS_SC_009_ListaCliente = () => {
                     refreshing={isLoading}
                     onRefresh={getClientesList}
                     data={clientList?.csicp_bb012}
-                    keyExtractor={(item) => item.csicp_bb012.ID}
+                    keyExtractor={(item, index) => item.csicp_bb012.csicp_bb012.ID}
                     renderItem={({ item }) => <RenderItemCliente item={item} edit={(bb12id) => navigate('EditCliente', { bb12id: bb12id })} />}
                 />
             </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}

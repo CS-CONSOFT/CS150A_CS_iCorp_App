@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
@@ -9,7 +9,7 @@ import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
-import { ItemListPaymentForm } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
+import { ItemListPaymentFormSaved } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { formatMoneyValue } from "../../util/FormatText";
@@ -19,6 +19,7 @@ import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetPaymen
 import { INotaPagamentosValores, handleCalculateValuesPayedAndToPay, handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
+import { moneyApplyMask, moneyRemoveMask } from "../../util/Masks";
 
 const CS_SC_007_Pagamento = () => {
     // Estado para armazenar o PV (Ponto de Venda) atual
@@ -28,7 +29,7 @@ const CS_SC_007_Pagamento = () => {
     const [toDeleteForm, setToDeleteForm] = useState(false)
 
     // Estado para armazenar a lista de formas de pagamento salvas
-    const [listOfPaymentSaved, setListOfPaymentSaved] = useState<ItemListPaymentForm[]>()
+    const [listOfPaymentSaved, setListOfPaymentSaved] = useState<ItemListPaymentFormSaved[]>()
 
     // Estado para armazenar os valores pagos e a pagar da nota
     const [iNotaValoresPagoEPagar, setiNotaValoresPagoEPagar] = useState<INotaPagamentosValores>()
@@ -504,7 +505,12 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                     <CustomLoading />
                 )}
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
-                <TextInput value={paymentValue} onChangeText={setPaymentValue} style={commonStyle.common_input} />
+                <TextInput value={moneyApplyMask(Number(paymentValue))}
+                    onChangeText={(value) => {
+                        moneyApplyMask(moneyRemoveMask(value))
+                        setPaymentValue(value)
+                    }
+                    } style={commonStyle.common_input} />
 
                 {termItem?.PermiteEntrada && (
                     <View>
@@ -516,14 +522,21 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
 
 
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
-                        <TextInput value={paymentValueEntranceValue} onChangeText={setPaymentValueEntranceValue} style={commonStyle.common_input} />
+                        <TextInput value={moneyApplyMask(Number(paymentValueEntranceValue))}
+                            onChangeText={(value) => {
+                                moneyApplyMask(moneyRemoveMask(value))
+                                setPaymentValueEntranceValue(value)
+                            }
+                            }
+
+                            style={commonStyle.common_input} />
                     </View>
                 )}
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
 
 
                     <Pressable style={[commonStyle.btn_gray]} onPress={() => scInsertPaymentForm()}>
-                        {btnClickLoading ? <CustomLoading /> : <Text style={commonStyle.btn_text_gray}>Finalizar</Text>}
+                        {btnClickLoading ? <ActivityIndicator /> : <Text style={commonStyle.btn_text_gray}>Finalizar</Text>}
                     </Pressable>
 
 
@@ -538,7 +551,7 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
     )
 }
 
-const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm }: { list: ItemListPaymentForm[], toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void }) => {
+const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm }: { list: ItemListPaymentFormSaved[], toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void }) => {
     return (
         <View>
             <FlatList
@@ -554,12 +567,22 @@ const ListDetalhamentoFormasPagamento = ({ list, toDeleteForm, deletePaymentForm
 /**
  * Item de detalhamento
  */
-const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm, item }: { toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void, item: ItemListPaymentForm }) => {
+const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm, item }: { toDeleteForm: boolean, deletePaymentForm: (formaPgtoAtendimentoId: string) => void, item: ItemListPaymentFormSaved }) => {
     return (
-        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16, toDeleteForm && { backgroundColor: "#141414CC" }]}>
-            <Text>{item.csicp_bb026.BB026_FormaPagamento}</Text>
-            {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm(item.csicp_dd072.DD072_Id)} /> : <Text>{item.csicp_bb008.BB008_Condicao_Pagto}</Text>}
-            <Text>{formatMoneyValue(item.csicp_dd072.DD072_Valor_TotalPago)} </Text>
+        <View style={commonStyle.common_columnItem}>
+            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16, toDeleteForm && { backgroundColor: "#141414CC" }]}>
+                <Text>{item.csicp_bb026.BB026_FormaPagamento}</Text>
+                {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm(item.csicp_dd072.DD072_Id)} /> : <Text>{item.csicp_bb008.BB008_Condicao_Pagto}</Text>}
+                <Text>{formatMoneyValue(item.csicp_dd072.DD072_Valor_TotalPago)} </Text>
+            </View>
+
+            {item.FormaPagto_Vinculado && (
+                <View style={[commonStyle.common_rowItem, { width: '100%' }]}>
+                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>Entrada:</Text>
+                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>{item.FormaPagto_Vinculado.V2_csicp_bb026.BB026_FormaPagamento}</Text>
+                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>{item.FormaPagto_Vinculado.V1_csicp_dd072.DD072_Valor_Pago}</Text>
+                </View>
+            )}
         </View>
     )
 }

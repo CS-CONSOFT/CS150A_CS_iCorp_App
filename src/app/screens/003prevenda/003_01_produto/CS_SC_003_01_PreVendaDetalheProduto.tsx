@@ -48,6 +48,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     }
 
     function updateDiscountPercent(productId: string, discountPercent: number, getProductsToCurrentPv: () => void): void {
+        console.log("sss" + discountPercent);
+        console.log("sss" + productId);
         handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent })
             .then((res) => {
                 if (res.IsOk) {
@@ -60,6 +62,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
 
 
     function updateValueDiscount(productId: string, valueDiscount: number): void {
+        console.log("s" + valueDiscount);
         handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount })
             .then((res) => {
                 if (res.IsOk) {
@@ -110,8 +113,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                         deleteProduct={deleteProduct}
                         updateDiscountPercent={(productId, discountPercent) => updateDiscountPercent(productId, discountPercent, getCurrentPv)}
                         updateValueDiscount={updateValueDiscount}
-                        updateUnityPrice={updateTablePrice}
-                        updateTablePrice={updateUnityPrice}
+                        updateUnityPrice={updateUnityPrice}
+                        updateTablePrice={updateTablePrice}
                     />
                 )}
 
