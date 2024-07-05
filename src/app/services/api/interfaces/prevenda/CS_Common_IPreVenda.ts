@@ -830,6 +830,8 @@ export interface Csicp_dd041_Frete2 {
     Codigo_SEFAZ: string
 }
 
+
+
 export interface DD072_FormaPagtos {
     csicp_dd072: Csicp_dd072
     csicp_bb008: Csicp_bb008

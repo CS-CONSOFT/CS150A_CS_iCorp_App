@@ -2,10 +2,10 @@ import api from "../../axios_config";
 import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../interfaces/pagamento/CS_IReqInsertPaymentForm";
 import { PaymentType } from "../../interfaces/pagamento/CS_IReqListFormPayment";
+import { CS_IResBB026_Estatica } from "../../interfaces/pagamento/CS_IResBB026_Estatica";
 import { IResPaymentResponse } from "../../interfaces/pagamento/CS_IResListFormPayment";
-import { IResFormPaymentComplete } from '../../interfaces/pagamento/CS_IResListFormPaymentComplete';
+import { IResFormPayment } from '../../interfaces/pagamento/CS_IResListFormPaymentComplete';
 import { IResPaymentFormByIdComplete } from '../../interfaces/pagamento/CS_IResPaymentFormByIdComplete';
-import { IResListPaymentFormSaved } from "../../interfaces/pagamento/IResListPaymentFormSaved";
 import { TermItem } from './../../interfaces/pagamento/IResPaymentTerm';
 
 export async function getListOfPaymentForm({ tenantId, paymentForm }: { tenantId: number, paymentForm: PaymentType }): Promise<IResPaymentResponse> {
@@ -84,8 +84,17 @@ export async function getPaymentTerm({ tenantId, termId, paymentFormKey }: { ten
 }
 
 /** A NOVA API APONTA PRA ESSA FUNCAO */
-export async function getListOfPaymentForm002({ tenantId }: { tenantId: number }): Promise<IResFormPaymentComplete> {
-    const url = `/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_List_FormaPagto`
+export async function getListOfPaymentForm002({ tenantId, onlyAVista }: { tenantId: number, onlyAVista: boolean }): Promise<IResFormPayment> {
+
+    let url = ''
+    //se nao for a vista apenas
+    if (!onlyAVista) {
+        url = `/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_List_FormaPagto`
+    } else {
+        //se for apenas a vista
+        url = `/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_List_FormaPagto_AVista`
+    }
+
     const headerParams = {
         tenant_id: tenantId,
         In_IsCount: 0,
@@ -97,7 +106,18 @@ export async function getListOfPaymentForm002({ tenantId }: { tenantId: number }
 
     try {
         const response = await api.get(url, { headers: headerParams })
-        return response.data as IResFormPaymentComplete
+        return response.data as IResFormPayment
+    } catch (error) {
+        throw error
+    }
+}
+
+
+export async function getBB026_Tipo(): Promise<CS_IResBB026_Estatica> {
+    const url = `/CSR_BB100_Tabelas_LIB/rest/GetAllEstatica/get_all_bb`
+    try {
+        const response = await api.get(url)
+        return response.data as CS_IResBB026_Estatica
     } catch (error) {
         throw error
     }
@@ -126,18 +146,6 @@ export async function insertPaymentForm({ tenantId, pvId, insertPaymentBody }: {
     }
 }
 
-
-/** A NOVA API APONTA PRA ESSA FUNCAO */
-export async function listPaymentForm({ tenantId, pvId }: { tenantId: number, pvId: string }):
-    Promise<IResListPaymentFormSaved> {
-    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${tenantId}/${pvId}/Pagamento_ListarPagamentos`
-    try {
-        const response = await api.get(url)
-        return response.data as IResListPaymentFormSaved
-    } catch (error) {
-        throw error
-    }
-}
 
 /** A NOVA API APONTA PRA ESSA FUNCAO */
 export async function deletePaymentForm({ tenantId, pvId, formaPgtoAtendimentoId }: { tenantId: number, pvId: string, formaPgtoAtendimentoId: string }):

@@ -123,7 +123,18 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         }>
             <Animated.View style={[common003_01_styles.containerRenderItem, common003_01_styles.boxShadow, animatedStyleX, animatedStyleY, extraIconsRightOpen && common003_01_styles.openContainerX]}>
                 {/** IMAGEM */}
+                {
+
+                }
                 <View style={common003_01_styles.productContainerLeft}>
+                    {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path !== undefined && (
+                        <Image style={common003_01_styles.productImage}
+                            source={{ uri: product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path }} />
+                    )}
+
+                    {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path === undefined && (
+                        <Text style={common003_01_styles.productName}>Sem Imagem</Text>
+                    )}
 
                 </View>
 

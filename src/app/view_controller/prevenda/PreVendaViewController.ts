@@ -207,8 +207,6 @@ export interface INotaPagamentosValores {
     valorAPagar: number
 }
 export function handleCalculateValuesPayedAndToPay(item: IResGetPv): INotaPagamentosValores {
-    console.log(item);
-
     const totalLiquido = item.DD070_Nota.csicp_dd070.DD070_Total_Liquido
     let valorSomaTotalPagoFormaPagamentos: number = 0
 

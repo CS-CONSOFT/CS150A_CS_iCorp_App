@@ -3,6 +3,7 @@ import { ActivityIndicator, Pressable, View, Text } from "react-native";
 import { common003_01_styles } from "../../screens/003prevenda/003_01_produto/components/CommonStyles";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import CustomLoading from "../loading/CustomLoading";
 
 interface ReactProps {
     children: ReactNode,
@@ -14,7 +15,7 @@ interface ReactProps {
 const CustomCard004 = ({ children, rightItem, onClickItem, loadingClick, title }: ReactProps) => {
 
     if (loadingClick) {
-        return <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+        return <CustomLoading />
     }
     return (
         <Pressable onPress={() => {
