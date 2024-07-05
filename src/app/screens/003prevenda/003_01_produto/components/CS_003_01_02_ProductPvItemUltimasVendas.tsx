@@ -1,10 +1,9 @@
 import Ioicons from '@expo/vector-icons/Ionicons';
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { commonStyle } from "../../../../CommonStyle";
-import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomEmpty from '../../../../components/lists/CustomEmpty';
+import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import { IProdutoItemUltimasVendas } from '../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto';
-import { moneyApplyMask } from '../../../../util/Masks';
 import { formatMoneyValue } from '../../../../util/FormatText';
 
 const data = [

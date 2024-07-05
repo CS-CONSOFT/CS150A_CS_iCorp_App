@@ -11,6 +11,7 @@ import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, ha
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
+import CustomLoading from "../../../components/loading/CustomLoading";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {
@@ -47,6 +48,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     }
 
     function updateDiscountPercent(productId: string, discountPercent: number, getProductsToCurrentPv: () => void): void {
+        console.log("sss" + discountPercent);
+        console.log("sss" + productId);
         handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent })
             .then((res) => {
                 if (res.IsOk) {
@@ -59,6 +62,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
 
 
     function updateValueDiscount(productId: string, valueDiscount: number): void {
+        console.log("s" + valueDiscount);
         handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount })
             .then((res) => {
                 if (res.IsOk) {
@@ -100,7 +104,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     const isLoading = status === FETCH_STATUS.LOADING
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
-            {isLoading ? <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} /> : <>
+            {isLoading ? <CustomLoading /> : <>
                 {pv?.DD070_Nota.csicp_dd070_Sit.Label === 'Consulta' && (
                     <ScreenWhenIsConsulta
                         pv={pv}
@@ -109,10 +113,8 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                         deleteProduct={deleteProduct}
                         updateDiscountPercent={(productId, discountPercent) => updateDiscountPercent(productId, discountPercent, getCurrentPv)}
                         updateValueDiscount={updateValueDiscount}
-                        updateUnityPrice={updateTablePrice}
-                        updateTablePrice={updateUnityPrice}
-
-
+                        updateUnityPrice={updateUnityPrice}
+                        updateTablePrice={updateTablePrice}
                     />
                 )}
 

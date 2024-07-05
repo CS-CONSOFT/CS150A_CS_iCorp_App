@@ -89,7 +89,7 @@ export const common003_01_styles = StyleSheet.create({
     },
     extraBottomStyleSwitchs: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
     },
     extraBottomStyleAmount: {
         flexDirection: 'row',

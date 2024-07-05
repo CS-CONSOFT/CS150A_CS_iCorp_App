@@ -76,7 +76,7 @@ export function formatPercentInput(value: string): string {
     let numValue = parseFloat(numericValue) / 100;
 
     // Limita o valor a 1.00
-    if (numValue > 1) numValue = 100;
+    if (numValue > 1) numValue = 0.99;
 
     // Formata com duas casas decimais
     return numValue.toFixed(2);

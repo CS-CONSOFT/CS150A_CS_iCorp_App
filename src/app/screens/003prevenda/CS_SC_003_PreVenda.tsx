@@ -12,6 +12,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { getPaginationList } from "../../util/GetPaginationArray";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
+import CustomLoading from "../../components/loading/CustomLoading";
 
 
 
@@ -67,7 +68,7 @@ const CS_SC_003_PreVenda = () => {
     return (
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
             {isLoading ? <>
-                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+                <CustomLoading />
             </> :
                 <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>

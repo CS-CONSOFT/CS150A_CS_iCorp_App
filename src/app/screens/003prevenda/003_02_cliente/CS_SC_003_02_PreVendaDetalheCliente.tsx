@@ -12,6 +12,7 @@ import { DD071_Enderecos, IResGetPv } from "../../../services/api/interfaces/pre
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleGetPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import ColorStyle from "../../../ColorStyle";
+import CustomLoading from "../../../components/loading/CustomLoading";
 
 
 interface Avatar {
@@ -52,7 +53,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
 
 
     if (status === FETCH_STATUS.LOADING) {
-        return <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+        return <CustomLoading />
     }
 
     return (
@@ -60,7 +61,6 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
             <C_003_02_01_HeaderClient />
 
             <View style={[commonStyle.common_columnItem, commonStyle.common_margin_vertical, commonStyle.align_spacebetween_row, commonStyle.common_margin_horizontal, commonStyle.common_padding_16]}>
-
                 {
                     img && (img !== "")
                         ?
@@ -68,14 +68,13 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
                         :
                         <View style={commonStyle.avatar_nomeIniciais}>
                             <Text style={commonStyle.title_nomeIniciais}>
-                                {ExtrairIniciais(name.toUpperCase())}
+                                {ExtrairIniciais((pv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || "").toUpperCase())}
                             </Text>
                         </View>
                 }
 
-                <Text style={commonStyle.title_nomeIniciais}>{name}</Text>
-                <Text>{"00001"}</Text>
-                <ButtonLink onPress={() => ("")} label="Alterar" />
+                <Text style={commonStyle.title_nomeIniciais}>{pv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""}</Text>
+                <Text>{pv?.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
             </View>
 
             <View style={[commonStyle.common_rowItem, commonStyle.common_margin_vertical]}>
@@ -96,7 +95,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
                             } icon={ICON_NAME.FLECHA_DIRETA} />
                         }
                         hiddenChildren={
-                            <EnderecoItem item={item} />
+                            <EnderecoItem item={item} isConsulta={pv?.DD070_Nota.csicp_dd070_Sit.Label === 'Consulta'} />
                         }
                     />
                 }
@@ -116,11 +115,11 @@ const VisibleAccordionItem = ({ title, icon }: { title: string, icon: any }) => 
     );
 }
 
-const EnderecoItem = ({ item }: { item: DD071_Enderecos }) => {
+const EnderecoItem = ({ item, isConsulta = false }: { item: DD071_Enderecos, isConsulta?: boolean }) => {
     const { navigate } = useNavigation()
     function editEndereco(): void {
         navigate('PreVendaEnd', {
-            DD071_JSON: JSON.stringify(item)
+            enderecoId: item.csicp_dd071.DD070_ID
         })
     }
 
@@ -158,9 +157,11 @@ const EnderecoItem = ({ item }: { item: DD071_Enderecos }) => {
                 </View>
 
             </View>
-            <Pressable onPress={() => editEndereco()} style={[commonStyle.common_columnItem, commonStyle.align_centralizar, ClienteStyles.btn_squad]}>
-                <Ionicons name="create-outline" size={24} />
-            </Pressable>
+            {isConsulta && (
+                <Pressable onPress={() => editEndereco()} style={[commonStyle.common_columnItem, commonStyle.align_centralizar, ClienteStyles.btn_squad]}>
+                    <Ionicons name="create-outline" size={24} />
+                </Pressable>
+            )}
         </View>
 
     )
