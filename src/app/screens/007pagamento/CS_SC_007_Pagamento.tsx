@@ -493,6 +493,7 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 <TextInput
                     value={paymentValue}
                     onChangeText={(value) => {
+
                         const tratedValue = moneyApplyMask(moneyRemoveMask(value))
                         setPaymentValue(tratedValue)
                     }
