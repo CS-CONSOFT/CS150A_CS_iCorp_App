@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
@@ -86,7 +86,7 @@ const CS_SC_007_Pagamento = () => {
         <SafeAreaView>
             <ScrollView>
                 {/* Componente para exibir o topo da tela com informações do protocolo e cliente */}
-                <TopOfScreen currentPv={currentPv?.DD070_Nota.csicp_dd070.DD070_Id} clientPv={currentPv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""} />
+                <TopOfScreen currentPv={currentPv?.DD070_Nota.csicp_dd070.DD070_ProtocolNumber} clientPv={currentPv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""} />
 
                 <CustomSeparator />
 
@@ -418,7 +418,7 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
 /** termId == condicaoId */
 const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado }: { valorAPagarZerado: boolean, paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
-    const [paymentValue, setPaymentValue] = useState('')
+    const [paymentValue, setPaymentValue] = useState('0')
     const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState('0')
     const [entranceFormId, setEntranceFormId] = useState('')
     const [btnClickLoading, setBtnClickLoading] = useState(false)
@@ -462,8 +462,8 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 FormaPagamentoId: paymentFormId,
                 CondicaoPagamentoId: termId,
                 FormaPagamentoEntradaId: entranceFormId || undefined,
-                Valor: Number(paymentValue),
-                ValorEntrada: Number(paymentValueEntranceValue) || 0
+                Valor: moneyRemoveMask(paymentValue),
+                ValorEntrada: moneyRemoveMask(paymentValueEntranceValue) || 0
             }
 
             handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
@@ -475,21 +475,6 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 setBtnClickLoading(false)
                 finishPayment()
             })
-
-            /**
-            if (iReqInsertPaymentForm.FormaPagamentoEntradaId === undefined) {
-                showToast(ToastType.ERROR, "Selecione", "Forma de entrada!!")
-            } else {
-                handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
-                    if (res.IsOk) {
-                        showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
-                    } else {
-                        showToast(ToastType.ERROR, "Erro", res.Msg)
-                    }
-                    finishPayment()
-                })
-            }
- */
 
         } catch (error: any) {
             showToast(ToastType.ERROR, error, "")
@@ -505,10 +490,12 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                     <CustomLoading />
                 )}
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
-                <TextInput value={moneyApplyMask(Number(paymentValue))}
+                <TextInput
+                    value={paymentValue}
                     onChangeText={(value) => {
-                         moneyApplyMask(Number(moneyRemoveMask(value)))
-                        setPaymentValue(value)
+
+                        const tratedValue = moneyApplyMask(moneyRemoveMask(value))
+                        setPaymentValue(tratedValue)
                     }
                     } style={commonStyle.common_input} />
 
@@ -522,10 +509,10 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
 
 
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
-                        <TextInput value={moneyApplyMask(Number(paymentValueEntranceValue))}
+                        <TextInput value={paymentValueEntranceValue}
                             onChangeText={(value) => {
-                                moneyApplyMask(Number(moneyRemoveMask(value)))
-                                setPaymentValueEntranceValue(value)
+                                const tratedValue = moneyApplyMask(Number(moneyRemoveMask(value)))
+                                setPaymentValueEntranceValue(tratedValue)
                             }
                             }
 
@@ -573,14 +560,20 @@ const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm, item }: { toDeleteF
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16, toDeleteForm && { backgroundColor: "#141414CC" }]}>
                 <Text>{item.csicp_bb026.BB026_FormaPagamento}</Text>
                 {toDeleteForm ? <CustomIcon icon={ICON_NAME.LIXEIRA} iconColor="#FFF" iconSize={24} onPress={() => deletePaymentForm(item.csicp_dd072.DD072_Id)} /> : <Text>{item.csicp_bb008.BB008_Condicao_Pagto}</Text>}
-                <Text>{formatMoneyValue(item.csicp_dd072.DD072_Valor_TotalPago)} </Text>
+                <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
+                    <Text>{formatMoneyValue(item.csicp_dd072.DD072_Valor_TotalPago)} </Text>
+                </View>
             </View>
 
+
             {item.FormaPagto_Vinculado && (
-                <View style={[commonStyle.common_rowItem, { width: '100%' }]}>
-                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>Entrada:</Text>
-                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>{item.FormaPagto_Vinculado.V2_csicp_bb026.BB026_FormaPagamento}</Text>
-                    <Text style={{ padding: 16, backgroundColor: "#C3C3C3" }}>{item.FormaPagto_Vinculado.V1_csicp_dd072.DD072_Valor_Pago}</Text>
+                <View>
+
+                    <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, { paddingHorizontal: 16, backgroundColor: "#C3C3C3" }]}>
+                        <Text style={{ padding: 16 }}>Entrada:</Text>
+                        <Text style={{ padding: 16 }}>{item.FormaPagto_Vinculado.V2_csicp_bb026.BB026_FormaPagamento}</Text>
+                        <Text style={{ padding: 16 }}>{formatMoneyValue(item.FormaPagto_Vinculado.V1_csicp_dd072.DD072_Valor_Pago)}</Text>
+                    </View>
                 </View>
             )}
         </View>

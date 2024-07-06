@@ -1,8 +1,12 @@
+import { ToastType, showToast } from "./ShowToast";
+
 // Aplica máscara de dinheiro
 export function moneyApplyMask(value: number) {
+    console.log(value);
+
     // Verifica se o valor é um número
     if (isNaN(value)) {
-        throw new Error('Valor não é um número válido');
+        showToast(ToastType.ERROR, "Erro", "Nao é um numero")
     }
 
     // Formata o número para valor monetário em reais
@@ -75,7 +79,6 @@ export function formatPercentInput(value: string): string {
     // Converte para número e divide por 100 para obter o formato correto
     let numValue = parseInt(numericValue, 10) / 100;
 
-    // Limita o valor a 0.99
 
 
     // Formata com duas casas decimais

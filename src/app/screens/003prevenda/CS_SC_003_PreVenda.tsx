@@ -40,10 +40,12 @@ const CS_SC_003_PreVenda = () => {
     const _fetchPV = async (page: number) => {
         setStatus(FETCH_STATUS.LOADING)
         handleFetchPv(initialDateString, finalDateString, page, 4).then((res) => {
-            if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
-                setPvList(res.csicp_dd070_Completo)
-                const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
-                setPaginationArray(pagesArray)
+            if (res.csicp_dd070_Completo !== undefined) {
+                if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
+                    setPvList(res.csicp_dd070_Completo)
+                    const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
+                    setPaginationArray(pagesArray)
+                }
             }
             setStatus(FETCH_STATUS.SUCCESS)
         })
@@ -84,7 +86,7 @@ const CS_SC_003_PreVenda = () => {
                     />
                 </View>
             }
-            {paginationArray.length > 1 && (
+            {paginationArray !== undefined && paginationArray.length > 1 && (
                 <View>
                     <Custom_Pagination
                         onPagePress={(page) => _fetchPV(page)}
