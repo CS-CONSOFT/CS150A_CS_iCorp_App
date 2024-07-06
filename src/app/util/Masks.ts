@@ -2,6 +2,8 @@ import { ToastType, showToast } from "./ShowToast";
 
 // Aplica máscara de dinheiro
 export function moneyApplyMask(value: number) {
+    console.log(value);
+
     // Verifica se o valor é um número
     if (isNaN(value)) {
         showToast(ToastType.ERROR, "Erro", "Nao é um numero")
