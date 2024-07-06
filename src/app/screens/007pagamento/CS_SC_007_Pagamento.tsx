@@ -507,7 +507,7 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
                 <TextInput value={moneyApplyMask(Number(paymentValue))}
                     onChangeText={(value) => {
-                        moneyApplyMask(moneyRemoveMask(value))
+                         moneyApplyMask(Number(moneyRemoveMask(value)))
                         setPaymentValue(value)
                     }
                     } style={commonStyle.common_input} />
@@ -524,7 +524,7 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
                         <TextInput value={moneyApplyMask(Number(paymentValueEntranceValue))}
                             onChangeText={(value) => {
-                                moneyApplyMask(moneyRemoveMask(value))
+                                moneyApplyMask(Number(moneyRemoveMask(value)))
                                 setPaymentValueEntranceValue(value)
                             }
                             }
