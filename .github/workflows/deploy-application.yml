@@ -2,7 +2,7 @@ name: Gerar APK
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "Valter-Camera" ]
   workflow_dispatch:
 
 env:

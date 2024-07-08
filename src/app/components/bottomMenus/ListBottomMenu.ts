@@ -18,7 +18,7 @@ export const listBottomMenu001 = [
     {
         id: 4,
         title: "Leitor",
-        onPress: (navigate: any) => { navigate('BipeCamera') },
+        onPress: (navigate: any) => { navigate('Camera') },
         iconName: ICON_NAME.CODIGO_BARRA_CONTORNADO
     }
 ]
