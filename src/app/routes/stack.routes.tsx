@@ -23,6 +23,7 @@ import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
+import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
 
 
 
@@ -40,10 +41,11 @@ declare global {
             Pre_Venda_Detalhes: { currentPv: string },
             Pre_Venda: undefined,
             Obras: undefined,
+            ObrasFilhas: { obraId: number },
             Obras_Solicitacao: { obraId: number }
             Obras_Requisicao: { obraId: number }
             Obras_Anexos: undefined
-            Obras_Chat: undefined
+            Obras_Chat: { obraId: number }
             Obras_PDF: undefined
             Pagamento: undefined
             ComandaLista: undefined
@@ -145,6 +147,17 @@ export default function StackRoutes() {
                 },
                 headerBackVisible: true,
             })} />
+
+            <StackNav.Screen name="ObrasFilhas" component={CS_SC_005_Obras_Filhas} options={({
+                title: "Obras Filhas",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            })} />
+
 
             <StackNav.Screen name="EditCliente" component={CS_SC_009_CadastroCliente} options={({
                 title: "Editar Cliente",

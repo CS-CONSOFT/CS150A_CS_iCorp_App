@@ -150,7 +150,7 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
                 refreshing={isLoading}
                 onRefresh={handleRefreshProducts}
                 ListEmptyComponent={<CustomEmpty text="Essa PV não tem produtos!" />}
-                ListHeaderComponent={<C_003_01_05_TopHeaderItensProdutosDetalhesPV isConsulta={true} />}
+                ListHeaderComponent={<C_003_01_05_TopHeaderItensProdutosDetalhesPV descontoValor={pv?.DD070_Nota.csicp_dd070.DD070_Desconto} isConsulta={true} />}
                 renderItem={({ item }) => (
                     <C_003_01_ProductPvItem
                         isConsulta={true}
