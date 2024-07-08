@@ -1,13 +1,32 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
+import { Chat } from "../../services/api/interfaces/obras/CS_IResGetListObras";
+import { useEffect, useState } from "react";
+import { formatDateToSlashPattern } from "../../util/FormatText";
 
-const CustomChatCard_001 = ({ username, message, image, isSender }: { username: string, message: string, image: string, isSender: boolean }) => {
+const CustomChatCard_001 = ({ messageItem, currentUser }: {
+    messageItem: Chat
+    /** id do usuario atual */
+    currentUser: string
+}) => {
+    const [isSender, setIsSender] = useState(false)
+
+    useEffect(() => {
+        setIsSender(messageItem.csicp_dd197.dd197_Usuario === currentUser)
+    }, [])
+
     return (
         <View style={[commonStyle.margin_16, commonStyle.common_rowItem, isSender ? style.sender : style.receiver]}>
-            <Image source={{ uri: image }} />
             <View style={commonStyle.common_columnItem}>
-                <Text style={style.username}>{username}</Text>
-                <Text style={style.message}>{message}</Text>
+                <View style={[commonStyle.common_rowItem]}>
+                    <Text style={style.username}>{messageItem.csicp_sy001.SY001_Nome}</Text>
+                    <View style={[{ alignItems: 'flex-end', marginLeft: 16 }, commonStyle.common_rowItem]}>
+                        <Text style={style.message}>{formatDateToSlashPattern(messageItem.csicp_dd197.dd197_Data)}</Text>
+                        <Text style={style.message}>{messageItem.csicp_dd197.dd197_Hora}</Text>
+                    </View>
+                </View>
+                <Text style={style.message}>{messageItem.csicp_dd197.dd197_Mensagem}</Text>
+
             </View>
         </View >
     );
