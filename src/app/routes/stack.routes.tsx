@@ -24,6 +24,7 @@ import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
 import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
+import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 
 
 
@@ -73,6 +74,16 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Cadastro_001" component={CS_SC_009_CadastroCliente} options={{
                 title: "Cadastro Cliente",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="Camera" component={CS_SC_Camera} options={{
+                title: "Camera",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {

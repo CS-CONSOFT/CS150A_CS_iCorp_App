@@ -418,8 +418,8 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
 /** termId == condicaoId */
 const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado }: { valorAPagarZerado: boolean, paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
-    const [paymentValue, setPaymentValue] = useState('0')
-    const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState('0')
+    const [paymentValue, setPaymentValue] = useState(moneyApplyMask(0))
+    const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState(moneyApplyMask(0))
     const [entranceFormId, setEntranceFormId] = useState('')
     const [btnClickLoading, setBtnClickLoading] = useState(false)
     const [isLoadingData, setIsLoadingData] = useState(false)
@@ -491,9 +491,9 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 )}
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
                 <TextInput
+                    keyboardType='numeric'
                     value={paymentValue}
                     onChangeText={(value) => {
-
                         const tratedValue = moneyApplyMask(moneyRemoveMask(value))
                         setPaymentValue(tratedValue)
                     }
@@ -510,6 +510,7 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
 
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
                         <TextInput value={paymentValueEntranceValue}
+                            keyboardType='numeric'
                             onChangeText={(value) => {
                                 const tratedValue = moneyApplyMask(Number(moneyRemoveMask(value)))
                                 setPaymentValueEntranceValue(tratedValue)
