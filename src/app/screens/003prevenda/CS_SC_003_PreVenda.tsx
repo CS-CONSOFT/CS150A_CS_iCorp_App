@@ -13,6 +13,7 @@ import { getPaginationList } from "../../util/GetPaginationArray";
 import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
 import CustomLoading from "../../components/loading/CustomLoading";
+import { formatMoneyValue } from "../../util/FormatText";
 
 
 
@@ -75,7 +76,7 @@ const CS_SC_003_PreVenda = () => {
                 <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
                     <FlatList
-                        data={pvList}
+                        data={pvList.toReversed()}
                         refreshing={isLoading}
                         onRefresh={handleRefreshList}
                         ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
@@ -114,10 +115,10 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
 
 
                 <View style={stylesPreVenda.containerRenderItemRight}>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.DD070_Nota.csicp_dd070.DD070_ProtocolNumber}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.DD070_Nota.csicp_bb012.BB012_Nome_Cliente}</Text>
-                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.DD070_Nota.csicp_sy001_Atendente.SY001_Usuario}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.DD070_Nota.csicp_dd070.DD070_ProtocolNumber} - {item.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.DD070_Nota.csicp_bb012.BB012_Nome_Cliente}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{formatMoneyValue(item.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}</Text>
+                    <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.DD070_Nota.csicp_sy001_Atendente.SY001_Nome}</Text>
                     <View>
                         <Text style={[stylesPreVenda.containerRenderItemRightTextNormal]}>{item.DD070_Nota.csicp_dd070_Sit.Label}</Text>
                     </View>

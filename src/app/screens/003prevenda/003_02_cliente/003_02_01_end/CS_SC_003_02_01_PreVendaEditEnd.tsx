@@ -130,10 +130,15 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         setIsBtnCepLoading(true)
         try {
             handleGetCep(attributesMap.CEP).then((res) => {
-                if (!res.erro) {
-                    setValueToObjectWhenInputTyped('Logradouro', res.logradouro)
-                    setValueToObjectWhenInputTyped('Bairro', res.bairro)
-                    setValueToObjectWhenInputTyped('Complemento', res.complemento)
+                console.log(res);
+
+                if (res !== undefined) {
+                    setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
+                    setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)
+                    setValueToObjectWhenInputTyped('UF', res.UF_ID)
+                    setValueToObjectWhenInputTyped('Cidade', res.CIDADE_ID)
+                    setSelectedUf(res.UF_ID)
+                    setSelectedCity(res.CIDADE_ID)
                 } else {
                     showToast(ToastType.ERROR, "Falha", "Ocorreu uma falha ao procurar pelo CEP")
                 }
@@ -195,9 +200,8 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
      * Função chamada ao selecionar uma cidade
      * @param key id da cidade selecionada
      */
-    function setSelectedCity(key: string, value: string) {
+    function setSelectedCity(key: string) {
         setValueToObjectWhenInputTyped('Cidade', key)
-        setValueToObjectWhenInputTyped('CidadeNome', value)
     }
 
     // Renderiza um loading se o status estiver carregando
@@ -299,7 +303,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                                 /** key == a chave do valor que foi selecionada, a chave é mapeada para receber o ID do valor na funcao
                                  * getFormaPagamento()
                                  */
-                                setSelected={(key: string) => { setSelectedCity(key, '') }}
+                                setSelected={(key: string) => { setSelectedCity(key) }}
                                 data={cityList!}
                                 save="key"
                                 defaultOption={{ key: enderecamentoAtual?.csicp_dd071.DD071_Cidade_ID, value: enderecamentoAtual?.csicp_aa028.AA028_Cidade }}

@@ -33,6 +33,13 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                         </View>
                         <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
                             <CustomItemIconTitleRoundedBlue
+                                title={"Requisição"}
+                                onPress={() => navigate('Requisicao')}
+                                iconName={ICON_NAME.DOCUMENT}
+                            />
+                        </View>
+                        <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
+                            <CustomItemIconTitleRoundedBlue
                                 title={"Código"}
                                 onPress={() => navigate('Consulta_Produtos', { cameFromPv: true })}
                                 iconName={ICON_NAME.ADICIONAR_CONTORNADO}

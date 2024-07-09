@@ -117,10 +117,13 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         setIsBtnCepLoading(true)
         try {
             handleGetCep(attributesMap.CEP).then((res) => {
-                if (!res.erro) {
-                    setValueToObjectWhenInputTyped('Logradouro', res.logradouro)
-                    setValueToObjectWhenInputTyped('Bairro', res.bairro)
-                    setValueToObjectWhenInputTyped('Complemento', res.complemento)
+                if (res !== undefined) {
+                    setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
+                    setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)
+                    setValueToObjectWhenInputTyped('UF', res.UF_ID)
+                    setValueToObjectWhenInputTyped('Cidade', res.CIDADE_ID)
+                    setSelectedCity(res.CIDADE_ID)
+                    setSelectedUf(res.UF_ID)
                 } else {
                     showToast(ToastType.ERROR, "Falha", "Ocorreu uma falha ao procurar pelo CEP")
                 }
@@ -198,9 +201,8 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * funcao chamada ao selecionar uma ciade
      * @param key id da cidade selecionada
      */
-    function setSelectedCity(key: string, value: string) {
+    function setSelectedCity(key: string) {
         setValueToObjectWhenInputTyped('Cidade', key)
-        setValueToObjectWhenInputTyped('CidadeNome', value)
     }
 
     function sair() {
@@ -223,7 +225,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
                     <View style={[commonStyle.common_columnItem]}>
-                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>{bb12id} - {userToEdit?.csicp_bb012.csicp_bb012.ID}</Text>
+                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>CEP</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 230 }]}
                             onChangeText={(value) => setValueToObjectWhenInputTyped('CEP', value)}
@@ -296,7 +298,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                         save="key"
                         search={false}
                         dropdownItemStyles={styles.dropdownStyle}
-                        defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa027.Id, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
+                        defaultOption={{ key: attributesMap.UF, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
                     />
 
                     {cityList === undefined && attributesMap.UF !== '' && (
@@ -310,10 +312,10 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                                 /** key == a chave do valor que foi selecionada, a chave é mapeada para receber o ID do valor na funcao
                                  * getFormaPagamento()
                                  */
-                                setSelected={(key: string) => { setSelectedCity(key, '') }}
+                                setSelected={(key: string) => { setSelectedCity(key) }}
                                 data={cityList!}
                                 save="key"
-                                defaultOption={{ key: userToEdit?.BB01206_Endereco.csicp_aa028.Id, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade }}
+                                defaultOption={{ key: attributesMap.Cidade, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade }}
                             />
 
                         </View>

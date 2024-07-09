@@ -8,6 +8,8 @@ import { storeSimpleDataVc } from "../../view_controller/SharedViewController";
 import { DataKey } from "../../enum/DataKeys";
 import api from "../../services/api/axios_config";
 import { showToast, ToastType } from "../../util/ShowToast";
+import CustomIcon from "../../components/icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
 
 
 // Componente de configuração de ambiente
@@ -15,7 +17,7 @@ const CS_SC_006__EnvorimentConfig = () => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
-    const [token, setToken] = useState('');
+    const [token, setToken] = useState('xd--');
     const [hasValue, setHasValue] = useState(false);
     const { navigate } = useNavigation();
     const db = useDatabase();
@@ -29,7 +31,6 @@ const CS_SC_006__EnvorimentConfig = () => {
     function init() {
         if (tenant === '' || tenant === undefined || urlBase === '' || urlBase === undefined || token === '' || token === undefined) {
             showToast(ToastType.ERROR, "Dados Insuficientes!", "Preencha os dados corretamente para avançar!")
-            exclude()
         } else {
             navigate('Login');
         }
@@ -42,7 +43,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                 if (response != null) {
                     // Se houver resposta, atualizar estados e armazenar dados localmente
                     setHasValue(true);
-                    setTenant(response!.tenantId);
+                    setTenant(response!.tenantId.toString());
                     setUrlBase(response!.urlBase);
                     setToken(response!.token);
                     storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString());
@@ -55,7 +56,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                     setHasValue(false);
                     setTenant('');
                     setUrlBase('');
-                    setToken('');
+                    setToken('xd--');
                 }
             });
         } catch (error) {
@@ -96,7 +97,6 @@ const CS_SC_006__EnvorimentConfig = () => {
             {hasValue && (
                 // Se houver valores, exibir dados e botões de ações
                 <View>
-
                     <View style={commonStyle.align_centralizar}>
                         <Text style={commonStyle.text_size_20}>{`Tenant: ${tenant}`}</Text>
                         <Text style={commonStyle.text_size_20}>{`URL: ${urlBase}`}</Text>
@@ -126,34 +126,43 @@ const CS_SC_006__EnvorimentConfig = () => {
             {!hasValue && (
                 // Se não houver valores, exibir campos de entrada para configuração
                 <View>
-                    <Text>Tenant</Text>
-                    <TextInput
-                        style={[commonStyle.common_input]}
-                        onChangeText={setTenant}
-                        value={tenant}
-                    />
+                    <View style={commonStyle.common_columnItem}>
+                        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
+                            <Text>Tenant</Text>
+                            <CustomIcon icon={ICON_NAME.CAMERA} onPress={() => {
+                                navigate('Camera', {
+                                    previousScreen: 'Config_Ambiente'
+                                })
+                            }} />
+                        </View>
+                        <TextInput
+                            style={[commonStyle.common_input]}
+                            onChangeText={setTenant}
+                            value={tenant}
+                        />
 
-                    <Text>URL</Text>
-                    <TextInput
-                        style={[commonStyle.common_input]}
-                        onChangeText={setUrlBase}
-                        value={urlBase}
-                    />
+                        <Text>URL</Text>
+                        <TextInput
+                            style={[commonStyle.common_input]}
+                            onChangeText={setUrlBase}
+                            value={urlBase}
+                        />
 
-                    <Text>TOKEN</Text>
-                    <TextInput
-                        style={[commonStyle.common_input]}
-                        onChangeText={setToken}
-                        value={token}
-                    />
+                        <Text>TOKEN</Text>
+                        <TextInput
+                            style={[commonStyle.common_input]}
+                            onChangeText={setToken}
+                            value={token}
+                        />
 
-                    <TouchableHighlight
-                        onPress={create}
-                        style={commonStyle.common_button_style}
-                        underlayColor='white'
-                    >
-                        <Text style={commonStyle.common_text_button_style}>Salvar</Text>
-                    </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={create}
+                            style={commonStyle.common_button_style}
+                            underlayColor='white'
+                        >
+                            <Text style={commonStyle.common_text_button_style}>Salvar</Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
             )}
         </SafeAreaView>

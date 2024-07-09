@@ -48,8 +48,6 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     }
 
     function updateDiscountPercent(productId: string, discountPercent: number, getProductsToCurrentPv: () => void): void {
-        console.log("sss" + discountPercent);
-        console.log("sss" + productId);
         handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent })
             .then((res) => {
                 if (res.IsOk) {

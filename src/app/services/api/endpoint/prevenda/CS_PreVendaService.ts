@@ -112,3 +112,13 @@ export async function savedd071({ cs_tenant_id, cs_req_save }: { cs_tenant_id: n
         throw err;
     }
 }
+
+
+export async function setClienteToPv({ cs_tenant_id, cs_pv_id, cs_cliente_id }: { cs_tenant_id: number, cs_pv_id: string, cs_cliente_id: string }) {
+    try {
+        const response = await api.post(`/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_pv_id}/SetCliente/${cs_cliente_id}`);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}

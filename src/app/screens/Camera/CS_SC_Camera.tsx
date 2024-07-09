@@ -1,10 +1,16 @@
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { commonStyle } from '../../CommonStyle';
+import { useNavigation } from '@react-navigation/native';
 
-export default function CS_SC_Camera() {
+export default function CS_SC_Camera({ route }: { route: any }) {
     const [facing, setFacing] = useState('back');
+    //dados que vem do qrcode ou barcode
+    const [dataCode, setDataCode] = useState('O texto irá aparecer aqui');
     const [permission, requestPermission] = useCameraPermissions();
+    const { currentScreen } = route.params
+    const { navigate } = useNavigation()
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -25,12 +31,19 @@ export default function CS_SC_Camera() {
         setFacing(current => (current === 'back' ? 'front' : 'back'));
     }
 
+    function readBarCode(scanningResult: BarcodeScanningResult) {
+        setDataCode(scanningResult.data)
+        navigate(currentScreen)
+    }
+
     return (
         <View style={styles.container}>
-            <CameraView style={styles.camera} facing='front'>
+            <Text style={commonStyle.btn_text_gray}>{dataCode}</Text>
+            <CameraView style={styles.camera} facing='back' onBarcodeScanned={readBarCode} barcodeScannerSettings={{
+                barcodeTypes: ['code128', 'aztec', 'codabar', 'code39', 'code93', 'datamatrix', 'ean13', 'ean8', 'itf14', 'pdf417', 'qr', 'upc_a', 'upc_e']
+            }}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-                        <Text style={styles.text}>Flip Camera</Text>
                     </TouchableOpacity>
                 </View>
             </CameraView>
@@ -42,6 +55,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        paddingTop: 16
     },
     camera: {
         flex: 1,

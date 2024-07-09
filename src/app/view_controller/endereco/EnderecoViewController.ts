@@ -5,7 +5,8 @@ import { getObject } from "../../services/storage/AsyncStorageConfig";
 
 export async function handleGetCep(cep: string) {
     try {
-        const response = await getCep(cep)
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = await getCep(cep, currentUser.TenantId)
         return response
     } catch (error) {
         throw error
