@@ -2,12 +2,15 @@ import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-ca
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { commonStyle } from '../../CommonStyle';
+import { useNavigation } from '@react-navigation/native';
 
-export default function CS_SC_Camera() {
+export default function CS_SC_Camera({ route }: { route: any }) {
     const [facing, setFacing] = useState('back');
     //dados que vem do qrcode ou barcode
     const [dataCode, setDataCode] = useState('O texto irá aparecer aqui');
     const [permission, requestPermission] = useCameraPermissions();
+    const { currentScreen } = route.params
+    const { navigate } = useNavigation()
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -30,6 +33,7 @@ export default function CS_SC_Camera() {
 
     function readBarCode(scanningResult: BarcodeScanningResult) {
         setDataCode(scanningResult.data)
+        navigate(currentScreen)
     }
 
     return (

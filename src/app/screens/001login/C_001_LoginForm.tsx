@@ -6,6 +6,8 @@ import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
 import { stylesLogin } from "./StylesLogin";
 import { commonStyle } from "../../CommonStyle";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import CustomLoading from "../../components/loading/CustomLoading";
 
 
 const CS_SC001_LoginForm = () => {
@@ -17,6 +19,7 @@ const CS_SC001_LoginForm = () => {
     });
     const { navigate } = useNavigation()
     const [isBtnLoading, setIsBtnLoading] = useState(false)
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     //fim variaveis
 
     function navigateToMenu() {
@@ -27,7 +30,7 @@ const CS_SC001_LoginForm = () => {
         setIsBtnLoading(false)
         checkIfUserIsLogged().then((isLogged) => {
             if (isLogged) {
-                navigateToMenu()
+                onClickLogin()
             }
         })
     }, [])
@@ -35,6 +38,7 @@ const CS_SC001_LoginForm = () => {
 
 
     async function onClickLogin(): Promise<void> {
+        setStatus(FETCH_STATUS.LOADING)
         const loginData: IPostLoginData = {
             domain: attributesMap.Domínio,
             user: attributesMap.Usuário,
@@ -43,6 +47,7 @@ const CS_SC001_LoginForm = () => {
         try {
             const response = await generalLoginVc(loginData);
             if (response.IsOk) {
+                setStatus(FETCH_STATUS.SUCCESS)
                 //salvando dados localmente
                 storeObjectDataVc(DataKey.LoginResponse, response.Model)
                 navigateToMenu()
@@ -57,6 +62,10 @@ const CS_SC001_LoginForm = () => {
             return { ...prevAttributesMap, [id]: value };
         });
     };
+
+    if (status === FETCH_STATUS.LOADING) {
+        return <CustomLoading />
+    }
 
     return (
         <SafeAreaView>

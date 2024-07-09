@@ -32,5 +32,6 @@ export const ICON_NAME = {
     DOCUMENT_EMPTY: "document-outline",
     EDITAR: "create-outline",
     FECHAR: "close-circle-outline",
+    CAMERA: "camera-outline",
 
 }

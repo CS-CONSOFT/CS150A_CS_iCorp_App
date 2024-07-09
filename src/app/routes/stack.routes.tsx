@@ -41,6 +41,7 @@ declare global {
             Serie: undefined,
             Consulta_Produtos: { cameFromPv: boolean },
             Config_Ambiente: undefined,
+            Camera: { previousScreen: string }
             Pre_Venda_Detalhes: { currentPv: string },
             Pre_Venda: undefined,
             Obras: undefined,
@@ -56,7 +57,6 @@ declare global {
             EditCliente: { bb12id?: string }
             Cadastro_002_End: { bb12id: string, isEdit: boolean }
             Cadastro_003_Perf: undefined
-            BipeCamera: undefined
             Requisicao: undefined
             PreVendaEnd: { enderecoId: string }
             ListaCliente: { isToInsertPv: boolean, pvId: string }
