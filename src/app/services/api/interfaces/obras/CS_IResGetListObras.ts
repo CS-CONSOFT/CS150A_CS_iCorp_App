@@ -1,7 +1,13 @@
+import { Code_Erro } from './../pagamento/CS_IResListFormPaymentComplete';
 export interface IResGetListObras {
     Contador: Contador
     dd190_Obras: Dd190_Obras[]
     Code_Retorno: Code_Retorno
+}
+
+export interface Code_Retorno {
+    Code_Erro: string,
+    Mensagem: string
 }
 
 export interface Contador {
@@ -19,6 +25,9 @@ export interface Dd190_Obras {
     DD199_RecProdutos: DD199_RecProdutos[]
     DD202_Profissionais: DD202_Profissionais[]
     DD205_Ocorrencias: DD205_Ocorrencias[]
+    Requisicao: Requisicao[]
+    Obra_Filhas: Obra_Filhas[]
+    Chat: Chat[]
 }
 
 export interface DD190_Obra {
@@ -614,6 +623,9 @@ export interface DD191_Produtos {
     csicp_gg008: Csicp_gg008
     csicp_gg520: Csicp_gg520
     AlteracaoProds: AlteracaoProds[]
+    gg008kardec_id: string,
+    gg007_id: string,
+    Prm_Vlr_Unitario: number
 }
 
 export interface Csicp_dd191 {
@@ -1231,7 +1243,290 @@ export interface Csicp_sy0012 {
     SY001_Celular: string
 }
 
-export interface Code_Retorno {
-    Code_Erro: string
-    Mensagem: string
+export interface Requisicao {
+    csicp_gg073: Csicp_gg0732
+    csicp_bb005: Csicp_bb0052
+    csicp_gg073_stat: Csicp_gg073_stat
+    csicp_gg073_tmov: Csicp_gg073_tmov
+    csicp_sy001: Csicp_sy0012
+    Str121_RequisicaoDet: Str121_RequisicaoDet[]
+}
+
+export interface Csicp_gg0732 {
+    gg073_Id: string
+    gg073_EstabID: string
+    gg073_Data_Movimento: string
+    gg073_UsuarioID: string
+    gg073_Observacao: string
+    gg073_CCustoID: string
+    gg073_AlmoxMovD: string
+    gg073_AlmoxMovSaida: string
+    gg073_dhRegistro: string
+    gg073_StatusID: number
+    gg073_tMovID: number
+    gg073_ValorizarPorID: number
+    gg073_tMovimento: number
+    gg073_ProtocoloNro: string
+    gg073_Qtde_Itens: number
+    gg073_ID_ORIG: string
+    dd190_ObraID: number
+}
+
+export interface Csicp_bb0052 {
+    ID: string
+    BB005_Filial: number
+    BB005_Codigo: number
+    BB005_NomeCCusto: string
+    BB005_ColunaImpressao: number
+    EmpresaId: string
+    BB005_IsActive: boolean
+}
+
+export interface Csicp_gg073_stat {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+}
+
+export interface Csicp_gg073_tmov {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+}
+
+export interface Csicp_sy0012 {
+    Id: string
+    SY001_Usuario: string
+    SY001_Nome: string
+    SY001_Senha: string
+    SY001_Bloqueado: boolean
+    SY001_Data_Validade: string
+    SY001_AutAlterarSenha: number
+    SY001_AltSenhaPxLogin: number
+    SY001_Expira_Senha: number
+    SY001_SenhExpAposNDias: number
+    SY001_DtExpiracaoLogin: string
+    SY001_DeptoLotado: string
+    SY001_Cargo: string
+    SY001_Email: string
+    SY001_Imagem: string
+    SY001_DataUltimoAcesso: string
+    UserID: number
+    SY001_Idioma_ID: number
+    SY001_SenhaCS: string
+    SY001_Celular: string
+}
+
+export interface Str121_RequisicaoDet {
+    csicp_gg074: Csicp_gg0742
+    csicp_gg072_stq: Csicp_gg072_stq
+    csicp_gg073_tmov: Csicp_gg073_tmov2
+    csicp_gg007: Csicp_gg007
+    csicp_gg008: Csicp_gg0082
+}
+
+export interface Csicp_gg0742 {
+    gg074_Id: number
+    gg073_id: string
+    gg074_CodBarrasAlfa: string
+    gg074_Kardex_ID: string
+    gg074_SaldoID: string
+    gg074_UN_ID: string
+    gg074_Qtd: number
+    gg074_vUnitario: number
+    gg074_StatusEstqID: number
+    gg074_tMovID: number
+    gg074_tProduto: number
+}
+
+export interface Csicp_gg072_stq {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+    CodgCS: number
+}
+
+export interface Csicp_gg073_tmov2 {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+}
+
+export interface Csicp_gg007 {
+    Id: string
+    GG007_Filial: number
+    GG007_FilialID: string
+    GG007_Unidade: string
+    GG007_Descricao: string
+    GG007_Is_Active: boolean
+    GG007_FormaVenda_ID: number
+    gg007_qDecimais: string
+}
+
+export interface Csicp_gg0082 {
+    Id: string
+    GG008_FilialID: string
+    GG008_Filial: number
+    GG008_CodgProduto: number
+    GG008_Tipo_Produto: string
+    GG008_Codigo_Grupo: number
+    GG008_Codigo_Classe: number
+    GG008_Codigo_Artigo: number
+    GG008_Codigo_Marca: number
+    GG008_Codigo_Padrao: string
+    GG008_Codigo_Tipo: string
+    GG008_Codigo_Qualidade: string
+    GG008_TipoProdutoID: string
+    GG008_GrupoID: string
+    GG008_SubGrupoID: string
+    GG008_ClasseID: string
+    GG008_ArtigoID: string
+    GG008_MarcaID: string
+    GG008_LinhaID: string
+    GG008_PadraoID: string
+    GG008_TipoID: string
+    GG008_QualidadeID: string
+    GG008_Referencia: string
+    GG008_Complemento: string
+    GG008_CodIndustrial: string
+    GG008_SafraDiaMesInicio: number
+    GG008_Safra_DiaMesFim: number
+    GG008_Etiqueta: number
+    GG008_NCM: number
+    GG008_EX_NCM: string
+    GG008_NCMID: string
+    GG008_Peso_Bruto: number
+    GG008_Peso_Liquido: number
+    GG008_Tamanho: number
+    GG008_Largura: number
+    GG008_Espessura: number
+    GG008_Embalagem_1: string
+    GG008_Embalagem_2: string
+    GG008_Qtd_Embalagem_1: number
+    GG008_Qtd_Embalagem_2: number
+    GG008_ComprimentoArmaz: number
+    GG008_Largura_Armaz: number
+    GG008_Altura_Armaz: number
+    GG008_Fator_Armaz: number
+    GG008_Empilhagem: number
+    GG008_DescReduzida: string
+    GG008_Usa_Nro_Serie: number
+    GG008_ReferSimilar: string
+    GG008_PrzGaranCompra: number
+    GG008_PrzGaranVenda: number
+    GG008_Servico: number
+    GG008_Montavel: number
+    GG008_ClassifVegetal: string
+    GG008_Is_Active: boolean
+    GG008_EstadoFisico_ID: number
+    GG008_TpGarantiaCompra_ID: number
+    GG008_TpGarantiaVenda_ID: number
+    GG008_TipoKit_ID: number
+    GG008_Pesavel_ID: number
+    GG008_IsForaLinha: boolean
+    GG008_DataForaLinha: string
+    GG008_ListServico_ID: number
+    GG008_GrpSubGrupoID: number
+    GG008_Sequence: number
+    GG008_dUltAlteracao: string
+    GG008_Entregar: number
+    GG008_Isecommerce: boolean
+    GG008_ANP_ID: string
+    GG008_dRegistro: string
+    gg008_UsuarioPropID: string
+    gg008_UsuarioAltID: string
+    gg008_IERelevanteID: number
+    gg008_CNPJFabricante: string
+    gg008_NomeFabricante: string
+    GG008_vICMSProprio: number
+    gg008_DescEspecial1: string
+    gg008_DescEspecial2: string
+}
+
+export interface Obra_Filhas {
+    csicp_dd190: Csicp_dd1902
+}
+
+export interface Csicp_dd1902 {
+    dd190_Id: number
+    dd190_SKID: string
+    dd190_EstabID: string
+    dd190_ContaClienteID: string
+    dd190_ProtocolNumber: string
+    dd190_dMovto: string
+    dd190_dInicioExec: string
+    dd190_dFinalExec: string
+    dd190_RespTecnicoID: string
+    dd190_Descricao: string
+    dd190_pAndamento: number
+    dd190_UsuarioPropID: string
+    dd190_dInclusao: string
+    dd190_UsuarioAlt: string
+    dd190_DAlteracao: string
+    dd190_CCusto_ID: string
+    dd190_AgCobrador_ID: string
+    dd190_Cond_Pagto_ID: string
+    dd190_Responsavel_ID: string
+    dd190_FormaPagto_ID: string
+    dd190_ValorObra: number
+    dd190_statusID: number
+    dd190_IsGeradoFinanc: boolean
+    dd190_CEP: number
+    dd190_Logradouro: string
+    dd190_Numero: string
+    dd190_Complemento: string
+    dd190_Perimetro: string
+    dd190_Bairro: string
+    dd190_Pais_ID: string
+    dd190_UF_ID: string
+    dd190_Cidade_ID: string
+    dd190_tHrTarefa: number
+    dd190_tHrExec: number
+    dd190_pExecucao: number
+    dd190_Tag: string
+    dd190_ID_ObraPai: number
+    dd196_GrupoID: number
+    dd190_ColorId: string
+    dd190_TagID: number
+}
+
+export interface Chat {
+    csicp_dd197: Csicp_dd197
+    csicp_sy001: Csicp_sy0012
+}
+
+export interface Csicp_dd197 {
+    dd197_Id: number
+    dd190_ObraId: number
+    dd197_Data: string
+    dd197_Hora: string
+    dd197_Usuario: string
+    dd197_Mensagem: string
+}
+
+export interface Csicp_sy0012 {
+    Id: string
+    SY001_Usuario: string
+    SY001_Nome: string
+    SY001_Senha: string
+    SY001_Bloqueado: boolean
+    SY001_Data_Validade: string
+    SY001_AutAlterarSenha: number
+    SY001_AltSenhaPxLogin: number
+    SY001_Expira_Senha: number
+    SY001_SenhExpAposNDias: number
+    SY001_DtExpiracaoLogin: string
+    SY001_DeptoLotado: string
+    SY001_Cargo: string
+    SY001_Email: string
+    SY001_Imagem: string
+    SY001_DataUltimoAcesso: string
+    UserID: number
+    SY001_Idioma_ID: number
+    SY001_SenhaCS: string
+    SY001_Celular: string
 }

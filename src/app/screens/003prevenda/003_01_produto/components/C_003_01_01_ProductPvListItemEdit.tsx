@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, Text, TextInput, TouchableHighlight, View } from "react-native";
 import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
@@ -12,6 +12,7 @@ import { formatPercentInput, moneyApplyMask, moneyRemoveMask } from "../../../..
 import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { common003_01_styles } from "./CommonStyles";
 import { formatMoneyValue } from '../../../../util/FormatText';
+import { IReqUpdateProdutItens } from '../../../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens';
 
 /** componente de edição dos valores do produto */
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
@@ -37,7 +38,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [percentDiscount, setPercentDiscount] = useState('');
     const [valueDiscount, setValueDiscount] = useState('');
 
-    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const [updateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
 
 
     useEffect(() => {
@@ -48,7 +49,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela || 0));
         setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario || 0));
         setPercentDiscount('');
-        setPercentDiscount(formatPercentInput(product.csicp_dd080.DD080_Perc_DescProduto.toString() || '0'));
+        setPercentDiscount(formatPercentInput((product.csicp_dd080.DD080_Perc_DescProduto || 0).toString() || '0'));
         setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto || 0));
     }, [])
 
@@ -59,7 +60,6 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             if (res.IsOk) {
                 setProductAmount(newAmount)
                 setAmountProduct(newAmount)
-                setStatus(FETCH_STATUS.SUCCESS)
             }
         })
     }
@@ -123,19 +123,15 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         switch (currentSwitch) {
             case 1:
                 setIsEntregar(value)
-                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsEntregar: value });
                 break
             case 2:
                 setIsRequisitar(value)
-                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsRequisitar: value });
                 break
             case 3:
                 setIsSaldoNegativo(value)
-                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsSaldoNegativo: value });
                 break
             case 4:
                 setIsMontar(value)
-                //handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, { IsMontar: value, });
                 break
         }
     }
@@ -263,6 +259,21 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <CustomSwitch title="S. Negativo" switchValue={isSaldoNegativo} onValueChange={(value: boolean) => handleSwitchChange(value, 3)} />
                     <CustomSwitch title="Montar" switchValue={isMontar} onValueChange={(value: boolean) => handleSwitchChange(value, 4)} />
                 </View>
+
+                {updateDataFromSwitch ? <ActivityIndicator /> : <CustomIcon icon={ICON_NAME.CHECK} onPress={() => {
+                    setUpdateDataFromSwitchs(true)
+                    const updateData: IReqUpdateProdutItens = {
+                        IsEntregar: isEntregar,
+                        IsMontar: isMontar,
+                        IsRequisitar: isRequisitar,
+                        IsSaldoNegativo: isSaldoNegativo
+                    }
+                    handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, updateData).then(() => {
+                        setUpdateDataFromSwitchs(false)
+                    })
+                }} />}
+
+
             </View>
 
             {/** BOTOES */}

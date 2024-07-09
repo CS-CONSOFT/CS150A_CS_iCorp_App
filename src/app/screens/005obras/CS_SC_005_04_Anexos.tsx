@@ -2,15 +2,19 @@ import React from 'react';
 import { Pressable, SafeAreaView, Text, StyleSheet, Dimensions, Alert, ActivityIndicator } from "react-native";
 import CustomCard_002 from "../../components/cards/CustomCard_002";
 import { ICON_NAME } from "../../util/IconsName";
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import WebView from 'react-native-webview';
+
+
 
 /**
  * FUNDO TODO AZUL, UM TEXTO NO MEIO E ICONE AO LADO
  * Ref: OBRA ANEXOS 
  */
 const CS_SC_005_04_Anexos = () => {
+
 
     const api =  axios.create({
         baseURL: "http://docente.ifsc.edu.br/"
@@ -77,7 +81,6 @@ const CS_SC_005_04_Anexos = () => {
                 icon={ICON_NAME.DOCUMENT} 
                 title="PDF do projeto"
                 />
-                
             </Pressable>
         </SafeAreaView>
     );

@@ -251,7 +251,7 @@ export async function getLastSalesProduct({ cs_tenant_id, cs_produto_id, cs_cont
 export async function saveGlobalDiscount({ cs_tenant_id, cs_atendimento_id, cs_valor_percentual }:
     { cs_tenant_id: number, cs_atendimento_id: string, cs_valor_percentual: number }): Promise<ICommonResponse> {
 
-    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}}/SalvarDescontoGlobal`
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}/SalvarDescontoGlobal`
     const response = await api.post(url, {
         ValorPercentual: cs_valor_percentual
     })

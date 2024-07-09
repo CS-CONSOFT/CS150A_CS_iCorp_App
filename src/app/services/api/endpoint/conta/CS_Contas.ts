@@ -48,7 +48,7 @@ export async function getListConta({ commonReq, cs_mod_relacao_id }: { commonReq
             in_search: commonReq.in_search
         }
 
-        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_List_Contas', { headers: data });
+        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_List_ContasCompleto', { headers: data });
         return response.data;
     } catch (err) {
         throw err;

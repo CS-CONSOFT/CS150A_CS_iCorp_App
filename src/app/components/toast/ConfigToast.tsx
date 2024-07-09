@@ -15,12 +15,13 @@ export const toastConfig = {
             {...props}
             style={{ borderLeftColor: 'green', backgroundColor: "#eefdec" }}
             contentContainerStyle={{ paddingHorizontal: 15 }}
+            text2NumberOfLines={3}
             text1Style={{
                 fontSize: 16,
                 fontWeight: '800'
             }}
             text2Style={{
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: '400'
             }}
 
@@ -40,8 +41,9 @@ export const toastConfig = {
                 color: "#000"
 
             }}
+            text2NumberOfLines={3}
             text2Style={{
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: '600',
                 color: "#000"
             }}
@@ -58,8 +60,9 @@ export const toastConfig = {
                 color: "blue"
 
             }}
+            text2NumberOfLines={3}
             text2Style={{
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: '600',
                 color: "#000"
             }}

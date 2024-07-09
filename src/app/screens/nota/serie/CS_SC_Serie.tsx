@@ -83,7 +83,7 @@ const CS_SC_Serie = () => {
                 data={nota?.Produtos}
                 refreshing={loadingProducts}
                 onRefresh={handleRefreshList}
-                ListEmptyComponent={<CustomEmpty text={"Nenhuma entrega encontrada"} />}
+                ListEmptyComponent={<CustomEmpty text={"Não encontrado"} />}
                 renderItem={({ item }) => (
                     <CustomCard_001 title={item.DD060_Descricao} children={
                         <ProductItem productItemProps={{ product: item, onPress: (product) => handlePopUp(product) }} />

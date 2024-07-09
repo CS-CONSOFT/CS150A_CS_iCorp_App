@@ -1,8 +1,10 @@
-name: Gerar APK para Testes!
+
+name: Gerar APK
+
 
 on:
   push:
-    branches: [ "desenvolvimento" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
@@ -50,36 +52,3 @@ jobs:
           name: app-release-apk
           path: android/app/build/outputs/apk/release/app-release.apk
 
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build
-#    steps:
-#      - name: Download APK
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: app-release-apk
-#          path: ./release
-
-#      - name: Configure SSH Access
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.AWS_EC2_KEY_PAIR }}" > ~/.ssh/aws_ec2_key
-#          chmod 600 ~/.ssh/aws_ec2_key
-#          ssh-keyscan -H 44.193.189.111 >> ~/.ssh/known_hosts
-#          echo "StrictHostKeyChecking no" > ~/.ssh/config
-
-#      - name: Creating folder on EC2
-#        run: |
-#          ssh -i ~/.ssh/aws_ec2_key ubuntu@${{ secrets.AWS_EC2_INSTANCE_IP }} "mkdir -p /home/ubuntu/app"
-
-
-#      - name: Upload APK to EC2
-#        run: |
-#          scp -i ~/.ssh/aws_ec2_key ./release/app-release.apk ubuntu@${{ secrets.AWS_EC2_INSTANCE_IP }}:/home/ubuntu/app/app-release.apk
-
-#      - name: SSH into EC2 and deploy APK
-#        run: |
-#          ssh -i ~/.ssh/aws_ec2_key ubuntu@${{ secrets.AWS_EC2_INSTANCE_IP }} << 'EOF'
-#            mv /home/ubuntu/app/app-release.apk /var/www/myapp/app-release.apk
-            # Adicione aqui outros comandos necessários para sua aplicação
-#          EOF
