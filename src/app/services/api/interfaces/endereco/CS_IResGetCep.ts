@@ -1,14 +1,10 @@
 export interface IResGetCep {
-    cep: string
-    logradouro: string
-    complemento: string
-    unidade: string
-    bairro: string
-    localidade: string
-    uf: string
-    ibge: string
-    gia: string
-    ddd: string
-    siafi: string,
-    erro?: boolean
+    UF_ID: string
+    PAIS_ID: string
+    NATURALIDADE: string
+    NACIONALIDADE: string
+    LOGRADOURO: string
+    CIDADE_ID: string
+    BAIRRO: string
+    CEP: string
 }

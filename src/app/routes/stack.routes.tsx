@@ -25,6 +25,8 @@ import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
 import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
 import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
+import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
+import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
 
 
 
@@ -55,7 +57,9 @@ declare global {
             Cadastro_002_End: { bb12id: string, isEdit: boolean }
             Cadastro_003_Perf: undefined
             BipeCamera: undefined
+            Requisicao: undefined
             PreVendaEnd: { enderecoId: string }
+            ListaCliente: { isToInsertPv: boolean, pvId: string }
         }
     }
 }
@@ -74,6 +78,16 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Cadastro_001" component={CS_SC_009_CadastroCliente} options={{
                 title: "Cadastro Cliente",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="Requisicao" component={CS_SC_010_Requisicao} options={{
+                title: "Requisicao",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
@@ -141,6 +155,17 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="Serie" component={CS_SC_Serie} options={{
                 title: "Serie",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+
+            <StackNav.Screen name="ListaCliente" component={CS_SC_009_ListaCliente} options={{
+                title: "Inserir cliente para PV",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {

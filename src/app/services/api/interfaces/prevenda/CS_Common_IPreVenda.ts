@@ -23,6 +23,11 @@ export interface IResGetPv {
     DD075_Obs: DD075_Obs[]
     DD080_Produtos: DD080_Produtos[]
     DD077_DoctoArrecadacao: DD077_DoctoArrecadacao[]
+    Requisicoes: Requisicoes[]
+}
+
+export interface Requisicoes {
+
 }
 
 export interface DD070_Nota {

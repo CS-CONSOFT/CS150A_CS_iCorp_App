@@ -33,7 +33,7 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
 
     const [pv, setPv] = useState<IResGetPv>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         getCurrentPv()
@@ -75,6 +75,9 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
 
                 <Text style={commonStyle.title_nomeIniciais}>{pv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""}</Text>
                 <Text>{pv?.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
+                <Pressable onPress={() => navigate('ListaCliente', { isToInsertPv: true, pvId: (pv?.DD070_Nota.csicp_dd070.DD070_Id || 'zzz') })}>
+                    <Text style={commonStyle.btn_text_transparente}>Alterar</Text>
+                </Pressable>
             </View>
 
             <View style={[commonStyle.common_rowItem, commonStyle.common_margin_vertical]}>

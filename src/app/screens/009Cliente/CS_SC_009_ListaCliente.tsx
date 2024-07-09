@@ -11,12 +11,14 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { getPaginationList } from "../../util/GetPaginationArray";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
+import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaViewController";
 
-const CS_SC_009_ListaCliente = () => {
+const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
     const [paginationArray, setPaginationArray] = useState<number[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const { navigate } = useNavigation()
+    const navigation = useNavigation()
+    const { isToInsertPv, pvId } = route.params
 
     function getClientesList(page?: number, searchValue?: string) {
         setStatus(FETCH_STATUS.LOADING)
@@ -35,9 +37,26 @@ const CS_SC_009_ListaCliente = () => {
         })
     }
 
+
+
     useEffect(() => {
         getClientesList(1)
     }, [])
+
+    function handleClickItem(bb12id: string) {
+        //é para alterar o cliente da pv?
+        if (isToInsertPv) {
+            setStatus(FETCH_STATUS.LOADING)
+            handleSetClienteToPv(bb12id).then((res) => {
+                setStatus(FETCH_STATUS.SUCCESS)
+                navigation.navigate('Pre_Venda_Detalhes', {
+                    currentPv: pvId
+                })
+            })
+        } else {
+            navigation.navigate('EditCliente', { bb12id: bb12id })
+        }
+    }
 
 
     const isLoading = status === FETCH_STATUS.LOADING
@@ -53,7 +72,7 @@ const CS_SC_009_ListaCliente = () => {
                     onRefresh={getClientesList}
                     data={clientList?.csicp_bb012}
                     keyExtractor={(item, index) => item.csicp_bb012.csicp_bb012.ID}
-                    renderItem={({ item }) => <RenderItemCliente item={item} edit={(bb12id) => navigate('EditCliente', { bb12id: bb12id })} />}
+                    renderItem={({ item }) => <RenderItemCliente item={item} edit={(bb12id) => handleClickItem(bb12id)} />}
                 />
             </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}
             <Custom_Pagination

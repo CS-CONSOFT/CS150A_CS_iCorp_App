@@ -15,7 +15,7 @@ const CS_SC_006__EnvorimentConfig = () => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
-    const [token, setToken] = useState('');
+    const [token, setToken] = useState('-');
     const [hasValue, setHasValue] = useState(false);
     const { navigate } = useNavigation();
     const db = useDatabase();
@@ -29,7 +29,6 @@ const CS_SC_006__EnvorimentConfig = () => {
     function init() {
         if (tenant === '' || tenant === undefined || urlBase === '' || urlBase === undefined || token === '' || token === undefined) {
             showToast(ToastType.ERROR, "Dados Insuficientes!", "Preencha os dados corretamente para avançar!")
-            exclude()
         } else {
             navigate('Login');
         }
@@ -55,7 +54,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                     setHasValue(false);
                     setTenant('');
                     setUrlBase('');
-                    setToken('');
+                    setToken('--');
                 }
             });
         } catch (error) {

@@ -1,12 +1,16 @@
-import { api_cep } from "../../api_cep.config";
 import api from "../../axios_config";
 import { IResGetCep } from "../../interfaces/endereco/CS_IResGetCep";
 import { IResCityList } from "../../interfaces/endereco/CS_IResListCity";
 import { IResUfList } from "../../interfaces/endereco/CS_IResUFList";
 
-export async function getCep(cep: string): Promise<IResGetCep> {
+export async function getCep(cep: string, tenantId: number): Promise<IResGetCep> {
     try {
-        const response = await api_cep.get(`${cep}/json/`)
+        const url = `/CSR_BB100_Tabelas_LIB/rest/CS_ConsultaCEP/Get_CEP`
+        const urlParams = {
+            In_CEP: cep,
+            In_Tenant_ID: tenantId
+        }
+        const response = await api.get(url, { params: urlParams })
         return response.data as IResGetCep
     } catch (error) {
         throw error
