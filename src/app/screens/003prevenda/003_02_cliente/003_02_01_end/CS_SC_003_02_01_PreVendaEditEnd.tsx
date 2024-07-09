@@ -1,20 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View, StyleSheet } from "react-native";
-import { handleGetCep, handleGetCityList, handleGetUfList } from "../../../../view_controller/endereco/EnderecoViewController";
-import { ToastType, showToast } from "../../../../util/ShowToast";
-import { CS_IReqSaveEndereco } from "../../../../services/api/interfaces/contas/CS_IReqSaveEndereco";
-import { handleSave1206 } from "../../../../view_controller/conta/ContaViewController";
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
 import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
-import { ICON_NAME } from "../../../../util/IconsName";
-import { SelectList } from "react-native-dropdown-select-list";
-import estados from "../../../009Cliente/ListaEstados";
-import ColorStyle from "../../../../ColorStyle";
+import CustomLoading from "../../../../components/loading/CustomLoading";
 import { DD071_Enderecos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { FETCH_STATUS } from "../../../../util/FETCH_STATUS";
+import { ICON_NAME } from "../../../../util/IconsName";
+import { ToastType, showToast } from "../../../../util/ShowToast";
+import { handleGetCep, handleGetCityList, handleGetUfList } from "../../../../view_controller/endereco/EnderecoViewController";
+import { handleGetPv, handleSaveDD071, mapToUpdateEndereco } from "../../../../view_controller/prevenda/PreVendaViewController";
 
 
 const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
+    // Estado para armazenar os atributos do endereço
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
         CEP: '',
         Logradouro: '',
@@ -27,16 +27,27 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         Perimetro: ''
     });
 
+    // Navegação para mudar de tela
+    const navigation = useNavigation()
+
+    // Estados para armazenar listas de UF e cidades
     const [ufList, setUfList] = useState<{ key: string, value: string }[]>()
     const [cityList, setCityList] = useState<{ key: string, value: string }[]>()
+
+    // Estados para controlar carregamento
     const [isSavingLoading, setIsSavingLoading] = useState(false)
-
-    const [enderecamento, setEnderecamento] = useState<DD071_Enderecos>()
-
-    const { navigate } = useNavigation()
     const [isBtnCepLoading, setIsBtnCepLoading] = useState(false)
-    const { DD071_JSON } = route.params
 
+    // Estado para armazenar o endereço atual
+    const [enderecamentoAtual, setEnderecamentoAtual] = useState<DD071_Enderecos>()
+
+    // Estado para controlar o status de busca
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+
+    // Pegar o parâmetro de rota (enderecoId)
+    const { enderecoId } = route.params
+
+    // Função para resetar o formulário
     function resetForm() {
         setAttributesMap({
             CEP: '',
@@ -52,20 +63,30 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         setIsSavingLoading(false)
     }
 
+    // Função para pegar a pré-venda atual e setar os valores do endereço atual no formulário
+    function getCurrentPv() {
+        setStatus(FETCH_STATUS.LOADING)
+        handleGetPv().then((res) => {
+            if (res !== undefined) {
+                const current = res.DD071_Enderecos.find((item) => item.csicp_dd071.DD070_ID === enderecoId)
 
+                handleInputTyping('CEP', (current?.csicp_dd071.DD071_CEP || 0).toString())
+                handleInputTyping('Logradouro', current?.csicp_dd071.DD071_Logradouro || "")
+                handleInputTyping('Bairro', current?.csicp_dd071.DD071_NomeBairro || "")
+                handleInputTyping('Complemento', current?.csicp_dd071.DD071_Complemento || "")
+                handleInputTyping('UF', current?.csicp_dd071.DD071_UF_ID || "")
+                handleInputTyping('Cidade', current?.csicp_dd071.DD071_Cidade_ID || "")
+                handleInputTyping('Numero', current?.csicp_dd071.DD071_Numero || "")
+                handleInputTyping('Perímetro', current?.csicp_dd071.DD071_Perimetro || "")
+
+                setEnderecamentoAtual(current)
+            }
+        })
+    }
+
+    // useEffect para pegar a pré-venda atual e a lista de UFs na montagem do componente
     useEffect(() => {
-        resetForm()
-
-        setEnderecamento(JSON.parse(DD071_JSON))
-        handleInputTyping('CEP', JSON.parse(DD071_JSON).csicp_dd071.DD071_CEP)
-        handleInputTyping('Logradouro', JSON.parse(DD071_JSON).csicp_dd071.DD071_Logradouro)
-        handleInputTyping('Bairro', JSON.parse(DD071_JSON).csicp_dd071.DD071_NomeBairro)
-        handleInputTyping('Complemento', JSON.parse(DD071_JSON).csicp_dd071.DD071_Complemento)
-        handleInputTyping('UF', JSON.parse(DD071_JSON).csicp_aa027.Id)
-        handleInputTyping('Cidade', JSON.parse(DD071_JSON).csicp_aa028.Id)
-        handleInputTyping('Numero', JSON.parse(DD071_JSON).csicp_dd071.DD071_Numero)
-        handleInputTyping('Perímetro', JSON.parse(DD071_JSON).csicp_dd071.DD071_Perimetro)
-
+        getCurrentPv()
         try {
             handleGetUfList().then((res) => {
                 const list = res.csicp_aa027
@@ -76,21 +97,23 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                     }
                 ))
                 setUfList(mappedUfList)
+                setStatus(FETCH_STATUS.SUCCESS)
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Falha", "Ao recuperar os estados")
         }
+        setStatus(FETCH_STATUS.SUCCESS)
     }, [])
 
+    // Função para setar o valor do input no state attributesMap
     function handleInputTyping(id: string, value: string): void {
         setAttributesMap((prevAttributesMap) => {
             return { ...prevAttributesMap, [id]: value };
         });
     }
 
-
     /**
-     * funcao que seta um valor para o state de formulario criado acima
+     * Função para setar um valor no state attributesMap quando um input é digitado
      * @param id id do valor do objeto
      * @param value valor do objeto
      */
@@ -101,7 +124,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     }
 
     /**
-     * funcao que recupera os valores do CEP do VIA CEP
+     * Função que recupera os valores do CEP do VIA CEP
      */
     function getValuesFromCep() {
         setIsBtnCepLoading(true)
@@ -122,35 +145,26 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     }
 
     /**
-     * Funcao que salva um endereco
+     * Função que salva um endereço
      */
     function saveEndereco() {
-
-        let iSaveEndereco: CS_IReqSaveEndereco = {}
-
-        if (!attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero || !attributesMap.Complemento || !attributesMap.Perimetro) {
+        if (!attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero) {
             showToast(ToastType.ERROR, "Campos Faltando", "Preencha corretamente todos")
             return;
         }
         setIsSavingLoading(true)
-        iSaveEndereco.BB012_CEP = Number(attributesMap.CEP)
-        iSaveEndereco.BB012_Logradouro = attributesMap.Logradouro
-        iSaveEndereco.BB012_Bairro = attributesMap.Bairro
-        iSaveEndereco.BB012_Numero = attributesMap.Numero
-        iSaveEndereco.BB012_Complemento = attributesMap.Complemento
-        iSaveEndereco.BB012_Perimetro = attributesMap.Perimetro
-        iSaveEndereco.BB012_UF = attributesMap.UF
-        iSaveEndereco.BB012_Codigo_Cidade = attributesMap.Cidade
 
-        handleSave1206({ cs_req_save: iSaveEndereco }).then(() => {
+        const iSaveEndereco = mapToUpdateEndereco(enderecamentoAtual!, attributesMap)
+
+        handleSaveDD071({ cs_req_save: iSaveEndereco }).then(() => {
             resetForm()
-            navigate('CadastroCliente')
+            navigation.goBack()
         })
     }
 
     /**
-     * funcao que é chamada ao selecionar uma uf no dropdown
-     * @param key id da selecao
+     * Função chamada ao selecionar uma UF no dropdown
+     * @param key id da seleção
      */
     function setSelectedUf(key: string) {
         setValueToObjectWhenInputTyped('Cidade', '')
@@ -159,7 +173,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     }
 
     /**
-     * funcao que busca as cidades
+     * Função que busca as cidades
      * @param valor o valor de pesquisa
      */
     function getCities(valor?: string) {
@@ -178,7 +192,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     }
 
     /**
-     * funcao chamada ao selecionar uma ciade
+     * Função chamada ao selecionar uma cidade
      * @param key id da cidade selecionada
      */
     function setSelectedCity(key: string, value: string) {
@@ -186,8 +200,14 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         setValueToObjectWhenInputTyped('CidadeNome', value)
     }
 
+    // Renderiza um loading se o status estiver carregando
+    if (status === FETCH_STATUS.LOADING) {
+        return <CustomLoading />
+    }
+
     return (
         <SafeAreaView style={{ padding: 8 }}>
+
             <ScrollView>
                 <View style={[commonStyle.common_rowItem, commonStyle.align_centralizar, commonStyle.common_margin_top_32, commonStyle.common_margin_bottom_16]}>
                     <CustomIcon icon={ICON_NAME.LOCALIZACAO} iconColor="#0A3147" />
@@ -200,7 +220,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 230 }]}
                             onChangeText={(value) => setValueToObjectWhenInputTyped('CEP', value)}
-                            value={attributesMap.Domínio}
+                            value={attributesMap.CEP}
                             placeholder="CEP"
                             keyboardType='numeric'
                         />
@@ -268,7 +288,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                         data={ufList!}
                         save="key"
                         search={false}
-                        dropdownItemStyles={styles.dropdownStyle}
+                        defaultOption={{ key: enderecamentoAtual?.csicp_dd071.DD071_UF_ID, value: enderecamentoAtual?.csicp_aa027.AA027_Sigla }}
                     />
 
 
@@ -282,36 +302,16 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                                 setSelected={(key: string) => { setSelectedCity(key, '') }}
                                 data={cityList!}
                                 save="key"
+                                defaultOption={{ key: enderecamentoAtual?.csicp_dd071.DD071_Cidade_ID, value: enderecamentoAtual?.csicp_aa028.AA028_Cidade }}
                             />
 
                         </View>
                     )}
 
-                    {/**
-                    {cityList !== undefined && attributesMap.Cidade === '' && (
-                        <View style={[commonStyle.common_columnItem, { width: 230 }]}>
-                            <CustomSearch
-                                clickToSearch={false}
-                                onSearchPress={(valor) => { getCities(valor) }}
-                                placeholder="Cidade"
-                            />
-                            <View style={{ flexDirection: 'column', height: 140, borderWidth: 1, padding: 12, borderRadius: 20, borderColor: "#949494" }}>
-                                <FlatList data={cityList}
-                                    keyExtractor={(item) => item.key}
-                                    renderItem={(item) => <RenderItemCondicao onCitySelected={(valor, key) => setSelectedCity(key, valor)} id={item.item.key} title={item.item.value} />}
-                                />
-                            </View>
-                        </View>
-                    )}
-                         */}
 
                     {attributesMap.Cidade !== '' && (
                         <Text>{attributesMap.CidadeNome}</Text>
                     )}
-
-
-
-
                 </View>
 
 
@@ -336,10 +336,5 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     );
 }
 
-const styles = StyleSheet.create({
-    dropdownStyle: {
-        width: 100
-    }
-})
 
 export default CS_SC_003_02_01_PreVendaEditEnd;

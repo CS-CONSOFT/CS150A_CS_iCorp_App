@@ -1,8 +1,12 @@
+import { ToastType, showToast } from "./ShowToast";
+
 // Aplica máscara de dinheiro
 export function moneyApplyMask(value: number) {
+    console.log(value);
+
     // Verifica se o valor é um número
     if (isNaN(value)) {
-        throw new Error('Valor não é um número válido');
+        showToast(ToastType.ERROR, "Erro", "Nao é um numero")
     }
 
     // Formata o número para valor monetário em reais
@@ -70,13 +74,12 @@ export function removeCpfCnpjMask(value: string): number {
 
 export function formatPercentInput(value: string): string {
     // Remove todos os caracteres não numéricos
-    const numericValue = value.replace(/\D/g, '');
+    const numericValue = value.replace(/[^\d]/g, '');
 
     // Converte para número e divide por 100 para obter o formato correto
-    let numValue = parseFloat(numericValue) / 100;
+    let numValue = parseInt(numericValue, 10) / 100;
 
-    // Limita o valor a 1.00
-    if (numValue > 1) numValue = 100;
+
 
     // Formata com duas casas decimais
     return numValue.toFixed(2);

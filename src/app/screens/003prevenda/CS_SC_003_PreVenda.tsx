@@ -1,17 +1,18 @@
-import { lazy, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
-import { stylesPreVenda } from "./PreVendaStyles";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 import CustomEmpty from "../../components/lists/CustomEmpty";
+import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import { DataKey } from "../../enum/DataKeys";
 import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
-import ColorStyle from "../../ColorStyle";
-import { commonStyle } from "../../CommonStyle";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import { getPaginationList } from "../../util/GetPaginationArray";
+import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
+import { stylesPreVenda } from "./PreVendaStyles";
+import CustomLoading from "../../components/loading/CustomLoading";
 
 
 
@@ -38,11 +39,13 @@ const CS_SC_003_PreVenda = () => {
     /**Formatando data */
     const _fetchPV = async (page: number) => {
         setStatus(FETCH_STATUS.LOADING)
-        handleFetchPv(initialDateString, finalDateString, page, 5).then((res) => {
-            if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
-                setPvList(res.csicp_dd070_Completo)
-                const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
-                setPaginationArray(pagesArray)
+        handleFetchPv(initialDateString, finalDateString, page, 4).then((res) => {
+            if (res.csicp_dd070_Completo !== undefined) {
+                if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
+                    setPvList(res.csicp_dd070_Completo)
+                    const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
+                    setPaginationArray(pagesArray)
+                }
             }
             setStatus(FETCH_STATUS.SUCCESS)
         })
@@ -58,7 +61,7 @@ const CS_SC_003_PreVenda = () => {
     function goToDetails(currentPv: Csicp_dd070_Completo) {
         storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
         navigate('Pre_Venda_Detalhes', {
-            currentPv: currentPv.DD070_Nota.csicp_dd070.DD070_Id
+            currentPv: currentPv.DD070_Nota.csicp_dd070.DD070_ProtocolNumber
         })
     }
 
@@ -67,7 +70,7 @@ const CS_SC_003_PreVenda = () => {
     return (
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
             {isLoading ? <>
-                <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
+                <CustomLoading />
             </> :
                 <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
@@ -83,7 +86,7 @@ const CS_SC_003_PreVenda = () => {
                     />
                 </View>
             }
-            {paginationArray.length > 1 && (
+            {paginationArray !== undefined && paginationArray.length > 1 && (
                 <View>
                     <Custom_Pagination
                         onPagePress={(page) => _fetchPV(page)}
@@ -115,6 +118,9 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                     <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
                     <Text style={stylesPreVenda.containerRenderItemRightPriceText}>{item.DD070_Nota.csicp_bb012.BB012_Nome_Cliente}</Text>
                     <Text style={stylesPreVenda.containerRenderItemRightTextNormal}>{item.DD070_Nota.csicp_sy001_Atendente.SY001_Usuario}</Text>
+                    <View>
+                        <Text style={[stylesPreVenda.containerRenderItemRightTextNormal]}>{item.DD070_Nota.csicp_dd070_Sit.Label}</Text>
+                    </View>
                 </View>
             </View>
         </Pressable>

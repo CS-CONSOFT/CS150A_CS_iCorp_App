@@ -1,6 +1,7 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { getListObras, getObraById } from "../../services/api/endpoint/obras/CS_Obras";
+import { getListObras, getObraById, sendMessage, solicitaQtd } from "../../services/api/endpoint/obras/CS_Obras";
+import { IProductsToUpdate } from "../../services/api/interfaces/obras/CS_IReqUpdateQtdSolicitacao";
 import { IResGetListObras } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { getObject } from "../../services/storage/AsyncStorageConfig";
 import { testFormatDate } from "../../util/FormatText";
@@ -54,3 +55,29 @@ export async function handleGetObraById({ cs_obra_id }: { cs_obra_id: string }) 
         throw error
     }
 }
+
+export async function handleSendMessage({ cs_obra_id, message }: { cs_obra_id: string, message: string }) {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = sendMessage({ cs_tenant_id: currentUser.TenantId, cs_obra_id: cs_obra_id, message: message, usuario: currentUser.UsuarioId })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+
+export async function handleSolicitaQtd({ cs_obra_id, cs_lista }: { cs_obra_id: string, cs_lista: IProductsToUpdate[] }) {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = solicitaQtd({
+            cs_tenant_id: currentUser.TenantId,
+            cs_obra_id: cs_obra_id,
+            cs_lista: cs_lista
+        })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+

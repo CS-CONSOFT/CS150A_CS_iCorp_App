@@ -1,14 +1,13 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, listPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getBB026_Tipo, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
 import { PaymentType } from "../../services/api/interfaces/pagamento/CS_IReqListFormPayment";
 import { IResPaymentResponse } from "../../services/api/interfaces/pagamento/CS_IResListFormPayment";
-import { IResFormPaymentComplete } from "../../services/api/interfaces/pagamento/CS_IResListFormPaymentComplete";
+import { IResFormPayment } from "../../services/api/interfaces/pagamento/CS_IResListFormPaymentComplete";
 import { IResPaymentFormByIdComplete } from "../../services/api/interfaces/pagamento/CS_IResPaymentFormByIdComplete";
-import { IResListPaymentFormSaved } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 
@@ -43,10 +42,10 @@ export async function handleGetPaymentTerm({ termId, paymentFormKey }: { termId:
     }
 }
 
-export async function handleGetListOfPaymentForm002(): Promise<IResFormPaymentComplete> {
+export async function handleGetListOfPaymentForm002(onlyAVista: boolean): Promise<IResFormPayment> {
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-        const response = getListOfPaymentForm002({ tenantId: currentUser.TenantId })
+        const response = getListOfPaymentForm002({ tenantId: currentUser.TenantId, onlyAVista: onlyAVista })
         return response
     } catch (error) {
         throw error
@@ -82,19 +81,6 @@ export async function handleSaveGlobalDiscount({ cs_valor_percentual }: { cs_val
     }
 }
 
-export async function handleListPaymentFormSaved(): Promise<IResListPaymentFormSaved> {
-    try {
-        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-        let currentPvId: any = ''
-        const res = await getSimpleData(DataKey.CurrentPV)
-        currentPvId = res
-
-        const response = listPaymentForm({ tenantId: currentUser.TenantId, pvId: currentPvId })
-        return response
-    } catch (error) {
-        throw error
-    }
-}
 
 export async function handleDeletePaymentForm({ formaPgtoAtendimentoId }: { formaPgtoAtendimentoId: string }): Promise<ICommonResponse> {
     try {

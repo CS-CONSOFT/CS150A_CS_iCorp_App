@@ -44,7 +44,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 false, // is entrega
                 1, // quantidade
                 1, // tipo atendimento
-                pvId || undefined, // pv id
+                cameFromPv ? pvId : undefined, // pv id
                 undefined // conta id
             ).then(() => {
                 setStatus(FETCH_STATUS.SUCCESS)

@@ -4,7 +4,7 @@ import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomIcon from "../../components/icon/CustomIcon";
-import { Csicp_gg073, DD199_RecProdutos } from "../../services/api/interfaces/obras/CS_IResGetListObras";
+import { Csicp_gg073, DD199_RecProdutos, Requisicao } from "../../services/api/interfaces/obras/CS_IResGetListObras";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatDateToSlashPattern } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
@@ -12,10 +12,11 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetObraById } from "../../view_controller/obras/CS_ObrasViewController";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import ColorStyle from "../../ColorStyle";
+import CustomSearch from "../../components/search/CustomSearch";
 
 const CS_SC_005_03_Requisição = ({ route }: { route: any }) => {
     const { obraId } = route.params
-    const [products, setProductsList] = useState<DD199_RecProdutos[]>()
+    const [reqList, setReqList] = useState<Requisicao[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
     function getObraById() {
@@ -23,7 +24,7 @@ const CS_SC_005_03_Requisição = ({ route }: { route: any }) => {
         try {
             handleGetObraById({ cs_obra_id: obraId }).then((res) => {
                 if (res !== undefined) {
-                    setProductsList(res.DD199_RecProdutos)
+                    setReqList(res.Requisicao)
                     setStatus(FETCH_STATUS.SUCCESS)
                 } else {
                     showToast(ToastType.ERROR, "Error", "Undefined")
@@ -48,13 +49,10 @@ const CS_SC_005_03_Requisição = ({ route }: { route: any }) => {
         <SafeAreaView style={{ flex: 1 }}>
             <GestureHandlerRootView >
                 <FlatList
-                    data={products}
+                    data={reqList}
                     keyExtractor={(item) => item.csicp_gg073.gg073_Id.toString()}
                     ListEmptyComponent={<CustomEmpty text="Nenhuma requisição encontrada" />}
-                    renderItem={({ item }) => (<CustomCard_001
-                        title={item.csicp_gg073.gg073_ProtocoloNro}
-                        children={<RenderItem recProduto={item} />}
-                    />)}
+                    renderItem={({ item }) => (<RenderItem recProduto={item} />)}
                 />
 
                 <Pressable style={commonStyle.common_button_style}>
@@ -65,53 +63,36 @@ const CS_SC_005_03_Requisição = ({ route }: { route: any }) => {
     );
 }
 
-const RenderItem = ({ recProduto }: { recProduto: DD199_RecProdutos }) => {
+const RenderItem = ({ recProduto }: { recProduto: Requisicao }) => {
     return (
         <CustomCard_001
-            title="2024"
-            children={<RenderItemChildren gg037={recProduto.csicp_gg073} />}
-            showRightChildren={true}
-            rightChildren={<RenderItemRightChildren />}
+            title={recProduto.csicp_gg073.gg073_ProtocoloNro}
+            children={<RenderItemChildren req={recProduto} />}
+            showRightChildren={false}
         />
     )
 }
 
-const RenderItemChildren = ({ gg037 }: { gg037: Csicp_gg073 }) => {
+const RenderItemChildren = ({ req }: { req: Requisicao }) => {
     return (
         <View style={[commonStyle.common_columnItem, commonStyle.margin_16]}>
             <View style={commonStyle.common_rowItem}>
-                <Text>C.Custo: </Text>
-                <Text>400</Text>
+                <Text>Data Movimento: </Text>
+                <Text>{formatDateToSlashPattern(req.csicp_gg073.gg073_Data_Movimento)}</Text>
             </View>
 
             <View style={commonStyle.common_rowItem}>
-                <Text>Data: </Text>
-                <Text>{formatDateToSlashPattern(gg037.gg073_Data_Movimento)}</Text>
+                <Text>Responsável: </Text>
+                <Text>{req.csicp_sy001.SY001_Nome}</Text>
             </View>
 
             <View style={commonStyle.common_rowItem}>
-                <Text>C.Custo: </Text>
-                <Text>{gg037.gg073_ID_ORIG}</Text>
+                <Text>Tipo Movimento: </Text>
+                <Text>{(req.csicp_gg073_tmov || {}).Label || 'Sem Dados de Tipo Movimento'}</Text>
             </View>
 
             <View style={commonStyle.common_rowItem}>
-                <Text>C.Custo: </Text>
-                <Text>400</Text>
-            </View>
-
-            <View style={commonStyle.common_rowItem}>
-                <Text>C.Custo: </Text>
-                <Text>400</Text>
-            </View>
-
-            <View style={commonStyle.common_rowItem}>
-                <Text>C.Custo: </Text>
-                <Text>400</Text>
-            </View>
-
-            <View style={commonStyle.common_rowItem}>
-                <Text>{gg037.gg073_tMovimento}</Text>
-                <Text>400</Text>
+                <Text>{req.csicp_gg073_stat.Label}</Text>
             </View>
         </View>
     )

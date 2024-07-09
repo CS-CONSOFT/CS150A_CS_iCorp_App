@@ -89,6 +89,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                 Logradouro: res.BB01206_Endereco.csicp_bb01206.BB012_Logradouro,
                 Bairro: res.BB01206_Endereco.csicp_bb01206.BB012_Bairro,
                 Complemento: res.BB01206_Endereco.csicp_bb01206.BB012_Complemento,
+                UF: res.BB01206_Endereco.csicp_aa027.Id,
                 Cidade: res.BB01206_Endereco.csicp_aa028.Id,
                 Numero: res.BB01206_Endereco.csicp_bb01206.BB012_Numero,
                 Perimetro: res.BB01206_Endereco.csicp_bb01206.BB012_Perimetro

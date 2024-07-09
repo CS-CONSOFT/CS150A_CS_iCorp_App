@@ -9,10 +9,11 @@ import { formatDateToSlashPattern, formatMoneyValue } from "../../../../util/For
 export interface IPreVendaData {
     dataEmissao?: string,
     dataValidade?: string,
-    totalLiquido?: string
+    totalLiquido?: string,
+    isConsulta?: boolean
 }
 
-const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido }: IPreVendaData) => {
+const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValidade, totalLiquido, isConsulta = false }: IPreVendaData) => {
     const { navigate } = useNavigation()
     return (
         <CustomBottomItem height={160} >
@@ -25,12 +26,14 @@ const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValid
                 <Text style={[styles.total_liquido_text, styles.padding_12]}>Total Liquido</Text>
                 <Text style={[styles.valor, styles.padding_12]}>{totalLiquido!}</Text>
             </View>
-            <TouchableHighlight
-                onPress={() => { navigate('Pagamento') }}
-                style={styles.btnStyle}
-                underlayColor='white'
-            ><Text style={styles.txtBtnStyle}>Pagamento</Text></TouchableHighlight>
 
+            {isConsulta && (
+                <TouchableHighlight
+                    onPress={() => { navigate('Pagamento') }}
+                    style={styles.btnStyle}
+                    underlayColor='white'
+                ><Text style={styles.txtBtnStyle}>Pagamento</Text></TouchableHighlight>
+            )}
         </CustomBottomItem>
     );
 }

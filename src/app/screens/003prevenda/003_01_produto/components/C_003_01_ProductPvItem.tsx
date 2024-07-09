@@ -17,8 +17,9 @@ import { commonStyle } from "../../../../CommonStyle";
 
 
 //Item de produto que aparece na listagem
-export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
+export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue }:
     {
+        isConsulta?: boolean
         product: DD080_Produtos,
         onDeleteProductClick: (productId: string) => void,
         saveTablePrice: (tablePrice: number, productId: string) => void
@@ -114,13 +115,29 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
 
 
     return (
-        <Pressable onPress={() => downSwipeToEdit()}>
+        <Pressable onPress={() => {
+            if (isConsulta) {
+                downSwipeToEdit()
+            }
+        }
+        }>
             <Animated.View style={[common003_01_styles.containerRenderItem, common003_01_styles.boxShadow, animatedStyleX, animatedStyleY, extraIconsRightOpen && common003_01_styles.openContainerX]}>
                 {/** IMAGEM */}
+                {
+
+                }
                 <View style={common003_01_styles.productContainerLeft}>
-                    <Image style={common003_01_styles.productImage}
-                        source={{ uri: product.csicp_gg008c_Imagens.at(0)?.gg008c_Path }} />
+                    {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path !== undefined && (
+                        <Image style={common003_01_styles.productImage}
+                            source={{ uri: product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path }} />
+                    )}
+
+                    {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path === undefined && (
+                        <Text style={common003_01_styles.productName}>Sem Imagem</Text>
+                    )}
+
                 </View>
+
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>
                     <Text style={common003_01_styles.productName}>N° {product.csicp_dd080.DD080_Codigo_Produto}</Text>
@@ -130,23 +147,28 @@ export const C_003_01_ProductPvItem = ({ product, onDeleteProductClick, saveTabl
                     <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
                 </View>
 
-                {/** CLIQUE DO LADO DIREITO */}
-                <Pressable style={common003_01_styles.productContainerArrow} onPress={leftSwipe}>
-                    <View>
-                        {extraIconsRightOpen ? <CustomIcon icon={ICON_NAME.FLECHA_ESQUERDA} iconSize={18} /> : <CustomIcon icon={ICON_NAME.FLECHA_DIRETA} iconSize={18} />}
-                    </View>
-                </Pressable>
 
-                {/** CONTEUDO EXIBIDO A DIREITA DE CADA ITEM DA LISTA */}
-                {extraIconsRightOpen && (
-                    <View style={common003_01_styles.iconsRight}>
-                        {loadingRightItens ? <ActivityIndicator color={"#fff"} style={commonStyle.align_centralizar} /> : <>
-                            <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
-                            <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
-                            <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
-                        </>}
+                {isConsulta && (
+                    <>
+                        {/** CLIQUE DO LADO DIREITO */}
+                        <Pressable style={common003_01_styles.productContainerArrow} onPress={leftSwipe}>
+                            <View>
+                                {extraIconsRightOpen ? <CustomIcon icon={ICON_NAME.FLECHA_ESQUERDA} iconSize={18} /> : <CustomIcon icon={ICON_NAME.FLECHA_DIRETA} iconSize={18} />}
+                            </View>
+                        </Pressable>
 
-                    </View>
+                        {/** CONTEUDO EXIBIDO A DIREITA DE CADA ITEM DA LISTA */}
+                        {extraIconsRightOpen && (
+                            <View style={common003_01_styles.iconsRight}>
+                                {loadingRightItens ? <ActivityIndicator color={"#fff"} style={commonStyle.align_centralizar} /> : <>
+                                    <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
+                                    <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
+                                    <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
+                                </>}
+
+                            </View>
+                        )}
+                    </>
                 )}
             </Animated.View>
 

@@ -12,6 +12,7 @@ import WebView from 'react-native-webview';
  */
 const CS_SC_005_04_Anexos = () => {
 
+
     const api =  axios.create({
         baseURL: "http://docente.ifsc.edu.br/"
     })
@@ -78,6 +79,16 @@ const CS_SC_005_04_Anexos = () => {
                 title="PDF do projeto"
                 />
                 
+
+    const navigation = useNavigation;
+    const aquivoPdf: any | undefined = { uri: 'http://docente.ifsc.edu.br/vilson.junior/pi/04_Introducao_JavaScript.pdf' };
+    return (
+        <SafeAreaView>
+            <CustomCard_002 icon={ICON_NAME.IMAGE} title="Imagem do projeto" />
+            <CustomCard_002 icon={ICON_NAME.DOCUMENT} title="PDF do projeto" />
+            <Pressable onPress={() => ""}>
+                <CustomCard_002 icon={ICON_NAME.DOCUMENT} title="PDF do projeto" />
+
             </Pressable>
         </SafeAreaView>
     );

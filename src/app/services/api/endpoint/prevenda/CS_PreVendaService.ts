@@ -4,6 +4,7 @@ import api from "../../axios_config";
 import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
+import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
 import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
@@ -98,4 +99,16 @@ export async function deleteProductFromPv({ cs_tenant_id, cs_empresa_id, cs_aten
     const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_empresa_id}/${cs_atendimento_id}/${cs_product_pv_id}/RemoverProduto`
     const response = await api.delete(url)
     return response.data.IsOk
+}
+
+export async function savedd071({ cs_tenant_id, cs_req_save }: { cs_tenant_id: number, cs_req_save: IReqUpdateDD071 }) {
+    try {
+        const data = {
+            In_Tenant_Id: cs_tenant_id
+        }
+        const response = await api.post('/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/csicp_dd071_Save_Endereco', cs_req_save, { headers: data });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
 }
