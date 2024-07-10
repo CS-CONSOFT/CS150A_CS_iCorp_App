@@ -2313,7 +2313,8 @@ export interface Requisicoes {
     csicp_gg041_tpreq: Csicp_gg041_tpreq
     csicp_sy001_UserAtendente: Csicp_sy001_UserAtendente
     csicp_sy001_UserProprietario: Csicp_sy001_UserProprietario
-    Produtos: Produtos[]
+    Produtos: Produtos[],
+    csicp_status: string
 }
 
 export interface Csicp_gg071 {

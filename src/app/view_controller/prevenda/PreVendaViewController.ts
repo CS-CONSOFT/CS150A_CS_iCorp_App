@@ -1,12 +1,13 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deleteProductFromPv, fetchPVs, getPreSaleProducts, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getPreSaleProducts, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../services/api/interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../services/api/interfaces/prevenda/CS_IReqPreVendaLista";
 import { IReqUpdateDD071 } from "../../services/api/interfaces/prevenda/CS_IReqUpdateDD071";
+import { ISelectItemAlmox } from "../../services/api/interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../services/api/interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { IResProductsListPvModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";
@@ -293,6 +294,87 @@ export function mapToUpdateEndereco(currentEndereco: DD071_Enderecos, attributes
     };
 
     return iSaveEndereco;
+}
+
+export async function handleRI_CancelaRI({ In_GG071_ID }: { In_GG071_ID: number }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await RI_CancelaRI({ In_GG071_ID: In_GG071_ID, cs_tenant_id: currentUser.TenantId });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function handleRI_RequisitarRI({ In_GG071_ID }: { In_GG071_ID: number }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await RI_RequisitarRI({ In_GG071_ID: In_GG071_ID, cs_tenant_id: currentUser.TenantId });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export async function handleRI_Gerar_RI({ cs_pv_id, In1_gg001_ID_AlmoxSaida }:
+    { cs_pv_id: string, In1_gg001_ID_AlmoxSaida: string }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await RI_Gerar_RI({ cs_cliente_id: currentUser.UsuarioId, cs_pv_id: cs_pv_id, cs_tenant_id: currentUser.TenantId, In1_gg001_ID_AlmoxSaida: In1_gg001_ID_AlmoxSaida });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export async function handleRI_ExcluirRI({ In_GG071_ID, In_GG071_STA_ID }: { In_GG071_ID: number, In_GG071_STA_ID: number }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await RI_ExcluirRI({ In_GG071_ID: In_GG071_ID, In_GG071_STA_ID: In_GG071_STA_ID, cs_tenant_id: currentUser.TenantId });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export async function handleCsicp_gg001_Get_List_Almox(): Promise<{ key: string, value: string }[]> {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await csicp_gg001_Get_List_Almox({ cs_tenant_id: currentUser.TenantId });
+        const listFilterdByEstab = response.Almoxarifados.filter((item) => item.csicp_bb001.ID == currentUser.EstabelecimentoId)
+
+        const listFilteredByTipo = listFilterdByEstab.filter((item) => {
+            return item.csicp_gg001_TAlmox.Label === "Loja" ||
+                item.csicp_gg001_TAlmox.Label === "Depósito" ||
+                item.csicp_gg001_TAlmox.Label === "WWS";
+        });
+
+        const listMapped = listFilteredByTipo.map(item => ({
+            key: item.csicp_gg001.Id,
+            value: item.csicp_gg001.GG001_DescAlmox
+        }))
+        return listMapped;
+    } catch (error) {
+        throw error;
+    }
 }
 
 

@@ -5,6 +5,7 @@ import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
 import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
+import { IResGetListAlmox } from "../../interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
 import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
@@ -117,6 +118,92 @@ export async function savedd071({ cs_tenant_id, cs_req_save }: { cs_tenant_id: n
 export async function setClienteToPv({ cs_tenant_id, cs_pv_id, cs_cliente_id }: { cs_tenant_id: number, cs_pv_id: string, cs_cliente_id: string }) {
     try {
         const response = await api.post(`/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_pv_id}/SetCliente/${cs_cliente_id}`);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+//REQUISICAO
+
+export async function RI_RequisitarRI({ cs_tenant_id, In_GG071_ID }: {
+    cs_tenant_id: number, In_GG071_ID: number
+}) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_GG071_ID: In_GG071_ID
+        }
+        const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_RequisitarRI`, null, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export async function RI_Gerar_RI({ cs_tenant_id, cs_pv_id, cs_cliente_id, In1_gg001_ID_AlmoxSaida }:
+    { cs_tenant_id: number, cs_pv_id: string, cs_cliente_id: string, In1_gg001_ID_AlmoxSaida: string }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_DD070_ID: cs_pv_id,
+            In1_gg001_ID_AlmoxSaida: In1_gg001_ID_AlmoxSaida
+        }
+
+        const url = {
+            In_SY001_id_Usuario: cs_cliente_id
+        }
+        const response = await api.post(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_Gerar_RI`, null, { headers: header, params: url });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export async function RI_ExcluirRI({ cs_tenant_id, In_GG071_ID, In_GG071_STA_ID }: { cs_tenant_id: number, In_GG071_STA_ID: number, In_GG071_ID: number }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_GG071_ID: In_GG071_ID,
+            In_GG071_STA_ID: In_GG071_STA_ID
+        }
+        const response = await api.delete(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_ExcluirRI`, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export async function RI_CancelaRI({ cs_tenant_id, In_GG071_ID }:
+    { cs_tenant_id: number, In_GG071_ID: number }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_GG071_ID: In_GG071_ID
+        }
+        const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_CancelaRI`, null, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export async function csicp_gg001_Get_List_Almox({ cs_tenant_id }:
+    { cs_tenant_id: number }): Promise<IResGetListAlmox> {
+    try {
+        const header = {
+            tenant_id: cs_tenant_id,
+            In_IsActive: true,
+            In_IsCount: 0,
+            in_currentPage: 1,
+            in_pageSize: 9999
+        }
+        const response = await api.get(`/CSR_GG100_Materiais_API_IS/rest/CS_Materiais/csicp_gg001_Get_List_Almox`, { headers: header });
         return response.data;
     } catch (err) {
         throw err;

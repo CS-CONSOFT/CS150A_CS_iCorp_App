@@ -27,6 +27,7 @@ import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
 import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
 import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
+import DrawerRoute001 from "./drawer.route";
 
 
 
@@ -69,11 +70,12 @@ export default function StackRoutes() {
         <StackNav.Navigator initialRouteName="Config_Ambiente">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
-            <StackNav.Screen name="Menu" component={CS_SC_002_Menu} options={{
+            <StackNav.Screen name="Menu" component={DrawerRoute001} options={{
                 headerRight: () => <CustomHeaderLogo />,
                 headerTitleAlign: 'center',
                 title: '',
-                headerLeft: () => <CustomLoggoutTitle />
+                headerLeft: () => <CustomLoggoutTitle />,
+                headerShown: false
             }} />
 
             <StackNav.Screen name="Cadastro_001" component={CS_SC_009_CadastroCliente} options={{
