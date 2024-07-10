@@ -37,7 +37,6 @@ export async function storeSimpleDataVc(key: string, value: string) {
 
 export async function getUserProperties(): Promise<IGetUserProperties> {
     let userProperties: IGetUserProperties = {
-        userId: -1,
         userName: '',
         tenantId: undefined,
         estabId: '',
@@ -50,7 +49,6 @@ export async function getUserProperties(): Promise<IGetUserProperties> {
         if (result) {
             const loginResponse = result as ILoginResponse;
             userProperties = {
-                userId: loginResponse.UserID,
                 userName: loginResponse.NomeUsuario,
                 tenantId: loginResponse.TenantId,
                 estabId: loginResponse.EstabelecimentoId,

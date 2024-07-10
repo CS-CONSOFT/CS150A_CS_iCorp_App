@@ -130,8 +130,6 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         setIsBtnCepLoading(true)
         try {
             handleGetCep(attributesMap.CEP).then((res) => {
-                console.log(res);
-
                 if (res !== undefined) {
                     setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
                     setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)

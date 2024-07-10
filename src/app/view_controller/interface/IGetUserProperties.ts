@@ -1,5 +1,4 @@
 export interface IGetUserProperties {
-    userId: number,
     usuarioId?: string
     userName: string,
     tenantId?: number,

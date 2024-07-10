@@ -15,6 +15,7 @@ import { stylesNotaSerie } from "./StylesNotaSerie";
 import CustomIcon from "../../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../../util/IconsName";
 import { TextInput } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const CS_SC_Serie = () => {
 
@@ -23,7 +24,7 @@ const CS_SC_Serie = () => {
     const [showPopUp, setShowPopUp] = useState(false)
     const [currentProductSelected, setCurrentProductSelected] = useState<Produtos>()
     const [currentNoteTyped, setCurrentNoteTyped] = useState('')
-
+    const { navigate } = useNavigation()
 
     async function search(value: string) {
         const note = value;
@@ -34,6 +35,9 @@ const CS_SC_Serie = () => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 setCurrentNoteTyped(value)
                 setNota(res)
+            }).catch((err) => {
+                navigate('Menu')
+                showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Error", error)

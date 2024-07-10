@@ -19,6 +19,8 @@ import CustomCard_001 from "../../../components/cards/CustomCard_001";
 import { CustomBottomContanier } from "../../../components/bottomItem/CustomBottomContanier";
 import { commonStyle } from "../../../CommonStyle";
 import { Info_Nota, Produtos } from "../../../services/api/interfaces/notas/CS_IResNoteData";
+import { useNavigation } from "@react-navigation/native";
+import { ToastType, showToast } from "../../../util/ShowToast";
 
 
 const CS_SC_Entrega = () => {
@@ -31,47 +33,54 @@ const CS_SC_Entrega = () => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [errorMessage, setErrorMessage] = useState('');
     const [isBtnLoading, setIsBtnLoading] = useState(false)
-
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         setIsBtnLoading(false)
         getObjectDataVc(DataKey.LoginResponse).then((res) => {
             const result = res as ILoginResponse
-            setUserId(result.UserID.toString())
+            setUserId(result.UsuarioId.toString())
         })
     }, [])
 
 
     //funcao para pesquisar nota
     async function searchNote(value: string) {
-        //criando objeto para enviar
-        setNoteTyped(value)
+        try {
+            //criando objeto para enviar
+            setNoteTyped(value)
+            const tenant = (await getUserProperties()).tenantId;
+            if (tenant != undefined) {
+                //enviando o objeto
+                const iEntregaGet: IReqGetDelivery = { note: noteTyped, tenant }
+                //setando loading
+                setStatus(FETCH_STATUS.LOADING)
+                //buscando notas
+                getEntrgNotaVc(iEntregaGet).then((res) => {
+                    if (res.info_Nota.dd040_id !== '') {
+                        setStatus(FETCH_STATUS.SUCCESS)
+                        setProducts(res.Produtos)
+                        setNoteInfo(res.info_Nota)
 
-
-        const tenant = (await getUserProperties()).tenantId;
-        if (tenant != undefined) {
-            //enviando o objeto
-            const iEntregaGet: IReqGetDelivery = { note: noteTyped, tenant }
-            //setando loading
-            setStatus(FETCH_STATUS.LOADING)
-            //buscando notas
-            getEntrgNotaVc(iEntregaGet).then((res) => {
-                if (res.info_Nota.dd040_id !== '') {
-                    setStatus(FETCH_STATUS.SUCCESS)
-                    setProducts(res.Produtos)
-                    setNoteInfo(res.info_Nota)
-
-                    if (res.info_Nota.result != '0') {
-                        //definindo mensagem quando o result nao trouxer produtos da nota
-                        setMessageWhenNoteIsAlreadyDelivered(res.info_Nota.result)
+                        if (res.info_Nota.result != '0') {
+                            //definindo mensagem quando o result nao trouxer produtos da nota
+                            setMessageWhenNoteIsAlreadyDelivered(res.info_Nota.result)
+                        }
+                    } else {
+                        setStatus(FETCH_STATUS.ERROR)
+                        setErrorMessage("Falha ao buscar a nota")
                     }
+                }).catch((err) => {
+                    navigate('Menu')
+                    showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+                })
+            }
+        } catch (error) {
+            navigate('Menu')
+            showToast(ToastType.ERROR, "Erro", "Erro")
 
-                } else {
-                    setStatus(FETCH_STATUS.ERROR)
-                    setErrorMessage("Falha ao buscar a nota")
-                }
-            })
         }
+
     }
 
     //funcao para setar a mensagem quando nao houver produtos na nota

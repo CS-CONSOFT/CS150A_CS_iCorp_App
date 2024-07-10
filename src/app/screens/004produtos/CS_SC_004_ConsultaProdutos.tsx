@@ -101,6 +101,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
         //chamada da api
         handleSearchProduct(_filterValues!).then((res) => {
+            if (res.isOk == false) {
+                navigate('Menu')
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
+            }
+
             if (res.isOk) {
                 setProductList(res.productResponse?.List)
                 setPaginationArray(res.pagesArray)

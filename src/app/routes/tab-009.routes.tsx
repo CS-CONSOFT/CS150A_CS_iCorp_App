@@ -19,7 +19,7 @@ export default function TabRoutes009() {
                     }
                     return <CustomIcon icon={ICON_NAME.LISTA_CONTORNADO} />
                 }
-            }} name='Lista de Clientes' component={CS_SC_009_ListaCliente} />
+            }} name='Lista de Clientes' initialParams={{ isToInsertPv: false }} component={CS_SC_009_ListaCliente} />
             <BottomTab.Screen options={{
                 headerShown: false, tabBarIcon: ({ color, focused }) => {
                     if (focused) {

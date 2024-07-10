@@ -21,6 +21,7 @@ import { ButtonActionSecondary } from "../../components/button/CustonButtonActio
 import { handleGetListComanda } from "../../view_controller/comanda/CS_ComandaViewController";
 import { IResComandaItem } from "../../services/api/interfaces/comanda/CS_IResListaComanda";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { ToastType, showToast } from "../../util/ShowToast";
 //Interface
 
 
@@ -32,12 +33,14 @@ const CS_SC_008_ListaComandas = () => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
 
-
     function getListComanda() {
         setStatus(FETCH_STATUS.LOADING)
         handleGetListComanda().then((res) => {
             setListaComanda(res)
             setStatus(FETCH_STATUS.SUCCESS)
+        }).catch((err) => {
+            navigation.navigate('Menu')
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
         })
     }
 

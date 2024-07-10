@@ -58,7 +58,6 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
 
 
     function updateValueDiscount(productId: string, valueDiscount: number): void {
-        console.log("s" + valueDiscount);
         handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount })
             .then((res) => {
                 if (res.IsOk) {

@@ -8,6 +8,7 @@ import { stylesLogin } from "./StylesLogin";
 import { commonStyle } from "../../CommonStyle";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
+import { useDatabase } from "../../services/storage/useDatabase";
 
 
 const CS_SC001_LoginForm = () => {
@@ -20,6 +21,7 @@ const CS_SC001_LoginForm = () => {
     const { navigate } = useNavigation()
     const [isBtnLoading, setIsBtnLoading] = useState(false)
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const db = useDatabase();
     //fim variaveis
 
     function navigateToMenu() {
@@ -30,8 +32,10 @@ const CS_SC001_LoginForm = () => {
         setIsBtnLoading(false)
         checkIfUserIsLogged().then((isLogged) => {
             if (isLogged) {
-                onClickLogin()
+                navigate('Menu')
+                setStatus(FETCH_STATUS.IDLE)
             }
+            setStatus(FETCH_STATUS.IDLE)
         })
     }, [])
 
@@ -48,8 +52,16 @@ const CS_SC001_LoginForm = () => {
             const response = await generalLoginVc(loginData);
             if (response.IsOk) {
                 setStatus(FETCH_STATUS.SUCCESS)
+                const toSaveJson = response.Model
+
+                await db.get().then((res) => {
+                    if (res !== null) {
+                        toSaveJson.TenantId = res.tenantId
+                    }
+                })
+
                 //salvando dados localmente
-                storeObjectDataVc(DataKey.LoginResponse, response.Model)
+                storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
                 navigateToMenu()
             }
         } catch (error) {

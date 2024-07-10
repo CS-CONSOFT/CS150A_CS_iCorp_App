@@ -14,6 +14,7 @@ import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewContro
 import { stylesPreVenda } from "./PreVendaStyles";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { formatMoneyValue } from "../../util/FormatText";
+import { ToastType, showToast } from "../../util/ShowToast";
 
 
 
@@ -41,14 +42,22 @@ const CS_SC_003_PreVenda = () => {
     const _fetchPV = async (page: number) => {
         setStatus(FETCH_STATUS.LOADING)
         handleFetchPv(initialDateString, finalDateString, page, 4).then((res) => {
-            if (res.csicp_dd070_Completo !== undefined) {
-                if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
-                    setPvList(res.csicp_dd070_Completo)
-                    const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
-                    setPaginationArray(pagesArray)
+            try {
+                if (res.csicp_dd070_Completo !== undefined) {
+                    if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
+                        setPvList(res.csicp_dd070_Completo)
+                        const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
+                        setPaginationArray(pagesArray)
+                    }
                 }
+                setStatus(FETCH_STATUS.SUCCESS)
+            } catch (error) {
+                navigate('Menu')
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
             }
-            setStatus(FETCH_STATUS.SUCCESS)
+        }).catch((err) => {
+            navigate('Menu')
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
         })
     }
 

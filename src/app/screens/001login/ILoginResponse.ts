@@ -3,6 +3,11 @@ export interface ILoginResponse {
     EstabelecimentoId: string;
     NomeEstabelecimento: string;
     NomeUsuario: string;
-    UserID: number;
+    /**
+     * usuario do outsystems
+     */
+    /**
+     * usuario da sy001
+     */
     UsuarioId: string;
 }

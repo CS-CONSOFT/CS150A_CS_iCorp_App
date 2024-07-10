@@ -20,6 +20,7 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const navigation = useNavigation()
     const { isToInsertPv, pvId } = route.params
 
+
     function getClientesList(page?: number, searchValue?: string) {
         setStatus(FETCH_STATUS.LOADING)
         handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 3, cs_search: searchValue === undefined ? undefined : searchValue }).then((res) => {
@@ -34,6 +35,9 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
                 showToast(ToastType.ERROR, "Falha", error)
                 setStatus(FETCH_STATUS.SUCCESS)
             }
+        }).catch((err) => {
+            navigation.navigate('Menu')
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
         })
     }
 

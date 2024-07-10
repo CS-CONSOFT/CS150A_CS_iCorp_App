@@ -20,6 +20,7 @@ const CS_SC_005_Obras = () => {
     const [listObras, setListObras] = useState<Dd190_Obras[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [currentPage, setCurrentPage] = useState(1)
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         getListObras()
@@ -31,7 +32,8 @@ const CS_SC_005_Obras = () => {
         try {
             handleGetListObras({ currentPage: page, dataFim: '2024-06-11', dataInicio: '2020-01-01' }).then(async (res) => {
                 if (res === undefined) {
-                    return
+                    navigate('Menu')
+                    showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
                 }
                 const pagesArray = await handleGetPagesArray((res.Contador || {}).cs_number_of_pages || 1)
                 setPaginationArray(pagesArray)

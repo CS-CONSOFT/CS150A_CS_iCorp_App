@@ -8,7 +8,7 @@ const CustomHeaderUserInfo = () => {
     useEffect(() => {
         getUserProperties().then((res) => {
             const defineUser: IGetUserProperties = {
-                userId: res.userId,
+                usuarioId: res.usuarioId || '0',
                 userName: res.userName,
                 tenantId: res.tenantId,
                 estabId: res.estabId,
