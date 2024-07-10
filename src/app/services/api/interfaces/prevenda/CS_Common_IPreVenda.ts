@@ -23,11 +23,7 @@ export interface IResGetPv {
     DD075_Obs: DD075_Obs[]
     DD080_Produtos: DD080_Produtos[]
     DD077_DoctoArrecadacao: DD077_DoctoArrecadacao[]
-    Requisicoes: Requisicoes[]
-}
-
-export interface Requisicoes {
-
+    Requisicao: Requisicao
 }
 
 export interface DD070_Nota {
@@ -2303,4 +2299,399 @@ export interface Csicp_aa0272 {
     AA027_Export_UFId: string
     AA025_Export_PaisID: string
     AA026_Export_RegiaoID: string
+}
+
+export interface Requisicao {
+    Requisicoes: Requisicoes[]
+}
+
+export interface Requisicoes {
+    csicp_gg071: Csicp_gg071
+    csicp_bb005: Csicp_bb0052
+    csicp_gg001_Almox_Entrada: Csicp_gg001_Almox_Entrada
+    csicp_gg001_Almox_Saida: Csicp_gg001_Almox_Saida
+    csicp_gg041_tpreq: Csicp_gg041_tpreq
+    csicp_sy001_UserAtendente: Csicp_sy001_UserAtendente
+    csicp_sy001_UserProprietario: Csicp_sy001_UserProprietario
+    Produtos: Produtos[]
+}
+
+export interface Csicp_gg071 {
+    gg071_Id: number
+    gg071_EstabID: string
+    gg071_ProtocolNumber: string
+    gg071_Data_Movimento: string
+    gg071_UsuarioID: string
+    gg071_Observacao: string
+    gg071_CCustoID: string
+    gg071_No_Docto: string
+    gg071_StatusId: number
+    dd070_ID: string
+    gg071_AlmoxSaidaID: string
+    GG071_AlmoxEntID: string
+    gg071_Atendente_UsuarioId: string
+    gg071_dAtendimento: string
+    gg071_TpReqID: number
+    gg071_dhSolicitacao: string
+}
+
+export interface Csicp_bb0052 {
+    ID: string
+    BB005_Filial: number
+    BB005_Codigo: number
+    BB005_NomeCCusto: string
+    BB005_ColunaImpressao: number
+    EmpresaId: string
+    BB005_IsActive: boolean
+}
+
+export interface Csicp_gg001_Almox_Entrada {
+    Id: string
+    GG001_Filial: number
+    GG001_FilialID: string
+    GG001_CodigoAlmox: number
+    GG001_DescAlmox: string
+    GG001_IsActive: boolean
+    GG001_TipoAlmoxarifado: number
+    GG001_RI_ControleQualidade: boolean
+    GG001_CapArmaz: number
+    GG001_DescNSPadrao: string
+}
+
+export interface Csicp_gg001_Almox_Saida {
+    Id: string
+    GG001_Filial: number
+    GG001_FilialID: string
+    GG001_CodigoAlmox: number
+    GG001_DescAlmox: string
+    GG001_IsActive: boolean
+    GG001_TipoAlmoxarifado: number
+    GG001_RI_ControleQualidade: boolean
+    GG001_CapArmaz: number
+    GG001_DescNSPadrao: string
+}
+
+export interface Csicp_gg041_tpreq {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+}
+
+export interface Csicp_sy001_UserAtendente {
+    Id: string
+    SY001_Usuario: string
+    SY001_Nome: string
+    SY001_Senha: string
+    SY001_Bloqueado: boolean
+    SY001_Data_Validade: string
+    SY001_AutAlterarSenha: number
+    SY001_AltSenhaPxLogin: number
+    SY001_Expira_Senha: number
+    SY001_SenhExpAposNDias: number
+    SY001_DtExpiracaoLogin: string
+    SY001_DeptoLotado: string
+    SY001_Cargo: string
+    SY001_Email: string
+    SY001_Imagem: string
+    SY001_DataUltimoAcesso: string
+    UserID: number
+    SY001_Idioma_ID: number
+    SY001_SenhaCS: string
+    SY001_Celular: string
+}
+
+export interface Csicp_sy001_UserProprietario {
+    Id: string
+    SY001_Usuario: string
+    SY001_Nome: string
+    SY001_Senha: string
+    SY001_Bloqueado: boolean
+    SY001_Data_Validade: string
+    SY001_AutAlterarSenha: number
+    SY001_AltSenhaPxLogin: number
+    SY001_Expira_Senha: number
+    SY001_SenhExpAposNDias: number
+    SY001_DtExpiracaoLogin: string
+    SY001_DeptoLotado: string
+    SY001_Cargo: string
+    SY001_Email: string
+    SY001_Imagem: string
+    SY001_DataUltimoAcesso: string
+    UserID: number
+    SY001_Idioma_ID: number
+    SY001_SenhaCS: string
+    SY001_Celular: string
+}
+
+export interface Produtos {
+    csicp_gg072: Csicp_gg072
+    csicp_gg007: Csicp_gg0072
+    csicp_gg007_UN_Sec: Csicp_gg007_UN_Sec2
+    csicp_gg008: Csicp_gg0082
+    csicp_gg008_Con: Csicp_gg008_Con2
+    csicp_gg072_stq: Csicp_gg072_stq
+    csicp_gg520_NSSaida: Csicp_gg520_NSSaida
+    csicp_gg520_NSEntrada: Csicp_gg520_NSEntrada
+}
+
+export interface Csicp_gg072 {
+    gg072_Id: number
+    gg071_id: number
+    gg072_CodBarrasAlfa: string
+    gg072_Kardex_ID: string
+    gg072_SaidaSALDOID: string
+    gg072_UN_ID: string
+    gg072_QUANTIDADE: number
+    gg072_VALOR_UNITARIO: number
+    gg072_QTD_ANTERIOR: string
+    gg072_EntradaSALDOID: string
+    gg072_UN_Sec_ID: string
+    gg072_Un_Sec_TipoConv_ID: number
+    gg072_Un_Sec_FatorConv: number
+    gg072_Un_Sec_Qtde: number
+    gg072_StatusEstqID: number
+    dd080_id: string
+    gg072_qtdSolicitada: number
+}
+
+export interface Csicp_gg0072 {
+    Id: string
+    GG007_Filial: number
+    GG007_FilialID: string
+    GG007_Unidade: string
+    GG007_Descricao: string
+    GG007_Is_Active: boolean
+    GG007_FormaVenda_ID: number
+    gg007_qDecimais: string
+}
+
+export interface Csicp_gg007_UN_Sec2 {
+    Id: string
+    GG007_Filial: number
+    GG007_FilialID: string
+    GG007_Unidade: string
+    GG007_Descricao: string
+    GG007_Is_Active: boolean
+    GG007_FormaVenda_ID: number
+    gg007_qDecimais: string
+}
+
+export interface Csicp_gg0082 {
+    Id: string
+    GG008_FilialID: string
+    GG008_Filial: number
+    GG008_CodgProduto: number
+    GG008_Tipo_Produto: string
+    GG008_Codigo_Grupo: number
+    GG008_Codigo_Classe: number
+    GG008_Codigo_Artigo: number
+    GG008_Codigo_Marca: number
+    GG008_Codigo_Padrao: string
+    GG008_Codigo_Tipo: string
+    GG008_Codigo_Qualidade: string
+    GG008_TipoProdutoID: string
+    GG008_GrupoID: string
+    GG008_SubGrupoID: string
+    GG008_ClasseID: string
+    GG008_ArtigoID: string
+    GG008_MarcaID: string
+    GG008_LinhaID: string
+    GG008_PadraoID: string
+    GG008_TipoID: string
+    GG008_QualidadeID: string
+    GG008_Referencia: string
+    GG008_Complemento: string
+    GG008_CodIndustrial: string
+    GG008_SafraDiaMesInicio: number
+    GG008_Safra_DiaMesFim: number
+    GG008_Etiqueta: number
+    GG008_NCM: number
+    GG008_EX_NCM: string
+    GG008_NCMID: string
+    GG008_Peso_Bruto: number
+    GG008_Peso_Liquido: number
+    GG008_Tamanho: number
+    GG008_Largura: number
+    GG008_Espessura: number
+    GG008_Embalagem_1: string
+    GG008_Embalagem_2: string
+    GG008_Qtd_Embalagem_1: number
+    GG008_Qtd_Embalagem_2: number
+    GG008_ComprimentoArmaz: number
+    GG008_Largura_Armaz: number
+    GG008_Altura_Armaz: number
+    GG008_Fator_Armaz: number
+    GG008_Empilhagem: number
+    GG008_DescReduzida: string
+    GG008_Usa_Nro_Serie: number
+    GG008_ReferSimilar: string
+    GG008_PrzGaranCompra: number
+    GG008_PrzGaranVenda: number
+    GG008_Servico: number
+    GG008_Montavel: number
+    GG008_ClassifVegetal: string
+    GG008_Is_Active: boolean
+    GG008_EstadoFisico_ID: number
+    GG008_TpGarantiaCompra_ID: number
+    GG008_TpGarantiaVenda_ID: number
+    GG008_TipoKit_ID: number
+    GG008_Pesavel_ID: number
+    GG008_IsForaLinha: boolean
+    GG008_DataForaLinha: string
+    GG008_ListServico_ID: number
+    GG008_GrpSubGrupoID: number
+    GG008_Sequence: number
+    GG008_dUltAlteracao: string
+    GG008_Entregar: number
+    GG008_Isecommerce: boolean
+    GG008_ANP_ID: string
+    GG008_dRegistro: string
+    gg008_UsuarioPropID: string
+    gg008_UsuarioAltID: string
+    gg008_IERelevanteID: number
+    gg008_CNPJFabricante: string
+    gg008_NomeFabricante: string
+    GG008_vICMSProprio: number
+    gg008_DescEspecial1: string
+    gg008_DescEspecial2: string
+}
+
+export interface Csicp_gg008_Con2 {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+}
+
+export interface Csicp_gg072_stq {
+    Id: number
+    Label: string
+    Order: number
+    Is_Active: boolean
+    CodgCS: number
+}
+
+export interface Csicp_gg520_NSSaida {
+    Id: string
+    GG520_FilialID: string
+    GG520_Kardex_ID: string
+    GG520_AlmoxID: string
+    GG520_CodBarras_ID: string
+    GG520_NS_NumeroSaldo: number
+    GG520_DescricaoSaldo: string
+    GG520_Filial: number
+    GG520_CodAlmoxarifado: number
+    GG520_Produto: number
+    GG520_Saldo: number
+    GG520_QtdComprometida: number
+    GG520_Qtd_Producao: number
+    GG520_Qtd_Empenho: number
+    GG520_Qtd_Reserva: number
+    GG520_QNPT: number
+    GG520_QTNP: number
+    GG520_UltInventario: string
+    GG520_UltFechamento: string
+    GG520_QtdUltFechamento: number
+    GG520_Item_em_Contagem: boolean
+    GG520_ProxInventario: string
+    GG520_UltRecebimento: string
+    GG520_QtdUltRecebto: number
+    GG520_Ultima_Venda: string
+    GG520_Qtde_Ult_Venda: number
+    GG520_QtdPedidoCompra: number
+    GG520_Lote: string
+    GG520_SubLote: string
+    GG520_Descricao_Lote: string
+    GG520_CompraID: string
+    GG520_Codg_Fornecedor: number
+    GG520_ContaID: string
+    GG520_UsuarioID: string
+    GG520_Data_Fabricacao: string
+    GG520_Data_Validade: string
+    GG520_Dias_Validade: number
+    GG520_Docto: number
+    GG520_Serie: string
+    GG520_CompraEntrada: string
+    GG520_GradeLinhaID: string
+    GG520_GradeColunaID: string
+    GG520_CodgGradeLinha: string
+    GG520_CodgGradeColuna: string
+    GG520_Estq_Minimo: number
+    GG520_EstoqueMaximo: number
+    GG520_LocalizacaoWMS: string
+    GG520_SuperPromocao: number
+    GG520_PeriodicidadeInv: number
+    GG520_ExibirEmConsulta: boolean
+    GG520_SaldoZeroDesabAutom: boolean
+    GG520_PermiteTroca: boolean
+    GG520_vBCSTRet: number
+    GG520_vICMSSTRet: number
+    GG520_IsActive: boolean
+    GG520_TimeStamp: string
+    gg520_IsPDV: boolean
+    gg520_vICMSSubstituto: number
+    gg520_VFutura_SaldoID: string
+}
+
+export interface Csicp_gg520_NSEntrada {
+    Id: string
+    GG520_FilialID: string
+    GG520_Kardex_ID: string
+    GG520_AlmoxID: string
+    GG520_CodBarras_ID: string
+    GG520_NS_NumeroSaldo: number
+    GG520_DescricaoSaldo: string
+    GG520_Filial: number
+    GG520_CodAlmoxarifado: number
+    GG520_Produto: number
+    GG520_Saldo: number
+    GG520_QtdComprometida: number
+    GG520_Qtd_Producao: number
+    GG520_Qtd_Empenho: number
+    GG520_Qtd_Reserva: number
+    GG520_QNPT: number
+    GG520_QTNP: number
+    GG520_UltInventario: string
+    GG520_UltFechamento: string
+    GG520_QtdUltFechamento: number
+    GG520_Item_em_Contagem: boolean
+    GG520_ProxInventario: string
+    GG520_UltRecebimento: string
+    GG520_QtdUltRecebto: number
+    GG520_Ultima_Venda: string
+    GG520_Qtde_Ult_Venda: number
+    GG520_QtdPedidoCompra: number
+    GG520_Lote: string
+    GG520_SubLote: string
+    GG520_Descricao_Lote: string
+    GG520_CompraID: string
+    GG520_Codg_Fornecedor: number
+    GG520_ContaID: string
+    GG520_UsuarioID: string
+    GG520_Data_Fabricacao: string
+    GG520_Data_Validade: string
+    GG520_Dias_Validade: number
+    GG520_Docto: number
+    GG520_Serie: string
+    GG520_CompraEntrada: string
+    GG520_GradeLinhaID: string
+    GG520_GradeColunaID: string
+    GG520_CodgGradeLinha: string
+    GG520_CodgGradeColuna: string
+    GG520_Estq_Minimo: number
+    GG520_EstoqueMaximo: number
+    GG520_LocalizacaoWMS: string
+    GG520_SuperPromocao: number
+    GG520_PeriodicidadeInv: number
+    GG520_ExibirEmConsulta: boolean
+    GG520_SaldoZeroDesabAutom: boolean
+    GG520_PermiteTroca: boolean
+    GG520_vBCSTRet: number
+    GG520_vICMSSTRet: number
+    GG520_IsActive: boolean
+    GG520_TimeStamp: string
+    gg520_IsPDV: boolean
+    gg520_vICMSSubstituto: number
+    gg520_VFutura_SaldoID: string
 }

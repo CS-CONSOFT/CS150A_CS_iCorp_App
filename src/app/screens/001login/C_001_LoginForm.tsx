@@ -88,6 +88,7 @@ const CS_SC001_LoginForm = () => {
                 style={[commonStyle.common_input]}
                 onChangeText={(value) => handleInputTyping('Senha', value)}
                 value={attributesMap.Senha}
+                secureTextEntry={true}
             />
 
 

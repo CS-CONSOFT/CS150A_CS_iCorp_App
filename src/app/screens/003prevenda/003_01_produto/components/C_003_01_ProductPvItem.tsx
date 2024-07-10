@@ -5,13 +5,14 @@ import { IProdutoItemUltimasVendas } from "../../../../services/api/interfaces/p
 import { formatMoneyValue } from "../../../../util/FormatText";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { ToastType, showToast } from "../../../../util/ShowToast";
-import { handleGetLastSalesProduct } from "../../../../view_controller/produto/ProductViewController";
+import { handleGetLastSalesProduct, handleGetProdutoGarantia } from "../../../../view_controller/produto/ProductViewController";
 import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
 import { DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { commonStyle } from "../../../../CommonStyle";
+import { IResProdutoGarantia } from "../../../../services/api/interfaces/produto/CS_IResGetProdutoGarantia";
 
 
 
@@ -30,6 +31,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
 
     const [productAmount, setProductAmount] = useState(0.0);
     const [lastSalesProduct, setLastSalesProduct] = useState<IProdutoItemUltimasVendas[]>()
+    const [guarantee, setGuarantee] = useState<IResProdutoGarantia>()
 
     useEffect(() => {
         setProductAmount(product.csicp_dd080.DD080_Quantidade)
@@ -58,9 +60,16 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         })
     }
 
-
-    function showGuarantee(Id: string): void {
-        //downSwipeToGuarantee()
+    //o refresh so ocorre ao comprar ou remover uma garantia, quando faz isso, nao deve fechar o drop swipe
+    function showGuarantee(produtoId: string, produtoAtendimentoId: string, isRefresh: boolean): void {
+        setLoadingRightItens(true)
+        handleGetProdutoGarantia({ cs_produto_id: produtoId, cs_atendimento_produto_id: produtoAtendimentoId }).then((res) => {
+            setGuarantee(res)
+            if (!isRefresh) {
+                downSwipeToGuarantee()
+            }
+            setLoadingRightItens(false)
+        })
     }
 
     /** FUNCOES QUE LIDAM COM AS ANIMACOES EM TELA */
@@ -162,7 +171,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                             <View style={common003_01_styles.iconsRight}>
                                 {loadingRightItens ? <ActivityIndicator color={"#fff"} style={commonStyle.align_centralizar} /> : <>
                                     <CustomIcon icon={ICON_NAME.LIXEIRA} iconSize={22} iconColor="#0A3147" onPress={() => onDeleteProductClick(product.csicp_dd080.DD080_Id)} />
-                                    <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id)} />
+                                    <CustomIcon icon={ICON_NAME.PAPEL_LISTA_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showGuarantee(product.csicp_gg008.Id, product.csicp_dd080.DD080_Id, false)} />
                                     <CustomIcon icon={ICON_NAME.CAIXA_ARQUIVO_CONTORNADO} iconSize={22} iconColor="#0A3147" onPress={() => showLastSales(product.csicp_gg008.Id)} />
                                 </>}
 
@@ -191,7 +200,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                 )}
 
                 {extraBottomOpenGuarantee && (
-                    <C_003_01_03_ProductPvItemGarantia close={() => downSwipeToGuarantee()} />
+                    <C_003_01_03_ProductPvItemGarantia produtoAtendimentoId={product.csicp_dd080.DD080_Id} close={() => downSwipeToGuarantee()} guarantee={guarantee!} refresh={() => showGuarantee(product.csicp_gg008.Id, product.csicp_dd080.DD080_Id, true)} />
                 )}
             </View>
         </Pressable>

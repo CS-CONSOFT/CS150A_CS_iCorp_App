@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView } from "react-native";
-import ColorStyle from "../../../ColorStyle";
-import { commonStyle } from "../../../CommonStyle";
+import { FlatList, SafeAreaView } from "react-native";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
+import CustomLoading from "../../../components/loading/CustomLoading";
 import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../../util/FormatText";
@@ -11,7 +10,6 @@ import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, ha
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
-import CustomLoading from "../../../components/loading/CustomLoading";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {

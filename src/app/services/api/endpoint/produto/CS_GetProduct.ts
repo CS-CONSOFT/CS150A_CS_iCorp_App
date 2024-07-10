@@ -6,6 +6,7 @@ import { IReqUpdatePercentageDiscount } from "../../interfaces/produto/CS_IReqUp
 import { IReqUpdateTablePrice } from "../../interfaces/produto/CS_IReqUpdateProdutoPreco";
 import { IReqUpdateAmount } from "../../interfaces/produto/CS_IReqUpdateQuantidadeProduto";
 import { IReqUpdateValueDiscount } from "../../interfaces/produto/CS_IReqUpdateValorDesconto";
+import { IResProdutoGarantia } from "../../interfaces/produto/CS_IResGetProdutoGarantia";
 import { IResProdutoSearch } from "../../interfaces/produto/CS_IResGetProdutoSearch";
 import { IResUltimasVendaProduto } from "../../interfaces/produto/CS_IResGetUltimasVendasProduto";
 
@@ -257,6 +258,46 @@ export async function saveGlobalDiscount({ cs_tenant_id, cs_atendimento_id, cs_v
     })
     return response.data as ICommonResponse
 }
+
+//Retorna se um produto possui ou não garantia estendida comprada.
+export async function getProdutoGarantia({ cs_tenant_id, cs_produto_id, cs_atendimento_produto_id }:
+    { cs_tenant_id: number, cs_produto_id: string, cs_atendimento_produto_id: string }): Promise<IResProdutoGarantia> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/GE_ProdutoComGarantia`
+    const response = await api.get(url, {
+        params: {
+            TenantId: cs_tenant_id,
+            ProdutoId: cs_produto_id,
+            AtendimentoProdutoId: cs_atendimento_produto_id
+        }
+    })
+    return response.data as IResProdutoGarantia
+}
+
+export async function comprarGarantiaEstendida({ cs_tenant_id, cs_atendimento_produto_id, ge002id }:
+    { cs_tenant_id: number, ge002id: string, cs_atendimento_produto_id: string }): Promise<ICommonResponse> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/GE_ComprarGarantiaEstendida`
+    const response = await api.get(url, {
+        params: {
+            TenantId: cs_tenant_id,
+            SeguroId: ge002id,
+            AtendimentoProdutoId: cs_atendimento_produto_id
+        }
+    })
+    return response.data as IResProdutoGarantia
+}
+
+export async function removerGarantiaEstendida({ cs_tenant_id, GE011_Id }:
+    { cs_tenant_id: number, GE011_Id: string }): Promise<ICommonResponse> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/GE_RemoverGarantiaEstendida`
+    const response = await api.get(url, {
+        params: {
+            TenantId: cs_tenant_id,
+            GE011_Id: GE011_Id,
+        }
+    })
+    return response.data as IResProdutoGarantia
+}
+
 
 
 

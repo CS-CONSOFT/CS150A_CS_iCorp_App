@@ -227,7 +227,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     </View>
 
                     <View style={{ flex: 1, marginLeft: 8 }}>
-                        <Text style={common003_01_styles.extraBottomStyleChilds}>Valor</Text>
+                        <Text style={common003_01_styles.extraBottomStyleChilds}>Valor Desconto</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
                                 style={[
