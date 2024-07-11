@@ -14,5 +14,6 @@ export interface IReqUpdatePrice {
  */
 export interface IReqUpdateTablePrice {
     pvTenant: IPVTenant,
+    usuarioId: string
     updatePrice: IReqUpdatePrice
 }

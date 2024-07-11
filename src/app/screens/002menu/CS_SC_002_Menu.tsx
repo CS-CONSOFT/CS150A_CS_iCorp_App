@@ -3,10 +3,25 @@ import CustomHeaderUserInfo from "../../components/headers/CustomHeaderUserInfo"
 import CustomItemIconTitleHalfRoundedWhite from "../../components/items/CustomItemIconTitleHalfRoundedWhite";
 import { data } from "./ListMenu";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
+import { DataKey } from "../../enum/DataKeys";
 
 
 const CS_SC_002_Menu = () => {
     const { navigate } = useNavigation()
+
+    useEffect(() => {
+        checkIfUserIsLogged().then((isLogged) => {
+            if (!isLogged) {
+                logout(DataKey.LoginResponse).then(() => {
+                    navigate('Login')
+                })
+            }
+        })
+    }, [])
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground

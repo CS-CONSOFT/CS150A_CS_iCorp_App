@@ -20,8 +20,7 @@ import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-
-const CustomSearch = lazy(() => import("../../components/search/CustomSearch"))
+import CustomSearch from "../../components/search/CustomSearch";
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 

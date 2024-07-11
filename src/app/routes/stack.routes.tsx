@@ -52,6 +52,7 @@ declare global {
             Obras_Anexos: undefined
             Obras_Chat: { obraId: number }
             Obras_PDF: undefined
+            DrawerRoute: undefined
             Pagamento: undefined
             ComandaLista: undefined
             TabListCliente: undefined
@@ -70,7 +71,7 @@ export default function StackRoutes() {
         <StackNav.Navigator initialRouteName="Config_Ambiente">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
-            <StackNav.Screen name="Menu" component={DrawerRoute001} options={{
+            <StackNav.Screen name="DrawerRoute" component={DrawerRoute001} options={{
                 headerRight: () => <CustomHeaderLogo />,
                 headerTitleAlign: 'center',
                 title: '',

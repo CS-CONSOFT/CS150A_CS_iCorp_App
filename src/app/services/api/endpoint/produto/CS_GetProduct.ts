@@ -64,14 +64,14 @@ export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Prom
  * Rota para atualizar o percentual de desconto de um produto na 
  * pre venda.
  */
-export async function updatePercentDiscount({ pvTenant, productDiscount: percentDiscount }: IReqUpdatePercentageDiscount): Promise<ICommonResponse> {
+export async function updatePercentDiscount({ pvTenant, usuarioId, productDiscount: percentDiscount }: IReqUpdatePercentageDiscount): Promise<ICommonResponse> {
     try {
 
         const bodyData = {
             AtendimentoProdutoId: percentDiscount.AtendimentoProdutoId,
             Valor: percentDiscount.Valor
         }
-        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoPercentual`
+        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoPercentual?IN_UsuarioID=${usuarioId}`
 
         const result = await api.post(url, bodyData)
         const commonResponse: ICommonResponse = {
@@ -89,7 +89,7 @@ export async function updatePercentDiscount({ pvTenant, productDiscount: percent
  * Rota para atualizar o valor de desconto de um produto na 
  * pre venda.
  */
-export async function updateValueDiscount({ pvTenant, productDiscount }: IReqUpdateValueDiscount): Promise<ICommonResponse> {
+export async function updateValueDiscount({ pvTenant, usuarioId, productDiscount }: IReqUpdateValueDiscount): Promise<ICommonResponse> {
     try {
 
         const params = {
@@ -97,7 +97,7 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IReqUpd
             Valor: productDiscount.Valor
         }
 
-        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoValor`
+        const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${pvTenant.TenantId}/${pvTenant.AtendimentoId}/SalvarDescontoValor?IN_UsuarioID=${usuarioId}`
 
         const result = await api.post(url, params)
         const commonResponse: ICommonResponse = {
@@ -116,15 +116,16 @@ export async function updateValueDiscount({ pvTenant, productDiscount }: IReqUpd
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateUnityPrice({ pvTenant, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
+export async function updateUnityPrice({ pvTenant, usuarioId, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
     try {
         const urlParams = {
             TenantId: pvTenant.TenantId,
             AtendimentoId: pvTenant.AtendimentoId,
             AtendimentoProdutoId: updatePrice.AtendimentoProdutoId,
+            IN_UsuarioID: usuarioId,
             PrecoUnitario: updatePrice.Valor
-        }
 
+        }
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoUnitario`
         const result = await api.post(url, null, { params: urlParams })
         const commonResponse: ICommonResponse = {
@@ -141,18 +142,22 @@ export async function updateUnityPrice({ pvTenant, updatePrice }: IReqUpdateTabl
  * Rota para setar o preço unitário de um produto na 
  * pre venda.
  */
-export async function updateTablePrice({ pvTenant, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
+export async function updateTablePrice({ pvTenant, usuarioId, updatePrice }: IReqUpdateTablePrice): Promise<ICommonResponse> {
     try {
 
         const urlParams = {
             TenantId: pvTenant.TenantId,
             AtendimentoId: pvTenant.AtendimentoId,
             AtendimentoProdutoId: updatePrice.AtendimentoProdutoId,
+            IN_UsuarioID: usuarioId,
             PrecoTabela: updatePrice.Valor
         }
+
+
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTabelaItem`
 
         const result = await api.post(url, null, { params: urlParams })
+
         const commonResponse: ICommonResponse = {
             IsOk: result.data.IsOk,
             Msg: result.data.Msg

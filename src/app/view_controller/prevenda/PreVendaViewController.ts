@@ -138,7 +138,7 @@ export async function handleUpdatePercentDiscount(productDiscount: IPVProductDis
         AtendimentoId: currentPvId
     }
 
-    return updatePercentDiscount({ pvTenant, productDiscount })
+    return updatePercentDiscount({ pvTenant, usuarioId: currentUser.UsuarioId, productDiscount })
 }
 
 export async function handleUpdateValueDiscount(productDiscount: IPVProductDiscount): Promise<ICommonResponse> {
@@ -152,7 +152,7 @@ export async function handleUpdateValueDiscount(productDiscount: IPVProductDisco
         TenantId: currentUser.TenantId,
         AtendimentoId: currentPvId
     }
-    return updateValueDiscount({ pvTenant, productDiscount })
+    return updateValueDiscount({ pvTenant, usuarioId: currentUser.UsuarioId, productDiscount })
 }
 
 export async function handleUpdateTablePrice(updatePrice: IReqUpdatePrice): Promise<ICommonResponse> {
@@ -167,7 +167,7 @@ export async function handleUpdateTablePrice(updatePrice: IReqUpdatePrice): Prom
         AtendimentoId: currentPvId
     }
 
-    return updateTablePrice({ pvTenant, updatePrice })
+    return updateTablePrice({ pvTenant, usuarioId: currentUser.UsuarioId, updatePrice })
 }
 
 export async function handleUpdateUnityPrice(updatePrice: IReqUpdatePrice): Promise<ICommonResponse> {
@@ -182,7 +182,7 @@ export async function handleUpdateUnityPrice(updatePrice: IReqUpdatePrice): Prom
         AtendimentoId: currentPvId
     }
 
-    return updateUnityPrice({ pvTenant, updatePrice })
+    return updateUnityPrice({ pvTenant, usuarioId: currentUser.UsuarioId, updatePrice })
 }
 
 export async function handleUpdateProductAmount(productId: string, productAmount: IReqUpdateProdutItens): Promise<ICommonResponse> {

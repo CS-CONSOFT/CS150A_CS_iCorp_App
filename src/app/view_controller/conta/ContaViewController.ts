@@ -1,3 +1,4 @@
+import { ClactaEnum, GruEnum } from './../../screens/009Cliente/ListaEnumClasseGrupo';
 // Importa enum para acessar chaves de dados específicas
 import { DataKey } from "../../enum/DataKeys";
 
@@ -5,7 +6,7 @@ import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 
 // Importa funções da API relacionadas a contas
-import { deleteConta, getContaById, getListConta, save1201, save1202, save1206, saveConta } from "../../services/api/endpoint/conta/CS_Contas";
+import { deleteConta, getContaById, getListConta, get_csicp_bbs, save1201, save1202, save1206, saveConta } from "../../services/api/endpoint/conta/CS_Contas";
 
 // Importa função da API para obter dados estáticos
 import { getEstaticasBB012 } from "../../services/api/endpoint/estaticas/CS_Estaticas";
@@ -170,6 +171,36 @@ export async function handleSave1206({ cs_req_save }: { cs_req_save: CS_IReqSave
         // Faz uma requisição para salvar os dados de endereço
         const response = await save1206({ cs_req_save: cs_req_save, cs_tenant_id: currentUser.TenantId });
         return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+/**
+ * @param claEnum classe
+ * @returns  retorna o id da classe passada no parametro
+ */
+export async function handleGetClaId(claEnum: ClactaEnum): Promise<number> {
+    try {
+        const list = await get_csicp_bbs();
+        const currentItem = list.csicp_bb12_clacta.find((item) => item.Label == claEnum)
+        return currentItem?.Id || -1;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+/**
+ * @param gruEnum classe
+ * @returns  retorna o id da classe passada no parametro
+ */
+export async function handleGetGruId(gruEnum: GruEnum): Promise<number> {
+    try {
+        const list = await get_csicp_bbs();
+        const currentItem = list.csicp_bb12_gructa.find((item) => item.Label == gruEnum)
+        return currentItem?.Id || -1;
     } catch (error) {
         throw error;
     }

@@ -15,6 +15,8 @@ import { stylesPreVenda } from "./PreVendaStyles";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { formatMoneyValue } from "../../util/FormatText";
 import { ToastType, showToast } from "../../util/ShowToast";
+import CustomIcon from "../../components/icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
 
 
 
@@ -122,7 +124,6 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                     <Text style={stylesPreVenda.containerRenderItemLeftText}>{year}</Text>
                 </View>
 
-
                 <View style={stylesPreVenda.containerRenderItemRight}>
                     <Text style={stylesPreVenda.containerRenderItemRightTextBold}>N° {item.DD070_Nota.csicp_dd070.DD070_ProtocolNumber} - {item.DD070_Nota.csicp_bb012.BB012_Codigo}</Text>
                     <Text style={stylesPreVenda.containerRenderItemRightTextBold}>{item.DD070_Nota.csicp_bb012.BB012_Nome_Cliente}</Text>
@@ -132,6 +133,14 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                         <Text style={[stylesPreVenda.containerRenderItemRightTextNormal]}>{item.DD070_Nota.csicp_dd070_Sit.Label}</Text>
                     </View>
                 </View>
+
+
+                <View style={[stylesPreVenda.containerRenderItemIcons, commonStyle.justify_content_space_evl]}>
+                    <CustomIcon icon={ICON_NAME.CHECK_CONTORNADO} />
+                    <CustomIcon icon={ICON_NAME.VOLTAR_CONTORNADO} />
+
+                </View>
+
             </View>
         </Pressable>
     )

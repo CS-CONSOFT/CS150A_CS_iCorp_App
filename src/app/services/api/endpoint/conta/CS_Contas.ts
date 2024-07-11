@@ -8,6 +8,8 @@ import { IResGetListConta } from "../../interfaces/contas/CS_IResGetListConta";
 import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
 import { IResPadraoConta } from "./IResPadraoConta";
 import { CS_IResGetConta } from "../../interfaces/contas/CS_IResGetConta";
+import { CS_IResBB026_Estatica } from "../../interfaces/pagamento/CS_IResBB026_Estatica";
+import { IResBBEstatica } from "../../interfaces/IResBBEstatica";
 
 export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<IResGetContaById> {
     try {
@@ -119,5 +121,15 @@ export async function save1206({ cs_tenant_id, cs_req_save }: { cs_tenant_id: nu
         return response.data;
     } catch (err) {
         throw err;
+    }
+}
+
+export async function get_csicp_bbs(): Promise<IResBBEstatica> {
+    const url = `/CSR_BB100_Tabelas_LIB/rest/GetAllEstatica/get_all_bb`
+    try {
+        const response = await api.get(url)
+        return response.data as IResBBEstatica
+    } catch (error) {
+        throw error
     }
 }

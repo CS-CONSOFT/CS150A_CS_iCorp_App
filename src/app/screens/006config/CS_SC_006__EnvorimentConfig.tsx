@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { commonStyle } from "../../CommonStyle";
 import { useDatabase } from "../../services/storage/useDatabase";
@@ -10,6 +10,8 @@ import api from "../../services/api/axios_config";
 import { showToast, ToastType } from "../../util/ShowToast";
 import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
+import { validaAmbiente } from "../../services/api/endpoint/login/CS_LoginGeral";
+import { logout } from "../../view_controller/login/LoginViewController";
 
 
 // Componente de configuração de ambiente
@@ -17,22 +19,36 @@ const CS_SC_006__EnvorimentConfig = () => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
-    const [token, setToken] = useState('xd--');
+    const [token, setToken] = useState('xd');
     const [hasValue, setHasValue] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const { navigate } = useNavigation();
     const db = useDatabase();
 
     // useEffect para carregar os dados iniciais
-    useEffect(() => {
-        get();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            get();
+            logout(DataKey.LoginResponse)
+        }, [])
+    );
 
     // Função para navegar para o menu
     function init() {
+        setIsLoading(true)
         if (tenant === '' || tenant === undefined || urlBase === '' || urlBase === undefined || token === '' || token === undefined) {
             showToast(ToastType.ERROR, "Dados Insuficientes!", "Preencha os dados corretamente para avançar!")
+            setIsLoading(false)
         } else {
-            navigate('Login');
+            validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
+                if (res.Retorno.IsOk) {
+                    navigate('Login');
+                }
+                setIsLoading(false)
+            }).catch((res) => {
+                showToast(ToastType.ERROR, "Erro", "Um erro ocorreu, verifique as informações")
+                setIsLoading(false)
+            })
         }
     }
 
@@ -40,6 +56,7 @@ const CS_SC_006__EnvorimentConfig = () => {
     async function get() {
         try {
             await db.get().then((response) => {
+                console.log(response);
                 if (response != null) {
                     // Se houver resposta, atualizar estados e armazenar dados localmente
                     setHasValue(true);
@@ -80,15 +97,6 @@ const CS_SC_006__EnvorimentConfig = () => {
     // Função assíncrona para excluir uma entrada do banco de dados
     async function exclude() {
         setHasValue(false);
-        /**
-        try {
-            await db.exclude().then(() => {
-                get(); // Buscar dados atualizados após a exclusão
-            });
-        } catch (error) {
-            // Tratar erros (pode ser aprimorado com um alerta ou log)
-        }
-             */
     }
 
     // Renderização do componente
@@ -105,7 +113,7 @@ const CS_SC_006__EnvorimentConfig = () => {
 
                     <View style={[commonStyle.justify_content_space_btw, commonStyle.common_rowItem]}>
                         <TouchableHighlight
-                            onPress={exclude}
+                            onPress={() => exclude()}
                             style={commonStyle.common_button_style}
                             underlayColor='white'
                         >
@@ -117,7 +125,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                             style={commonStyle.common_button_style}
                             underlayColor='white'
                         >
-                            <Text style={commonStyle.common_text_button_style}>Iniciar</Text>
+                            {isLoading ? <ActivityIndicator color={"#FFF"} /> : <Text style={commonStyle.common_text_button_style}>Iniciar</Text>}
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -138,6 +146,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                         <TextInput
                             style={[commonStyle.common_input]}
                             onChangeText={setTenant}
+                            placeholder="Digite o tenant"
                             value={tenant}
                         />
 
@@ -145,6 +154,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                         <TextInput
                             style={[commonStyle.common_input]}
                             onChangeText={setUrlBase}
+                            placeholder="Digite a URL"
                             value={urlBase}
                         />
 
@@ -152,6 +162,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                         <TextInput
                             style={[commonStyle.common_input]}
                             onChangeText={setToken}
+                            placeholder="Digite o token, caso nao tenha, preencha com QUALQUER valor"
                             value={token}
                         />
 

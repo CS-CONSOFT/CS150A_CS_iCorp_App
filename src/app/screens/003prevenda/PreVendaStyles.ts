@@ -45,6 +45,15 @@ export const stylesPreVenda = StyleSheet.create({
         borderTopLeftRadius: 12,
         borderBottomLeftRadius: 12
     },
+    containerRenderItemIcons: {
+        width: 32,
+        height: 'auto',
+        backgroundColor: '#fff',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12
+    },
     containerRenderItemLeftText: {
         color: "#0A3147",
         fontWeight: 'bold',
@@ -56,8 +65,7 @@ export const stylesPreVenda = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'column',
-        borderTopRightRadius: 12,
-        borderBottomRightRadius: 12,
+
         overflow: 'visible',
         backgroundColor: '#FFF'
     },

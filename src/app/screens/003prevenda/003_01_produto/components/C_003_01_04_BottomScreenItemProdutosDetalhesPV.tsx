@@ -4,6 +4,7 @@ import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomTextValueWithTitleBoldHorizontal from "../../../../components/text/CustomTextValueWithTitleBoldHorizontal";
 import { useNavigation } from "@react-navigation/native";
 import { formatDateToSlashPattern, formatMoneyValue } from "../../../../util/FormatText";
+import { commonStyle } from "../../../../CommonStyle";
 
 
 export interface IPreVendaData {
@@ -26,7 +27,6 @@ const C_003_01_04_BottomScreenItemProdutosDetalhesPV = ({ dataEmissao, dataValid
                 <Text style={[styles.total_liquido_text, styles.padding_12]}>Total Liquido</Text>
                 <Text style={[styles.valor, styles.padding_12]}>{totalLiquido!}</Text>
             </View>
-
             {isConsulta && (
                 <TouchableHighlight
                     onPress={() => { navigate('Pagamento') }}

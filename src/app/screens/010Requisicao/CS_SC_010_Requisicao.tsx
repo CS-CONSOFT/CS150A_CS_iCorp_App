@@ -66,7 +66,7 @@ const CS_SC_010_Requisicao = () => {
             showToast(ToastType.INFO, "Selecione", "Um Almoxarifado")
         }
     }
-
+    const requisicoes = pv?.Requisicao?.Requisicoes?.toReversed() ?? [];
     return (
         <SafeAreaView>
             <View>
@@ -89,7 +89,7 @@ const CS_SC_010_Requisicao = () => {
             </View>
             <View>
                 <FlatList
-                    data={pv?.Requisicao.Requisicoes.toReversed()}
+                    data={requisicoes}
                     keyExtractor={(item) => item.csicp_gg071.gg071_Id.toString()}
                     renderItem={({ item }) =>
                         <CustomCard_001

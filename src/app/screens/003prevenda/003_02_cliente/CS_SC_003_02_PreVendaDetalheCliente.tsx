@@ -6,8 +6,8 @@ import { ICON_NAME } from "../../../util/IconsName";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ClienteStyles } from "./ClienteStyles";
 import { ButtonLink } from "../../../components/button/CustomButtonLink";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { DD071_Enderecos, IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
 import { handleGetPv } from "../../../view_controller/prevenda/PreVendaViewController";
@@ -35,9 +35,13 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
 
-    useEffect(() => {
-        getCurrentPv()
-    }, [])
+
+
+    useFocusEffect(
+        useCallback(() => {
+            getCurrentPv()
+        }, [])
+    );
 
 
     function getCurrentPv() {

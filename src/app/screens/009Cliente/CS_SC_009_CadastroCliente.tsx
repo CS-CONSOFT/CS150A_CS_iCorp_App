@@ -8,7 +8,7 @@ import { IReqSaveConta } from "../../services/api/interfaces/contas/CS_IReqSaveC
 import { ICON_NAME } from "../../util/IconsName";
 import { cpfCnpjMask, removeCpfCnpjMask } from "../../util/Masks";
 import { ClactaEnum, GruEnum } from "./ListaEnumClasseGrupo";
-import { handleGetContaById, handleSave1201, handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
+import { handleGetClaId, handleGetContaById, handleGetGruId, handleSave1201, handleSave1202, handleSaveConta } from "../../view_controller/conta/ContaViewController";
 import { IReqSave1201 } from "../../services/api/interfaces/contas/CS_IReqSave1201";
 import { ToastType, showToast } from "../../util/ShowToast";
 import ColorStyle from "../../ColorStyle";
@@ -110,7 +110,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
         }
     }
 
-    function saveCliente() {
+    async function saveCliente() {
         setIsSavingLoading(true)
         //BB1201
         let reqSaveConta: IReqSaveConta = userToEdit?.csicp_bb012.csicp_bb012 || {}
@@ -153,8 +153,8 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
             }
 
 
-            reqSaveConta.BB012_ClasseConta_ID = ClactaEnum.ConsumidorFinal
-            reqSaveConta.BB012_Grupoconta_ID = GruEnum.PessoaFisica
+            reqSaveConta.BB012_ClasseConta_ID = await handleGetClaId(ClactaEnum.ConsumidorFinal)
+            reqSaveConta.BB012_Grupoconta_ID = await handleGetGruId(GruEnum.PessoaFisica)
 
         } else if (documentType === DOCUMENT_TYPE.IS_CNPJ) {
             reqSave1202.BB012_CNPJ = removeCpfCnpjMask(attributesMap.CPF_CNPJ)
@@ -170,8 +170,8 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                 return
             }
 
-            reqSaveConta.BB012_ClasseConta_ID = ClactaEnum.Revendedor
-            reqSaveConta.BB012_Grupoconta_ID = GruEnum.Privada
+            reqSaveConta.BB012_ClasseConta_ID = await handleGetClaId(ClactaEnum.Revendedor)
+            reqSaveConta.BB012_Grupoconta_ID = await handleGetGruId(GruEnum.Privada)
         }
 
 

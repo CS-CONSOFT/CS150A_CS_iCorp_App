@@ -1,5 +1,5 @@
 interface IPostLoginData {
-    domain: string,
+    tenant: number,
     user: string,
     password: string
 }

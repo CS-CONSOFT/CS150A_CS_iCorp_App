@@ -113,16 +113,6 @@ export async function getListOfPaymentForm002({ tenantId, onlyAVista }: { tenant
 }
 
 
-export async function getBB026_Tipo(): Promise<CS_IResBB026_Estatica> {
-    const url = `/CSR_BB100_Tabelas_LIB/rest/GetAllEstatica/get_all_bb`
-    try {
-        const response = await api.get(url)
-        return response.data as CS_IResBB026_Estatica
-    } catch (error) {
-        throw error
-    }
-}
-
 
 /** A NOVA API APONTA PRA ESSA FUNCAO */
 export async function insertPaymentForm({ tenantId, pvId, insertPaymentBody }: { tenantId: number, pvId: string, insertPaymentBody: IReqInsertPaymentForm }):

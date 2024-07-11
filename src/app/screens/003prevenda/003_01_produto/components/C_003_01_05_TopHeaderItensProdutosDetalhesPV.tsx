@@ -45,6 +45,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                                 iconName={ICON_NAME.ADICIONAR_CONTORNADO}
                             />
                         </View>
+
                     </CustomTopItem>
                     <CustomAlertDialog
                         isVisible={isModalVisible}

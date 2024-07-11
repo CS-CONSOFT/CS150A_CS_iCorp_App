@@ -1,14 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight, ActivityIndicator } from "react-native";
 import { DataKey } from "../../enum/DataKeys";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
-import { checkIfUserIsLogged, generalLoginVc } from "../../view_controller/login/LoginViewController";
+import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
 import { stylesLogin } from "./StylesLogin";
 import { commonStyle } from "../../CommonStyle";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { useDatabase } from "../../services/storage/useDatabase";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
 
 
 const CS_SC001_LoginForm = () => {
@@ -21,49 +23,65 @@ const CS_SC001_LoginForm = () => {
     const { navigate } = useNavigation()
     const [isBtnLoading, setIsBtnLoading] = useState(false)
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const [tenantId, setTenantId] = useState(-1)
+
     const db = useDatabase();
     //fim variaveis
 
     function navigateToMenu() {
-        navigate('Menu')
+        navigate('DrawerRoute')
     }
 
-    useEffect(() => {
-        setIsBtnLoading(false)
-        checkIfUserIsLogged().then((isLogged) => {
-            if (isLogged) {
-                navigate('Menu')
+
+    useFocusEffect(
+        useCallback(() => {
+            setIsBtnLoading(false)
+            checkIfUserIsLogged().then((isLogged) => {
+                if (isLogged) {
+                    navigate('DrawerRoute')
+                    setStatus(FETCH_STATUS.IDLE)
+                } else {
+                    db.get().then((res) => {
+                        setTenantId(Number(res?.tenantId))
+                    })
+                }
                 setStatus(FETCH_STATUS.IDLE)
-            }
-            setStatus(FETCH_STATUS.IDLE)
-        })
-    }, [])
+            })
+        }, [])
+    );
+
 
 
 
     async function onClickLogin(): Promise<void> {
         setStatus(FETCH_STATUS.LOADING)
         const loginData: IPostLoginData = {
-            domain: attributesMap.Domínio,
+            tenant: 0,
             user: attributesMap.Usuário,
             password: attributesMap.Senha
         }
         try {
-            const response = await generalLoginVc(loginData);
-            if (response.IsOk) {
-                setStatus(FETCH_STATUS.SUCCESS)
-                const toSaveJson = response.Model
+            loginData.tenant = tenantId
+            generalLoginVc(loginData).then((res) => {
+                if (res.IsOk) {
+                    setStatus(FETCH_STATUS.SUCCESS)
+                    const toSaveJson = res.Model
+                    toSaveJson.TenantId = tenantId
+                    console.log(toSaveJson);
 
-                await db.get().then((res) => {
-                    if (res !== null) {
-                        toSaveJson.TenantId = res.tenantId
-                    }
-                })
-
-                //salvando dados localmente
-                storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
-                navigateToMenu()
-            }
+                    //salvando dados localmente
+                    storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
+                    navigateToMenu()
+                }
+            }).catch((res) => {
+                if (res.StatusCode === undefined) {
+                    showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL")
+                    setStatus(FETCH_STATUS.ERROR)
+                    logout(DataKey.LoginResponse).then(() => {
+                        navigate('Config_Ambiente')
+                    })
+                }
+            })
         } catch (error) {
             Alert.alert(error as string)
         }
@@ -81,23 +99,16 @@ const CS_SC001_LoginForm = () => {
 
     return (
         <SafeAreaView>
-            <Text>Domínio</Text>
+            <Text style={commonStyle.common_fontWeight_800}>Usuário</Text>
             <TextInput
-                style={[commonStyle.common_input]}
-                onChangeText={(value) => handleInputTyping('Domínio', value)}
-                value={attributesMap.Domínio}
-            />
-
-            <Text>Usuário</Text>
-            <TextInput
-                style={[commonStyle.common_input]}
+                style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Usuário', value)}
                 value={attributesMap.Usuário}
             />
 
-            <Text>Senha</Text>
+            <Text style={commonStyle.common_fontWeight_800}>Senha</Text>
             <TextInput
-                style={[commonStyle.common_input]}
+                style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Senha', value)}
                 value={attributesMap.Senha}
                 secureTextEntry={true}
@@ -112,8 +123,16 @@ const CS_SC001_LoginForm = () => {
                 underlayColor='white'
             >
                 {isBtnLoading ? <ActivityIndicator /> : <Text style={commonStyle.common_text_button_style}>Logar</Text>}
+            </TouchableHighlight>
 
-
+            <TouchableHighlight
+                onPress={() => {
+                    navigate('Config_Ambiente')
+                }}
+                style={commonStyle.common_button_style}
+                underlayColor='white'
+            >
+                <Text style={commonStyle.common_text_button_style}>Configuração</Text>
             </TouchableHighlight>
         </SafeAreaView>
     );

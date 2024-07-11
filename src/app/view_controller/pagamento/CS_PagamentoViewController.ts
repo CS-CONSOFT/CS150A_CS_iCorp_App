@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getBB026_Tipo, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
