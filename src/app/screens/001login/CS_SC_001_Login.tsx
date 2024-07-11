@@ -37,7 +37,7 @@ const CS_SC_001_Login = () => {
                 <View style={{ margin: 56 }}>
                     <CustomHeaderLogo />
                     <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
-                    <Text style={commonStyle.common_fontWeight_800}>Domínio: {currentDominio}</Text>
+                    <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Domínio: {currentDominio}</Text>
                     <CS_SC001_LoginForm />
                 </View>
             </ImageBackground>

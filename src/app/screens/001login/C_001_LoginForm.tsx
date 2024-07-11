@@ -94,19 +94,19 @@ const CS_SC001_LoginForm = () => {
     };
 
     if (status === FETCH_STATUS.LOADING) {
-        return <CustomLoading />
+        return <ActivityIndicator style={{ backgroundColor: "#c3c3c3", borderRadius: 32 }} color={"#fff"} size={64} />
     }
 
     return (
         <SafeAreaView>
-            <Text style={commonStyle.common_fontWeight_800}>Usuário</Text>
+            <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Usuário</Text>
             <TextInput
                 style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Usuário', value)}
                 value={attributesMap.Usuário}
             />
 
-            <Text style={commonStyle.common_fontWeight_800}>Senha</Text>
+            <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Senha</Text>
             <TextInput
                 style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Senha', value)}
