@@ -66,7 +66,7 @@ const CS_SC_006__EnvorimentConfig = () => {
 
                     //configura a url no axios
                     api.defaults.baseURL = response.urlBase;
-                    init()
+                   
 
                 } else {
                     // Se não houver resposta, resetar estados
