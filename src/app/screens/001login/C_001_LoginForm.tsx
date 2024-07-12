@@ -63,12 +63,11 @@ const CS_SC001_LoginForm = () => {
         try {
             loginData.tenant = tenantId
             generalLoginVc(loginData).then((res) => {
+                setStatus(FETCH_STATUS.SUCCESS)
                 if (res.IsOk) {
-                    setStatus(FETCH_STATUS.SUCCESS)
+                    console.log(res.Model.Estab_Img);
                     const toSaveJson = res.Model
                     toSaveJson.TenantId = tenantId
-                    console.log(toSaveJson);
-
                     //salvando dados localmente
                     storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
                     navigateToMenu()

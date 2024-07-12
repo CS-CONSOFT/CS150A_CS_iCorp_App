@@ -28,6 +28,7 @@ import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
 import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
 import DrawerRoute001 from "./drawer.route";
+import CS_SC_008_DetalheComanda from "../screens/008ListaComandas/CS_SC_008_DetalheComanda";
 
 
 
@@ -40,7 +41,7 @@ declare global {
             Menu: undefined,
             Entrega: undefined,
             Serie: undefined,
-            Consulta_Produtos: { cameFromPv: boolean },
+            Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
             Config_Ambiente: undefined,
             Camera: { previousScreen: string }
             Pre_Venda_Detalhes: { currentPv: string },
@@ -55,6 +56,7 @@ declare global {
             DrawerRoute: undefined
             Pagamento: undefined
             ComandaLista: undefined
+            DetalheComanda: { comandaId: number }
             TabListCliente: undefined
             EditCliente: { bb12id?: string }
             Cadastro_002_End: { bb12id: string, isEdit: boolean }
@@ -146,6 +148,17 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="ComandaLista" component={TabRoutes008} options={{
                 title: "Lista de Comandas",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+
+            }} />
+
+            <StackNav.Screen name="DetalheComanda" component={CS_SC_008_DetalheComanda} options={{
+                title: "Detalhes Comanda",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {

@@ -17,14 +17,8 @@ import CustomLoading from "../../components/loading/CustomLoading";
 const CS_SC_010_Requisicao = () => {
     const [pv, setPv] = useState<IResGetPv>()
     const [almoxSelected, setAlmoxSelected] = useState("");
-    const [extraIconsRightOpen, setExtraIconsRightOpen] = useState(false);
     const [listAmox, setListAlmox] = useState<{ key: string, value: string }[]>();
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-
-
-    const leftSwipe = () => {
-        setExtraIconsRightOpen(!extraIconsRightOpen);
-    };
 
     useEffect(() => {
         getCurrentPv()

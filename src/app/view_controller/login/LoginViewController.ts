@@ -8,6 +8,7 @@ import { getObjectDataVc } from "../SharedViewController";
 
 export async function generalLoginVc(loginData: IPostLoginData) {
     try {
+        await removeValueFromStorage(DataKey.CurrentPV)
         const result = await generalLogin(loginData);
         return result;
     } catch (err) {
@@ -36,7 +37,7 @@ export async function checkIfUserIsLogged() {
 
 export async function logout(key: string) {
     try {
-        await removeValueFromStorage(key);
+        await removeValueFromStorage(DataKey.LoginResponse);
     } catch (err) {
         throw err;
     }

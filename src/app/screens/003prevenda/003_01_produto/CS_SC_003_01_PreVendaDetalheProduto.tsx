@@ -46,25 +46,30 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     }
 
     function updateDiscountPercent(productId: string, discountPercent: number, getProductsToCurrentPv: () => void): void {
+        setStatus(FETCH_STATUS.LOADING)
         handleUpdatePercentDiscount({ AtendimentoProdutoId: productId, Valor: discountPercent })
             .then((res) => {
                 if (res.IsOk) {
                     getProductsToCurrentPv()
                 } else {
                     showToast(ToastType.ERROR, "Falha", res.Msg)
+                    setStatus(FETCH_STATUS.SUCCESS)
                 }
             });
     }
 
 
     function updateValueDiscount(productId: string, valueDiscount: number): void {
+        setStatus(FETCH_STATUS.LOADING)
         handleUpdateValueDiscount({ AtendimentoProdutoId: productId, Valor: valueDiscount })
             .then((res) => {
                 if (res.IsOk) {
                     getCurrentPv()
+
                 } else {
                     showToast(ToastType.ERROR, "Falha", res.Msg)
                     showToast(ToastType.ERROR, "Falha", res.Msg)
+                    setStatus(FETCH_STATUS.SUCCESS)
                 }
             });
     }
@@ -72,12 +77,15 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
 
 
     function updateTablePrice(productId: string, tablePrice: number): void {
+        setStatus(FETCH_STATUS.LOADING)
         handleUpdateTablePrice({ AtendimentoProdutoId: productId, Valor: tablePrice })
             .then((res) => {
                 if (res.IsOk) {
                     getCurrentPv()
+
                 } else {
                     showToast(ToastType.ERROR, "Falha", res.Msg)
+                    setStatus(FETCH_STATUS.SUCCESS)
                 }
             });
     }
@@ -85,12 +93,14 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
 
 
     function updateUnityPrice(productId: string, unityPrice: number): void {
+        setStatus(FETCH_STATUS.LOADING)
         handleUpdateUnityPrice({ AtendimentoProdutoId: productId, Valor: unityPrice })
             .then((res) => {
                 if (res.IsOk) {
                     getCurrentPv()
                 } else {
                     showToast(ToastType.ERROR, "Falha", res.Msg)
+                    setStatus(FETCH_STATUS.SUCCESS)
                 }
             });
     }

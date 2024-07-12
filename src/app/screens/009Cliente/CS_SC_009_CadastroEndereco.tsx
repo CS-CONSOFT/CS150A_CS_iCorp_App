@@ -19,12 +19,13 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         Logradouro: '',
         Bairro: '',
         Complemento: '',
-        UF: '',
-        Cidade: '',
         CidadeNome: '',
         Numero: '',
         Perimetro: ''
     });
+
+    const [ufSelected, setUfSelected] = useState('')
+    const [citySelected, setCitySelected] = useState('')
 
     const { navigate } = useNavigation()
     const [isBtnCepLoading, setIsBtnCepLoading] = useState(false)
@@ -35,7 +36,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
     const [isLoadingData, setIsLoadingData] = useState(false)
 
     const { bb12id, isEdit } = route.params
-
 
     function resetForm() {
         setAttributesMap({
@@ -54,7 +54,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
 
     useEffect(() => {
-        resetForm()
         try {
             handleGetUfList().then((res) => {
                 const list = res.csicp_aa027
@@ -76,7 +75,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         }
 
 
-    }, [])
+    }, [bb12id])
 
 
     function getContaByIdToEdit(bb012_id: string) {
@@ -84,13 +83,12 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
             //seta o usuario para editar
             setUserToEdit(res)
             setSelectedUf(res.BB01206_Endereco.csicp_aa028.UFId)
+            setSelectedCity(res.BB01206_Endereco.csicp_aa028.Id)
             setAttributesMap({
                 CEP: (res.BB01206_Endereco.csicp_bb01206.BB012_CEP).toString(),
                 Logradouro: res.BB01206_Endereco.csicp_bb01206.BB012_Logradouro,
                 Bairro: res.BB01206_Endereco.csicp_bb01206.BB012_Bairro,
                 Complemento: res.BB01206_Endereco.csicp_bb01206.BB012_Complemento,
-                UF: res.BB01206_Endereco.csicp_aa027.Id,
-                Cidade: res.BB01206_Endereco.csicp_aa028.Id,
                 Numero: res.BB01206_Endereco.csicp_bb01206.BB012_Numero,
                 Perimetro: res.BB01206_Endereco.csicp_bb01206.BB012_Perimetro
             });
@@ -120,8 +118,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                 if (res !== undefined) {
                     setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
                     setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)
-                    setValueToObjectWhenInputTyped('UF', res.UF_ID)
-                    setValueToObjectWhenInputTyped('Cidade', res.CIDADE_ID)
                     setSelectedCity(res.CIDADE_ID)
                     setSelectedUf(res.UF_ID)
                 } else {
@@ -141,7 +137,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
         let iSaveEndereco: CS_IReqSaveEndereco = userToEdit?.BB01206_Endereco.csicp_bb01206 || {}
 
-        if (!attributesMap.Cidade || !attributesMap.UF || !attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero || !attributesMap.Complemento || !attributesMap.Perimetro) {
+        if (!citySelected || !ufSelected || !attributesMap.CEP || !attributesMap.Logradouro || !attributesMap.Bairro || !attributesMap.Numero || !attributesMap.Complemento || !attributesMap.Perimetro) {
             showToast(ToastType.ERROR, "Campos Faltando", "Preencha corretamente todos")
             return;
         }
@@ -152,8 +148,8 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         iSaveEndereco.BB012_Numero = attributesMap.Numero
         iSaveEndereco.BB012_Complemento = attributesMap.Complemento
         iSaveEndereco.BB012_Perimetro = attributesMap.Perimetro
-        iSaveEndereco.BB012_UF = attributesMap.UF
-        iSaveEndereco.BB012_Codigo_Cidade = attributesMap.Cidade
+        iSaveEndereco.BB012_UF = ufSelected
+        iSaveEndereco.BB012_Codigo_Cidade = citySelected
         iSaveEndereco.BB012_ID = isEdit ? userToEdit?.csicp_bb012.csicp_bb012.ID : bb12id
         try {
             handleSave1206({ cs_req_save: iSaveEndereco }).then(() => {
@@ -170,8 +166,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param key id da selecao
      */
     function setSelectedUf(key: string) {
-        setValueToObjectWhenInputTyped('Cidade', '')
-        setValueToObjectWhenInputTyped('UF', key)
+        setUfSelected(key)
         getCities(key, undefined)
     }
 
@@ -202,7 +197,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param key id da cidade selecionada
      */
     function setSelectedCity(key: string) {
-        setValueToObjectWhenInputTyped('Cidade', key)
+        setCitySelected(key)
     }
 
     function sair() {
@@ -282,7 +277,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                     placeholder="Perímetro"
                 />
 
-
+                <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>UF - CIDADE</Text>
                 <View style={[commonStyle.justify_content_space_btw,
                 commonStyle.common_rowItem,
                 commonStyle.common_padding_08,
@@ -298,10 +293,10 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                         save="key"
                         search={false}
                         dropdownItemStyles={styles.dropdownStyle}
-                        defaultOption={{ key: attributesMap.UF, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla }}
+                        defaultOption={isEdit ? { key: ufSelected, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla } : undefined}
                     />
 
-                    {cityList === undefined && attributesMap.UF !== '' && (
+                    {cityList === undefined && ufSelected !== '' && (
                         <Text>Carregando cidades</Text>
                     )}
 
@@ -315,13 +310,13 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                                 setSelected={(key: string) => { setSelectedCity(key) }}
                                 data={cityList!}
                                 save="key"
-                                defaultOption={{ key: attributesMap.Cidade, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade }}
+                                defaultOption={isEdit ? { key: citySelected, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade } : undefined}
                             />
 
                         </View>
                     )}
 
-                    {attributesMap.Cidade !== '' && (
+                    {citySelected !== '' && (
                         <Text>{attributesMap.CidadeNome}</Text>
                     )}
                 </View>

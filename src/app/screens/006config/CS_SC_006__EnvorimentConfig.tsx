@@ -125,7 +125,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                             style={commonStyle.common_button_style}
                             underlayColor='white'
                         >
-                            {isLoading ? <ActivityIndicator color={"#FFF"} /> : <Text style={commonStyle.common_text_button_style}>Iniciar</Text>}
+                            {isLoading ? <ActivityIndicator color={"#FFF"} /> : <Text style={commonStyle.common_text_button_style}>Validar</Text>}
                         </TouchableHighlight>
                     </View>
                 </View>

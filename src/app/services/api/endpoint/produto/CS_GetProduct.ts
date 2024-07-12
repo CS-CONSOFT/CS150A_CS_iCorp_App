@@ -123,11 +123,10 @@ export async function updateUnityPrice({ pvTenant, usuarioId, updatePrice }: IRe
             AtendimentoId: pvTenant.AtendimentoId,
             AtendimentoProdutoId: updatePrice.AtendimentoProdutoId,
             IN_UsuarioID: usuarioId,
-            PrecoUnitario: updatePrice.Valor
 
         }
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoUnitario`
-        const result = await api.post(url, null, { params: urlParams })
+        const result = await api.post(url, { prm_valor: updatePrice.Valor }, { params: urlParams })
         const commonResponse: ICommonResponse = {
             IsOk: result.data.IsOk,
             Msg: result.data.Msg
@@ -150,13 +149,12 @@ export async function updateTablePrice({ pvTenant, usuarioId, updatePrice }: IRe
             AtendimentoId: pvTenant.AtendimentoId,
             AtendimentoProdutoId: updatePrice.AtendimentoProdutoId,
             IN_UsuarioID: usuarioId,
-            PrecoTabela: updatePrice.Valor
         }
 
 
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTabelaItem`
 
-        const result = await api.post(url, null, { params: urlParams })
+        const result = await api.post(url, { prm_valor: updatePrice.Valor }, { params: urlParams })
 
         const commonResponse: ICommonResponse = {
             IsOk: result.data.IsOk,

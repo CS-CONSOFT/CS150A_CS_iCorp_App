@@ -1,22 +1,21 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
-import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
+import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
+import CustomLoading from "../../components/loading/CustomLoading";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import { DataKey } from "../../enum/DataKeys";
 import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { getPaginationList } from "../../util/GetPaginationArray";
-import { handleFetchPv } from "../../view_controller/prevenda/PreVendaViewController";
-import { stylesPreVenda } from "./PreVendaStyles";
-import CustomLoading from "../../components/loading/CustomLoading";
 import { formatMoneyValue } from "../../util/FormatText";
-import { ToastType, showToast } from "../../util/ShowToast";
-import CustomIcon from "../../components/icon/CustomIcon";
+import { getPaginationList } from "../../util/GetPaginationArray";
 import { ICON_NAME } from "../../util/IconsName";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleFetchPv, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
+import { stylesPreVenda } from "./PreVendaStyles";
 
 
 
@@ -26,10 +25,11 @@ const CS_SC_003_PreVenda = () => {
     const { navigate } = useNavigation()
     const [paginationArray, setPaginationArray] = useState<number[]>([])
 
-
-    useEffect(() => {
-        _fetchPV(1)
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            _fetchPV(1)
+        }, [])
+    );
 
 
     /**Formatando data */
@@ -114,6 +114,38 @@ export default CS_SC_003_PreVenda;
 /** RENDER ITEM */
 function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onPress: () => void }) {
     const [year, month, day] = item.DD070_Nota.csicp_dd070.DD070_Data_Emissao.split('-')
+    const [isLoading, setIsLoading] = useState(false)
+
+    function liberarPV(): void {
+        setIsLoading(true)
+        handleLiberarPV({ cs_bb012_id: item.DD070_Nota.csicp_bb012.ID, cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
+            setIsLoading(false)
+            if (!res.IsErro) {
+                showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+            } else {
+                showToast(ToastType.ERROR, "Falha", res.Msg)
+            }
+        }).catch(() => {
+            setIsLoading(false)
+            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
+        })
+    }
+
+    function retornarPv(): void {
+        setIsLoading(true)
+        handleRetornarPV({ cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
+            setIsLoading(false)
+            if (!res.IsErro) {
+                showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+            } else {
+                showToast(ToastType.ERROR, "Falha", res.Msg)
+            }
+        }).catch(() => {
+            setIsLoading(false)
+            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
+        })
+    }
+
     return (
         <Pressable onPress={onPress}>
             <View style={stylesPreVenda.containerRenderItem}>
@@ -136,8 +168,16 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
 
 
                 <View style={[stylesPreVenda.containerRenderItemIcons, commonStyle.justify_content_space_evl]}>
-                    <CustomIcon icon={ICON_NAME.CHECK_CONTORNADO} />
-                    <CustomIcon icon={ICON_NAME.VOLTAR_CONTORNADO} />
+                    {isLoading && (
+                        <ActivityIndicator color={"#c3c3c3"} size={32} style={commonStyle.align_centralizar} />
+                    )}
+
+                    {!isLoading && (
+                        <>
+                            <CustomIcon icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
+                            <CustomIcon icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+                        </>
+                    )}
 
                 </View>
 

@@ -48,9 +48,10 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
         setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela || 0));
         setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario || 0));
-        setPercentDiscount('');
         setPercentDiscount(formatPercentInput((product.csicp_dd080.DD080_Perc_DescProduto || 0).toString() || '0'));
         setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto || 0));
+        console.log("ss" + product.csicp_dd080.DD080_Perc_DescProduto);
+
     }, [])
 
     /** ALTERA A QUANTIDADE */
@@ -222,7 +223,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                 value={percentDiscount.toString()}
                                 keyboardType='decimal-pad'
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount), product.csicp_dd080.DD080_Id)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount) * 100, product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
 

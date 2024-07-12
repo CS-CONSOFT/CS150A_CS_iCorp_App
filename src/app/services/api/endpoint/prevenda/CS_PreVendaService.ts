@@ -1,6 +1,7 @@
 import { DataKey } from "../../../../enum/DataKeys";
 import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
+import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
 import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
@@ -204,6 +205,39 @@ export async function csicp_gg001_Get_List_Almox({ cs_tenant_id }:
             in_pageSize: 9999
         }
         const response = await api.get(`/CSR_GG100_Materiais_API_IS/rest/CS_Materiais/csicp_gg001_Get_List_Almox`, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export async function LiberarPV({ cs_tenant_id, cs_pv_id, cs_bb012_id, cs_sy001_id, cs_isComprometer }:
+    { cs_tenant_id: number, cs_pv_id: string, cs_bb012_id: string, cs_sy001_id: string, cs_isComprometer: boolean }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_DD070_Id: cs_pv_id,
+            In_BB012_Id: cs_bb012_id,
+            In_SY001_Id: cs_sy001_id,
+            In_Comprometer: cs_isComprometer ? 1 : 0
+        }
+        const response = await api.get(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_LiberarPV`, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function RetornarPV({ cs_tenant_id, cs_pv_id, cs_sy001_id }:
+    { cs_tenant_id: number, cs_pv_id: string, cs_sy001_id: string }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_DD070_Id: cs_pv_id,
+            In_SY001_Id: cs_sy001_id
+        }
+        const response = await api.get(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_RetornarPV`, { headers: header });
         return response.data;
     } catch (err) {
         throw err;

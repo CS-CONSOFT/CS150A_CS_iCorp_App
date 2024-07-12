@@ -139,6 +139,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
 
 
         if (documentType === DOCUMENT_TYPE.IS_CPF) {
+            /** teste de campos */
             reqSave1202.BB012_CPF = removeCpfCnpjMask(attributesMap.CPF_CNPJ)
             reqSave1202.BB012_RG = Number(attributesMap.RG)
 
@@ -157,6 +158,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
             reqSaveConta.BB012_Grupoconta_ID = await handleGetGruId(GruEnum.PessoaFisica)
 
         } else if (documentType === DOCUMENT_TYPE.IS_CNPJ) {
+            /** teste de campos */
             reqSave1202.BB012_CNPJ = removeCpfCnpjMask(attributesMap.CPF_CNPJ)
             reqSave1202.BB012_InscEstadual = Number(attributesMap.INSCES)
 
@@ -170,15 +172,25 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                 return
             }
 
+            /** recuperando id de classe e grupo */
             reqSaveConta.BB012_ClasseConta_ID = await handleGetClaId(ClactaEnum.Revendedor)
             reqSaveConta.BB012_Grupoconta_ID = await handleGetGruId(GruEnum.Privada)
         }
 
 
+        /** funcao para salvar a conta */
         handleSaveConta(reqSaveConta).then((res) => {
+            /** se der erro */
+            if (res.Str_ReturnErro.Out_IsSuccess === undefined || res.bb012_ID === undefined) {
+                showToast(ToastType.ERROR, "Erro", res.Str_ReturnErro.Out_Message)
+                setIsSavingLoading(false)
+                return
+            }
+            /** setado os ids  */
             reqSave1202.Id = bb012id_when_edit_cliente || res.bb012_ID
             reqSave1201.Id = bb012id_when_edit_cliente || res.bb012_ID
 
+            /** salvando a 1201 */
             handleSave1201({ cs_req_save: reqSave1201 }).then(() => {
                 handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
                     resetForm()
@@ -188,9 +200,11 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     })
                 })
             })
+        }).catch((res) => {
+            showToast(ToastType.ERROR, "Erro", "Um erro ocorreu")
+            setIsSavingLoading(false)
+            return
         })
-
-
     }
 
     if (isLoadingData) {
@@ -222,6 +236,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                     onChangeText={(value) => saveValuesToObjectForm('username', value)}
                     value={attributesMap.username}
+                    maxLength={150}
                     placeholder="Nome"
                 />
 
@@ -230,6 +245,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                     onChangeText={(value) => saveValuesToObjectForm('fantasyName', value)}
                     value={attributesMap.fantasyName}
+                    maxLength={100}
                     placeholder="Nome Fantasia"
                 />
 
@@ -264,8 +280,23 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     style={commonStyle.common_button_style}
                     underlayColor='white'
                 >
-                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Continuar</Text>}
+                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Atualizar</Text>}
                 </TouchableHighlight>
+
+                {/** quando for edit */}
+                {bb012id_when_edit_cliente && (
+                    <TouchableHighlight
+                        onPress={() => navigate('Cadastro_002_End', {
+                            bb12id: bb012id_when_edit_cliente || undefined,
+                            isEdit: bb012id_when_edit_cliente ? true : false
+                        })}
+                        style={commonStyle.common_button_style}
+                        underlayColor='white'
+                    >
+                        {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Ir Para Endereçamento</Text>}
+                    </TouchableHighlight>
+                )}
+
             </ScrollView>
         </SafeAreaView >
     );

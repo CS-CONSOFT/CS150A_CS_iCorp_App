@@ -2,7 +2,7 @@ name: Gerar APK
 
 on:
   push:
-    branches: [ "de--v" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:

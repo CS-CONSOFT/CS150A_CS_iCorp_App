@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../../../CommonStyle";
@@ -41,7 +41,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                         <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
                             <CustomItemIconTitleRoundedBlue
                                 title={"Código"}
-                                onPress={() => navigate('Consulta_Produtos', { cameFromPv: true })}
+                                onPress={() => navigate('Consulta_Produtos', { cameFromPv: true, insertComanda: false })}
                                 iconName={ICON_NAME.ADICIONAR_CONTORNADO}
                             />
                         </View>
@@ -68,6 +68,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
 }
 
 const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor: number, save: (discountValue: number) => void, dismiss: () => void }) => {
+
     const [desc1, setDesc1] = useState(formatPercentInput(descontoValor.toString()))
     return (
         <View style={commonStyle.modal_common_container}>

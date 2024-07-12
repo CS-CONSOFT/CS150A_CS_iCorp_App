@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, Text, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
@@ -21,6 +21,8 @@ import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaVi
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import CustomSearch from "../../components/search/CustomSearch";
+import { handleInsertProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
+import { IComandaDataInsert } from "../../services/api/endpoint/comanda/CS_Comanda";
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
@@ -29,31 +31,46 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
-    const cameFromPv = route.params.cameFromPv
+
+    /** quando vem da pv, ao inserir o produto é passado o id da pv atual.
+     * quando é insere comanda, a rota chamada é a de inserir produto na comanda
+     */
+    const { cameFromPv, insertComanda, comandaId } = route.params
     const { navigate } = useNavigation()
 
 
     // Função para inserir produto na pré-venda
-    function scInsertProductPv(product: IResGetProductItem) {
+    function scInsertProduct(product: IResGetProductItem) {
         setStatus(FETCH_STATUS.BTN_CLICK)
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
             const pvId = currentPv as string
-            handleInsertProductPv(
-                product.CodgProduto!.toString(),
-                false, // is entrega
-                1, // quantidade
-                1, // tipo atendimento
-                cameFromPv ? pvId : undefined, // pv id
-                undefined // conta id
-            ).then(() => {
-                setStatus(FETCH_STATUS.SUCCESS)
-                showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
-                if (cameFromPv) {
-                    navigate('Pre_Venda_Detalhes', {
-                        currentPv: pvId
-                    })
+            if (insertComanda) {
+                let dataPostInsertComandaProduto: IComandaDataInsert = {
+                    in_comanda_id: comandaId,
+                    in_produto_id: product.Id || 'zzz',
                 }
-            })
+                handleInsertProdutoComanda({ insertProdutoComanda: dataPostInsertComandaProduto }).then((res) => {
+                    setStatus(FETCH_STATUS.SUCCESS)
+                    comandaId === undefined ? navigate('ComandaLista') : navigate('DetalheComanda', { comandaId: comandaId })
+                })
+            } else {
+                handleInsertProductPv(
+                    product.CodgProduto!.toString(),
+                    false, // is entrega
+                    1, // quantidade
+                    1, // tipo atendimento
+                    cameFromPv ? pvId : undefined, // pv id
+                    undefined // conta id
+                ).then(() => {
+                    setStatus(FETCH_STATUS.SUCCESS)
+                    showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
+                    if (cameFromPv) {
+                        navigate('Pre_Venda_Detalhes', {
+                            currentPv: pvId
+                        })
+                    }
+                })
+            }
         })
     }
 
@@ -113,8 +130,10 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 // @ts-ignore
                 setStatus(FETCH_STATUS.ERROR)
             }
+        }).catch((res) => {
+            showToast(ToastType.ERROR, "Erro", "")
+            return
         })
-
     };
 
     function handleRefreshList(): void {
@@ -152,7 +171,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                     rightItem={<>
                                         <RightItem
                                             loadingClick={loadingBtnClickItem}
-                                            click={() => scInsertProductPv(item)}
+                                            click={() => scInsertProduct(item)}
                                         />
                                     </>}
                                 />}
@@ -205,12 +224,8 @@ const ImageProductItem = ({ descProd, image }: { descProd: string, image?: strin
         )}
 
             {image === undefined && (
-                <Text style={[commonStyle.align_centralizar, {
-                    width: 111,
-                    backgroundColor: '#A3C5D9',
-                    borderTopLeftRadius: 12,
-                    borderBottomLeftRadius: 12
-                }]}>{descProd.substring(0, 3)}</Text>
+                <Image style={commonStyle.productImage}
+                    source={require("../../../../assets/imgnaodisp.jpg")} />
             )}
 
         </>

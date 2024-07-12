@@ -12,7 +12,7 @@ export const listBottomMenu001 = [
     {
         id: 'special-button',
         title: "Lista",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
+        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false, insertComanda: false }) },
         iconName: ICON_NAME.LISTA_CONTORNADO
     },
     {

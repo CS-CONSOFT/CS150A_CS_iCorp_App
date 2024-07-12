@@ -2,7 +2,6 @@ import { ToastType, showToast } from "./ShowToast";
 
 // Aplica máscara de dinheiro
 export function moneyApplyMask(value: number) {
-    console.log(value);
 
     // Verifica se o valor é um número
     if (isNaN(value)) {
@@ -76,13 +75,19 @@ export function formatPercentInput(value: string): string {
     // Remove todos os caracteres não numéricos
     const numericValue = value.replace(/[^\d]/g, '');
 
+    let divideNumber = 100
+    if (value.substring(2, 4).length === 1) {
+        divideNumber = 10
+    }
     // Converte para número e divide por 100 para obter o formato correto
-    let numValue = parseInt(numericValue, 10) / 100;
+    let numValue = parseInt(numericValue, 10) / divideNumber;
 
-
-
+    if (numValue > 0.99) {
+        numValue = parseInt("0099", 10) / 100;
+    }
+    const finalFormatted = numValue.toFixed(2);
     // Formata com duas casas decimais
-    return numValue.toFixed(2);
+    return finalFormatted
 }
 
 

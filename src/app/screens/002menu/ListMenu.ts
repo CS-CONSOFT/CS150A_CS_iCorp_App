@@ -18,7 +18,7 @@ export const data = [
     {
         id: 3,
         title: "Consulta Produtos",
-        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false }) },
+        onPress: (navigate: any) => { navigate('Consulta_Produtos', { cameFromPv: false, insertComanda: false }) },
         iconName: "search-outline"
 
     },

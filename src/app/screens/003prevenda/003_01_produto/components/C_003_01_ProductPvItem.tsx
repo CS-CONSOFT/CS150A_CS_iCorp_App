@@ -142,7 +142,8 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                     )}
 
                     {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path === undefined && (
-                        <Text style={common003_01_styles.productName}>Sem Imagem</Text>
+                        <Image style={common003_01_styles.productImage}
+                            source={require('../../../../../../assets/imgnaodisp.jpg')} />
                     )}
 
                 </View>
