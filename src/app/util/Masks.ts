@@ -85,6 +85,8 @@ export function formatPercentInput(value: string): string {
     if (numValue > 0.99) {
         numValue = parseInt("0000", 10) / 100;
     }
+
+    //
     const finalFormatted = numValue.toFixed(2);
     // Formata com duas casas decimais
     return finalFormatted

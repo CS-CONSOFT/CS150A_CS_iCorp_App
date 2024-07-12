@@ -56,7 +56,6 @@ const CS_SC_006__EnvorimentConfig = () => {
     async function get() {
         try {
             await db.get().then((response) => {
-                console.log(response);
                 if (response != null) {
                     // Se houver resposta, atualizar estados e armazenar dados localmente
                     setHasValue(true);
@@ -67,6 +66,7 @@ const CS_SC_006__EnvorimentConfig = () => {
 
                     //configura a url no axios
                     api.defaults.baseURL = response.urlBase;
+                    init()
 
                 } else {
                     // Se não houver resposta, resetar estados
