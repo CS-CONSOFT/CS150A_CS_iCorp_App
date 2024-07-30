@@ -4,6 +4,7 @@ export enum DataKey {
     LoginResponse = "LoginResponse",
     CurrentPV = "CurrentPV",
     TenantId = "TenantId",
+    IsLoginValidado = "IsLoginValidado",
     URL_Base = "URL_Base",
     DominioValorString = "DominioValorString",
     CurrentContaId = "CurrentContaId"

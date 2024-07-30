@@ -14,7 +14,7 @@ export default function DrawerRoute001() {
                 headerTitleAlign: 'center',
                 title: 'Menu',
             }} />
-            <Drawer.Screen name="Configuração" component={CS_SC_006__EnvorimentConfig} />
+            <Drawer.Screen name="Configuração" component={CS_SC_006__EnvorimentConfig} initialParams={{ doLogout: true }} />
 
         </Drawer.Navigator>
     );

@@ -54,7 +54,7 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
             handleSetClienteToPv(bb12id).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 navigation.navigate('Pre_Venda_Detalhes', {
-                    currentPv: pvId
+                    currentPv: ""
                 })
             })
         } else {

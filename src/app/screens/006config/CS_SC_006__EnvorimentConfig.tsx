@@ -12,10 +12,12 @@ import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import { validaAmbiente } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { logout } from "../../view_controller/login/LoginViewController";
+import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import CustomLoading from "../../components/loading/CustomLoading";
 
 
 // Componente de configuração de ambiente
-const CS_SC_006__EnvorimentConfig = () => {
+const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
@@ -24,32 +26,44 @@ const CS_SC_006__EnvorimentConfig = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { navigate } = useNavigation();
     const db = useDatabase();
+    const { doLogout = false } = route.params || {}
 
     // useEffect para carregar os dados iniciais
     useFocusEffect(
         useCallback(() => {
-            get();
-            logout(DataKey.LoginResponse)
+            if (doLogout) {
+                //todo
+            } else {
+                get()
+            }
         }, [])
     );
 
     // Função para navegar para o menu
-    function init() {
+    async function init() {
         setIsLoading(true)
-        if (tenant === '' || tenant === undefined || urlBase === '' || urlBase === undefined || token === '' || token === undefined) {
-            showToast(ToastType.ERROR, "Dados Insuficientes!", "Preencha os dados corretamente para avançar!")
-            setIsLoading(false)
+        const isValidado = await getSimpleData(DataKey.IsLoginValidado)
+        if (isValidado) {
+            navigate('Login');
         } else {
-            validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
-                if (res.Retorno.IsOk) {
-                    navigate('Login');
-                }
+            if (tenant === '' || tenant === undefined || urlBase === '' || urlBase === undefined || token === '' || token === undefined) {
+                showToast(ToastType.ERROR, "Dados Insuficientes!", "Preencha os dados corretamente para avançar!")
                 setIsLoading(false)
-            }).catch((res) => {
-                showToast(ToastType.ERROR, "Erro", "Um erro ocorreu, verifique as informações")
-                setIsLoading(false)
-            })
+            } else {
+                validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
+                    if (res.Retorno.IsOk) {
+                        storeSimpleDataVc(DataKey.IsLoginValidado, "1").then(() => {
+                            navigate('Login');
+                        })
+                    }
+                    setIsLoading(false)
+                }).catch((res) => {
+                    showToast(ToastType.ERROR, "Erro", "Um erro ocorreu, verifique as informações")
+                    setIsLoading(false)
+                })
+            }
         }
+
     }
 
     // Função assíncrona para buscar dados do banco de dados
@@ -62,12 +76,11 @@ const CS_SC_006__EnvorimentConfig = () => {
                     setTenant(response!.tenantId.toString());
                     setUrlBase(response!.urlBase);
                     setToken(response!.token);
-                    storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString());
-
-                    //configura a url no axios
-                    api.defaults.baseURL = response.urlBase;
-                   
-
+                    storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString()).then(() => {
+                        //configura a url no axios
+                        api.defaults.baseURL = response.urlBase;
+                        init()
+                    });
                 } else {
                     // Se não houver resposta, resetar estados
                     setHasValue(false);
@@ -99,6 +112,9 @@ const CS_SC_006__EnvorimentConfig = () => {
         setHasValue(false);
     }
 
+    if (isLoading) {
+        return <CustomLoading />
+    }
     // Renderização do componente
     return (
         <SafeAreaView style={{ flex: 1, padding: 16 }}>
@@ -125,7 +141,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                             style={commonStyle.common_button_style}
                             underlayColor='white'
                         >
-                            {isLoading ? <ActivityIndicator color={"#FFF"} /> : <Text style={commonStyle.common_text_button_style}>Validar</Text>}
+                            <Text style={commonStyle.common_text_button_style}>Validar</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -147,6 +163,7 @@ const CS_SC_006__EnvorimentConfig = () => {
                             style={[commonStyle.common_input]}
                             onChangeText={setTenant}
                             placeholder="Digite o tenant"
+                            keyboardType='decimal-pad'
                             value={tenant}
                         />
 
