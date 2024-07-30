@@ -2,8 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CustomHeaderLogo from "../components/headers/CustomHeaderLogo";
 import CustomLoggoutTitle from "../components/headers/CustomLoggoutTitle";
 import CS_SC_001_Login from "../screens/001login/CS_SC_001_Login";
-import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
-import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
 import CS_CS_005_05_Chat from "../screens/005obras/CS_CS_005_05_Chat";
 import CS_SC_005_02_Solicitação from "../screens/005obras/CS_SC_005_02_Solicitação";
 import CS_SC_005_03_Requisição from "../screens/005obras/CS_SC_005_03_Requisição";
@@ -16,19 +14,19 @@ import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 
 import CS_SC_003_02_01_PreVendaEditEnd from "../screens/003prevenda/003_02_cliente/003_02_01_end/CS_SC_003_02_01_PreVendaEditEnd";
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
+import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
+import CS_SC_008_DetalheComanda from "../screens/008ListaComandas/CS_SC_008_DetalheComanda";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
 import CS_SC_009_CadastroEndereco from "../screens/009Cliente/CS_SC_009_CadastroEndereco";
+import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
+import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
+import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
+import DrawerRoute001 from "./drawer.route";
 import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
-import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
-import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
-import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
-import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
-import DrawerRoute001 from "./drawer.route";
-import CS_SC_008_DetalheComanda from "../screens/008ListaComandas/CS_SC_008_DetalheComanda";
 
 
 
@@ -236,15 +234,17 @@ export default function StackRoutes() {
 
 
 
-            <StackNav.Screen name="Consulta_Produtos" component={CS_SC_ConsultaProdutos} options={{
-                title: "Consulta de Produto",
-                headerTitleAlign: 'center',
-                headerTintColor: "#fff",
-                headerStyle: {
-                    backgroundColor: "#0A3147"
-                },
-                headerBackVisible: true,
-            }} />
+            <StackNav.Screen name="Consulta_Produtos" component={TabRoutes002}
+                initialParams={{ cameFromPv: false, insertComanda: false, comandaId: undefined }}
+                options={{
+                    title: "Consulta de Produto",
+                    headerTitleAlign: 'center',
+                    headerTintColor: "#fff",
+                    headerStyle: {
+                        backgroundColor: "#0A3147"
+                    },
+                    headerBackVisible: true,
+                }} />
 
             <StackNav.Screen name="Config_Ambiente" component={CS_SC_006__EnvorimentConfig} options={{
                 title: "Configuração de Ambiente",

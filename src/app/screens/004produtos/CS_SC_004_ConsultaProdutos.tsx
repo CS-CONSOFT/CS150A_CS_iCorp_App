@@ -44,6 +44,9 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         setStatus(FETCH_STATUS.BTN_CLICK)
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
             const pvId = currentPv as string
+
+            console.log("Ao clicar, esse e o que esta na memoria: " + currentPv);
+
             if (insertComanda) {
                 let dataPostInsertComandaProduto: IComandaDataInsert = {
                     in_comanda_id: comandaId,
@@ -59,18 +62,26 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     false, // is entrega
                     1, // quantidade
                     1, // tipo atendimento
-                    cameFromPv ? pvId : undefined, // pv id
+                    pvId ? pvId : undefined, // pv id
                     undefined // conta id
                 ).then(() => {
                     setStatus(FETCH_STATUS.SUCCESS)
                     showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
                     if (cameFromPv) {
                         navigate('Pre_Venda_Detalhes', {
-                            currentPv: pvId
+                            currentPv: ""
                         })
                     }
+                }).catch(() => {
+                    showToast(ToastType.ERROR, "ERRO", "Consultar service center")
+                    setStatus(FETCH_STATUS.ERROR)
+                    return
                 })
             }
+        }).catch(() => {
+            showToast(ToastType.ERROR, "Erro", "Checar service center")
+            setStatus(FETCH_STATUS.ERROR)
+            return
         })
     }
 
@@ -131,7 +142,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 setStatus(FETCH_STATUS.ERROR)
             }
         }).catch((res) => {
-            showToast(ToastType.ERROR, "Erro", "")
+            showToast(ToastType.ERROR, "Erro", res.Msg)
+            setStatus(FETCH_STATUS.ERROR)
             return
         })
     };
@@ -144,9 +156,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     // Renderização da tela
     return (
-        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-            <Suspense fallback={<ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}>
-
+        <View style={{ flex: 1 }}>
+            <Suspense fallback={<ActivityIndicator style={[commonStyle.align_centralizar]} size="large" color={ColorStyle.colorPrimary200} />}>
                 <View>
                     {/* Componente de pesquisa */}
                     <CustomSearch
@@ -171,7 +182,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                     rightItem={<>
                                         <RightItem
                                             loadingClick={loadingBtnClickItem}
-                                            click={() => scInsertProduct(item)}
+                                            scInsertProduct={() => scInsertProduct(item)}
                                         />
                                     </>}
                                 />}
@@ -204,7 +215,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             />
 
             {paginationArray.length > 1 && (
-                <View>
+                <View style={commonStyle.common_margin_bottom_8}>
                     <Custom_Pagination
                         onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
                         paginationArray={paginationArray} />
@@ -244,10 +255,10 @@ const ProductItem = ({ product }: { product: IResGetProductItem }) => {
 }
 
 // Componente do botão direito para adicionar o produto à pré-venda
-const RightItem = ({ click, loadingClick }: { click: () => void, loadingClick: boolean }) => {
+const RightItem = ({ scInsertProduct, loadingClick }: { scInsertProduct: () => void, loadingClick: boolean }) => {
     return (
         <View style={stylesConsultaProduto.rightIcons}>
-            <Pressable onPress={click}>
+            <Pressable onPress={scInsertProduct}>
                 {loadingClick ? <ActivityIndicator size={32} color={"#000"} /> : <CustomIcon icon={ICON_NAME.CARRINHO_CONTORNADO} />}
             </Pressable>
         </View>

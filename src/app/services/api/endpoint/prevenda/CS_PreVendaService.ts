@@ -1,5 +1,5 @@
 import { DataKey } from "../../../../enum/DataKeys";
-import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
+import { getSimpleData, storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
 import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
 import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
@@ -40,6 +40,8 @@ export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<I
  * com o atendimento id definido, irá inserir o produto no atendimento especificado.
  */
 export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): Promise<IResInsertPv> {
+    console.log("Essa é a que foi enviada na req: " + insertPv.cs_atendimento);
+
     try {
         const data = {
             UsuarioId: insertPv.cs_usuario_id,
@@ -58,8 +60,16 @@ export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): P
         }
 
         const response = await api.post(url, data)
-        return response.data as IResInsertPv
+        const res = response.data as IResInsertPv
 
+        console.log("A que veio como resposta da API" + res.Model.AtendimentoId);
+
+        if (!insertPv.cs_atendimento) {
+            console.log("Nao tem atendimento");
+            await storeSimpleData(DataKey.CurrentPV, res.Model.AtendimentoId)
+        }
+
+        return res
     } catch (error) {
         throw error;
     }

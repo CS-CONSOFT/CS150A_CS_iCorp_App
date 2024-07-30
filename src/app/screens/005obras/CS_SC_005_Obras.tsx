@@ -65,7 +65,6 @@ const CS_SC_005_Obras = () => {
                     onPagePress={(page) => getListObras(page)}
                     paginationArray={paginationArray} />
             </View>
-
         </View>
     );
 }

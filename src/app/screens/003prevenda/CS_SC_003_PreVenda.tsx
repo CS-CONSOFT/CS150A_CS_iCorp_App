@@ -80,13 +80,14 @@ const CS_SC_003_PreVenda = () => {
     const isLoading = status === FETCH_STATUS.LOADING
 
     return (
-        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
+        <View style={{ flex: 1 }}>
             {isLoading ? <>
                 <CustomLoading />
             </> :
                 <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
                     <FlatList
+                        style={{ height: '77%' }}
                         data={pvList.toReversed()}
                         refreshing={isLoading}
                         onRefresh={handleRefreshList}
@@ -99,7 +100,7 @@ const CS_SC_003_PreVenda = () => {
                 </View>
             }
             {paginationArray !== undefined && paginationArray.length > 1 && (
-                <View>
+                <View style={{ height: '23%' }}>
                     <Custom_Pagination
                         onPagePress={(page) => _fetchPV(page)}
                         paginationArray={paginationArray} />
