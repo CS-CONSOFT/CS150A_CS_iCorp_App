@@ -42,7 +42,7 @@ declare global {
             Entrega: undefined,
             Serie: undefined,
             Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
-            Config_Ambiente: undefined,
+            Config_Ambiente: { doLogout?: boolean },
             Camera: { previousScreen: string }
             Pre_Venda_Detalhes: { currentPv: string },
             Pre_Venda: undefined,

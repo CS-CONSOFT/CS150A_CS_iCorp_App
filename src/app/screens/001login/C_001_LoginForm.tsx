@@ -61,7 +61,9 @@ const CS_SC001_LoginForm = () => {
             password: attributesMap.Senha
         }
         try {
+
             loginData.tenant = tenantId
+
             generalLoginVc(loginData).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 if (res.IsOk) {
@@ -77,7 +79,9 @@ const CS_SC001_LoginForm = () => {
                     showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL")
                     setStatus(FETCH_STATUS.ERROR)
                     logout(DataKey.LoginResponse).then(() => {
-                        navigate('Config_Ambiente')
+                        navigate('Config_Ambiente', {
+                            doLogout: true
+                        })
                     })
                 }
             })
@@ -126,7 +130,7 @@ const CS_SC001_LoginForm = () => {
 
             <TouchableHighlight
                 onPress={() => {
-                    navigate('Config_Ambiente')
+                    navigate('Config_Ambiente', { doLogout: true })
                 }}
                 style={commonStyle.common_button_style}
                 underlayColor='white'
