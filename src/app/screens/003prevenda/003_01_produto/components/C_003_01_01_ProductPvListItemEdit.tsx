@@ -13,6 +13,7 @@ import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../
 import { common003_01_styles } from "./CommonStyles";
 import { formatMoneyValue } from '../../../../util/FormatText';
 import { IReqUpdateProdutItens } from '../../../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens';
+import CurrencyInput from 'react-native-currency-input';
 
 /** componente de edição dos valores do produto */
 const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
@@ -33,10 +34,10 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [isRequisitar, setIsRequisitar] = useState(false);
     const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Quantidade);
 
-    const [tablePrice, setTablePrice] = useState('');
-    const [unityPrice, setUnityPrice] = useState('');
-    const [percentDiscount, setPercentDiscount] = useState('');
-    const [valueDiscount, setValueDiscount] = useState('');
+    const [tablePrice, setTablePrice] = useState(0);
+    const [unityPrice, setUnityPrice] = useState(0);
+    const [percentDiscount, setPercentDiscount] = useState('0');
+    const [valueDiscount, setValueDiscount] = useState(0);
 
     const [updateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
 
@@ -46,12 +47,10 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setIsMontar(product.csicp_dd080.DD080_IsMontar)
         setIsSaldoNegativo(product.csicp_dd080.DD080_Solicita_NS_Negativa)
         setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
-        setTablePrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Tabela || 0));
-        setUnityPrice(formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario || 0));
+        setTablePrice(product.csicp_dd080.DD080_Preco_Tabela || 0);
+        setUnityPrice(product.csicp_dd080.DD080_Preco_Unitario || 0);
         setPercentDiscount(formatPercentInput((product.csicp_dd080.DD080_Perc_DescProduto || 0).toString() || '0'));
-        setValueDiscount(formatMoneyValue(product.csicp_dd080.DD080_Total_Desconto || 0));
-        console.log("ss" + product.csicp_dd080.DD080_Perc_DescProduto);
-
+        setValueDiscount(product.csicp_dd080.DD080_Total_Desconto || 0);
     }, [])
 
     /** ALTERA A QUANTIDADE */
@@ -64,59 +63,6 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             }
         })
     }
-
-
-    /**
-     * @param inputValue valor escrito no input
-     * @param inputField 1= preço tabela || 2= || 3= || 4=
-     */
-    function applyMaskAndDisplay(inputValue: string, inputField: number) {
-        handleMaskAction(inputValue, inputField, true)
-    }
-    function removeMaskAndSaveData(inputValue: string, inputField: number) {
-        handleMaskAction(inputValue, inputField, false)
-    }
-
-    /**
-     * 
-     * @param inputValue valor passado ao digitar um campo
-     * @param inputField o campo em si
-     * @param isApply se é para aplicar ou nao mascara
-     */
-    // Função para manipular ações de máscara
-    function handleMaskAction(inputValue: string, inputField: number, isApply: boolean) {
-        // Recebe o valor do handle de máscara
-        const tratedValue = isApply ? moneyApplyMask(moneyRemoveMask(inputValue)) : moneyRemoveMask(inputValue);
-        //se for para aplicar o valor sera passado como string
-        if (isApply) {
-            switch (inputField) {
-                case 1:
-                    {
-                        setTablePrice(tratedValue as string);
-                    }
-                    break;
-                case 2:
-                    setUnityPrice(tratedValue as string);
-                    break;
-                case 3:
-                    setValueDiscount(tratedValue as string);
-                    break;
-            }
-        } else {
-            switch (inputField) {
-                case 1:
-                    saveTablePrice(tratedValue as number, product.csicp_dd080.DD080_Id);
-                    break;
-                case 2:
-                    saveUnityPrice(tratedValue as number, product.csicp_dd080.DD080_Id);
-                    break;
-                case 3:
-                    saveDiscountValue(tratedValue as number, product.csicp_dd080.DD080_Id);
-                    break;
-            }
-        }
-    }
-
 
     /** FUNCAO PARA ALTERAR OS VALORES EM SWITCH */
     function handleSwitchChange(value: boolean, currentSwitch: number): void {
@@ -136,6 +82,8 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 break
         }
     }
+
+
 
     return (
         <View style={{ backgroundColor: "#fffafa" }}>
@@ -162,21 +110,20 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ flex: 1, marginRight: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Tabela</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <TextInput
-                                style={[
+                            <CurrencyInput
+                                value={tablePrice}
+                                onChangeValue={(number) => setTablePrice(number || 0)}
+                                renderTextInput={textInputProps => <TextInput style={[
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
-                                ]}
-                                onChangeText={(value) => {
-                                    if (value !== undefined) {
-                                        applyMaskAndDisplay(value, 1)
-                                    }
-                                }}
-                                value={tablePrice}
-                                keyboardType='decimal-pad'
+                                ]} {...textInputProps} />}
+                                prefix="R$"
+                                delimiter="."
+                                separator=","
+                                precision={2}
                             />
                             <CustomIcon icon={ICON_NAME.CHECK} onPress={() => {
-                                removeMaskAndSaveData(tablePrice, 1)
+                                saveTablePrice(tablePrice, product.csicp_dd080.DD080_Id)
                             }} />
                         </View>
                     </View>
@@ -184,20 +131,23 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ flex: 1, marginLeft: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Unitário</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <TextInput
-                                style={[
-                                    commonStyle.common_input,
-                                    { height: 40, flex: 1, padding: 10 }
-                                ]}
-                                onChangeText={(value) => {
-                                    if (value !== undefined) {
-                                        applyMaskAndDisplay(value, 2)
-                                    }
-                                }}
+                            <CurrencyInput
                                 value={unityPrice}
-                                keyboardType='decimal-pad'
+                                onChangeValue={(number) => setUnityPrice(number || 0)}
+
+                                renderTextInput={textInputProps =>
+                                    <TextInput style={[
+                                        commonStyle.common_input,
+                                        { height: 40, flex: 1, padding: 10 }
+                                    ]} {...textInputProps} />}
+
+
+                                prefix="R$"
+                                delimiter="."
+                                separator=","
+                                precision={2}
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(unityPrice, 2)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveUnityPrice(unityPrice, product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
                 </View>
@@ -230,20 +180,20 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ flex: 1, marginLeft: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>Valor Desconto</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <TextInput
-                                style={[
+                            <CurrencyInput
+                                value={valueDiscount}
+                                onChangeValue={(number) => setValueDiscount(number || 0)}
+                                renderTextInput={textInputProps => <TextInput style={[
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
-                                ]}
-                                onChangeText={(value) => {
-                                    if (value !== undefined) {
-                                        applyMaskAndDisplay(value, 3)
-                                    }
-                                }}
-                                value={valueDiscount}
-                                keyboardType='decimal-pad'
+                                ]} {...textInputProps} />}
+                                prefix="R$"
+                                delimiter="."
+                                separator=","
+                                precision={2}
+
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => removeMaskAndSaveData(valueDiscount, 3)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountValue(valueDiscount, product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
                 </View>

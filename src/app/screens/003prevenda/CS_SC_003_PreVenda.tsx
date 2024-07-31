@@ -80,7 +80,7 @@ const CS_SC_003_PreVenda = () => {
 
     function goToDetails(currentPv: Csicp_dd070_Completo) {
         storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
-        navigate('Pre_Venda_Detalhes', {
+        navigate('Pre_Venda_Detalhes_001', {
             currentPv: currentPv.DD070_Nota.csicp_dd070.DD070_ProtocolNumber
         })
     }
