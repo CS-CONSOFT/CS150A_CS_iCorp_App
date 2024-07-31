@@ -40,7 +40,6 @@ export default function TabRoutes002({ route }: { route: any }) {
                     return <Ionicons color={color} size={24} name={"cart"} />
                 },
             }} component={TopTab001} />
-
         </BottomTab.Navigator >
     )
 }
