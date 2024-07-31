@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
@@ -14,8 +14,9 @@ import { formatMoneyValue } from "../../util/FormatText";
 import { getPaginationList } from "../../util/GetPaginationArray";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleFetchPv, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
+import { getFinalDateToFilter, handleFetchPv, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
+import CustomHorizontalFilter from "../../components/filterHorizontal/CustomHorizontalFilter";
 
 
 
@@ -24,26 +25,33 @@ const CS_SC_003_PreVenda = () => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
     const [paginationArray, setPaginationArray] = useState<number[]>([])
+    const [currentDateFilter, setCurrentDateFilter] = useState(-1)
 
     useFocusEffect(
         useCallback(() => {
-            _fetchPV(1)
-        }, [])
+            _fetchPV(1, currentDateFilter)
+        }, [currentDateFilter])
     );
 
 
-    /**Formatando data */
-    const finalDate: Date = new Date()
 
-    const initialDate: Date = new Date()
-    initialDate.setDate(initialDate.getDate() - 500)
-
-    const initialDateString: string = finalDate.toISOString().slice(0, 10);
-    const finalDateString: string = finalDate.toISOString().slice(0, 10);
-    /**Formatando data */
-    const _fetchPV = async (page: number) => {
+    const _fetchPV = async (page: number, dateFilterId: number) => {
         setStatus(FETCH_STATUS.LOADING)
-        handleFetchPv(initialDateString, finalDateString, page, 4).then((res) => {
+
+
+        /**Formatando data */
+        const todayDate: Date = new Date()
+
+        const passDate = getFinalDateToFilter(dateFilterId)
+
+        const todayDateString: string = todayDate.toISOString().slice(0, 10);
+        const passDateString: string = passDate.toISOString().slice(0, 10);
+
+        console.log("initial: " + todayDateString);
+        console.log("final: " + passDateString);
+
+
+        handleFetchPv(passDateString, todayDateString, page, 10).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
@@ -65,7 +73,7 @@ const CS_SC_003_PreVenda = () => {
 
     function handleRefreshList(): void {
         setStatus(FETCH_STATUS.LOADING)
-        _fetchPV(1).then(() => {
+        _fetchPV(1, currentDateFilter).then(() => {
             setStatus(FETCH_STATUS.SUCCESS)
         })
     }
@@ -86,8 +94,22 @@ const CS_SC_003_PreVenda = () => {
             </> :
                 <View>
                     <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
+
+                    <CustomHorizontalFilter
+                        dataList={[
+                            { id: 0, label: 'Hoje' },
+                            { id: 1, label: 'Ontem' },
+                            { id: 2, label: '5 dias' },
+                            { id: 3, label: '15 dias' },
+                            { id: 4, label: '30 dias' },
+                        ]}
+                        onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                        currentDateFilter={currentDateFilter}
+                    />
+
+
                     <FlatList
-                        style={{ height: '77%' }}
+                        style={{ height: '70%' }}
                         data={pvList.toReversed()}
                         refreshing={isLoading}
                         onRefresh={handleRefreshList}
@@ -100,9 +122,9 @@ const CS_SC_003_PreVenda = () => {
                 </View>
             }
             {paginationArray !== undefined && paginationArray.length > 1 && (
-                <View style={{ height: '23%' }}>
+                <View style={{ height: '30%' }}>
                     <Custom_Pagination
-                        onPagePress={(page) => _fetchPV(page)}
+                        onPagePress={(page) => _fetchPV(page, currentDateFilter)}
                         paginationArray={paginationArray} />
                 </View>
             )}

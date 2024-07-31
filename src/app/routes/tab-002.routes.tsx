@@ -6,7 +6,7 @@ import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaPro
 import CS_SC_002_Menu from "../screens/002menu/CS_SC_002_Menu";
 
 const BottomTab = createBottomTabNavigator()
-const TopTab = createMaterialTopTabNavigator();
+
 
 
 /**
@@ -29,10 +29,8 @@ export default function TabRoutes002({ route }: { route: any }) {
                         return <Ionicons color={color} size={size} name={"list-outline"} />
                     },
                 }}
-
             />
-
-            <TopTab.Screen name="Pré Venda" options={{
+            <BottomTab.Screen name="Pré Venda" options={{
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {
                         return <Ionicons color={color} size={24} name={"cart"} />

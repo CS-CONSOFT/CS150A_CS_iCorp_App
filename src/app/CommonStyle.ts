@@ -2,7 +2,20 @@ import { StyleSheet } from "react-native"
 import ColorStyle from "./ColorStyle";
 
 export const commonStyle = StyleSheet.create({
-
+    filterDateClicked: {
+        backgroundColor: "#0A3147",
+        borderRadius: 32
+    },
+    filterDateTextClicked: {
+        color: "#FFF"
+    },
+    filterDate: {
+        backgroundColor: "#A3C5D9",
+        borderRadius: 32
+    },
+    filterDateText: {
+        color: "#0A3147"
+    },
     common_container: {
         flex: 1,
         backgroundColor: '#fff',

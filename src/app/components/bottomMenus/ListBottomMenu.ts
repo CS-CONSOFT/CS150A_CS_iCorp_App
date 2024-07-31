@@ -32,3 +32,4 @@ export const listBottomMenu002 = [
         iconName: ICON_NAME.ESTATISTICA_CONTORNADO
     }
 ]
+

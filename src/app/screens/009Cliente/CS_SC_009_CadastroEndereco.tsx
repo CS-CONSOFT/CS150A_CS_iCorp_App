@@ -20,6 +20,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         Bairro: '',
         Complemento: '',
         CidadeNome: '',
+        UFNome: '',
         Numero: '',
         Perimetro: ''
     });
@@ -43,9 +44,8 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
             Logradouro: '',
             Bairro: '',
             Complemento: '',
-            UF: '',
-            Cidade: '',
             CidadeNome: '',
+            UFNome: '',
             Numero: '',
             Perimetro: ''
         });
@@ -56,7 +56,9 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
     useEffect(() => {
         try {
             handleGetUfList().then((res) => {
-                const list = res.csicp_aa027
+                const list = res.Lista_csicp_aa027
+                console.log(list);
+
                 const mappedUfList = list.map(item => (
                     {
                         key: item.csicp_aa027.Id,
@@ -118,6 +120,8 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                 if (res !== undefined) {
                     setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
                     setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)
+                    setValueToObjectWhenInputTyped('UFNome', res.UF_NOME)
+                    setValueToObjectWhenInputTyped('CidadeNome', res.CIDADE_NOME)
                     setSelectedCity(res.CIDADE_ID)
                     setSelectedUf(res.UF_ID)
                 } else {
@@ -249,14 +253,15 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
 
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl, { alignSelf: 'flex-start' }]}>
                     <View style={[commonStyle.common_columnItem, commonStyle.common_margin_right_16]}>
-                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>N</Text>
+                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>N°</Text>
                         <TextInput
                             style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 80 }]}
                             onChangeText={(value) => setValueToObjectWhenInputTyped('Numero', value)}
                             value={attributesMap.Numero}
-                            placeholder="N"
+                            placeholder="N°"
                         />
                     </View>
+
 
                     <View style={[commonStyle.common_columnItem]}>
                         <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Complemento</Text>
@@ -293,7 +298,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                         save="key"
                         search={false}
                         dropdownItemStyles={styles.dropdownStyle}
-                        defaultOption={isEdit ? { key: ufSelected, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla } : undefined}
+                        defaultOption={isEdit ? { key: ufSelected, value: userToEdit?.BB01206_Endereco.csicp_aa027.AA027_Sigla } : { key: ufSelected, value: attributesMap.UFNome }}
                     />
 
                     {cityList === undefined && ufSelected !== '' && (
@@ -310,14 +315,10 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                                 setSelected={(key: string) => { setSelectedCity(key) }}
                                 data={cityList!}
                                 save="key"
-                                defaultOption={isEdit ? { key: citySelected, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade } : undefined}
+                                defaultOption={isEdit ? { key: citySelected, value: userToEdit?.BB01206_Endereco.csicp_aa028.AA028_Cidade } : { key: citySelected, value: attributesMap.CidadeNome }}
                             />
 
                         </View>
-                    )}
-
-                    {citySelected !== '' && (
-                        <Text>{attributesMap.CidadeNome}</Text>
                     )}
                 </View>
 
