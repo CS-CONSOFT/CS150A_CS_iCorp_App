@@ -5,7 +5,7 @@ export const stylesPreVenda = StyleSheet.create({
     searchIcon: {
         backgroundColor: '#5E5D5D',
         padding: 8,
-        borderRadius: 32,
+        borderRadius: 24,
         marginLeft: 8,
         marginRight: 4
     },

@@ -32,6 +32,35 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
     return result
 }
 
+/**
+ * funcao que recupera qual a data final que deve ser utilizada para filtrar a pre venda
+ * @param dateFilterId o id do filtro de data, sendo eles 0 - hoje, 1 - ontem, 2 - 5 dias atras, 3 - 15 dias atras, 4 - 30 dias
+ * @returns 
+ */
+export function getFinalDateToFilter(dateFilterId?: number): Date {
+    if (dateFilterId === undefined || dateFilterId == 0 || dateFilterId == -1) {
+        return new Date()
+    } else {
+        const currentDate: Date = new Date()
+        switch (dateFilterId) {
+            case 1:
+                currentDate.setDate(currentDate.getDate() - 1)
+                return currentDate
+            case 2:
+                currentDate.setDate(currentDate.getDate() - 5)
+                return currentDate
+            case 3:
+                currentDate.setDate(currentDate.getDate() - 15)
+                return currentDate
+            case 4:
+                currentDate.setDate(currentDate.getDate() - 30)
+                return currentDate
+            default:
+                return new Date()
+        }
+    }
+}
+
 
 /**
  * Caso o atendimento id seja undefined, 

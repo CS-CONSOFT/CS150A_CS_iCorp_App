@@ -20,6 +20,7 @@ import { INotaPagamentosValores, handleCalculateValuesPayedAndToPay, handleGetPv
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { moneyApplyMask, moneyRemoveMask } from "../../util/Masks";
+import CurrencyInput from "react-native-currency-input";
 
 const CS_SC_007_Pagamento = () => {
     // Estado para armazenar o PV (Ponto de Venda) atual
@@ -292,7 +293,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
         try {
             handleGetListOfPaymentForm002(isEntrance).then((res) => {
                 if (res !== undefined) {
-                    const transformedData = res.csicp_bb026!.map(item => ({
+                    const transformedData = res.Lista_bb026!.map(item => ({
                         key: item.ID,
                         value: item.BB026_FormaPagamento
                     }));
@@ -363,14 +364,20 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
             handleGetPaymentTermList({ paymentFormKey: formaId }).then((res) => {
                 if (res !== undefined) {
                     //tem condicao de pagamento e ela nao e ela possui condições. Ou seja, NÃO É FIXA, como no caso do dinheiro
-                    if (res.formByIdWithConditions) {
+                    if (res.formByIdWithConditions?.FatoresAcrescimos != undefined) {
+                        console.log('entrou');
+
                         const transformedData = res.formByIdWithConditions.FatoresAcrescimos!.map(item => ({
                             key: item.csicp_bb008.ID,
                             value: item.csicp_bb008.BB008_Condicao_Pagto
                         }));
                         setPaymentTerms(transformedData)
                     } else {
-                        onTermSelected(res.formByIdWithFixedConditions?.csicp_bb026.csicp_bb026.BB026_CondPagtoFixoID!)
+                        const transformedData = [{
+                            key: res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.ID,
+                            value: res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.BB008_Condicao_Pagto
+                        }]
+                        setPaymentTerms(transformedData)
                     }
                     setIsLoading(false)
                 } else {
@@ -418,8 +425,8 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
 /** termId == condicaoId */
 const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado }: { valorAPagarZerado: boolean, paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
-    const [paymentValue, setPaymentValue] = useState(moneyApplyMask(0))
-    const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState(moneyApplyMask(0))
+    const [paymentValue, setPaymentValue] = useState(0)
+    const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState(0)
     const [entranceFormId, setEntranceFormId] = useState('')
     const [btnClickLoading, setBtnClickLoading] = useState(false)
     const [isLoadingData, setIsLoadingData] = useState(false)
@@ -462,8 +469,20 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 FormaPagamentoId: paymentFormId,
                 CondicaoPagamentoId: termId,
                 FormaPagamentoEntradaId: entranceFormId || undefined,
-                Valor: moneyRemoveMask(paymentValue),
-                ValorEntrada: moneyRemoveMask(paymentValueEntranceValue) || 0
+                Valor: paymentValue,
+                ValorEntrada: paymentValueEntranceValue || 0
+            }
+
+            if (iReqInsertPaymentForm.ValorEntrada == 0) {
+                showToast(ToastType.ERROR, "Aviso", "Insira valor de entrada!")
+                setBtnClickLoading(false)
+                return
+            }
+
+            if (iReqInsertPaymentForm.Valor == 0) {
+                showToast(ToastType.ERROR, "Aviso", "Insira valor pagamento!")
+                setBtnClickLoading(false)
+                return
             }
 
             handleInsertPaymentForm({ insertPaymentBody: iReqInsertPaymentForm }).then((res) => {
@@ -490,14 +509,19 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                     <CustomLoading />
                 )}
                 <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Pagamento</Text>
-                <TextInput
-                    keyboardType='numeric'
+                <CurrencyInput
                     value={paymentValue}
-                    onChangeText={(value) => {
-                        const tratedValue = moneyApplyMask(moneyRemoveMask(value))
-                        setPaymentValue(tratedValue)
-                    }
-                    } style={commonStyle.common_input} />
+                    onChangeValue={(number) => setPaymentValue(number || 0)}
+                    /** @ts-ignore */
+                    renderTextInput={textInputProps => <TextInput style={[
+                        commonStyle.common_input,
+                        { height: 40, flex: 1, padding: 10 }
+                    ]} {...textInputProps} />}
+                    prefix="R$ "
+                    delimiter="."
+                    separator=","
+                    precision={2}
+                />
 
                 {termItem?.PermiteEntrada && (
                     <View>
@@ -509,15 +533,19 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
 
 
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
-                        <TextInput value={paymentValueEntranceValue}
-                            keyboardType='numeric'
-                            onChangeText={(value) => {
-                                const tratedValue = moneyApplyMask(Number(moneyRemoveMask(value)))
-                                setPaymentValueEntranceValue(tratedValue)
-                            }
-                            }
-
-                            style={commonStyle.common_input} />
+                        <CurrencyInput
+                            value={paymentValueEntranceValue}
+                            onChangeValue={(number) => setPaymentValueEntranceValue(number || 0)}
+                            /** @ts-ignore */
+                            renderTextInput={textInputProps => <TextInput style={[
+                                commonStyle.common_input,
+                                { height: 40, flex: 1, padding: 10 }
+                            ]} {...textInputProps} />}
+                            prefix="R$ "
+                            delimiter="."
+                            separator=","
+                            precision={2}
+                        />
                     </View>
                 )}
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
@@ -567,9 +595,8 @@ const ItemDetalhamento = ({ toDeleteForm, deletePaymentForm, item }: { toDeleteF
             </View>
 
 
-            {item.FormaPagto_Vinculado && (
+            {item.FormaPagto_Vinculado && item.FormaPagto_Vinculado.V1_csicp_dd072.DD072_Valor_Pago > 0 && (
                 <View>
-
                     <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, { paddingHorizontal: 16, backgroundColor: "#C3C3C3" }]}>
                         <Text style={{ padding: 16 }}>Entrada:</Text>
                         <Text style={{ padding: 16 }}>{item.FormaPagto_Vinculado.V2_csicp_bb026.BB026_FormaPagamento}</Text>

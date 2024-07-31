@@ -68,7 +68,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     setStatus(FETCH_STATUS.SUCCESS)
                     showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
                     if (cameFromPv) {
-                        navigate('Pre_Venda_Detalhes', {
+                        navigate('Pre_Venda_Detalhes_002', {
                             currentPv: ""
                         })
                     }

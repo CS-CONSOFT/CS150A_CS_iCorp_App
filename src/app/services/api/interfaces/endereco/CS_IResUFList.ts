@@ -1,6 +1,6 @@
 export interface IResUfList {
     PageSize: PageSize
-    csicp_aa027: Csicp_aa027[]
+    Lista_csicp_aa027: Csicp_aa027[]
     Code_Erro: Code_Erro
 }
 

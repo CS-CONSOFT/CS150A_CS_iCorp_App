@@ -23,7 +23,6 @@ export async function getListOfUf({ tenantId }: { tenantId: number }): Promise<I
         const headers = {
             tenant_id: tenantId,
             In_IsCount: 0,
-            In_PaisID: 'a7c1b7fb-1780-4a39-b827-556c63d55856',
             in_currentPage: 1,
             in_pageSize: 27,
             In_IsActive: true

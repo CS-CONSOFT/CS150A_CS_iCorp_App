@@ -83,6 +83,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
+    //FALAR COM AGNALDO
     namespace 'com.teste_123456.cspv'
     defaultConfig {
         applicationId 'com.teste_123456.cspv'

@@ -10,12 +10,13 @@ import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, ha
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
+import { useNavigation } from "@react-navigation/native";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {
     const [pv, setPv] = useState<IResGetPv>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
-
+    const navigation = useNavigation()
 
     useEffect(() => {
         getCurrentPv()
@@ -30,6 +31,9 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                 setPv(res)
                 setStatus(FETCH_STATUS.SUCCESS)
             }
+        }).catch((err) => {
+            navigation.goBack()
+            showToast(ToastType.ERROR, "Erro", "Nenhuma PV Ativa no momento")
         })
     }
 
@@ -150,6 +154,7 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
     return (
         <>
             <FlatList
+
                 data={pv?.DD080_Produtos}
                 keyExtractor={(item) => item.csicp_dd080.DD080_Id}
                 refreshing={isLoading}
