@@ -11,7 +11,7 @@ import CustomLoading from "../../components/loading/CustomLoading";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
-
+import ColorStyle from "../../ColorStyle";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
@@ -102,14 +102,14 @@ const CS_SC001_LoginForm = () => {
 
     return (
         <SafeAreaView>
-            <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Usuário</Text>
+            <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Usuário</Text>
             <TextInput
                 style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Usuário', value)}
                 value={attributesMap.Usuário}
             />
 
-            <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Senha</Text>
+            <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Senha</Text>
             <TextInput
                 style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
                 onChangeText={(value) => handleInputTyping('Senha', value)}
@@ -122,7 +122,7 @@ const CS_SC001_LoginForm = () => {
                 onPress={() => {
                     isBtnLoading ? {} : onClickLogin()
                 }}
-                style={commonStyle.common_button_style}
+                style={[commonStyle.common_button_style, {backgroundColor: ColorStyle.colorPrimary100}]}
                 underlayColor='white'
             >
                 {isBtnLoading ? <ActivityIndicator /> : <Text style={commonStyle.common_text_button_style}>Logar</Text>}
@@ -132,10 +132,10 @@ const CS_SC001_LoginForm = () => {
                 onPress={() => {
                     navigate('Config_Ambiente', { doLogout: true })
                 }}
-                style={commonStyle.common_button_style}
+                style={[commonStyle.common_button_style, {backgroundColor: ColorStyle.colorPrimary300}]}
                 underlayColor='white'
             >
-                <Text style={commonStyle.common_text_button_style}>Configuração</Text>
+                <Text style={[commonStyle.common_text_button_style, {color: 'white',}]}>Configuração</Text>
             </TouchableHighlight>
         </SafeAreaView>
     );

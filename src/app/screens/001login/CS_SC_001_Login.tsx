@@ -34,11 +34,13 @@ const CS_SC_001_Login = () => {
                 source={require('../../../../assets/loginConf02.png')}
                 style={{ flex: 1 }}
             >
-                <View style={{ margin: 56 }}>
+                <View style={{ marginTop: 50, marginHorizontal: 30}}>
                     <CustomHeaderLogo />
                     <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
-                    <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Domínio: {currentDominio}</Text>
-                    <CS_SC001_LoginForm />
+                    <View style={[commonStyle.bg_blacktransparent, {borderRadius: 20, padding: 10}]}>
+                        <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Domínio: {currentDominio}</Text>
+                        <CS_SC001_LoginForm />
+                    </View>
                 </View>
             </ImageBackground>
         </SafeAreaView>

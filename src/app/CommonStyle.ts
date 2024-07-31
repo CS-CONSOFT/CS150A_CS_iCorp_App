@@ -29,6 +29,9 @@ export const commonStyle = StyleSheet.create({
         borderTopRightRadius: 16,
         borderBottomRightRadius: 16
     },
+    bg_blacktransparent: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
     margin_16: {
         margin: 16
     },
@@ -132,15 +135,13 @@ export const commonStyle = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 32,
         elevation: 3,
-        backgroundColor: '#A3C5D9',
-        margin: 16
+        margin: 14
     },
     common_text_button_style: {
         fontSize: 16,
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
-        color: '#0A3147',
     },
     justify_content_space_btw: {
         justifyContent: 'space-between'
