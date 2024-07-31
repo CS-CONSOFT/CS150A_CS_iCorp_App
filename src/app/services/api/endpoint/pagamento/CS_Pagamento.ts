@@ -53,15 +53,16 @@ export async function getPaymentFormByIdWithConditions({ tenantId, paymentFormKe
             formByIdWithConditions: undefined,
             formByIdWithFixedConditions: undefined
         }
-        //se houver condicao fixa
-        if (condFixId !== undefined) {
+
+        //se houver nao condicao fixa
+        if (condFixId == undefined || condFixId == "") {
             iResPaymentFormComplete = {
-                formByIdWithFixedConditions: response.data
+                formByIdWithConditions: response.data,
             }
-            //caso nao
+            //caso haja
         } else {
             iResPaymentFormComplete = {
-                formByIdWithConditions: response.data
+                formByIdWithFixedConditions: response.data,
             }
         }
         return iResPaymentFormComplete
@@ -72,6 +73,8 @@ export async function getPaymentFormByIdWithConditions({ tenantId, paymentFormKe
 
 /** unica condicao de pagamento */
 export async function getPaymentTerm({ tenantId, termId, paymentFormKey }: { tenantId: number, termId: string, paymentFormKey: string }): Promise<TermItem> {
+
+
     const url = `/cs_At_40_LogicoService/rest/CS_Basico_API/${tenantId}/${termId}//${paymentFormKey}/GetCondicaoPagamento`
 
 
