@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import ColorStyle from "../../ColorStyle";
 export const stylesLogin = StyleSheet.create({
     button: {
         alignItems: 'center',
@@ -20,6 +21,7 @@ export const stylesLogin = StyleSheet.create({
     txtAtendimentoMobile: {
         fontWeight: '600',
         textAlign: 'center',
+        color: 'white',
         fontSize: 18,
         marginTop: 44,
         marginBottom: 44
@@ -30,5 +32,6 @@ export const stylesLogin = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
-    }
+    },
+    
 });

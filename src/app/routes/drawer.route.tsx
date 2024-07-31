@@ -10,9 +10,9 @@ export default function DrawerRoute001() {
     return (
         <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="Menu" component={CS_SC_002_Menu} options={{
-                headerRight: () => <CustomHeaderLogo />,
+                //headerRight: () => <CustomHeaderLogo />,
                 headerTitleAlign: 'center',
-                title: 'Menu',
+                title: '',
             }} />
             <Drawer.Screen name="Configuração" component={CS_SC_006__EnvorimentConfig} initialParams={{ doLogout: true }} />
 
