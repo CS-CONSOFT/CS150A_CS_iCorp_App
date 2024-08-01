@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "cs-pv",
-    "slug": "cs-pv",
+    "name": "cs-pv-alpha",
+    "slug": "cs-pv-alpha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "cs-pv",
+    "scheme": "cs-pv-alpha",
     "splash": {
       "image": "./assets/LogoBrancoVermelho.png",
       "resizeMode": "contain",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.teste_123456.cspv"
+      "package": "cs.cspv"
     },
     "web": {
       "favicon": "./assets/favicon.png"

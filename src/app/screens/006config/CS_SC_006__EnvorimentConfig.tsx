@@ -26,7 +26,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [isLoading, setIsLoading] = useState(false)
     const { navigate } = useNavigation();
     const db = useDatabase();
-    const { doLogout = false } = route.params || {}
+    const { doLogout = true } = route.params || {}
 
     // useEffect para carregar os dados iniciais
     useFocusEffect(

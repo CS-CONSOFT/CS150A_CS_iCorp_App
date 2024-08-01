@@ -1,17 +1,14 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight, ActivityIndicator } from "react-native";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, Alert, SafeAreaView, Text, TextInput, TouchableHighlight } from "react-native";
+import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 import { DataKey } from "../../enum/DataKeys";
+import { useDatabase } from "../../services/storage/useDatabase";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { ToastType, showToast } from "../../util/ShowToast";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
-import { stylesLogin } from "./StylesLogin";
-import { commonStyle } from "../../CommonStyle";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import CustomLoading from "../../components/loading/CustomLoading";
-import { useDatabase } from "../../services/storage/useDatabase";
-import { ToastType, showToast } from "../../util/ShowToast";
-import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
-import ColorStyle from "../../ColorStyle";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
