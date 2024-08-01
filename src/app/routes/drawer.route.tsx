@@ -1,8 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import CustomHeaderLogo from '../components/headers/CustomHeaderLogo';
-import CS_SC_002_Menu from '../screens/002menu/CS_SC_002_Menu';
-import CS_SC_006__EnvorimentConfig from '../screens/006config/CS_SC_006__EnvorimentConfig';
 import CustomDrawerContent from '../components/drawer/CustomDrawerContent ';
+import CS_SC_002_Menu from '../screens/002menu/CS_SC_002_Menu';
 
 const Drawer = createDrawerNavigator();
 
@@ -12,10 +10,9 @@ export default function DrawerRoute001() {
             <Drawer.Screen name="Menu" component={CS_SC_002_Menu} options={{
                 //headerRight: () => <CustomHeaderLogo />,
                 headerTitleAlign: 'center',
-                title: '',
+                title: 'Menu',
             }} />
-            <Drawer.Screen name="Configuração" component={CS_SC_006__EnvorimentConfig} initialParams={{ doLogout: true }} />
-
         </Drawer.Navigator>
     );
+    //<Drawer.Screen name="Configuração" component={CS_SC_006__EnvorimentConfig} initialParams={{ doLogout: true }} />
 }

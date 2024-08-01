@@ -76,8 +76,6 @@ const CS_SC_008_ListaComandas = () => {
                             totalValor={item.TotalValor}
                             item={item}
                             onPress={() => {
-                                console.log(item.csicp_tt010.tt010_Id);
-
                                 navigation.navigate('DetalheComanda', {
                                     comandaId: item.csicp_tt010.tt010_Id
                                 })
