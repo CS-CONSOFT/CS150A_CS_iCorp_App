@@ -38,7 +38,6 @@ export async function validaAmbiente({ tenant, token }: { tenant: number, token:
                 Token: token
             }
         });
-        console.log(response.data);
         storeSimpleDataVc(DataKey.DominioValorString, response.data.Dominio);
         return response.data;
     } catch (err) {

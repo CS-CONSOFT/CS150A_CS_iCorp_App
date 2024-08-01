@@ -8,9 +8,9 @@
     "userInterfaceStyle": "light",
     "scheme": "cs-pv",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/LogoBrancoVermelho.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000"
     },
     "ios": {
       "supportsTablet": true
