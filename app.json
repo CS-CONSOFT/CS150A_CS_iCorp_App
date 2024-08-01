@@ -2,9 +2,9 @@
   "expo": {
     "name": "cs-pv-alpha",
     "slug": "cs-pv-alpha",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LogoBrancoVermelho.png",
     "userInterfaceStyle": "light",
     "scheme": "cs-pv-alpha",
     "splash": {
