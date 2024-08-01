@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { commonStyle } from "../../CommonStyle";
 import { useDatabase } from "../../services/storage/useDatabase";
@@ -14,6 +14,7 @@ import { validaAmbiente } from "../../services/api/endpoint/login/CS_LoginGeral"
 import { logout } from "../../view_controller/login/LoginViewController";
 import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import CustomLoading from "../../components/loading/CustomLoading";
+import ColorStyle from "../../ColorStyle";
 
 
 // Componente de configuração de ambiente
@@ -117,83 +118,89 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     }
     // Renderização do componente
     return (
-        <SafeAreaView style={{ flex: 1, padding: 16}}>
-            {hasValue && (
-                // Se houver valores, exibir dados e botões de ações
-                <View>
-                    <View style={commonStyle.align_centralizar}>
-                        <Text style={commonStyle.text_size_20}>{`Tenant: ${tenant}`}</Text>
-                        <Text style={commonStyle.text_size_20}>{`URL: ${urlBase}`}</Text>
-                        <Text style={commonStyle.text_size_20}>{`Token: ${token}`}</Text>
-                    </View>
-
-                    <View style={[commonStyle.justify_content_space_btw, commonStyle.common_rowItem]}>
-                        <TouchableHighlight
-                            onPress={() => exclude()}
-                            style={commonStyle.common_button_style}
-                            underlayColor='white'
-                        >
-                            <Text style={commonStyle.common_text_button_style}>Editar</Text>
-                        </TouchableHighlight>
-
-                        <TouchableHighlight
-                            onPress={init}
-                            style={commonStyle.common_button_style}
-                            underlayColor='white'
-                        >
-                            <Text style={commonStyle.common_text_button_style}>Validar</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            )}
-
-            {!hasValue && (
-                // Se não houver valores, exibir campos de entrada para configuração
-                <View>
-                    <View style={commonStyle.common_columnItem}>
-                        <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                            <Text>Tenant</Text>
-                            <CustomIcon icon={ICON_NAME.CAMERA} onPress={() => {
-                                navigate('Camera', {
-                                    previousScreen: 'Config_Ambiente'
-                                })
-                            }} />
+        <View style={{ flex: 1}}>
+            <ImageBackground
+                source={require('../../../../assets/loginConf01.png')}
+                style={{ flex: 1 }}
+            >
+                {hasValue && (
+                    // Se houver valores, exibir dados e botões de ações
+                    <View>
+                        <View style={commonStyle.align_centralizar}>
+                            <Text style={commonStyle.text_size_20}>{`Tenant: ${tenant}`}</Text>
+                            <Text style={commonStyle.text_size_20}>{`URL: ${urlBase}`}</Text>
+                            <Text style={commonStyle.text_size_20}>{`Token: ${token}`}</Text>
                         </View>
-                        <TextInput
-                            style={[commonStyle.common_input]}
-                            onChangeText={setTenant}
-                            placeholder="Digite o tenant"
-                            keyboardType='decimal-pad'
-                            value={tenant}
-                        />
 
-                        <Text>URL</Text>
-                        <TextInput
-                            style={[commonStyle.common_input]}
-                            onChangeText={setUrlBase}
-                            placeholder="Digite a URL"
-                            value={urlBase}
-                        />
+                        <View style={[commonStyle.justify_content_space_btw, commonStyle.common_rowItem]}>
+                            <TouchableHighlight
+                                onPress={() => exclude()}
+                                style={commonStyle.common_button_style}
+                                underlayColor='white'
+                            >
+                                <Text style={commonStyle.common_text_button_style}>Editar</Text>
+                            </TouchableHighlight>
 
-                        <Text>TOKEN</Text>
-                        <TextInput
-                            style={[commonStyle.common_input]}
-                            onChangeText={setToken}
-                            placeholder="Digite o token, caso nao tenha, preencha com QUALQUER valor"
-                            value={token}
-                        />
-
-                        <TouchableHighlight
-                            onPress={create}
-                            style={commonStyle.common_button_style}
-                            underlayColor='white'
-                        >
-                            <Text style={commonStyle.common_text_button_style}>Salvar</Text>
-                        </TouchableHighlight>
+                            <TouchableHighlight
+                                onPress={init}
+                                style={commonStyle.common_button_style}
+                                underlayColor='white'
+                            >
+                                <Text style={commonStyle.common_text_button_style}>Validar</Text>
+                            </TouchableHighlight>
+                        </View>
                     </View>
-                </View>
-            )}
-        </SafeAreaView>
+                )}
+
+                {!hasValue && (
+                    // Se não houver valores, exibir campos de entrada para configuração
+                    <View style={[commonStyle.common_margin_top_64, commonStyle.common_margin_horizontal]}>
+                        <View style={[commonStyle.common_columnItem]}>
+                            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
+                                <Text style={{color: '#fff'}}>Tenant</Text>
+                                <CustomIcon icon={ICON_NAME.CAMERA} onPress={() => {
+                                    navigate('Camera', {
+                                        previousScreen: 'Config_Ambiente'
+                                    })
+                                    
+                                }} />
+                            </View>
+                            <TextInput
+                                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                                onChangeText={setTenant}
+                                placeholder="Digite o tenant"
+                                keyboardType='decimal-pad'
+                                value={tenant}
+                            />
+
+                            <Text style={{color: '#fff'}}>URL</Text>
+                            <TextInput
+                                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                                onChangeText={setUrlBase}
+                                placeholder="Digite a URL"
+                                value={urlBase}
+                            />
+
+                            <Text style={{color: '#fff'}}>TOKEN</Text>
+                            <TextInput
+                                style={[commonStyle.common_input]}
+                                onChangeText={setToken}
+                                placeholder="Digite o token, caso nao tenha, preencha com QUALQUER valor"
+                                value={token}
+                            />
+
+                            <TouchableHighlight
+                                onPress={create}
+                                style={commonStyle.common_button_style}
+                                underlayColor='white'
+                            >
+                                <Text style={[commonStyle.common_text_button_style]}>Salvar</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                )}
+            </ImageBackground>
+        </View>
     );
 }
 

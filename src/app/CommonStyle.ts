@@ -116,11 +116,12 @@ export const commonStyle = StyleSheet.create({
     },
     common_input: {
         margin: 4,
-        borderWidth: 1,
+        //borderWidth: 1,
         padding: 10,
         borderRadius: 32,
         paddingHorizontal: 16,
-        borderColor: "#B0B0B0"
+        //borderColor: "#B0B0B0"
+        backgroundColor: 'white'
     },
     productImage: {
         height: '100%',
@@ -135,7 +136,8 @@ export const commonStyle = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 32,
         elevation: 3,
-        margin: 14
+        margin: 14,
+        backgroundColor: ColorStyle.colorPrimary100
     },
     common_text_button_style: {
         fontSize: 16,

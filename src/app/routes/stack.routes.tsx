@@ -28,6 +28,10 @@ import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
 import CS_SC_003_01_PreVendaDetalheProduto from "../screens/003prevenda/003_01_produto/CS_SC_003_01_PreVendaDetalheProduto";
+import CS_SC_011_splash_PreVenda from "../screens/011Splash/CS_SC_011_splash_PreVenda";
+import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Produto";
+import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entrega";
+import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
 
 
 
@@ -64,6 +68,9 @@ declare global {
             Requisicao: undefined
             PreVendaEnd: { enderecoId: string }
             ListaCliente: { isToInsertPv: boolean, pvId: string }
+            Splash_Entrega: undefined
+            Splash_PreVenda: undefined
+            Splash_Produto: undefined
         }
     }
 }
@@ -350,6 +357,16 @@ export default function StackRoutes() {
                 },
                 headerBackVisible: true
             }} />
+
+            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }}/>
+
+            <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }}/>
+
+            <StackNav.Screen name="Splash_PreVenda" component={CS_SC_011_splash_PreVenda} options={{ headerShown: false }}/>
+
+            <StackNav.Screen name="Splash_Produto" component={CS_SC_011_splash_Produto} options={{ headerShown: false }}/>
+
+            
         </StackNav.Navigator>
     )
 }
