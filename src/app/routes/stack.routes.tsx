@@ -81,7 +81,6 @@ declare global {
 export default function StackRoutes() {
     return (
         <StackNav.Navigator initialRouteName="Config_Ambiente">
-            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }}/>
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
             <StackNav.Screen name="Splash01" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
