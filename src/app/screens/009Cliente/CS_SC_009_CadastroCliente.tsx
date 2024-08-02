@@ -280,7 +280,7 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     style={commonStyle.common_button_style}
                     underlayColor='white'
                 >
-                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Atualizar</Text>}
+                    {isSavingLoading ? <ActivityIndicator color={"#fff"} /> : <Text style={commonStyle.common_text_button_style}>Salvar</Text>}
                 </TouchableHighlight>
 
                 {/** quando for edit */}

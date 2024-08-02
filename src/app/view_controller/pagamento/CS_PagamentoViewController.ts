@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
@@ -46,6 +46,16 @@ export async function handleGetListOfPaymentForm002(onlyAVista: boolean): Promis
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
         const response = getListOfPaymentForm002({ tenantId: currentUser.TenantId, onlyAVista: onlyAVista })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function handleGetListOfPaymentFormCreditoLoja(): Promise<IResFormPayment> {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+        const response = getListOfPaymentFormCreditoLoja({ tenantId: currentUser.TenantId })
         return response
     } catch (error) {
         throw error

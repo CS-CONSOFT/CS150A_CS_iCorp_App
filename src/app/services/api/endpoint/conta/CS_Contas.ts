@@ -1,15 +1,14 @@
 import api from "../../axios_config";
 import { ICommonReq } from "../../interfaces/CS_ICommonResponse";
+import { IResBBEstatica } from "../../interfaces/IResBBEstatica";
+import { IReqSave1201 } from "../../interfaces/contas/CS_IReqSave1201";
 import { CS_IReqSave1202 } from "../../interfaces/contas/CS_IReqSave1202";
 import { IReqSaveConta } from "../../interfaces/contas/CS_IReqSaveConta";
-import { IReqSave1201 } from "../../interfaces/contas/CS_IReqSave1201";
+import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
+import { CS_IResGetConta } from "../../interfaces/contas/CS_IResGetConta";
 import { IResGetContaById } from "../../interfaces/contas/CS_IResGetContaById";
 import { IResGetListConta } from "../../interfaces/contas/CS_IResGetListConta";
-import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
 import { IResPadraoConta } from "./IResPadraoConta";
-import { CS_IResGetConta } from "../../interfaces/contas/CS_IResGetConta";
-import { CS_IResBB026_Estatica } from "../../interfaces/pagamento/CS_IResBB026_Estatica";
-import { IResBBEstatica } from "../../interfaces/IResBBEstatica";
 
 export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<IResGetContaById> {
     try {
