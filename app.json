@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "scheme": "cs-pv-alpha",
     "splash": {
-      "image": "./assets/LogoBrancoVermelho.png",
+      "image": "./assets/logo-extenso.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
