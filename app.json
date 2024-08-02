@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "scheme": "cs-pv-alpha",
     "splash": {
-      "image": "./assets/logo-extenso.png",
-      "resizeMode": "contain",
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#000"
     },
     "ios": {
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/splash.png",
         "backgroundColor": "#ffffff"
       },
       "package": "cs.cspv"

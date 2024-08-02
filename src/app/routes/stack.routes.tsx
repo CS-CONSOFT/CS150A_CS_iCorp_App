@@ -78,6 +78,7 @@ declare global {
 export default function StackRoutes() {
     return (
         <StackNav.Navigator initialRouteName="Config_Ambiente">
+            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }}/>
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
             <StackNav.Screen name="DrawerRoute" component={DrawerRoute001} options={{
@@ -358,7 +359,7 @@ export default function StackRoutes() {
                 headerBackVisible: true
             }} />
 
-            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }}/>
+            
 
             <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }}/>
 

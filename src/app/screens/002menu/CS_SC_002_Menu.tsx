@@ -25,12 +25,12 @@ const CS_SC_002_Menu = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                source={require('../../../../assets/imgpersonselling.jpg')}
+                source={require('../../../../assets/Pre-venda.png')}
                 style={{ flex: 1 }}
             >
                 <View style={{
                     paddingVertical: 16,
-                    flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)'
+                    flex: 1,
                 }}>
                     <CustomHeaderUserInfo />
                     <FlatList
