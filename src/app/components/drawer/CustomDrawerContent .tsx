@@ -4,6 +4,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } 
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '../../view_controller/login/LoginViewController';
 import { DataKey } from '../../enum/DataKeys';
+import { removeValueFromStorage } from '../../services/storage/AsyncStorageConfig';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const navigation = useNavigation();
@@ -11,7 +12,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const handleLogout = () => {
         // Chame sua função de logout aqui
         logout(DataKey.LoginResponse).then(() => {
-            navigation.navigate('Login');
+            removeValueFromStorage(DataKey.IsConfigValidada).then(() => {
+                navigation.navigate('Login');
+            })
         });
     };
 

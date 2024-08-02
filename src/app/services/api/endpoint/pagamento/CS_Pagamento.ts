@@ -115,6 +115,28 @@ export async function getListOfPaymentForm002({ tenantId, onlyAVista }: { tenant
     }
 }
 
+/** A NOVA API APONTA PRA ESSA FUNCAO */
+export async function getListOfPaymentFormCreditoLoja({ tenantId }: { tenantId: number }): Promise<IResFormPayment> {
+
+    let url = '/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_List_FormaPagto_CreditoLoja'
+
+    const headerParams = {
+        tenant_id: tenantId,
+        In_IsCount: 0,
+        In_IsActive: true,
+        in_currentPage: 1,
+        in_pageSize: 9999
+    }
+
+
+    try {
+        const response = await api.get(url, { headers: headerParams })
+        return response.data as IResFormPayment
+    } catch (error) {
+        throw error
+    }
+}
+
 
 
 /** A NOVA API APONTA PRA ESSA FUNCAO */

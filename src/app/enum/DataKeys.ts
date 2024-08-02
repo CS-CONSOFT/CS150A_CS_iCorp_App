@@ -4,8 +4,10 @@ export enum DataKey {
     LoginResponse = "LoginResponse",
     CurrentPV = "CurrentPV",
     TenantId = "TenantId",
-    IsLoginValidado = "IsLoginValidado",
+    IsConfigValidada = "IsConfigValidada",
     URL_Base = "URL_Base",
     DominioValorString = "DominioValorString",
-    CurrentContaId = "CurrentContaId"
+    CurrentContaId = "CurrentContaId",
+    MaintainOpenConfig = "ManterConfiguracaoAbertaParaEdicao",
+    IsFirstTimeOpenApp = "IsFirstTimeOpenApp"
 }

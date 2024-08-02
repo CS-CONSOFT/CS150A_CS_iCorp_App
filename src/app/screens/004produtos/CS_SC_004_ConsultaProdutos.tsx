@@ -45,8 +45,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
             const pvId = currentPv as string
 
-            console.log("Ao clicar, esse e o que esta na memoria: " + currentPv);
-
             if (insertComanda) {
                 let dataPostInsertComandaProduto: IComandaDataInsert = {
                     in_comanda_id: comandaId,

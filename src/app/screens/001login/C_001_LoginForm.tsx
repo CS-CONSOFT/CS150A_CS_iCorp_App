@@ -9,6 +9,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
+import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
@@ -86,7 +87,7 @@ const CS_SC001_LoginForm = () => {
                     setStatus(FETCH_STATUS.ERROR)
                     logout(DataKey.LoginResponse).then(() => {
                         navigate('Config_Ambiente', {
-                            doLogout: true
+                            maintainOpenConfig: true
                         })
                     })
                 }
@@ -106,20 +107,24 @@ const CS_SC001_LoginForm = () => {
 
     return (
         <SafeAreaView>
-            <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Usuário</Text>
-            <TextInput
-                style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
-                onChangeText={(value) => handleInputTyping('Usuário', value)}
-                value={attributesMap.Usuário}
-            />
+            {!isBtnLoading && (
+                <>
+                    <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Usuário</Text>
+                    <TextInput
+                        style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
+                        onChangeText={(value) => handleInputTyping('Usuário', value)}
+                        value={attributesMap.Usuário}
+                    />
 
-            <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Senha</Text>
-            <TextInput
-                style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
-                onChangeText={(value) => handleInputTyping('Senha', value)}
-                value={attributesMap.Senha}
-                secureTextEntry={true}
-            />
+                    <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Senha</Text>
+                    <TextInput
+                        style={[commonStyle.common_input, { backgroundColor: "#fff" }]}
+                        onChangeText={(value) => handleInputTyping('Senha', value)}
+                        value={attributesMap.Senha}
+                        secureTextEntry={true}
+                    /></>
+            )}
+
 
 
             <TouchableHighlight
@@ -134,7 +139,8 @@ const CS_SC001_LoginForm = () => {
 
             <TouchableHighlight
                 onPress={() => {
-                    navigate('Config_Ambiente', { doLogout: true })
+                    storeSimpleData(DataKey.MaintainOpenConfig, "1")
+                    navigate('Config_Ambiente', { maintainOpenConfig: true })
                 }}
                 style={[commonStyle.common_button_style, { backgroundColor: ColorStyle.colorPrimary300 }]}
                 underlayColor='white'
