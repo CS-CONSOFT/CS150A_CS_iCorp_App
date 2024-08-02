@@ -30,16 +30,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     // useEffect para carregar os dados iniciais
     useFocusEffect(
         useCallback(() => {
-            getSimpleData(DataKey.IsConfigValidada).then((res) => {
-                //login validado
-                if (res === "1") {
-                    get().then(() => {
-                        if (!maintainOpenConfig) {
-                            setManterAbertaConfiguracao(false)
-                        }
-                    })
-                }
-            })
+            get()
         }, [])
     );
 
@@ -83,10 +74,6 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                         setTenant(response!.tenantId.toString());
                         setUrlBase(response!.urlBase);
                         setToken(response!.token);
-
-                        if (!manterAbertaConfiguracao) {
-                            init(response!.tenantId.toString(), response!.urlBase, response!.token)
-                        }
                     });
 
                 } else {

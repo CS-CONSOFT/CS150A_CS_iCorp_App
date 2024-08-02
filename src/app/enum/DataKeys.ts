@@ -8,5 +8,6 @@ export enum DataKey {
     URL_Base = "URL_Base",
     DominioValorString = "DominioValorString",
     CurrentContaId = "CurrentContaId",
-    MaintainOpenConfig = "ManterConfiguracaoAbertaParaEdicao"
+    MaintainOpenConfig = "ManterConfiguracaoAbertaParaEdicao",
+    IsFirstTimeOpenApp = "IsFirstTimeOpenApp"
 }

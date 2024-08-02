@@ -15,6 +15,7 @@ import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaVie
 import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
+import { handleAnaliseCliente, handleGerarCliente } from "../../view_controller/crediario/CrediarioViewController";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -137,6 +138,7 @@ const RightItemCliente = ({ cliente, handlePopUp }: { cliente: Csicp_bb012, hand
 
 const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cliente: Csicp_bb012) => void }) => {
     const [isBtnLoading, setIsBtnLoading] = useState(false)
+    const { navigate } = useNavigation()
     return (
         <View style={stylesEntregaCard.dialog}>
             <View>
@@ -148,15 +150,35 @@ const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cli
             <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_left_16, commonStyle.common_padding_08]}>
                 <View style={[stylesEntregaCard.contentContanier, commonStyle.common_columnItem]}>
                     <View style={stylesEntregaCard.contentContenierSmall}>
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                            setIsBtnLoading(true)
+                            handleGerarCliente({ cs_conta_id: cliente.csicp_bb012.csicp_bb012.ID }).then(() => {
+                                showToast(ToastType.SUCCESS, "Cadastro Efetuado", "Cliente gerado com sucesso!")
+                            }).catch((err) => {
+                                showToast(ToastType.ERROR, "Falha", err)
+                            })
+                            setIsBtnLoading(false)
+                        }}>
                             {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Cadastrar Cliente</Text>}
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                            setIsBtnLoading(true)
+                            handleAnaliseCliente({ cs_conta_id: cliente.csicp_bb012.csicp_bb012.ID }).then(() => {
+                                showToast(ToastType.SUCCESS, "Análise Feita", "!!!")
+                            }).catch((err) => {
+                                showToast(ToastType.ERROR, "Falha", err)
+                            })
+                            setIsBtnLoading(false)
+                        }}>
                             {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Efetuar Análise de Cliente</Text>}
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                            navigate('SimulacaoCrediario', {
+                                contaCodigo: cliente.csicp_bb012.csicp_bb012.BB012_Codigo
+                            })
+                        }}>
                             {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Simulador de Crédito</Text>}
                         </TouchableOpacity>
                     </View>

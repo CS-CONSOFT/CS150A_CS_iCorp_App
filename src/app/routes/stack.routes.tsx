@@ -32,6 +32,7 @@ import CS_SC_011_splash_PreVenda from "../screens/011Splash/CS_SC_011_splash_Pre
 import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Produto";
 import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entrega";
 import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
+import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
 
 
 
@@ -47,6 +48,7 @@ declare global {
             Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
             Config_Ambiente: { maintainOpenConfig: boolean },
             Splash01: undefined,
+            SimulacaoCrediario: { contaCodigo: number },
             Camera: { previousScreen: string }
             Pre_Venda_Detalhes_001: { currentPv: string },
             Pre_Venda_Detalhes_002: { currentPv: string },
@@ -78,10 +80,20 @@ declare global {
 
 export default function StackRoutes() {
     return (
-        <StackNav.Navigator initialRouteName="Splash01">
+        <StackNav.Navigator initialRouteName="Config_Ambiente">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
             <StackNav.Screen name="Splash01" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
+
+            <StackNav.Screen name="SimulacaoCrediario" component={CS_SC_012_SimuladorDeCredito} options={{
+                title: "Simulação de Crédito",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
 
             <StackNav.Screen name="DrawerRoute" component={DrawerRoute001} options={{
                 headerRight: () => <CustomHeaderLogo />,
