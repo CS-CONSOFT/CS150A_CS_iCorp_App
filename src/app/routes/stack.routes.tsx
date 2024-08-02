@@ -45,7 +45,8 @@ declare global {
             Entrega: undefined,
             Serie: undefined,
             Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
-            Config_Ambiente: { doLogout: boolean },
+            Config_Ambiente: { maintainOpenConfig: boolean },
+            Splash01: undefined,
             Camera: { previousScreen: string }
             Pre_Venda_Detalhes_001: { currentPv: string },
             Pre_Venda_Detalhes_002: { currentPv: string },
@@ -77,8 +78,10 @@ declare global {
 
 export default function StackRoutes() {
     return (
-        <StackNav.Navigator initialRouteName="Config_Ambiente">
+        <StackNav.Navigator initialRouteName="Splash01">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
+            <StackNav.Screen name="Splash01" options={{ headerShown: false }} component={CS_SC_001_Login} />
+
 
             <StackNav.Screen name="DrawerRoute" component={DrawerRoute001} options={{
                 headerRight: () => <CustomHeaderLogo />,
@@ -358,15 +361,15 @@ export default function StackRoutes() {
                 headerBackVisible: true
             }} />
 
-            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }}/>
+            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }} />
 
-            <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }}/>
+            <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }} />
 
-            <StackNav.Screen name="Splash_PreVenda" component={CS_SC_011_splash_PreVenda} options={{ headerShown: false }}/>
+            <StackNav.Screen name="Splash_PreVenda" component={CS_SC_011_splash_PreVenda} options={{ headerShown: false }} />
 
-            <StackNav.Screen name="Splash_Produto" component={CS_SC_011_splash_Produto} options={{ headerShown: false }}/>
+            <StackNav.Screen name="Splash_Produto" component={CS_SC_011_splash_Produto} options={{ headerShown: false }} />
 
-            
+
         </StackNav.Navigator>
     )
 }

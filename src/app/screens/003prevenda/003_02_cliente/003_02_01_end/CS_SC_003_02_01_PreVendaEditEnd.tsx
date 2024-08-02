@@ -20,9 +20,8 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         Logradouro: '',
         Bairro: '',
         Complemento: '',
-        UF: '',
-        Cidade: '',
         CidadeNome: '',
+        UFNome: '',
         Numero: '',
         Perimetro: ''
     });
@@ -37,6 +36,9 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
     // Estados para controlar carregamento
     const [isSavingLoading, setIsSavingLoading] = useState(false)
     const [isBtnCepLoading, setIsBtnCepLoading] = useState(false)
+
+    const [ufSelected, setUfSelected] = useState('')
+    const [citySelected, setCitySelected] = useState('')
 
     // Estado para armazenar o endereço atual
     const [enderecamentoAtual, setEnderecamentoAtual] = useState<DD071_Enderecos>()
@@ -54,9 +56,8 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
             Logradouro: '',
             Bairro: '',
             Complemento: '',
-            UF: '',
-            Cidade: '',
             CidadeNome: '',
+            UFNome: '',
             Numero: '',
             Perimetro: ''
         });
@@ -74,10 +75,13 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                 handleInputTyping('Logradouro', current?.csicp_dd071.DD071_Logradouro || "")
                 handleInputTyping('Bairro', current?.csicp_dd071.DD071_NomeBairro || "")
                 handleInputTyping('Complemento', current?.csicp_dd071.DD071_Complemento || "")
-                handleInputTyping('UF', current?.csicp_dd071.DD071_UF_ID || "")
-                handleInputTyping('Cidade', current?.csicp_dd071.DD071_Cidade_ID || "")
+                handleInputTyping('UFNome', current?.csicp_aa027.AA027_Sigla || "")
+                handleInputTyping('CidadeNome', current?.csicp_aa028.AA028_Cidade || "")
                 handleInputTyping('Numero', current?.csicp_dd071.DD071_Numero || "")
                 handleInputTyping('Perímetro', current?.csicp_dd071.DD071_Perimetro || "")
+
+                setUfSelected(current?.csicp_dd071.DD071_UF_ID || "")
+                setCitySelected(current?.csicp_dd071.DD071_Cidade_ID || "")
 
                 setEnderecamentoAtual(current)
             }
@@ -89,7 +93,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         getCurrentPv()
         try {
             handleGetUfList().then((res) => {
-                const list = res.csicp_aa027
+                const list = res.Lista_csicp_aa027
                 const mappedUfList = list.map(item => (
                     {
                         key: item.csicp_aa027.Id,
@@ -133,10 +137,12 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                 if (res !== undefined) {
                     setValueToObjectWhenInputTyped('Logradouro', res.LOGRADOURO)
                     setValueToObjectWhenInputTyped('Bairro', res.BAIRRO)
-                    setValueToObjectWhenInputTyped('UF', res.UF_ID)
-                    setValueToObjectWhenInputTyped('Cidade', res.CIDADE_ID)
-                    setSelectedUf(res.UF_ID)
-                    setSelectedCity(res.CIDADE_ID)
+                    setValueToObjectWhenInputTyped('UFNome', res.UF_NOME)
+                    setValueToObjectWhenInputTyped('CidadeNome', res.CIDADE_NOME)
+
+                    setUfSelected(res.UF_ID)
+                    setCitySelected(res.CIDADE_ID)
+
                 } else {
                     showToast(ToastType.ERROR, "Falha", "Ocorreu uma falha ao procurar pelo CEP")
                 }
@@ -290,7 +296,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                         data={ufList!}
                         save="key"
                         search={false}
-                        defaultOption={{ key: enderecamentoAtual?.csicp_dd071.DD071_UF_ID, value: enderecamentoAtual?.csicp_aa027.AA027_Sigla }}
+                        defaultOption={{ key: ufSelected, value: attributesMap.UFNome }}
                     />
 
 
@@ -304,15 +310,17 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                                 setSelected={(key: string) => { setSelectedCity(key) }}
                                 data={cityList!}
                                 save="key"
-                                defaultOption={{ key: enderecamentoAtual?.csicp_dd071.DD071_Cidade_ID, value: enderecamentoAtual?.csicp_aa028.AA028_Cidade }}
+                                defaultOption={{ key: citySelected, value: attributesMap.CidadeNome }}
                             />
 
                         </View>
                     )}
 
+                    {cityList === undefined && (
+                        <View style={[commonStyle.common_columnItem, { width: 230 }]}>
+                            <ActivityIndicator />
 
-                    {attributesMap.Cidade !== '' && (
-                        <Text>{attributesMap.CidadeNome}</Text>
+                        </View>
                     )}
                 </View>
 

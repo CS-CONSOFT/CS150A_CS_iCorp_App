@@ -33,5 +33,6 @@ export const ICON_NAME = {
     EDITAR: "create-outline",
     FECHAR: "close-circle-outline",
     CAMERA: "camera-outline",
+    TRES_PONTOS_VERTICAL: "ellipsis-vertical-outline",
 
 }

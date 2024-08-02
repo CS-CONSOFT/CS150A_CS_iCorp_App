@@ -13,6 +13,7 @@ import { commonStyle } from "../../CommonStyle";
 const CS_SC_001_Login = () => {
     const { navigate } = useNavigation()
     const [currentDominio, setCurrentDominio] = useState('')
+
     function navigateToMenu() {
         navigate('Menu')
     }
@@ -34,10 +35,10 @@ const CS_SC_001_Login = () => {
                 source={require('../../../../assets/loginConf02.png')}
                 style={{ flex: 1 }}
             >
-                <View style={{ marginTop: 50, marginHorizontal: 30}}>
+                <View style={{ marginTop: 50, marginHorizontal: 30 }}>
                     <CustomHeaderLogo />
                     <Text style={stylesLogin.txtAtendimentoMobile}>Atendimento Mobile</Text>
-                    <View style={[commonStyle.bg_blacktransparent, {borderRadius: 20, padding: 10}]}>
+                    <View style={[commonStyle.bg_blacktransparent, { borderRadius: 20, padding: 10 }]}>
                         <Text style={[commonStyle.common_fontWeight_600, commonStyle.margin_8, { fontSize: 18, color: 'white' }]}>Domínio: {currentDominio}</Text>
                         <CS_SC001_LoginForm />
                     </View>

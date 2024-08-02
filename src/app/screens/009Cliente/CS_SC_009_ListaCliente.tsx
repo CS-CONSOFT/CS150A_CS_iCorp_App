@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, SafeAreaView, Text, View, TouchableOpacity, TextInput } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard004 from "../../components/cards/CustomCard_004";
@@ -12,14 +12,22 @@ import { getPaginationList } from "../../util/GetPaginationArray";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
 import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaViewController";
+import CustomIcon from "../../components/icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
+import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
     const [paginationArray, setPaginationArray] = useState<number[]>()
+    const [currentClientSelected, setCurrentClientSelected] = useState<Csicp_bb012>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const navigation = useNavigation()
-    const { isToInsertPv, pvId } = route.params
+    const [showPopUp, setShowPopUp] = useState(false)
+    const { isToInsertPv } = route.params
 
+    useEffect(() => {
+        setShowPopUp(false)
+    }, [])
 
     function getClientesList(page?: number, searchValue?: string) {
         setStatus(FETCH_STATUS.LOADING)
@@ -63,10 +71,13 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     }
 
 
+
+    function handlePopUp(client: Csicp_bb012) {
+        setCurrentClientSelected(client)
+        setShowPopUp(!showPopUp)
+    }
+
     const isLoading = status === FETCH_STATUS.LOADING
-
-
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
@@ -76,30 +87,116 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
                     onRefresh={getClientesList}
                     data={clientList?.csicp_bb012}
                     keyExtractor={(item, index) => item.csicp_bb012.csicp_bb012.ID}
-                    renderItem={({ item }) => <RenderItemCliente item={item} edit={(bb12id) => handleClickItem(bb12id)} />}
+                    renderItem={({ item }) => <RenderItemCliente handlePopUp={() => handlePopUp(item)} cliente={item} edit={(bb12id) => handleClickItem(bb12id)} />}
                 />
             </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}
             <Custom_Pagination
                 paginationArray={paginationArray!}
                 onPagePress={getClientesList}
             />
+            <CustomAlertDialog
+                isVisible={showPopUp}
+                onDismiss={() => setShowPopUp(false)}
+                children={<AlertDialog cliente={currentClientSelected!} onClose={(cliente) => handlePopUp(cliente)} />}
+            />
+
         </SafeAreaView>
     );
 }
 
-const RenderItemCliente = ({ item, edit }: { item: Csicp_bb012, edit: (id: string) => void }) => {
+const RenderItemCliente = ({ cliente, edit, handlePopUp }: { cliente: Csicp_bb012, handlePopUp: (cliente: Csicp_bb012) => void, edit: (id: string) => void }) => {
     return (
         <CustomCard004
-            onClickItem={() => edit(item.csicp_bb012.csicp_bb012.ID)}
+            onClickItem={() => edit(cliente.csicp_bb012.csicp_bb012.ID)}
             children={
                 <View style={commonStyle.common_columnItem}>
-                    <Text style={commonStyle.common_fontWeight_800}>{item.csicp_bb012.csicp_bb012.BB012_Codigo}</Text>
-                    <Text style={commonStyle.common_fontWeight_800}>{item.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}</Text>
-                    <Text style={commonStyle.common_fontWeight_800}>{item.BB01202.csicp_bb01202.BB012_CPF || item.BB01202.csicp_bb01202.BB012_CNPJ}</Text>
-                    <Text style={[commonStyle.common_fontWeight_800]}>{item.csicp_bb012.csicp_bb012_SitCta.Label}</Text>
+                    <Text style={commonStyle.common_fontWeight_800}>{cliente.csicp_bb012.csicp_bb012.BB012_Codigo}</Text>
+                    <Text style={commonStyle.common_fontWeight_800}>{cliente.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}</Text>
+                    <Text style={commonStyle.common_fontWeight_800}>{cliente.BB01202.csicp_bb01202.BB012_CPF || cliente.BB01202.csicp_bb01202.BB012_CNPJ}</Text>
+                    <Text style={[commonStyle.common_fontWeight_800]}>{cliente.csicp_bb012.csicp_bb012_SitCta.Label}</Text>
                 </View>
-            } title={item.csicp_bb012.csicp_bb012.BB012_Nome_Cliente} />
+            } title={cliente.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}
+            rightItem={<RightItemCliente cliente={cliente} handlePopUp={handlePopUp} />}
+        />
     )
 }
+
+const RightItemCliente = ({ cliente, handlePopUp }: { cliente: Csicp_bb012, handlePopUp: (cliente: Csicp_bb012) => void }) => {
+    return (
+        <View
+            style={[commonStyle.common_columnItem,
+            { backgroundColor: "#fffafa", flex: 1, padding: 8, paddingVertical: 16, borderTopRightRadius: 16, borderBottomRightRadius: 16 },
+            commonStyle.justify_content_space_btw]}
+        >
+            <CustomIcon icon={ICON_NAME.TRES_PONTOS_VERTICAL} onPress={() => {
+                handlePopUp(cliente)
+            }} />
+        </View>
+    )
+}
+
+const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cliente: Csicp_bb012) => void }) => {
+    const [isBtnLoading, setIsBtnLoading] = useState(false)
+    return (
+        <View style={stylesEntregaCard.dialog}>
+            <View>
+                <Text>{cliente.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}</Text>
+                <CustomIcon icon={ICON_NAME.FECHAR} style={{ marginLeft: 'auto' }} iconSize={32} onPress={onClose} />
+            </View>
+
+
+            <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_left_16, commonStyle.common_padding_08]}>
+                <View style={[stylesEntregaCard.contentContanier, commonStyle.common_columnItem]}>
+                    <View style={stylesEntregaCard.contentContenierSmall}>
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Cadastrar Cliente</Text>}
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Efetuar Análise de Cliente</Text>}
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => { }}>
+                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Simulador de Crédito</Text>}
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={commonStyle.align_centralizar}>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+
+const stylesEntregaCard = StyleSheet.create({
+    dialog: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20
+    },
+    contentContanier: {
+
+        height: "auto",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+        padding: 10
+    },
+    contentContenierSmall: {
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    tituloCard: {
+        fontWeight: "700",
+        marginBottom: 8
+    },
+    itemCard: {
+        fontWeight: "700",
+        marginBottom: 8,
+        color: "#0A3147"
+    }
+})
+
 
 export default CS_SC_009_ListaCliente;
