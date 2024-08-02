@@ -92,9 +92,9 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 <Text style={common003_01_styles.extraBottomStyleTitles}>Quantidade</Text>
                 <CustomSeparator />
                 <View style={common003_01_styles.extraBottomStyleAmount}>
-                    <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
-                    <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
                     <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
+                    <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
+                    <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
                 </View>
             </View>
 

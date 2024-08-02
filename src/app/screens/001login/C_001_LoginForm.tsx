@@ -1,27 +1,22 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import { Alert, SafeAreaView, TextInput, Text, TouchableHighlight, ActivityIndicator } from "react-native";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, Alert, SafeAreaView, Text, TextInput, TouchableHighlight } from "react-native";
+import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 import { DataKey } from "../../enum/DataKeys";
+import { useDatabase } from "../../services/storage/useDatabase";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { ToastType, showToast } from "../../util/ShowToast";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
-import { stylesLogin } from "./StylesLogin";
-import { commonStyle } from "../../CommonStyle";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import CustomLoading from "../../components/loading/CustomLoading";
-import { useDatabase } from "../../services/storage/useDatabase";
-import { ToastType, showToast } from "../../util/ShowToast";
-import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
-import ColorStyle from "../../ColorStyle";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
     const [attributesMap, setAttributesMap] = useState<{ [key: string]: string }>({
-        Domínio: 'Comercial',
-        Usuário: 'Barros',
-        Senha: 'ba'
+        Usuário: '',
+        Senha: ''
     });
     const { navigate } = useNavigation()
-    const [isBtnLoading, setIsBtnLoading] = useState(false)
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const [tenantId, setTenantId] = useState(-1)
 
@@ -35,7 +30,7 @@ const CS_SC001_LoginForm = () => {
 
     useFocusEffect(
         useCallback(() => {
-            setIsBtnLoading(false)
+            setStatus(FETCH_STATUS.LOADING)
             checkIfUserIsLogged().then((isLogged) => {
                 if (isLogged) {
                     navigate('DrawerRoute')
@@ -60,6 +55,16 @@ const CS_SC001_LoginForm = () => {
             user: attributesMap.Usuário,
             password: attributesMap.Senha
         }
+
+
+        if (loginData.user == '') {
+            showToast(ToastType.ERROR, "Campo vazio", "Preencha o usuário")
+        }
+
+        if (loginData.password == '') {
+            showToast(ToastType.ERROR, "Campo vazio", "Preencha a senha")
+        }
+
         try {
 
             loginData.tenant = tenantId
@@ -67,16 +72,17 @@ const CS_SC001_LoginForm = () => {
             generalLoginVc(loginData).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
                 if (res.IsOk) {
-                    console.log(res.Model.Estab_Img);
                     const toSaveJson = res.Model
                     toSaveJson.TenantId = tenantId
                     //salvando dados localmente
                     storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
                     navigateToMenu()
+                } else {
+                    showToast(ToastType.ERROR, "Falha ao logar", res.Msg)
                 }
             }).catch((res) => {
                 if (res.StatusCode === undefined) {
-                    showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL")
+                    showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL base")
                     setStatus(FETCH_STATUS.ERROR)
                     logout(DataKey.LoginResponse).then(() => {
                         navigate('Config_Ambiente', {
@@ -96,9 +102,7 @@ const CS_SC001_LoginForm = () => {
         });
     };
 
-    if (status === FETCH_STATUS.LOADING) {
-        return <ActivityIndicator style={{ backgroundColor: "#c3c3c3", borderRadius: 32 }} color={"#fff"} size={64} />
-    }
+    const isBtnLoading = status === FETCH_STATUS.LOADING
 
     return (
         <SafeAreaView>
@@ -122,20 +126,20 @@ const CS_SC001_LoginForm = () => {
                 onPress={() => {
                     isBtnLoading ? {} : onClickLogin()
                 }}
-                style={[commonStyle.common_button_style, {backgroundColor: ColorStyle.colorPrimary100}]}
+                style={[commonStyle.common_button_style, { backgroundColor: ColorStyle.colorPrimary100 }]}
                 underlayColor='white'
             >
-                {isBtnLoading ? <ActivityIndicator /> : <Text style={commonStyle.common_text_button_style}>Logar</Text>}
+                {isBtnLoading ? <ActivityIndicator color={"#FFF"} /> : <Text style={commonStyle.common_text_button_style}>Logar</Text>}
             </TouchableHighlight>
 
             <TouchableHighlight
                 onPress={() => {
                     navigate('Config_Ambiente', { doLogout: true })
                 }}
-                style={[commonStyle.common_button_style, {backgroundColor: ColorStyle.colorPrimary300}]}
+                style={[commonStyle.common_button_style, { backgroundColor: ColorStyle.colorPrimary300 }]}
                 underlayColor='white'
             >
-                <Text style={[commonStyle.common_text_button_style, {color: 'white',}]}>Configuração</Text>
+                <Text style={[commonStyle.common_text_button_style, { color: 'white', }]}>Configuração</Text>
             </TouchableHighlight>
         </SafeAreaView>
     );

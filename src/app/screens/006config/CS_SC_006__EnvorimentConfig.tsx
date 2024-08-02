@@ -33,7 +33,8 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     useFocusEffect(
         useCallback(() => {
             if (doLogout) {
-                //todo
+                setHasValue(false)
+                setIsLoading(false)
             } else {
                 get()
             }
@@ -97,14 +98,19 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
 
     // Função assíncrona para criar uma nova entrada no banco de dados
     async function create() {
+        setIsLoading(true)
         const id = 501;
         const isValidado = false;
         try {
             await db.create({ id, urlBase, token, tenantId: tenant, isValidado }).then(() => {
-                get(); // Buscar dados atualizados após a criação
+                get().then(() => {
+                    setIsLoading(false)
+                }); // Buscar dados atualizados após a criação
             });
         } catch (error) {
             Alert.alert("Error", "Deu erro, cheque o log");
+            setIsLoading(false)
+            return
         }
     }
 

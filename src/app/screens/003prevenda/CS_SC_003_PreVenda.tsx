@@ -46,11 +46,6 @@ const CS_SC_003_PreVenda = () => {
 
         const todayDateString: string = todayDate.toISOString().slice(0, 10);
         const passDateString: string = passDate.toISOString().slice(0, 10);
-
-        console.log("initial: " + todayDateString);
-        console.log("final: " + passDateString);
-
-
         handleFetchPv(passDateString, todayDateString, page, 10).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
