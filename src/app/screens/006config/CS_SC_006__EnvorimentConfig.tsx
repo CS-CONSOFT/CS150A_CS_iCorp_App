@@ -8,10 +8,12 @@ import { DataKey } from "../../enum/DataKeys";
 import api from "../../services/api/axios_config";
 import { validaAmbiente } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import CustomLoading from "../../components/loading/CustomLoading";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { storeSimpleDataVc } from "../../view_controller/SharedViewController";
+
 
 
 // Componente de configuração de ambiente
@@ -161,9 +163,11 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     // Se não houver valores, exibir campos de entrada para configuração
                     <View style={[commonStyle.common_margin_top_64, commonStyle.common_margin_horizontal]}>
                         <View style={[commonStyle.common_columnItem]}>
-                            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                                <Text style={{ color: '#fff' }}>Tenant</Text>
-                                <CustomIcon icon={ICON_NAME.CAMERA} onPress={() => {
+
+                            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_margin_bottom_8]}>
+                                <Text style={[commonStyle.common_fontWeight_600,{color: '#fff', fontSize: 16}]}>Tenant</Text>
+                                <CustomIcon icon={ICON_NAME.CAMERA} iconColor="#fff" iconSize={28} onPress={() => {
+
                                     navigate('Camera', {
                                         previousScreen: 'Config_Ambiente'
                                     })
@@ -178,7 +182,8 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 value={tenant}
                             />
 
-                            <Text style={{ color: '#fff' }}>URL</Text>
+                            <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, {color: '#fff', fontSize: 16}]}>URL</Text>
+
                             <TextInput
                                 style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                                 onChangeText={setUrlBase}
@@ -186,9 +191,11 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 value={urlBase}
                             />
 
-                            <Text style={{ color: '#fff' }}>TOKEN</Text>
+
+                            <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, {color: '#fff', fontSize: 16}]}>Token</Text>
+
                             <TextInput
-                                style={[commonStyle.common_input]}
+                                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                                 onChangeText={setToken}
                                 placeholder="Digite o token, caso nao tenha, preencha com QUALQUER valor"
                                 value={token}
