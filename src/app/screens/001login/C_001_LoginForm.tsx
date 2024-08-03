@@ -86,8 +86,8 @@ const CS_SC001_LoginForm = () => {
                     showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL base")
                     setStatus(FETCH_STATUS.ERROR)
                     logout(DataKey.LoginResponse).then(() => {
-                        navigate('Config_Ambiente', {
-                            maintainOpenConfig: true
+                        storeSimpleData(DataKey.MaintainOpenConfig, "true").then(() => {
+                            navigate('Config_Ambiente')
                         })
                     })
                 }
@@ -139,8 +139,8 @@ const CS_SC001_LoginForm = () => {
 
             <TouchableHighlight
                 onPress={() => {
-                    storeSimpleData(DataKey.MaintainOpenConfig, "1")
-                    navigate('Config_Ambiente', { maintainOpenConfig: true })
+                    storeSimpleData(DataKey.MaintainOpenConfig, "true")
+                    navigate('Config_Ambiente')
                 }}
                 style={[commonStyle.common_button_style, { backgroundColor: ColorStyle.colorPrimary300 }]}
                 underlayColor='white'

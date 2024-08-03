@@ -16,6 +16,7 @@ import CustomIcon from "../../components/icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 import { handleAnaliseCliente, handleGerarCliente } from "../../view_controller/crediario/CrediarioViewController";
+import CustomLoading from "../../components/loading/CustomLoading";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -139,6 +140,7 @@ const RightItemCliente = ({ cliente, handlePopUp }: { cliente: Csicp_bb012, hand
 const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cliente: Csicp_bb012) => void }) => {
     const [isBtnLoading, setIsBtnLoading] = useState(false)
     const { navigate } = useNavigation()
+
     return (
         <View style={stylesEntregaCard.dialog}>
             <View>
@@ -156,6 +158,7 @@ const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cli
                                 showToast(ToastType.SUCCESS, "Cadastro Efetuado", "Cliente gerado com sucesso!")
                             }).catch((err) => {
                                 showToast(ToastType.ERROR, "Falha", err)
+                                setIsBtnLoading(false)
                             })
                             setIsBtnLoading(false)
                         }}>
@@ -168,6 +171,7 @@ const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cli
                                 showToast(ToastType.SUCCESS, "Análise Feita", "!!!")
                             }).catch((err) => {
                                 showToast(ToastType.ERROR, "Falha", err)
+                                setIsBtnLoading(false)
                             })
                             setIsBtnLoading(false)
                         }}>

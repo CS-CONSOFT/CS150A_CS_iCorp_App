@@ -169,8 +169,7 @@ export const commonStyle = StyleSheet.create({
     btn_gray: {
         backgroundColor: '#E3E3E3',
         paddingHorizontal: 32,
-        paddingVertical: 8,
-        marginVertical: 8,
+        marginVertical: 16,
         borderRadius: 32,
         elevation: 3
     },

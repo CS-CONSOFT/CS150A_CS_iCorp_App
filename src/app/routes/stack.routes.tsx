@@ -33,6 +33,7 @@ import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Prod
 import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entrega";
 import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
 import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
+import CS_SC_012_RespostaCrediario from "../screens/012Crediario/CS_SC_012_RespostaCrediario";
 
 
 
@@ -46,9 +47,10 @@ declare global {
             Entrega: undefined,
             Serie: undefined,
             Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
-            Config_Ambiente: { maintainOpenConfig: boolean },
+            Config_Ambiente: undefined,
             Splash01: undefined,
             SimulacaoCrediario: { contaCodigo: number },
+            RespostaCrediario: { jsonResponse: string, valorEntrada: number },
             Camera: { previousScreen: string }
             Pre_Venda_Detalhes_001: { currentPv: string },
             Pre_Venda_Detalhes_002: { currentPv: string },
@@ -87,6 +89,16 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="SimulacaoCrediario" component={CS_SC_012_SimuladorDeCredito} options={{
                 title: "Simulação de Crédito",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#0A3147"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="RespostaCrediario" component={CS_SC_012_RespostaCrediario} options={{
+                title: "Propostas",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {

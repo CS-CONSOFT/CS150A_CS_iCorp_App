@@ -7,7 +7,7 @@ import CustomLoading from "../../components/loading/CustomLoading";
 import { DataKey } from "../../enum/DataKeys";
 import api from "../../services/api/axios_config";
 import { validaAmbiente } from "../../services/api/endpoint/login/CS_LoginGeral";
-import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { getSimpleData, storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
@@ -24,9 +24,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const { navigate } = useNavigation();
-    const [manterAbertaConfiguracao, setManterAbertaConfiguracao] = useState(true)
     const db = useDatabase();
-    const { maintainOpenConfig = false } = route.params || {}
 
     // useEffect para carregar os dados iniciais
     useFocusEffect(
@@ -51,6 +49,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                 if (res.Retorno.IsOk) {
                     storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
                         navigate('Login');
+                        storeSimpleData(DataKey.MaintainOpenConfig, "false")
                     })
                 }
                 setIsLoading(false)
@@ -75,6 +74,13 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                         setTenant(response!.tenantId.toString());
                         setUrlBase(response!.urlBase);
                         setToken(response!.token);
+
+                        getSimpleData(DataKey.MaintainOpenConfig).then((res) => {
+                            if (res === "false") {
+                                init(response.tenantId!, response.urlBase, response.token)
+                            }
+                        })
+
                     });
 
                 } else {
