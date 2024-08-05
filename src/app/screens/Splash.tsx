@@ -14,7 +14,7 @@ const Splash = () => {
             }
         })
         setTimeout(() => {
-            navigate('Config_Ambiente', { maintainOpenConfig: false })
+            navigate('Config_Ambiente')
         }, 100)
     }, [])
     return (

@@ -1,24 +1,25 @@
 import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import { useNavigation } from "@react-navigation/native";
 
 const CS_SC_011_splash_PreVenda = () => {
- 
+    const { navigate } = useNavigation()
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                style={{ flex: 1}}
+                style={{ flex: 1 }}
                 source={require('../../../../assets/Pre-venda.png')}
             >
                 <View
                     style={[
-                        
-                        { 
-                        height:"100%",
-                        marginHorizontal:15,
-                        paddingVertical: 60,
-                        alignItems: "center",
-                        justifyContent: "space-between"
+
+                        {
+                            height: "100%",
+                            marginHorizontal: 15,
+                            paddingVertical: 60,
+                            alignItems: "center",
+                            justifyContent: "space-between"
                         }
                     ]}
                 >
@@ -35,8 +36,8 @@ const CS_SC_011_splash_PreVenda = () => {
                     >
                         Faça suas vendas de forma rápida e segura
                     </Text>
-                    <TouchableOpacity 
-                        onPress={() => ""}
+                    <TouchableOpacity
+                        onPress={() => navigate('Splash_Produto')}
                         style={[
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,

@@ -84,7 +84,7 @@ export default function StackRoutes() {
     return (
         <StackNav.Navigator initialRouteName="Splash">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
-            
+
             <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }} />
 
 
@@ -387,7 +387,7 @@ export default function StackRoutes() {
             }} />
 
 
-            
+
 
             <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }} />
 

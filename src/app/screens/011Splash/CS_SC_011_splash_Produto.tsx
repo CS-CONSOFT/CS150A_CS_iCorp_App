@@ -1,24 +1,32 @@
 import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import { useNavigation } from "@react-navigation/native";
+import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../enum/DataKeys";
 
 const CS_SC_011_splash_Produto = () => {
- 
+    const { navigate } = useNavigation()
+    function finish(): void {
+        storeSimpleData(DataKey.IsFirstTimeOpenApp, "0")
+        navigate('Config_Ambiente')
+    }
+
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                style={{ flex: 1}}
+                style={{ flex: 1 }}
                 source={require('../../../../assets/CadastroProduto.png')}
             >
                 <View
                     style={[
-                        
-                        { 
-                        height:"100%",
-                        marginHorizontal:15,
-                        paddingVertical: 60,
-                        alignItems: "flex-start",
-                        justifyContent: "space-between"
+
+                        {
+                            height: "100%",
+                            marginHorizontal: 15,
+                            paddingVertical: 60,
+                            alignItems: "flex-start",
+                            justifyContent: "space-between"
                         }
                     ]}
                 >
@@ -35,8 +43,8 @@ const CS_SC_011_splash_Produto = () => {
                     >
                         Encontre produtos{'\n'}com{'\n'}facilidade
                     </Text>
-                    <TouchableOpacity 
-                        onPress={() => ""}
+                    <TouchableOpacity
+                        onPress={() => finish()}
                         style={[
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,

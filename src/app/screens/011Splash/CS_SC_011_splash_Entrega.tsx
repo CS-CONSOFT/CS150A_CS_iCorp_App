@@ -1,24 +1,25 @@
 import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import { useNavigation } from "@react-navigation/native";
 
 const CS_SC_011_splash_Entrega = () => {
- 
+    const { navigate } = useNavigation()
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                style={{ flex: 1}}
+                style={{ flex: 1 }}
                 source={require('../../../../assets/Entrega.png')}
             >
                 <View
                     style={[
-                        
-                        { 
-                        height:"100%",
-                        marginHorizontal:15,
-                        paddingVertical: 60,
-                        alignItems: "center",
-                        justifyContent: "space-between"
+
+                        {
+                            height: "100%",
+                            marginHorizontal: 15,
+                            paddingVertical: 60,
+                            alignItems: "center",
+                            justifyContent: "space-between"
                         }
                     ]}
                 >
@@ -35,8 +36,8 @@ const CS_SC_011_splash_Entrega = () => {
                     >
                         Faça suas entregas e registre series de produtos
                     </Text>
-                    <TouchableOpacity 
-                        onPress={() => ""}
+                    <TouchableOpacity
+                        onPress={() => navigate('Splash_PreVenda')}
                         style={[
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,
