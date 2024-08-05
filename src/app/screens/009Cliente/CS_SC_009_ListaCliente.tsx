@@ -17,6 +17,9 @@ import { ICON_NAME } from "../../util/IconsName";
 import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 import { handleAnaliseCliente, handleGerarCliente } from "../../view_controller/crediario/CrediarioViewController";
 import CustomLoading from "../../components/loading/CustomLoading";
+import { IResAnaliseCliente } from "../../services/api/interfaces/crediario/IResAnaliseCliente";
+import { formatMoneyValue } from "../../util/FormatText";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -82,8 +85,8 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const isLoading = status === FETCH_STATUS.LOADING
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
             {!isLoading ? <>
+                <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
                 <FlatList
                     refreshing={isLoading}
                     onRefresh={getClientesList}
@@ -140,6 +143,17 @@ const RightItemCliente = ({ cliente, handlePopUp }: { cliente: Csicp_bb012, hand
 const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cliente: Csicp_bb012) => void }) => {
     const [isBtnLoading, setIsBtnLoading] = useState(false)
     const { navigate } = useNavigation()
+    const [resultOfAnalysis, setResultOfAnalysis] = useState<IResAnaliseCliente>()
+    const [resultOfCreatingUser, setResultOfCreatingUser] = useState('')
+
+    useEffect(() => {
+        if (resultOfCreatingUser !== '') {
+            setTimeout(() => {
+                setResultOfCreatingUser('')
+            }, 5000)
+        }
+    }, [resultOfCreatingUser, resultOfAnalysis])
+
 
     return (
         <View style={stylesEntregaCard.dialog}>
@@ -148,48 +162,98 @@ const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cli
                 <CustomIcon icon={ICON_NAME.FECHAR} style={{ marginLeft: 'auto' }} iconSize={32} onPress={onClose} />
             </View>
 
+            {isBtnLoading && (
+                <ActivityIndicator />
+            )}
 
-            <View style={[commonStyle.common_rowItem, commonStyle.align_spacebetween_row, commonStyle.common_margin_left_16, commonStyle.common_padding_08]}>
+            {!isBtnLoading && (
                 <View style={[stylesEntregaCard.contentContanier, commonStyle.common_columnItem]}>
-                    <View style={stylesEntregaCard.contentContenierSmall}>
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                    <View style={[{ width: '95%' }]}>
+
+                        <TouchableOpacity onPress={() => {
+                            /** CADASTRANDO NO CREDIARO */
                             setIsBtnLoading(true)
                             handleGerarCliente({ cs_conta_id: cliente.csicp_bb012.csicp_bb012.ID }).then(() => {
-                                showToast(ToastType.SUCCESS, "Cadastro Efetuado", "Cliente gerado com sucesso!")
+                                setResultOfCreatingUser("Usuário cadastrado com sucesso!")
+                                setIsBtnLoading(false)
                             }).catch((err) => {
+                                setResultOfCreatingUser("Falha ao cadastrar usuário!")
                                 showToast(ToastType.ERROR, "Falha", err)
                                 setIsBtnLoading(false)
                             })
-                            setIsBtnLoading(false)
                         }}>
-                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Cadastrar Cliente</Text>}
+                            <View style={[commonStyle.common_rowItem, commonStyle.margin_16]}>
+                                <View style={{ backgroundColor: "#0A3147", padding: 8, borderRadius: 8, marginRight: 8 }}>
+                                    <CustomIcon icon={ICON_NAME.ADICIONAR_PESSOA_CONTORNADO} iconColor="#FFF" />
+                                </View>
+                                <View style={[commonStyle.align_centralizar]}>
+                                    <Text style={[commonStyle.common_text_button_style]}>Cadastre no meu crediário clicando aqui!</Text>
+                                </View>
+                            </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                        <TouchableOpacity onPress={() => {
+                            /** ANALISE DE CREDITO */
                             setIsBtnLoading(true)
-                            handleAnaliseCliente({ cs_conta_id: cliente.csicp_bb012.csicp_bb012.ID }).then(() => {
+                            handleAnaliseCliente({ cs_conta_id: cliente.csicp_bb012.csicp_bb012.ID }).then((res) => {
                                 showToast(ToastType.SUCCESS, "Análise Feita", "!!!")
+                                setResultOfAnalysis(res)
+                                setIsBtnLoading(false)
                             }).catch((err) => {
                                 showToast(ToastType.ERROR, "Falha", err)
                                 setIsBtnLoading(false)
                             })
-                            setIsBtnLoading(false)
                         }}>
-                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Efetuar Análise de Cliente</Text>}
+                            <View style={[commonStyle.common_rowItem, commonStyle.margin_16]}>
+                                <View style={{ backgroundColor: "#0A3147", padding: 8, borderRadius: 8, marginRight: 8 }}>
+                                    <CustomIcon icon={ICON_NAME.ADICIONAR_PESSOA_CONTORNADO} iconColor="#FFF" />
+                                </View>
+                                <View style={[commonStyle.align_centralizar]}>
+                                    <Text style={[commonStyle.common_text_button_style]}>Efetue análise de crédito clicando aqui!</Text>
+                                </View>
+                            </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={commonStyle.common_button_style} onPress={() => {
+                        <TouchableOpacity onPress={() => {
                             navigate('SimulacaoCrediario', {
                                 contaCodigo: cliente.csicp_bb012.csicp_bb012.BB012_Codigo
                             })
                         }}>
-                            {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Simulador de Crédito</Text>}
+                            <View style={[commonStyle.common_rowItem, commonStyle.margin_16]}>
+                                <View style={{ backgroundColor: "#0A3147", padding: 8, borderRadius: 8, marginRight: 8 }}>
+                                    <CustomIcon icon={ICON_NAME.ESTATISTICA_CONTORNADO} iconColor="#FFF" />
+                                </View>
+                                <View style={[commonStyle.align_centralizar]}>
+                                    <Text style={[commonStyle.common_text_button_style]}>Efetue uma simulação de venda do cliente</Text>
+                                </View>
+                            </View>
                         </TouchableOpacity>
+
+                        <CustomSeparator />
+
+                        {/** SE USUÁRIO FOR CADASTRADO */}
+                        {resultOfCreatingUser !== '' && resultOfAnalysis === undefined && (
+                            <View style={[commonStyle.align_centralizar]}>
+                                <Text style={[commonStyle.common_text_button_style, { color: 'green' }]}>{resultOfCreatingUser}</Text>
+                            </View>
+                        )}
+
+                        {/** SE USUÁRIO FOR ANÁLISE DE CRÉDITO */}
+                        {resultOfCreatingUser === '' && resultOfAnalysis !== undefined && (
+                            <View style={[commonStyle.align_centralizar, commonStyle.common_rowItem]}>
+                                <View style={commonStyle.common_columnItem}>
+                                    <Text style={[commonStyle.common_text_button_style]}>Limite de Crédito: {formatMoneyValue(resultOfAnalysis.limite.saldo)}</Text>
+                                    <Text style={[commonStyle.common_text_button_style]}>Tipo de Cliente: {resultOfAnalysis.limite.tipocliente}</Text>
+                                    <Text style={[commonStyle.common_text_button_style]}>Risco: {resultOfAnalysis.limite.risco}</Text>
+                                    <Text style={[commonStyle.common_text_button_style]}>Ação Sugerida: {resultOfAnalysis.limite.acaoSugerida}</Text>
+                                </View>
+                                <CustomIcon icon={ICON_NAME.FECHAR} style={{ marginLeft: 'auto' }} iconSize={32} onPress={onClose} />
+                            </View>
+                        )}
                     </View>
                 </View>
-                <View style={commonStyle.align_centralizar}>
-                </View>
-            </View>
+            )}
+
         </View>
     )
 }
@@ -199,7 +263,8 @@ const stylesEntregaCard = StyleSheet.create({
     dialog: {
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: 20
+        padding: 20,
+        margin: 16
     },
     contentContanier: {
 
