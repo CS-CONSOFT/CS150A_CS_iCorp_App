@@ -1,3 +1,4 @@
+import { longPressHandlerName } from "react-native-gesture-handler/lib/typescript/handlers/LongPressGestureHandler";
 import { DataKey } from "../../../../enum/DataKeys";
 import { getSimpleData, storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
@@ -10,6 +11,7 @@ import { IResGetListAlmox } from "../../interfaces/prevenda/CS_IResGetListAlmox"
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
 import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
+import { getEstaticasPV } from "../estaticas/CS_Estaticas";
 
 /**
  * Lista todas as PVS
@@ -18,21 +20,77 @@ import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdut
  */
 export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
-        const params = {
+        let params = {
             In_Tenant_Id: IGetPreVendaList.cs_tenant_id,
             In_IsCount: 0,
             in_currentPage: IGetPreVendaList.cs_current_page,
             in_pageSize: IGetPreVendaList.cs_page_size,
             In_DataInicio: IGetPreVendaList.cs_data_inicial,
-            In_DataFinal: IGetPreVendaList.cs_data_final
+            In_DataFinal: IGetPreVendaList.cs_data_final,
+            //         In_ClauseInt_List_csicp_dd070_Sit: '',
+            //       In_ClauseInt_List_csicp_dd070_TpAte: ''
         }
-        const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`
-        const response = await api.get(url, { headers: params })
-        return response.data as IResPreVenda
+
+        /**
+        try {
+            const resSit = await _handleGetEstaticaSit();
+            params.In_ClauseInt_List_csicp_dd070_Sit = resSit;
+            const resTpAtd = await _handleGetEstaticaTpAt();
+            params.In_ClauseInt_List_csicp_dd070_TpAte = resTpAtd;
+        } catch (error: any) {
+            throw new Error(`Failed to fetch static data: ${error.message}`);
+        }
+ */
+        const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
+        const response = await api.get(url, { headers: params });
+        return response.data as IResPreVenda;
     } catch (error) {
         throw error;
     }
 }
+
+enum ES_TYPE {
+    BPM = "BPM",
+    APROVADO = "Aprovado",
+    CONSULTA = "Consulta",
+    PV = "PreVenda"
+}
+
+
+/** recupera uma lista de ids da situacao para filtro da PV */
+async function _handleGetEstaticaSit(): Promise<string> {
+    try {
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await getEstaticasPV();
+
+        const idConsulta = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.CONSULTA)?.Id
+        const idAprovado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.APROVADO)?.Id
+        const idBPM = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.BPM)?.Id
+
+        const stringReturn = `${idConsulta},${idAprovado},${idBPM}`
+
+        return stringReturn;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/** recupera uma lista de ids da tipo de atendimento para filtro da PV */
+async function _handleGetEstaticaTpAt(): Promise<string> {
+    try {
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await getEstaticasPV();
+
+        const idPv = response.csicp_dd070_TpAte.find((item) => item.Label == ES_TYPE.PV)?.Id
+
+        const stringReturn = `${idPv}`
+
+        return stringReturn;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 
 /**
