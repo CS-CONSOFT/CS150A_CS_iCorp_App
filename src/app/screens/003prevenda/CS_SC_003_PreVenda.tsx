@@ -103,6 +103,8 @@ const CS_SC_003_PreVenda = () => {
                     />
 
 
+
+
                     <FlatList
                         style={{ height: '70%' }}
                         data={pvList.toReversed()}
