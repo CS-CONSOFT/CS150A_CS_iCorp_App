@@ -82,9 +82,10 @@ declare global {
 
 export default function StackRoutes() {
     return (
-        <StackNav.Navigator initialRouteName="Config_Ambiente">
+        <StackNav.Navigator initialRouteName="Splash">
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
-            <StackNav.Screen name="Splash01" options={{ headerShown: false }} component={CS_SC_001_Login} />
+            
+            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }} />
 
 
             <StackNav.Screen name="SimulacaoCrediario" component={CS_SC_012_SimuladorDeCredito} options={{
@@ -386,7 +387,7 @@ export default function StackRoutes() {
             }} />
 
 
-            <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }} />
+            
 
             <StackNav.Screen name="Splash_Entrega" component={CS_SC_011_splash_Entrega} options={{ headerShown: false }} />
 
