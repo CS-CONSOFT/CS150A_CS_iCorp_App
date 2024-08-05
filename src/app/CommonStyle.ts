@@ -223,6 +223,10 @@ export const commonStyle = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
     },
+    align_spacebetween_column: {
+        alignContent: "center",
+        justifyContent: "space-between",
+    },
     align_start_spaceAround_collumn: {
         alignItems: "flex-start",
         justifyContent: "space-around",

@@ -1,4 +1,6 @@
-import { ImageBackground, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { commonStyle } from "../../CommonStyle";
+import ColorStyle from "../../ColorStyle";
 
 const CS_SC_011_splash_Entrega = () => {
  
@@ -8,10 +10,56 @@ const CS_SC_011_splash_Entrega = () => {
                 style={{ flex: 1}}
                 source={require('../../../../assets/Entrega.png')}
             >
-                <Text>Faça suas entregas e registre series de produtos</Text>
-                <TouchableOpacity onPress={() => ""}>
-                    <Text>Proximo</Text>
-                </TouchableOpacity>
+                <View
+                    style={[
+                        
+                        { 
+                        height:"100%",
+                        marginHorizontal:15,
+                        paddingVertical: 60,
+                        alignItems: "center",
+                        justifyContent: "space-between"
+                        }
+                    ]}
+                >
+                    <Text
+                        style={[
+                            commonStyle.common_fontWeight_800,
+                            {
+                                width: "auto",
+                                fontSize: 50,
+                                textAlign: "left",
+                                color: "white",
+                            }
+                        ]}
+                    >
+                        Faça suas entregas e registre series de produtos
+                    </Text>
+                    <TouchableOpacity 
+                        onPress={() => ""}
+                        style={[
+                            commonStyle.border_radius_32,
+                            commonStyle.align_centralizar,
+                            {
+                                backgroundColor: ColorStyle.colorPrimary100,
+                                width: "100%",
+                                height: 60,
+                            }
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                commonStyle.common_fontWeight_600,
+                                commonStyle.font_size_18,
+                                {
+                                    color: ColorStyle.colorPrimary300,
+                                }
+                            ]}
+                        >
+                            Proximo
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
         </SafeAreaView>
     );
