@@ -1,6 +1,7 @@
 import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 
 const CS_SC_011_splash_PreVenda = () => {
@@ -42,6 +43,7 @@ const CS_SC_011_splash_PreVenda = () => {
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,
                             {
+                                flexDirection: "row",
                                 backgroundColor: ColorStyle.colorPrimary100,
                                 width: "100%",
                                 height: 60,
@@ -54,11 +56,13 @@ const CS_SC_011_splash_PreVenda = () => {
                                 commonStyle.font_size_18,
                                 {
                                     color: ColorStyle.colorPrimary300,
+                                    marginRight: 12
                                 }
                             ]}
                         >
                             Proximo
                         </Text>
+                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline"/>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
