@@ -23,30 +23,42 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     };
 
     return (
-        <DrawerContentScrollView 
+        <DrawerContentScrollView
             {...props}
             style={{
                 backgroundColor: ColorStyle.colorPrimary300
             }}
         >
-            <DrawerItemList {...props}/>
+            <DrawerItemList {...props} />
             <TouchableHighlight
                 onPress={handleLogout}
                 underlayColor={'white'}
-                style={{ margin: 16, padding: 10,  borderRadius: 8 }}
+                style={{ margin: 16, padding: 10, borderRadius: 8 }}
             >
                 <Text
                     style={[
                         commonStyle.common_fontWeight_800,
                         {
-                        color: ColorStyle.colorPrimary100,
-                        
+                            color: ColorStyle.colorPrimary100,
+
                         }
                     ]}
                 >
                     Sair
                 </Text>
             </TouchableHighlight>
+
+            <Text
+                style={[
+                    commonStyle.common_fontWeight_800,
+                    {
+                        color: ColorStyle.colorPrimary100,
+
+                    }
+                ]}
+            >
+                -Versão: 0.1.0
+            </Text>
         </DrawerContentScrollView>
     );
 };
