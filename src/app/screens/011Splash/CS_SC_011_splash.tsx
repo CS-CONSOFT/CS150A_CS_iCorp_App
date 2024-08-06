@@ -18,7 +18,7 @@ const CS_SC_011_splash = () => {
                     navigate('Splash_Entrega')
                 } else {
                     navigate('Config_Ambiente')
-                    //navigate('Splash_Entrega')
+                    
                 }
             })
         }, 3500)
