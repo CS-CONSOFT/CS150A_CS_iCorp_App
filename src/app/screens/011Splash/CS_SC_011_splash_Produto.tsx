@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../enum/DataKeys";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const CS_SC_011_splash_Produto = () => {
     const { navigate } = useNavigation()

@@ -12,7 +12,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+
+        "foregroundImage": "./assets/logo-extenso.png",
         "backgroundColor": "#ffffff"
       },
       "package": "cs.cspv"
