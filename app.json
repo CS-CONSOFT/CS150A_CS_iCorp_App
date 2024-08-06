@@ -4,16 +4,15 @@
     "slug": "cs-pv-alpha",
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/LogoBrancoVermelho.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "cs-pv-alpha",
-   
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splash.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "cs.cspv"
