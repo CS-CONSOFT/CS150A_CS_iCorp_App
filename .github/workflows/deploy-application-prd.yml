@@ -1,4 +1,4 @@
-name: Gerar APK
+name: Gerar pacote PV-Mobile aab
 
 on:
   push:
