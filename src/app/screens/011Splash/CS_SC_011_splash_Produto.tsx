@@ -4,6 +4,7 @@ import ColorStyle from "../../ColorStyle";
 import { useNavigation } from "@react-navigation/native";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../enum/DataKeys";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const CS_SC_011_splash_Produto = () => {
     const { navigate } = useNavigation()
@@ -64,8 +65,9 @@ const CS_SC_011_splash_Produto = () => {
                                 }
                             ]}
                         >
-                            Proximo
+                            Login
                         </Text>
+                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline"/>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

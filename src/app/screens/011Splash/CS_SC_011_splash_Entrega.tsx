@@ -2,6 +2,7 @@ import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "rea
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
 import { useNavigation } from "@react-navigation/native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const CS_SC_011_splash_Entrega = () => {
     const { navigate } = useNavigation()
@@ -59,6 +60,7 @@ const CS_SC_011_splash_Entrega = () => {
                         >
                             Proximo
                         </Text>
+                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline"/>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
