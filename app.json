@@ -7,12 +7,12 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "cs-pv-alpha",
-   
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
+
         "foregroundImage": "./assets/logo-extenso.png",
         "backgroundColor": "#ffffff"
       },

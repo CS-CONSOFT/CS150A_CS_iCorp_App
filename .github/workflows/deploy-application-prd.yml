@@ -1,8 +1,8 @@
-name: Gerar APK
+name: Gerar pacote PV-Mobile aab
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "csprd" ]
   workflow_dispatch:
 
 env:
@@ -39,14 +39,14 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x android/gradlew
 
-      - name: Generate APK
+      - name: Generate AAB
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew bundleRelease
 
-      - name: Upload APK
+      - name: Upload AAB
         uses: actions/upload-artifact@v3
         with:
-          name: cs-pvmobile-010-apk
+          name: cs-pvmobile-010-aab
           path: android/app/build/outputs/apk/release/app-release-apk
 

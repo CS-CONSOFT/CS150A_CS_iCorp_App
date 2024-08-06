@@ -1,6 +1,7 @@
 import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import ColorStyle from "../../ColorStyle";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { DataKey } from "../../enum/DataKeys";
@@ -36,13 +37,13 @@ const CS_SC_011_splash_Produto = () => {
                             commonStyle.common_fontWeight_800,
                             {
                                 width: "100%",
-                                fontSize: 52,
+                                fontSize: 50,
                                 textAlign: "left",
                                 color: "white",
                             }
                         ]}
                     >
-                        Encontre produtos{'\n'}com{'\n'}facilidade
+                        Encontre milhares de produtos com facilidade
                     </Text>
                     <TouchableOpacity
                         onPress={() => finish()}
@@ -50,6 +51,7 @@ const CS_SC_011_splash_Produto = () => {
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,
                             {
+                                flexDirection: "row",
                                 backgroundColor: ColorStyle.colorPrimary100,
                                 width: "100%",
                                 height: 60,
@@ -62,6 +64,7 @@ const CS_SC_011_splash_Produto = () => {
                                 commonStyle.font_size_18,
                                 {
                                     color: ColorStyle.colorPrimary300,
+                                    marginRight: 12
                                 }
                             ]}
                         >
