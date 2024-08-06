@@ -5,6 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { logout } from '../../view_controller/login/LoginViewController';
 import { DataKey } from '../../enum/DataKeys';
 import { removeValueFromStorage, storeSimpleData } from '../../services/storage/AsyncStorageConfig';
+import ColorStyle from '../../ColorStyle';
+import { commonStyle } from '../../CommonStyle';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const navigation = useNavigation();
@@ -20,15 +23,42 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     };
 
     return (
-        <DrawerContentScrollView {...props}>
+        <DrawerContentScrollView
+            {...props}
+            style={{
+                backgroundColor: ColorStyle.colorPrimary300
+            }}
+        >
             <DrawerItemList {...props} />
             <TouchableHighlight
                 onPress={handleLogout}
                 underlayColor={'white'}
-                style={{ margin: 16, padding: 10, backgroundColor: '#f2f2f2', borderRadius: 8 }}
+                style={{ margin: 16, padding: 10, borderRadius: 8 }}
             >
-                <Text>Sair</Text>
+                <Text
+                    style={[
+                        commonStyle.common_fontWeight_800,
+                        {
+                            color: ColorStyle.colorPrimary100,
+
+                        }
+                    ]}
+                >
+                    Sair
+                </Text>
             </TouchableHighlight>
+
+            <Text
+                style={[
+                    commonStyle.common_fontWeight_800,
+                    {
+                        color: ColorStyle.colorPrimary100,
+
+                    }
+                ]}
+            >
+                -Versão: 0.1.0
+            </Text>
         </DrawerContentScrollView>
     );
 };

@@ -69,7 +69,7 @@ const CS_SC_011_splash_Produto = () => {
                         >
                             Login
                         </Text>
-                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline"/>
+                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline" />
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
