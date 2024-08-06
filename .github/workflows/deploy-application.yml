@@ -47,6 +47,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: cs-pvmobile-0.1.0-apk
-          path: android/app/build/outputs/apk/release/cs-pvmobile-0.1.0-apk
+          name: cs-pvmobile-010-apk
+          path: android/app/build/outputs/apk/release/app-release-apk
 
