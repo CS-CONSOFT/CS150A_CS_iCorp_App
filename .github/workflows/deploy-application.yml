@@ -48,5 +48,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: cs-pvmobile-010-apk
-          path: android/app/build/outputs/apk/release/app-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
