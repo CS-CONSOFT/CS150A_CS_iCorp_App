@@ -471,11 +471,13 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
                 ValorEntrada: paymentValueEntranceValue || 0
             }
 
-            if (iReqInsertPaymentForm.ValorEntrada == 0) {
+            if (iReqInsertPaymentForm.ValorEntrada == 0 && entranceFormId != '') {
                 showToast(ToastType.ERROR, "Aviso", "Insira valor de entrada!")
                 setBtnClickLoading(false)
                 return
             }
+
+
 
             if (iReqInsertPaymentForm.Valor == 0) {
                 showToast(ToastType.ERROR, "Aviso", "Insira valor pagamento!")
