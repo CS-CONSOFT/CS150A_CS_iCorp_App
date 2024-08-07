@@ -36,7 +36,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
     const [tablePrice, setTablePrice] = useState(0);
     const [unityPrice, setUnityPrice] = useState(0);
-    const [percentDiscount, setPercentDiscount] = useState('0');
+    const [percentDiscount2, setPercentDiscount2] = useState(0);
     const [valueDiscount, setValueDiscount] = useState(0);
 
     const [updateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
@@ -49,7 +49,6 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
         setTablePrice(product.csicp_dd080.DD080_Preco_Tabela || 0);
         setUnityPrice(product.csicp_dd080.DD080_Preco_Unitario || 0);
-        setPercentDiscount(formatPercentInput((product.csicp_dd080.DD080_Perc_DescProduto || 0).toString() || '0'));
         setValueDiscount(product.csicp_dd080.DD080_Total_Desconto || 0);
     }, [])
 
@@ -162,18 +161,23 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     <View style={{ flex: 1, marginRight: 8 }}>
                         <Text style={common003_01_styles.extraBottomStyleChilds}>%</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <TextInput
-                                style={[
+                            <CurrencyInput
+                                value={percentDiscount2}
+                                onChangeValue={(number) => {
+                                    setPercentDiscount2(number || 0)
+                                }}
+                                renderTextInput={textInputProps => <TextInput style={[
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
-                                ]}
-                                onChangeText={(value) => {
-                                    setPercentDiscount(formatPercentInput(value))
-                                }}
-                                value={percentDiscount.toString()}
-                                keyboardType='decimal-pad'
+                                ]} {...textInputProps} />}
+                                prefix=""
+                                delimiter="."
+                                separator="."
+                                precision={2}
+                                maxValue={0.99}
                             />
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount) * 100, product.csicp_dd080.DD080_Id)} />
+
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount2) * 100, product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
 
