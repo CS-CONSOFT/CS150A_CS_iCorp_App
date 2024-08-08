@@ -1,25 +1,23 @@
-import { Text, View, TouchableOpacity, ScrollView, Image, Pressable, FlatList, ActivityIndicator } from "react-native";
-import C_003_02_01_HeaderClient from "./components/C_003_02_01_HeaderClient";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { commonStyle } from "../../../CommonStyle";
 import CustomAccordion from "../../../components/accordion/CustomAccordion";
-import { ICON_NAME } from "../../../util/IconsName";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { ClienteStyles } from "./ClienteStyles";
-import { ButtonLink } from "../../../components/button/CustomButtonLink";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import CustomLoading from "../../../components/loading/CustomLoading";
 import { DD071_Enderecos, IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { FETCH_STATUS } from "../../../util/FETCH_STATUS";
+import { ICON_NAME } from "../../../util/IconsName";
 import { handleGetPv } from "../../../view_controller/prevenda/PreVendaViewController";
-import ColorStyle from "../../../ColorStyle";
-import CustomLoading from "../../../components/loading/CustomLoading";
+import { ClienteStyles } from "./ClienteStyles";
+import C_003_02_01_HeaderClient from "./components/C_003_02_01_HeaderClient";
 
 
 interface Avatar {
     img?: string;
     name?: string; //? Para teste
 }
-//Valor padrão Para teste
+//Valor padrão Para tes♀e
 const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: Avatar) => {
 
     const img: string = "";

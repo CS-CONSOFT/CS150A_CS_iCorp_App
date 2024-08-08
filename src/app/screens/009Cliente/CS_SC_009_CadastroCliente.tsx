@@ -193,11 +193,18 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
             /** salvando a 1201 */
             handleSave1201({ cs_req_save: reqSave1201 }).then(() => {
                 handleSave1202({ cs_req_save: reqSave1202 }).then(() => {
-                    resetForm()
-                    navigate('Cadastro_002_End', {
-                        bb12id: bb012id_when_edit_cliente || res.bb012_ID,
-                        isEdit: bb012id_when_edit_cliente ? true : false
-                    })
+
+
+                    //cliente editando
+                    if (bb012id_when_edit_cliente !== undefined) {
+                        setIsSavingLoading(false)
+                    } else {
+                        resetForm()
+                        navigate('Cadastro_002_End', {
+                            bb12id: bb012id_when_edit_cliente || res.bb012_ID,
+                            isEdit: bb012id_when_edit_cliente ? true : false
+                        })
+                    }
                 })
             })
         }).catch((res) => {
