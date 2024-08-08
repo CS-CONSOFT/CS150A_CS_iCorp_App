@@ -1,6 +1,6 @@
 {
-  "name": "cs-pv",
-  "version": "1.0.0",
+  "name": "pv-mobile",
+  "version": "0.1.2",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
@@ -39,7 +39,8 @@
     "react-native-screens": "^3.31.1",
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-message": "^2.2.0",
-    "react-native-web": "~0.19.10"
+    "react-native-web": "~0.19.10",
+    "expo-network": "~6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

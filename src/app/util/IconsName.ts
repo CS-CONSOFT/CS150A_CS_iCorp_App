@@ -34,5 +34,6 @@ export const ICON_NAME = {
     FECHAR: "close-circle-outline",
     CAMERA: "camera-outline",
     TRES_PONTOS_VERTICAL: "ellipsis-vertical-outline",
+    WIFI: "wifi",
 
 }
