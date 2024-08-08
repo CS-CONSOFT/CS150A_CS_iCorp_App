@@ -1,4 +1,4 @@
-rootProject.name = 'cs-pv'
+rootProject.name = 'PV Mobile'
 
 dependencyResolutionManagement {
   versionCatalogs {

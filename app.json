@@ -1,12 +1,16 @@
 {
   "expo": {
-    "name": "cs-pv-alpha",
-    "slug": "cs-pv-alpha",
-    "version": "0.1.1",
+    "name": "PV Mobile",
+    "slug": "cs-pv-mobile",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "cs-pv-alpha",
+    "scheme": "br.com.pvmobile",
     "ios": {
       "supportsTablet": true
     },
@@ -15,10 +19,10 @@
         "foregroundImage": "./assets/logo-extenso.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "cs.cspv"
+      "package": "br.com.pvmobile"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       "expo-build-properties",

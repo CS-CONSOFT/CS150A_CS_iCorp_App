@@ -70,6 +70,10 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString()).then(() => {
                         //configura a url no axios
                         api.defaults.baseURL = response.urlBase;
+                        api.defaults.timeout = 30000
+                        api.defaults.timeoutErrorMessage = "Tempo Limite Atingido!"
+
+
                         setHasValue(true);
                         setTenant(response!.tenantId.toString());
                         setUrlBase(response!.urlBase);
