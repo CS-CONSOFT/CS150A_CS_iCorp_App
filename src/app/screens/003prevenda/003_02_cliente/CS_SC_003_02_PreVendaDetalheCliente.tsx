@@ -11,6 +11,7 @@ import { ICON_NAME } from "../../../util/IconsName";
 import { handleGetPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import { ClienteStyles } from "./ClienteStyles";
 import C_003_02_01_HeaderClient from "./components/C_003_02_01_HeaderClient";
+import { showToast, ToastType } from '../../../util/ShowToast';
 
 
 interface Avatar {
@@ -50,6 +51,8 @@ const CS_SC_003_02_PreVendaDetalheCliente = ({ img: string, name = "Agnaldo" }: 
                 setPv(res)
                 setStatus(FETCH_STATUS.SUCCESS)
             }
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro", err.response)
         })
     }
 

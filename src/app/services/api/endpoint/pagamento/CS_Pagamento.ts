@@ -173,3 +173,31 @@ export async function deletePaymentForm({ tenantId, pvId, formaPgtoAtendimentoId
         throw error
     }
 }
+''
+export async function paymentSelectForm({ tenantId, pvId, formId }: { tenantId: number, pvId: string, formId: string }):
+    Promise<ICommonResponse> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${tenantId}/${pvId}/${formId}/Pagamento_SelectForma`
+
+    const body = {}
+
+    try {
+        const response = await api.post(url, body)
+        return response.data as ICommonResponse
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function paymentSelectTerm({ tenantId, pvId, formId, termId }: { tenantId: number, pvId: string, formId: string, termId: string }):
+    Promise<ICommonResponse> {
+    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${tenantId}/${pvId}/${formId}/${termId}/Pagamento_SelectCondicao`
+
+    const body = {}
+
+    try {
+        const response = await api.post(url, body)
+        return response.data as ICommonResponse
+    } catch (error) {
+        throw error
+    }
+}

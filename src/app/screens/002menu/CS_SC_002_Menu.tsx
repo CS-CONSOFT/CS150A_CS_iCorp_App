@@ -1,15 +1,16 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import { FlatList, ImageBackground, SafeAreaView, View } from "react-native";
 import CustomHeaderUserInfo from "../../components/headers/CustomHeaderUserInfo";
 import CustomItemIconTitleHalfRoundedWhite from "../../components/items/CustomItemIconTitleHalfRoundedWhite";
-import { data } from "./ListMenu";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
-import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
 import { DataKey } from "../../enum/DataKeys";
+import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
+import { data } from "./ListMenu";
 
 
 const CS_SC_002_Menu = () => {
     const { navigate } = useNavigation()
+
 
     useEffect(() => {
         checkIfUserIsLogged().then((isLogged) => {
@@ -20,6 +21,8 @@ const CS_SC_002_Menu = () => {
             }
         })
     }, [])
+
+
 
 
     return (

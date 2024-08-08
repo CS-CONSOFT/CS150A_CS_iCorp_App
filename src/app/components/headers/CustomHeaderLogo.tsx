@@ -1,16 +1,37 @@
 
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Text, StyleSheet, View } from "react-native";
+import { commonStyle } from "../../CommonStyle";
+import { useFocusEffect } from "@react-navigation/native";
+import { checkIfTheresNetworkConnection } from "../../util/CheckConnection";
+import { useState } from "react";
+import CustomIcon from "../icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
 const CustomHeaderLogo = () => {
+
+    const [isNetworkConnected, setIsNetworkConnected] = useState(true)
+    useFocusEffect(() => {
+        checkIfTheresNetworkConnection().then((res) => {
+            if (res == true) {
+                setIsNetworkConnected(true)
+            } else {
+                setIsNetworkConnected(false)
+            }
+        })
+    })
+
     return (
-        <View style={styles.container}>
-            <Image style={styles.image} source={require('../../../../assets/logo-extenso.png')} />
+        <View style={[styles.container, commonStyle.common_rowItem]}>
+            <Image style={styles.image} source={require('../../../../assets/icon.png')} />
+            <Text style={[commonStyle.common_margin_left_16, commonStyle.common_margin_right_16]}>CS-Consoft</Text>
+            <CustomIcon icon={ICON_NAME.WIFI} iconColor={isNetworkConnected ? "green" : "red"} />
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     image: {
-        width: 280,
+        width: 32,
         height: 32,
         borderRadius: 4
     },
@@ -18,8 +39,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
         borderRadius: 8,
+        marginTop: '5%',
+
     },
 })
 

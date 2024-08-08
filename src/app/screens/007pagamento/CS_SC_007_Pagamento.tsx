@@ -15,12 +15,13 @@ import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPre
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handlePaymentSelectForm, handlePaymentSelectTerm } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { INotaPagamentosValores, handleCalculateValuesPayedAndToPay, handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { moneyApplyMask, moneyRemoveMask } from "../../util/Masks";
 import CurrencyInput from "react-native-currency-input";
+import { FadeIn } from "react-native-reanimated";
 
 const CS_SC_007_Pagamento = () => {
     // Estado para armazenar o PV (Ponto de Venda) atual
@@ -188,8 +189,10 @@ const ItemSelecao = ({ finish, valorAPagarZerado }: {
      * @param key ID da forma selecionada
      */
     function onFormSelected(key: string) {
-        setCurrentStage(PaymentStage.CONDICAO)
         setFormaPagamentoId(key)
+        handlePaymentSelectForm({ formId: key }).then(() => {
+            setCurrentStage(PaymentStage.CONDICAO)
+        })
     }
 
     /**
@@ -198,7 +201,10 @@ const ItemSelecao = ({ finish, valorAPagarZerado }: {
      */
     function onTermSelected(key: string) {
         setCondicaoId(key)
-        setCurrentStage(PaymentStage.PAGAMENTO)
+        handlePaymentSelectTerm({ formId: formaPagamentoId, termId: key }).then(() => {
+            setCurrentStage(PaymentStage.PAGAMENTO)
+
+        })
     }
 
     // Definição das etapas com seus respectivos números e labels
@@ -282,7 +288,10 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
     /** guarda a lista de pagamento */
     const [paymentsForm, setPaymentsForm] = useState<{ key: string, value: string }[]>();
 
+    const [btnLoading, setBtnLoading] = useState(false)
+
     useEffect(() => {
+        setBtnLoading(false)
         getFormaPagamento002()
     }, [])
 
@@ -328,8 +337,11 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
             </View>
             {selected !== '' && !isEntrance && (
                 <View style={[{ paddingHorizontal: 32 }, commonStyle.common_rowItem, commonStyle.justify_content_space_btw]}>
-                    <Pressable style={[commonStyle.btn_gray]} onPress={() => onFormSelected(selected)}>
-                        <Text style={commonStyle.btn_text_gray}>Continuar</Text>
+                    <Pressable style={[commonStyle.btn_gray]} onPress={() => {
+                        setBtnLoading(true)
+                        onFormSelected(selected)
+                    }}>
+                        {btnLoading ? <ActivityIndicator /> : <Text style={commonStyle.btn_text_gray}>Continuar</Text>}
                     </Pressable>
                     <Pressable style={[commonStyle.btn_transparente]} onPress={() => setSelected('')}>
                         <Text style={commonStyle.btn_text_transparente}>Cancelar</Text>
@@ -352,6 +364,7 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
+        setIsLoading(false)
         getCondicaoPagamentoLista()
     }, [])
 
@@ -370,6 +383,7 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
                             value: item.csicp_bb008.BB008_Condicao_Pagto
                         }));
                         setPaymentTerms(transformedData)
+                        setIsLoading(false)
                     } else {
                         const transformedData = [{
                             key: res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.ID,
@@ -378,7 +392,6 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
                         setPaymentTerms(transformedData)
                         onTermSelected(res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.ID)
                     }
-                    setIsLoading(false)
                 } else {
                     showToast(ToastType.ERROR, "Lista vazia", "Não foi possivel recuperar a forma de pagamento!")
                     setIsLoading(false)
