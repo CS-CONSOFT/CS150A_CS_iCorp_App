@@ -2,7 +2,7 @@
   "expo": {
     "name": "cs-pv-alpha",
     "slug": "cs-pv-alpha",
-    "version": "1.0.1",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +12,6 @@
     },
     "android": {
       "adaptiveIcon": {
-
         "foregroundImage": "./assets/logo-extenso.png",
         "backgroundColor": "#ffffff"
       },

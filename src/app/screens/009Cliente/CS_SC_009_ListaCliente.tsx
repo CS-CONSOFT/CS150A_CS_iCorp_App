@@ -20,6 +20,7 @@ import CustomLoading from "../../components/loading/CustomLoading";
 import { IResAnaliseCliente } from "../../services/api/interfaces/crediario/IResAnaliseCliente";
 import { formatMoneyValue } from "../../util/FormatText";
 import CustomSeparator from "../../components/lists/CustomSeparator";
+import CustomEmpty from "../../components/lists/CustomEmpty";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -28,19 +29,21 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const navigation = useNavigation()
     const [showPopUp, setShowPopUp] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
     const { isToInsertPv } = route.params
 
     useEffect(() => {
         setShowPopUp(false)
     }, [])
 
-    function getClientesList(page?: number, searchValue?: string) {
+    function getClientesList(page: number, searchValue: string) {
         setStatus(FETCH_STATUS.LOADING)
-        handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 3, cs_search: searchValue === undefined ? undefined : searchValue }).then((res) => {
+        handleGetListConta({ currentPage: page || 1, pageSize: 10, modRelacaoID: 3, cs_search: searchValue }).then((res) => {
             try {
                 if (res !== undefined) {
                     setClientList(res)
-                    const pagesArray = getPaginationList(res.PageSize.cs_list_total_itens)
+                    const pagesArray = getPaginationList(res.PageSize.cs_number_of_pages)
                     setPaginationArray(pagesArray)
                     setStatus(FETCH_STATUS.SUCCESS)
                 }
@@ -54,19 +57,13 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
         })
     }
 
-
-
-    useEffect(() => {
-        getClientesList(1)
-    }, [])
-
     function handleClickItem(bb12id: string) {
         //é para alterar o cliente da pv?
         if (isToInsertPv) {
             setStatus(FETCH_STATUS.LOADING)
             handleSetClienteToPv(bb12id).then((res) => {
                 setStatus(FETCH_STATUS.SUCCESS)
-                navigation.navigate('Pre_Venda_Detalhes_002', {
+                navigation.navigate('Pre_Venda_Detalhes_001', {
                     currentPv: ""
                 })
             })
@@ -85,20 +82,31 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const isLoading = status === FETCH_STATUS.LOADING
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <CustomSearch onSearchPress={(searchValue) => {
+                setSearchValue(searchValue)
+                getClientesList(currentPage, searchValue)
+            }} placeholder="Pesquisar" clickToSearch={true} />
             {!isLoading ? <>
-                <CustomSearch onSearchPress={(searchValue) => { getClientesList(undefined, searchValue) }} placeholder="Pesquisar" clickToSearch={true} />
                 <FlatList
+                    ListEmptyComponent={<CustomEmpty text="Nenhum cliente encontrado!" />}
                     refreshing={isLoading}
-                    onRefresh={getClientesList}
+                    onRefresh={() => getClientesList(currentPage, searchValue)}
                     data={clientList?.csicp_bb012}
                     keyExtractor={(item, index) => item.csicp_bb012.csicp_bb012.ID}
                     renderItem={({ item }) => <RenderItemCliente handlePopUp={() => handlePopUp(item)} cliente={item} edit={(bb12id) => handleClickItem(bb12id)} />}
                 />
             </> : <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />}
-            <Custom_Pagination
-                paginationArray={paginationArray!}
-                onPagePress={getClientesList}
-            />
+
+            {(paginationArray?.length || [].length) > 1 && (
+                <Custom_Pagination
+                    paginationArray={paginationArray!}
+                    onPagePress={(page) => {
+                        setCurrentPage(page)
+                        getClientesList(page, searchValue)
+                    }}
+                />
+            )}
+
             <CustomAlertDialog
                 isVisible={showPopUp}
                 onDismiss={() => setShowPopUp(false)}

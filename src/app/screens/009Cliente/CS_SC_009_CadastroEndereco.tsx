@@ -92,6 +92,10 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
                 Numero: res.BB01206_Endereco.csicp_bb01206.BB012_Numero,
                 Perimetro: res.BB01206_Endereco.csicp_bb01206.BB012_Perimetro
             });
+
+            setValueToObjectWhenInputTyped('UFNome', res.BB01206_Endereco.csicp_aa027.AA027_Sigla)
+            setValueToObjectWhenInputTyped('CidadeNome', res.BB01206_Endereco.csicp_aa028.AA028_Cidade)
+
             setIsLoadingData(false)
         })
     }
@@ -178,6 +182,9 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param ufId id da UF
      */
     function getCities(ufId: string, valor?: string) {
+        console.log(ufSelected);
+        console.log(attributesMap.UFNome);
+
         handleGetCityList(ufId, valor).then((res) => {
             const list = res.csicp_aa028
             if (list !== undefined) {

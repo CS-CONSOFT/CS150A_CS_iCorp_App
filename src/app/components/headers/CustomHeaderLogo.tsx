@@ -3,27 +3,26 @@ import { Image, StyleSheet, View } from "react-native";
 const CustomHeaderLogo = () => {
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={require('../../../../assets/LogoBrancoVermelho.png')} />
+            <Image style={styles.image} source={require('../../../../assets/logo-extenso.png')} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     image: {
-        width: 260,
-        height: 60,
+        width: 280,
+        height: 32,
+        borderRadius: 4
     },
     container: {
+        flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    txtAtendimentoMobile: {
-        fontWeight: '600',
-        textAlign: 'center',
-        marginTop: 32,
-        fontSize: 18
+        alignItems: 'center',
+        marginTop: 20,
+        borderRadius: 8,
     },
 })
+
 
 export default CustomHeaderLogo;
 
