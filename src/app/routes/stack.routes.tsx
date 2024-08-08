@@ -34,6 +34,7 @@ import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entr
 import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
 import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
 import CS_SC_012_RespostaCrediario from "../screens/012Crediario/CS_SC_012_RespostaCrediario";
+import TopTab001 from "./top-tab001.routes";
 
 
 
@@ -344,7 +345,7 @@ export default function StackRoutes() {
                 headerBackVisible: true,
             })} />
 
-            <StackNav.Screen name="Pre_Venda_Detalhes_001" component={CS_SC_003_01_PreVendaDetalheProduto} options={({ route }: { route: any }) => ({
+            <StackNav.Screen name="Pre_Venda_Detalhes_001" component={TopTab001} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,
                 headerTitleAlign: 'center',
                 headerTintColor: "#c3c3c3",

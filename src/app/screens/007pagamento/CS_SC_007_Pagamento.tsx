@@ -363,7 +363,7 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
         try {
             handleGetPaymentTermList({ paymentFormKey: formaId }).then((res) => {
                 if (res !== undefined) {
-                    //tem condicao de pagamento e ela nao e ela possui condições. Ou seja, NÃO É FIXA, como no caso do dinheiro
+                    //tem condicao de pagamento e ela nao e ela possui condições. Ou seja, NÃO É FIXA
                     if (res.formByIdWithConditions?.FatoresAcrescimos != undefined) {
                         const transformedData = res.formByIdWithConditions.FatoresAcrescimos!.map(item => ({
                             key: item.csicp_bb008.ID,
@@ -376,6 +376,7 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
                             value: res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.BB008_Condicao_Pagto
                         }]
                         setPaymentTerms(transformedData)
+                        onTermSelected(res.formByIdWithFixedConditions!.csicp_bb026.csicp_bb008.ID)
                     }
                     setIsLoading(false)
                 } else {

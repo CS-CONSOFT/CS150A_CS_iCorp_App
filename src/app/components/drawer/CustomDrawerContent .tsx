@@ -1,13 +1,15 @@
-import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { logout } from '../../view_controller/login/LoginViewController';
-import { DataKey } from '../../enum/DataKeys';
-import { removeValueFromStorage, storeSimpleData } from '../../services/storage/AsyncStorageConfig';
+import React from 'react';
+import { Text, TouchableHighlight } from 'react-native';
 import ColorStyle from '../../ColorStyle';
 import { commonStyle } from '../../CommonStyle';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { DataKey } from '../../enum/DataKeys';
+import { removeValueFromStorage, storeSimpleData } from '../../services/storage/AsyncStorageConfig';
+import { logout } from '../../view_controller/login/LoginViewController';
+import appConfig from '../../../../app.json';
+
+
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const navigation = useNavigation();
@@ -57,7 +59,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
                     }
                 ]}
             >
-                -Versão: 0.1.0
+                -Versão: {appConfig.expo.version}
             </Text>
         </DrawerContentScrollView>
     );

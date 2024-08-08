@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { lazy, Suspense, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, Text, View } from "react-native";
+import React, { Suspense, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -8,8 +8,10 @@ import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import CustomProduct from "../../components/product/CustomProduct";
+import CustomSearch from "../../components/search/CustomSearch";
 import CustomSwitch from "../../components/switch/CustomSwitch";
 import { DataKey } from "../../enum/DataKeys";
+import { IComandaDataInsert } from "../../services/api/endpoint/comanda/CS_Comanda";
 import { IReqGetProductSearch } from "../../services/api/interfaces/produto/CS_IReqGetProdutoSearch";
 import { IResGetProductItem } from "../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
 import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
@@ -17,12 +19,10 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
 import { showToast, ToastType } from "../../util/ShowToast";
+import { handleInsertProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import CustomSearch from "../../components/search/CustomSearch";
-import { handleInsertProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
-import { IComandaDataInsert } from "../../services/api/endpoint/comanda/CS_Comanda";
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
@@ -154,72 +154,58 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     // Renderização da tela
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <Suspense fallback={<ActivityIndicator style={[commonStyle.align_centralizar]} size="large" color={ColorStyle.colorPrimary200} />}>
-                <View>
-                    {/* Componente de pesquisa */}
+                <View style={{ flexShrink: 0 }}>
                     <CustomSearch
                         placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick}
                         clickToSearch={true} />
+                </View>
 
-                    {/* Carregamento da lista de produtos ou exibição da lista */}
-                    {isLoading ? <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} /> :
-                        <View>
-                            <FlatList
-                                data={productList}
-                                refreshing={isLoading}
-                                onRefresh={handleRefreshList}
-                                keyExtractor={(item) => item.Id!.toString()}
-                                ListEmptyComponent={<CustomEmpty text={"Nenhum produto encontrado!"} />}
-                                renderItem={({ item }) => <CustomProduct
+                {isLoading ? (
+                    <ActivityIndicator style={[commonStyle.align_centralizar, { height: '100%' }]} size="large" color={ColorStyle.colorPrimary200} />
+                ) : (
+                    <View style={[paginationArray.length > 1 ? { height: "85%" } : { height: "100%" }]}>
+                        <FlatList
+                            data={productList}
+                            refreshing={isLoading}
+                            onRefresh={handleRefreshList}
+                            keyExtractor={(item) => item.Id!.toString()}
+                            ListEmptyComponent={<CustomEmpty text="Nenhum produto encontrado!" />}
+                            renderItem={({ item }) => (
+                                <CustomProduct
                                     onClickItem={() => { }}
                                     children={<ProductItem product={item} />}
                                     image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
-                                    rightItem={<>
+                                    rightItem={
                                         <RightItem
                                             loadingClick={loadingBtnClickItem}
                                             scInsertProduct={() => scInsertProduct(item)}
                                         />
-                                    </>}
-                                />}
-                            />
+                                    }
+                                />
+                            )}
+                        />
+                        {paginationArray.length > 1 && (
+                            <View >
+                                <Custom_Pagination
+                                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                                    paginationArray={paginationArray}
+                                />
+                            </View>
+                        )}
+                    </View>
+                )}
 
-                        </View>
-                    }
-                </View>
-
-
-
-                {/* Modal para filtros */}
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}
-                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
-                        handleFormSubmitToSearch(filters)
-                    }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => handleFormSubmitToSearch(filters)} close={() => setStatus(FETCH_STATUS.IDLE)} />}
                 />
-
             </Suspense>
-
-            {/* Modal para filtros */}
-            <CustomAlertDialog
-                isVisible={openModal}
-                onDismiss={() => { }}
-                children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => {
-                    handleFormSubmitToSearch(filters)
-                }} close={() => setStatus(FETCH_STATUS.IDLE)} />}
-            />
-
-            {paginationArray.length > 1 && (
-                <View style={commonStyle.common_margin_bottom_8}>
-                    <Custom_Pagination
-                        onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                        paginationArray={paginationArray} />
-                </View>
-            )}
-        </View>
+        </SafeAreaView>
 
     );
 }
@@ -271,7 +257,7 @@ const ModalSwitchFilter = ({ titles, close, search }: { titles: string[], search
     })
     return (
         <View style={{ flexDirection: 'column', backgroundColor: "#fff", width: '80%', padding: 8, borderRadius: 32, justifyContent: 'center' }}>
-            <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={close} />
+            <CustomIcon icon={ICON_NAME.FECHAR} onPress={close} />
             <CustomSwitch
                 title={titles[0]}
                 switchValue={filter.isPromo}
@@ -288,5 +274,23 @@ const ModalSwitchFilter = ({ titles, close, search }: { titles: string[], search
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    searchContainer: {
+        flexShrink: 0,
+    },
+    loading: {
+        height: '100%',
+    },
+    content: {
+        flex: 1,
+    },
+    paginationContainer: {
+        flexShrink: 0,
+    },
+});
 
 export default CS_SC_ConsultaProdutos;
