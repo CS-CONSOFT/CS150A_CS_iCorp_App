@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, paymentSelectForm, paymentSelectTerm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
@@ -101,6 +101,38 @@ export async function handleDeletePaymentForm({ formaPgtoAtendimentoId }: { form
         currentPvId = res
 
         const response = deletePaymentForm({ tenantId: currentUser.TenantId, pvId: currentPvId, formaPgtoAtendimentoId: formaPgtoAtendimentoId })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+
+
+export async function handlePaymentSelectForm({ formId }: { formId: string }): Promise<ICommonResponse> {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+
+        let currentPvId: any = ''
+        const res = await getSimpleData(DataKey.CurrentPV)
+        currentPvId = res
+
+        const response = paymentSelectForm({ tenantId: currentUser.TenantId, pvId: currentPvId, formId: formId })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function handlePaymentSelectTerm({ formId, termId }: { formId: string, termId: string }): Promise<ICommonResponse> {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+
+        let currentPvId: any = ''
+        const res = await getSimpleData(DataKey.CurrentPV)
+        currentPvId = res
+
+        const response = paymentSelectTerm({ tenantId: currentUser.TenantId, pvId: currentPvId, formId: formId, termId: termId })
         return response
     } catch (error) {
         throw error

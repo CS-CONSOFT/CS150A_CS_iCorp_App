@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { getUserProperties } from "../../view_controller/SharedViewController";
 import { IGetUserProperties } from "../../view_controller/interface/IGetUserProperties";
+import { checkIfTheresNetworkConnection } from "../../util/CheckConnection";
+import { useFocusEffect } from "@react-navigation/native";
+import { commonStyle } from "../../CommonStyle";
+import CustomIcon from "../icon/CustomIcon";
+import { ICON_NAME } from "../../util/IconsName";
 
 const CustomHeaderUserInfo = () => {
     const [useProp, setUserProp] = useState<IGetUserProperties>()
+
+
     useEffect(() => {
         getUserProperties().then((res) => {
             const defineUser: IGetUserProperties = {
@@ -15,12 +22,16 @@ const CustomHeaderUserInfo = () => {
                 estabName: res.estabName
             }
             setUserProp(defineUser)
+            //
         })
-    }, [useProp]);
+    }, []);
+
 
     return (
         <View style={styles.container}>
-            <Text style={styles.txtEstabName}>{useProp?.estabName}</Text>
+            <View style={commonStyle.common_rowItem}>
+                <Text style={styles.txtEstabName}>{useProp?.estabName}</Text>
+            </View>
             <Text style={styles.txtUsername}>{useProp?.userName}</Text>
         </View>
     );
@@ -38,6 +49,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#FFF',
         elevation: 1,
+        marginRight: 4
 
     },
     txtUsername: {
