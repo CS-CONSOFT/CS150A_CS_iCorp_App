@@ -18,10 +18,10 @@ const CS_SC_011_splash = () => {
                     navigate('Splash_Entrega')
                 } else {
                     navigate('Config_Ambiente')
-                    
+
                 }
             })
-        }, 3500)
+        }, 1500)
     }, [])
 
     return (
@@ -51,7 +51,7 @@ const CS_SC_011_splash = () => {
                             translateX: 156
                         }}
                         transition={{
-                            duration: 5000,
+                            duration: 3000,
                         }}
 
                     >
