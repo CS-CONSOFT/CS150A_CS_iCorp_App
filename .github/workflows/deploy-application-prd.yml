@@ -39,9 +39,6 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x android/gradlew
 
-      - name: Run Expo Prebuild
-        run: npx expo prebuild
-
       - name: Generate AAB
         run: |
           cd android
