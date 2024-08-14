@@ -6,20 +6,24 @@
       "ios",
       "android"
     ],
-    "version": "0.1.2",
+    "version": "0.1.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "br.com.pvmobile",
+    "scheme": "br.com.csicorpnet.pvmobile",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-extenso.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "br.com.pvmobile"
+      "package": "br.com.csicorpnet.pvmobile",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/icon.png"
@@ -35,6 +39,11 @@
           "recordAudioAndroid": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "518f5d1b-ddd8-4fad-bbad-03967e9fb5cb"
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@ name: Gerar APK
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "development" ]
   workflow_dispatch:
 
 env:
@@ -24,11 +24,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Set up JDK 17
+      - name: Set up JDK 22
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '22'
 
       - name: Setup Expo CLI
         run: npm install expo-cli --global

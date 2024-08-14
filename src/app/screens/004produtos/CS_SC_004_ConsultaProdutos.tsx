@@ -167,7 +167,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 {isLoading ? (
                     <ActivityIndicator style={[commonStyle.align_centralizar, { height: '100%' }]} size="large" color={ColorStyle.colorPrimary200} />
                 ) : (
-                    <View style={[paginationArray.length > 1 ? { height: "85%" } : { height: "100%" }]}>
+                    <View style={[paginationArray.length > 1 ? { height: "75%" } : { height: "88%" }]}>
                         <FlatList
                             data={productList}
                             refreshing={isLoading}
@@ -188,17 +188,17 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                 />
                             )}
                         />
-                        {paginationArray.length > 1 && (
-                            <View >
-                                <Custom_Pagination
-                                    onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                                    paginationArray={paginationArray}
-                                />
-                            </View>
-                        )}
+
                     </View>
                 )}
-
+                {paginationArray.length > 1 && (
+                    <View >
+                        <Custom_Pagination
+                            onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
+                            paginationArray={paginationArray}
+                        />
+                    </View>
+                )}
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}

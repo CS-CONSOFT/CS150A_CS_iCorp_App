@@ -1,4 +1,4 @@
-package com.teste_123456.cspv
+package br.com.csicorpnet.pvmobile
 
 import android.app.Application
 import android.content.res.Configuration

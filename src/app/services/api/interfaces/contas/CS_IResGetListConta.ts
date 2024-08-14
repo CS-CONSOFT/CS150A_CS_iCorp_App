@@ -1,6 +1,6 @@
 export interface IResGetListConta {
     PageSize: PageSize
-    csicp_bb012: Csicp_bb012[]
+    Lista_csicp_bb012: Csicp_bb012[]
     Code_Erro: Code_Erro
 }
 
