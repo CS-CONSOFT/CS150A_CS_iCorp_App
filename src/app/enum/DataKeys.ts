@@ -9,5 +9,6 @@ export enum DataKey {
     DominioValorString = "DominioValorString",
     CurrentContaId = "CurrentContaId",
     MaintainOpenConfig = "ManterConfiguracaoAbertaParaEdicao",
-    IsFirstTimeOpenApp = "IsFirstTimeOpenApp"
+    IsFirstTimeOpenApp = "IsFirstTimeOpenApp",
+    NomeCotacao = "NomeCotacao"
 }
