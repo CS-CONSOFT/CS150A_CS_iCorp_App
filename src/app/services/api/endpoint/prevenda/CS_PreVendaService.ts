@@ -306,3 +306,14 @@ export async function RetornarPV({ cs_tenant_id, cs_pv_id, cs_sy001_id }:
         throw err;
     }
 }
+
+/** gera PDF */
+export async function GenerateReport({ cs_tenant_id, cs_pv_id, cs_nome_cot }:
+    { cs_tenant_id: number, cs_pv_id: string, cs_nome_cot: string }): Promise<string> {
+    try {
+        const response = await api.get(`/CsExecReport/rest/PVMobile/RESTAPI_Report?DD070_ID=${cs_pv_id}&Prm_Tenant_Id=${cs_tenant_id}&NomeCotacao=${cs_nome_cot}`);
+        return response.request._url;
+    } catch (err) {
+        throw err;
+    }
+}

@@ -1,7 +1,8 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text, View, Linking } from "react-native";
 import { commonStyle } from "../../CommonStyle";
+import CustomHorizontalFilter from "../../components/filterHorizontal/CustomHorizontalFilter";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomLoading from "../../components/loading/CustomLoading";
@@ -14,9 +15,8 @@ import { formatMoneyValue } from "../../util/FormatText";
 import { getPaginationList } from "../../util/GetPaginationArray";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { getFinalDateToFilter, handleFetchPv, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
+import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
-import CustomHorizontalFilter from "../../components/filterHorizontal/CustomHorizontalFilter";
 
 
 
@@ -166,6 +166,25 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
         })
     }
 
+    function gerarReport(): void {
+        setIsLoading(true)
+        handleGenerateReport({ cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
+            setIsLoading(false)
+            Linking.canOpenURL(res).then((supported) => {
+                if (supported) {
+                    Linking.openURL(res);
+                } else {
+                    showToast(ToastType.ERROR, "Falha", "Impossivel baixar PDF!")
+                }
+            }).catch(() => {
+                showToast(ToastType.ERROR, "Falha", "Impossivel baixar PDF!")
+            })
+        }).catch(() => {
+            setIsLoading(false)
+            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
+        })
+    }
+
     return (
         <Pressable onPress={onPress}>
             <View style={stylesPreVenda.containerRenderItem}>
@@ -194,8 +213,9 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
 
                     {!isLoading && (
                         <>
-                            <CustomIcon icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
-                            <CustomIcon icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+                            <CustomIcon iconSize={32} icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
+                            <CustomIcon iconSize={32} icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+                            <CustomIcon iconSize={32} icon={ICON_NAME.PRINT} onPress={() => gerarReport()} />
                         </>
                     )}
 

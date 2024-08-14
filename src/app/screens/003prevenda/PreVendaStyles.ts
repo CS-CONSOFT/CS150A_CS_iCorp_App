@@ -46,7 +46,7 @@ export const stylesPreVenda = StyleSheet.create({
         borderBottomLeftRadius: 12
     },
     containerRenderItemIcons: {
-        width: 32,
+        width: 64,
         height: 'auto',
         backgroundColor: '#fff',
         justifyContent: 'space-between',
