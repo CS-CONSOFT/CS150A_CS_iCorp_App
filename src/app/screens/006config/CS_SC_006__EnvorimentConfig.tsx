@@ -21,6 +21,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
     const [token, setToken] = useState('xd');
+    const [nomeCotacao, setNomeCotacao] = useState('-');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const { navigate } = useNavigation();
@@ -93,6 +94,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     setTenant('');
                     setUrlBase('');
                     setToken('xd--');
+                    setNomeCotacao('-');
                 }
             });
 
@@ -108,10 +110,12 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         const isValidado = false;
         try {
             await db.create({ id, urlBase, token, tenantId: tenant, isValidado }).then(() => {
-                get().then(() => {
-                    setIsLoading(false)
-                    init(tenant, urlBase, token)
-                }); // Buscar dados atualizados após a criação
+                storeSimpleData(DataKey.NomeCotacao, nomeCotacao).then(() => {
+                    get().then(() => {
+                        setIsLoading(false)
+                        init(tenant, urlBase, token)
+                    }); // Buscar dados atualizados após a criação
+                })
             });
         } catch (error) {
             Alert.alert("Error", "Deu erro, cheque o log");
@@ -208,6 +212,15 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 onChangeText={setToken}
                                 placeholder="Digite o token, caso nao tenha, preencha com QUALQUER valor"
                                 value={token}
+                            />
+
+                            <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Modelo de Impressão Nome Cotação</Text>
+
+                            <TextInput
+                                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                                onChangeText={setNomeCotacao}
+                                placeholder="Digite o valor nome cotação"
+                                value={nomeCotacao}
                             />
 
                             <TouchableHighlight
