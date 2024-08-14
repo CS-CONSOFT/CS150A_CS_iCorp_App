@@ -1,26 +1,25 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, SafeAreaView, Text, View, TouchableOpacity, TextInput } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomCard004 from "../../components/cards/CustomCard_004";
+import CustomIcon from "../../components/icon/CustomIcon";
+import CustomEmpty from "../../components/lists/CustomEmpty";
+import CustomSeparator from "../../components/lists/CustomSeparator";
+import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import CustomSearch from "../../components/search/CustomSearch";
 import { Csicp_bb012, IResGetListConta } from "../../services/api/interfaces/contas/CS_IResGetListConta";
+import { IResAnaliseCliente } from "../../services/api/interfaces/crediario/IResAnaliseCliente";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { formatMoneyValue } from "../../util/FormatText";
 import { getPaginationList } from "../../util/GetPaginationArray";
+import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
-import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaViewController";
-import CustomIcon from "../../components/icon/CustomIcon";
-import { ICON_NAME } from "../../util/IconsName";
-import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 import { handleAnaliseCliente, handleGerarCliente } from "../../view_controller/crediario/CrediarioViewController";
-import CustomLoading from "../../components/loading/CustomLoading";
-import { IResAnaliseCliente } from "../../services/api/interfaces/crediario/IResAnaliseCliente";
-import { formatMoneyValue } from "../../util/FormatText";
-import CustomSeparator from "../../components/lists/CustomSeparator";
-import CustomEmpty from "../../components/lists/CustomEmpty";
+import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaViewController";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -91,7 +90,7 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
                     ListEmptyComponent={<CustomEmpty text="Nenhum cliente encontrado!" />}
                     refreshing={isLoading}
                     onRefresh={() => getClientesList(currentPage, searchValue)}
-                    data={clientList?.csicp_bb012}
+                    data={clientList?.Lista_csicp_bb012}
                     keyExtractor={(item, index) => item.csicp_bb012.csicp_bb012.ID}
                     renderItem={({ item }) => <RenderItemCliente handlePopUp={() => handlePopUp(item)} cliente={item} edit={(bb12id) => handleClickItem(bb12id)} />}
                 />
