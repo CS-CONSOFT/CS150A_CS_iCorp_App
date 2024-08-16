@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">PV Mobile</string>
+  <string name="blob_provider_authority">br.com.csicorpnet.pvmobile.blobs</string>
 </resources>

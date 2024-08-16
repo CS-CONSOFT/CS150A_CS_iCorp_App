@@ -20,6 +20,12 @@ import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroC
 import CS_SC_009_CadastroEndereco from "../screens/009Cliente/CS_SC_009_CadastroEndereco";
 import CS_SC_009_ListaCliente from "../screens/009Cliente/CS_SC_009_ListaCliente";
 import CS_SC_010_Requisicao from "../screens/010Requisicao/CS_SC_010_Requisicao";
+import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
+import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entrega";
+import CS_SC_011_splash_PreVenda from "../screens/011Splash/CS_SC_011_splash_PreVenda";
+import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Produto";
+import CS_SC_012_RespostaCrediario from "../screens/012Crediario/CS_SC_012_RespostaCrediario";
+import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
 import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
 import DrawerRoute001 from "./drawer.route";
@@ -27,14 +33,8 @@ import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
-import CS_SC_003_01_PreVendaDetalheProduto from "../screens/003prevenda/003_01_produto/CS_SC_003_01_PreVendaDetalheProduto";
-import CS_SC_011_splash_PreVenda from "../screens/011Splash/CS_SC_011_splash_PreVenda";
-import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Produto";
-import CS_SC_011_splash_Entrega from "../screens/011Splash/CS_SC_011_splash_Entrega";
-import CS_SC_011_splash from "../screens/011Splash/CS_SC_011_splash";
-import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
-import CS_SC_012_RespostaCrediario from "../screens/012Crediario/CS_SC_012_RespostaCrediario";
 import TopTab001 from "./top-tab001.routes";
+import PDF from "../screens/PDF";
 
 
 
@@ -56,6 +56,7 @@ declare global {
             Pre_Venda_Detalhes_001: { currentPv: string },
             Pre_Venda_Detalhes_002: { currentPv: string },
             Pre_Venda: undefined,
+            PDF: { htmlContent: string },
             Obras: undefined,
             ObrasFilhas: { obraId: number },
             Obras_Solicitacao: { obraId: number }
@@ -87,6 +88,7 @@ export default function StackRoutes() {
             <StackNav.Screen name="Login" options={{ headerShown: false }} component={CS_SC_001_Login} />
 
             <StackNav.Screen name="Splash" component={CS_SC_011_splash} options={{ headerShown: false }} />
+            <StackNav.Screen name="PDF" component={PDF} options={{ headerShown: true }} />
 
 
             <StackNav.Screen name="SimulacaoCrediario" component={CS_SC_012_SimuladorDeCredito} options={{
