@@ -1,6 +1,5 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { getEstaticasPV } from "../../services/api/endpoint/estaticas/CS_Estaticas";
 import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getPreSaleProducts, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
@@ -8,7 +7,6 @@ import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../..
 import { IReqInsertPvWhitoutService } from "../../services/api/interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../services/api/interfaces/prevenda/CS_IReqPreVendaLista";
 import { IReqUpdateDD071 } from "../../services/api/interfaces/prevenda/CS_IReqUpdateDD071";
-import { ISelectItemAlmox } from "../../services/api/interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../services/api/interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { IResProductsListPvModel } from "../../services/api/interfaces/prevenda/CS_IResProdutosPreVenda";

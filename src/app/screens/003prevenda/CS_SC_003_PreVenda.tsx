@@ -1,6 +1,7 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, View, Linking } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+import { WebView } from 'react-native-webview';
 import { commonStyle } from "../../CommonStyle";
 import CustomHorizontalFilter from "../../components/filterHorizontal/CustomHorizontalFilter";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -17,7 +18,6 @@ import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
-
 
 
 const CS_SC_003_PreVenda = () => {
@@ -135,6 +135,9 @@ export default CS_SC_003_PreVenda;
 function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onPress: () => void }) {
     const [year, month, day] = item.DD070_Nota.csicp_dd070.DD070_Data_Emissao.split('-')
     const [isLoading, setIsLoading] = useState(false)
+    const [htmlResponse, setHtmlResponse] = useState('')
+    const { navigate } = useNavigation()
+
 
     function liberarPV(): void {
         setIsLoading(true)
@@ -168,21 +171,12 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
 
     function gerarReport(): void {
         setIsLoading(true)
-        handleGenerateReport({ cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
-            setIsLoading(false)
-            Linking.canOpenURL(res).then((supported) => {
-                if (supported) {
-                    Linking.openURL(res);
-                } else {
-                    showToast(ToastType.ERROR, "Falha", "Impossivel baixar PDF!")
-                }
-            }).catch(() => {
-                showToast(ToastType.ERROR, "Falha", "Impossivel baixar PDF!")
-            })
-        }).catch(() => {
-            setIsLoading(false)
-            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
-        })
+        handleGenerateReport({ cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((htmlContent) => {
+            setIsLoading(false);
+            navigate('PDF', { htmlContent: htmlContent })
+        }
+        )
+
     }
 
     return (
@@ -205,7 +199,6 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                     </View>
                 </View>
 
-
                 <View style={[stylesPreVenda.containerRenderItemIcons, commonStyle.justify_content_space_evl]}>
                     {isLoading && (
                         <ActivityIndicator color={"#c3c3c3"} size={32} style={commonStyle.align_centralizar} />
@@ -215,10 +208,10 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                         <>
                             <CustomIcon iconSize={32} icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
                             <CustomIcon iconSize={32} icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+
                             <CustomIcon iconSize={32} icon={ICON_NAME.PRINT} onPress={() => gerarReport()} />
                         </>
                     )}
-
                 </View>
 
             </View>
