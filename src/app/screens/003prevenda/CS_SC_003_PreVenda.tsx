@@ -138,6 +138,7 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
     const [htmlResponse, setHtmlResponse] = useState('')
     const { navigate } = useNavigation()
 
+
     function liberarPV(): void {
         setIsLoading(true)
         handleLiberarPV({ cs_bb012_id: item.DD070_Nota.csicp_bb012.ID, cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
@@ -207,6 +208,7 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
                         <>
                             <CustomIcon iconSize={32} icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
                             <CustomIcon iconSize={32} icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+
                             <CustomIcon iconSize={32} icon={ICON_NAME.PRINT} onPress={() => gerarReport()} />
                         </>
                     )}
