@@ -151,6 +151,8 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
     updateUnityPrice: (productId: string, unityPrice: number) => void,
     updateTablePrice: (productId: string, tablePrice: number) => void,
 }) => {
+    //variavel que controla se o bottom da tela deve ou nao aparecer
+    const [hideBottom, setHideBottom] = useState(false)
     return (
         <>
             <FlatList
@@ -164,21 +166,27 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
                     <C_003_01_ProductPvItem
                         isConsulta={true}
                         product={item}
-                        onDeleteProductClick={(productId) => { deleteProduct(productId) }}
+                        onDeleteProductClick={(productId) => { deleteProduct(productId); }}
                         saveDiscountPercent={(discountPercent, productId) => updateDiscountPercent(productId, discountPercent)}
                         saveDiscountValue={(valueDiscount, productId) => updateValueDiscount(productId, valueDiscount)}
                         saveTablePrice={(tablePrice, productId) => updateTablePrice(productId, tablePrice)}
                         saveUnityPrice={(unityPrice, productId) => updateUnityPrice(productId, unityPrice)}
+                        hideBottom={(hide) => {
+                            setHideBottom(hide)
+                        }}
                     />
                 )}
             />
 
-            <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
-                dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
-                totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
-                isConsulta={true}
-            />
+            {!hideBottom && (
+                <C_003_01_04_BottomScreenItemProdutosDetalhesPV
+                    dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
+                    dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
+                    totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
+                    isConsulta={true}
+                />
+            )}
+
         </>
     )
 }
@@ -205,11 +213,9 @@ const ScreenWhenIsNotConsulta = ({ pv, isLoading, handleRefreshProducts }: {
                         saveDiscountValue={() => { }}
                         saveTablePrice={() => { }}
                         saveUnityPrice={() => { }}
-                    />
+                        hideBottom={() => { }} />
                 )}
             />
-
-
             <C_003_01_04_BottomScreenItemProdutosDetalhesPV
                 dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
                 dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
