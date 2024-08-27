@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getPreSaleProducts, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
@@ -95,19 +95,6 @@ export async function handleInsertProductPv(
     return result
 }
 
-
-export async function handleGetProductsPv(): Promise<IResProductsListPvModel> {
-    let currentPvId: any = ''
-    getSimpleData(DataKey.CurrentPV).then((res) => {
-        currentPvId = res
-    })
-    const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-    const result = getPreSaleProducts({
-        cs_tenant_id: currentUser.TenantId,
-        cs_atendimento_id: currentPvId
-    })
-    return result
-}
 
 export async function handleSetClienteToPv(cs_cliente_id: string): Promise<ICommonResponse> {
     let currentPvId: any = ''

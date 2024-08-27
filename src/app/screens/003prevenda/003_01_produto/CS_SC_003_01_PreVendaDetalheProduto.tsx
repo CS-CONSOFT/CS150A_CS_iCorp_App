@@ -154,7 +154,6 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
     return (
         <>
             <FlatList
-
                 data={pv?.DD080_Produtos}
                 keyExtractor={(item) => item.csicp_dd080.DD080_Id}
                 refreshing={isLoading}

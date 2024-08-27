@@ -153,7 +153,27 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                     <Text style={common003_01_styles.productName}>N° {product.csicp_dd080.DD080_Codigo_Produto}</Text>
                     <Text style={common003_01_styles.productInfo}>{product.csicp_dd080.DD080_DescProduto.slice(0, 20)}</Text>
                     <Text style={common003_01_styles.productInfo}>{`Qtd: ${productAmount}`}</Text>
-                    <Text style={common003_01_styles.productInfo}>{`Unitário: ${formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario)}`}</Text>
+
+                    {product.csicp_dd080.DD080_Unidade && (
+                        <Text style={common003_01_styles.productInfo}>{`Unidade: ${product.csicp_dd080.DD080_Unidade}`}</Text>
+                    )}
+
+                    {product.csicp_dd080.DD080_Un_Sec && (
+                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${product.csicp_dd080.DD080_Un_Sec}`}</Text>
+                    )}
+
+                    {product.csicp_dd080.DD080_Un_Sec_Qtde && (
+                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec Qtd: ${product.csicp_dd080.DD080_Un_Sec_Qtde}`}</Text>
+                    )}
+
+
+                    <View style={commonStyle.common_rowItem}>
+                        <Text style={common003_01_styles.productInfo}>{`Unitário: ${formatMoneyValue(product.csicp_dd080.DD080_Preco_Unitario)}`}</Text>
+                        {product.csicp_dd080.dd080_NroPrcTabela > 0 && (
+                            <Text style={common003_01_styles.productInfo}>{` (${product.csicp_dd080.dd080_NroPrcTabela})`}</Text>
+                        )}
+                    </View>
+
                     <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
                 </View>
 

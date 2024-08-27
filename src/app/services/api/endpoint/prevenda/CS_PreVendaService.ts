@@ -128,20 +128,6 @@ export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): P
     }
 }
 
-/**
- * Busca os produtos da pv
- */
-export async function getPreSaleProducts({ cs_tenant_id, cs_atendimento_id }:
-    { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResProductsListPvModel> {
-
-    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}/ListarProdutos`
-
-
-    /** RESPONSE DE PRODUTOS */
-    const response = await api.get(url)
-
-    return response.data as IResProductsListPvModel
-}
 
 export async function getPv({ cs_tenant_id, cs_atendimento_id }: { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResGetPv> {
     const headerParams = {
