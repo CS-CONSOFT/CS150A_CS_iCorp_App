@@ -217,8 +217,9 @@ export const commonStyle = StyleSheet.create({
         fontSize: 16,
     },
     align_centralizar: {
-        alignItems: "center",
+        alignItems: 'flex-start',
         justifyContent: "center",
+
     },
     align_spacebetween_row: {
         alignItems: "center",
