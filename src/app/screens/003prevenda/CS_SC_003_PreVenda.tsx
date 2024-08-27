@@ -46,7 +46,7 @@ const CS_SC_003_PreVenda = () => {
 
         const todayDateString: string = todayDate.toISOString().slice(0, 10);
         const passDateString: string = passDate.toISOString().slice(0, 10);
-        handleFetchPv(passDateString, todayDateString, page, 10).then((res) => {
+        handleFetchPv(passDateString, todayDateString, page, 10, true, true).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
@@ -102,7 +102,14 @@ const CS_SC_003_PreVenda = () => {
                         currentDateFilter={currentDateFilter}
                     />
 
-
+                    <CustomHorizontalFilter
+                        dataList={[
+                            { id: 0, label: 'Consulta' },
+                            { id: 1, label: 'Faturado' },
+                        ]}
+                        onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                        currentDateFilter={currentDateFilter}
+                    />
 
 
                     <FlatList
