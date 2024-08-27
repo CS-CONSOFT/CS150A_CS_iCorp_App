@@ -1,8 +1,6 @@
-import { longPressHandlerName } from "react-native-gesture-handler/lib/typescript/handlers/LongPressGestureHandler";
 import { DataKey } from "../../../../enum/DataKeys";
-import { getSimpleData, storeSimpleData } from "../../../storage/AsyncStorageConfig";
+import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
-import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
 import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
@@ -10,37 +8,51 @@ import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
 import { IResGetListAlmox } from "../../interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
-import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
 import { getEstaticasPV } from "../estaticas/CS_Estaticas";
 
 /**
  * Lista todas as PVS
- * @param IGetPreVendaList 
+ * @param iGetPreVendaList 
  * @returns lista de pvs
  */
-export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
+export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
         let params = {
-            In_Tenant_Id: IGetPreVendaList.cs_tenant_id,
+            In_Tenant_Id: iGetPreVendaList.cs_tenant_id,
             In_IsCount: 0,
-            in_currentPage: IGetPreVendaList.cs_current_page,
-            in_pageSize: IGetPreVendaList.cs_page_size,
-            In_DataInicio: IGetPreVendaList.cs_data_inicial,
-            In_DataFinal: IGetPreVendaList.cs_data_final,
-            //         In_ClauseInt_List_csicp_dd070_Sit: '',
-            //       In_ClauseInt_List_csicp_dd070_TpAte: ''
+            in_currentPage: iGetPreVendaList.cs_current_page,
+            in_pageSize: iGetPreVendaList.cs_page_size,
+            In_DataInicio: iGetPreVendaList.cs_data_inicial,
+            In_DataFinal: iGetPreVendaList.cs_data_final,
+            In_ClauseInt_List_csicp_dd070_Sit: '',
+            In_ClauseInt_List_csicp_dd070_TpAte: ''
         }
 
-        /**
         try {
             const resSit = await _handleGetEstaticaSit();
-            params.In_ClauseInt_List_csicp_dd070_Sit = resSit;
+
+            /**
+             * construindo string para mandar na clausula IN
+             * index 0 = CONSULTA
+             * index 1 = FATURADO
+             */
+            let strToSit = ''
+            if (iGetPreVendaList.cs_consulta && !iGetPreVendaList.cs_faturado) {
+                strToSit = (resSit.at(0) || 0).toString()
+            } else if (iGetPreVendaList.cs_faturado && iGetPreVendaList.cs_consulta) {
+                strToSit = `${(resSit.at(0) || 0).toString()}, ${(resSit.at(1) || 0).toString()}`
+            } else {
+                strToSit = (resSit.at(1) || 0).toString()
+            }
+
             const resTpAtd = await _handleGetEstaticaTpAt();
+
+            params.In_ClauseInt_List_csicp_dd070_Sit = strToSit
             params.In_ClauseInt_List_csicp_dd070_TpAte = resTpAtd;
         } catch (error: any) {
-            throw new Error(`Failed to fetch static data: ${error.message}`);
+            throw new Error(`Failed to fetch s-tatic data: ${error.message}`);
         }
- */
+
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
         const response = await api.get(url, { headers: params });
         return response.data as IResPreVenda;
@@ -53,23 +65,25 @@ enum ES_TYPE {
     BPM = "BPM",
     APROVADO = "Aprovado",
     CONSULTA = "Consulta",
-    PV = "PreVenda"
+    PV = "PreVenda",
+    FATURADO = "Faturado"
 }
 
 
 /** recupera uma lista de ids da situacao para filtro da PV */
-async function _handleGetEstaticaSit(): Promise<string> {
+async function _handleGetEstaticaSit(): Promise<string[]> {
     try {
         // Faz uma requisição para salvar os dados de endereço
         const response = await getEstaticasPV();
 
         const idConsulta = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.CONSULTA)?.Id
-        const idAprovado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.APROVADO)?.Id
-        const idBPM = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.BPM)?.Id
+        const idFaturado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.FATURADO)?.Id
 
-        const stringReturn = `${idConsulta},${idAprovado},${idBPM}`
+        const arrayStr: string[] = []
+        arrayStr.push((idConsulta || 0).toString())
+        arrayStr.push((idFaturado || 0).toString())
 
-        return stringReturn;
+        return arrayStr;
     } catch (error) {
         throw error;
     }

@@ -8,4 +8,6 @@ export interface IReqGetPreVendaList {
     cs_page_size: number,
     cs_data_inicial: string,
     cs_data_final: string,
+    cs_consulta: boolean,
+    cs_faturado: boolean
 }

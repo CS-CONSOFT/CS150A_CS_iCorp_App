@@ -17,7 +17,7 @@ import { getUserProperties } from "../SharedViewController";
 
 
 
-export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number): Promise<IResPreVenda> {
+export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number, cs_contulta: boolean, cs_faturado: boolean): Promise<IResPreVenda> {
     const userProp = (await getUserProperties())
     const IGetPreVendaList: IReqGetPreVendaList = {
         cs_tenant_id: userProp.tenantId!,
@@ -26,6 +26,8 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
         cs_page_size: cs_page_size,
         cs_data_inicial: cs_data_inicial,
         cs_data_final: cs_data_final,
+        cs_consulta: cs_contulta,
+        cs_faturado: cs_faturado
     }
     const result = fetchPVs(IGetPreVendaList)
     return result
