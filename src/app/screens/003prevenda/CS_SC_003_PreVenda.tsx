@@ -18,6 +18,7 @@ import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 
 
 const CS_SC_003_PreVenda = () => {
@@ -46,7 +47,7 @@ const CS_SC_003_PreVenda = () => {
 
         const todayDateString: string = todayDate.toISOString().slice(0, 10);
         const passDateString: string = passDate.toISOString().slice(0, 10);
-        handleFetchPv(passDateString, todayDateString, page, 10, true, true).then((res) => {
+        handleFetchPv(passDateString, todayDateString, page, 10, true, false).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
@@ -101,7 +102,7 @@ const CS_SC_003_PreVenda = () => {
                         onPress={(currentItem) => setCurrentDateFilter(currentItem)}
                         currentDateFilter={currentDateFilter}
                     />
-
+                    <CustomSeparator />
                     <CustomHorizontalFilter
                         dataList={[
                             { id: 0, label: 'Consulta' },

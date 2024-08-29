@@ -8,6 +8,7 @@ import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
 import { IResGetListAlmox } from "../../interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
+import { IListaPrecoTabela } from "../../interfaces/prevenda/CS_ListaPrecoTabela";
 import { getEstaticasPV } from "../estaticas/CS_Estaticas";
 
 /**
@@ -312,8 +313,25 @@ export async function GenerateReport({ cs_tenant_id, cs_pv_id, cs_nome_cot }:
     { cs_tenant_id: number, cs_pv_id: string, cs_nome_cot: string }): Promise<string> {
     try {
         const response = await api.get(`/CsExecReport/rest/PVMobile/RESTAPI_Report_html?DD070_ID=${cs_pv_id}&Prm_Tenant_Id=${cs_tenant_id}&NomeCotacao=${cs_nome_cot}`);
-        console.log(response.data);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
 
+
+/** LISTA PREÇO PRODUTOS TABELA */
+export async function getListPrecoTabela({ cs_tenant_id, cs_pdt_dkx }:
+    { cs_tenant_id: number, cs_pdt_dkx: string }): Promise<IListaPrecoTabela> {
+
+    const url = {
+        TenantId: cs_tenant_id,
+        Prm_ProdutoKdxId: cs_pdt_dkx
+    }
+    try {
+        const response = await api.get(`/cs_At_40_LogicoService/rest/CS_Basico_API/GetTabelaPreco`, {
+            params: url
+        });
         return response.data;
     } catch (err) {
         throw err;

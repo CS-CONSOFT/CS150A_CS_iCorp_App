@@ -293,7 +293,7 @@ export default function StackRoutes() {
                 headerStyle: {
                     backgroundColor: "#0A3147"
                 },
-                headerBackVisible: true,
+                headerBackVisible: false,
             }} />
 
             <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
