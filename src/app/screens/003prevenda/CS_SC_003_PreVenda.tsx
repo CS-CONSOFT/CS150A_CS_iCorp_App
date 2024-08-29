@@ -93,22 +93,19 @@ const CS_SC_003_PreVenda = () => {
             <View>
                 <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
 
-                {currentFilterOfTypePV == 1 && (
-                    <>
-                        <CustomHorizontalFilter
-                            dataList={[
-                                { id: 0, label: 'Hoje' },
-                                { id: 1, label: 'Ontem' },
-                                { id: 2, label: '5 dias' },
-                                { id: 3, label: '15 dias' },
-                                { id: 4, label: '30 dias' },
-                            ]}
-                            onPress={(currentItem) => setCurrentDateFilter(currentItem)}
-                            currentItemSelected={currentDateFilter}
-                        />
-                        <CustomSeparator />
-                    </>
-                )}
+                <CustomHorizontalFilter
+                    dataList={[
+                        { id: 0, label: 'Hoje' },
+                        { id: 1, label: 'Ontem' },
+                        { id: 2, label: '5 dias' },
+                        { id: 3, label: '15 dias' },
+                        { id: 4, label: '30 dias' },
+                    ]}
+                    onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                    currentItemSelected={currentDateFilter}
+                />
+                <CustomSeparator />
+
 
                 <View style={commonStyle.common_rowItem}>
                     <FilterHorizontalItem

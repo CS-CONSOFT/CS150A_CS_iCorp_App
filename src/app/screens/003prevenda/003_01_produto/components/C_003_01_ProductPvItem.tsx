@@ -146,10 +146,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         }
         }>
             <Animated.View style={[common003_01_styles.containerRenderItem, common003_01_styles.boxShadow, animatedStyleX, animatedStyleY, extraIconsRightOpen && common003_01_styles.openContainerX]}>
-                {/** IMAGEM */}
-                {
 
-                }
                 <View style={common003_01_styles.productContainerLeft}>
                     {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path !== undefined && (
                         <Image style={common003_01_styles.productImage}
@@ -162,6 +159,8 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                     )}
 
                 </View>
+
+
 
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>
@@ -177,8 +176,8 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                         <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${product.csicp_dd080.DD080_Un_Sec}`}</Text>
                     )}
 
-                    {product.csicp_dd080.DD080_Un_Sec_Qtde && (
-                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec Qtd: ${product.csicp_dd080.DD080_Un_Sec_Qtde}`}</Text>
+                    {product.csicp_dd080.DD080_Un_Sec_Qtde.toString() && (
+                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${product.csicp_dd080.DD080_Un_Sec_Qtde}`}</Text>
                     )}
 
 
@@ -191,8 +190,6 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
 
                     <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
                 </View>
-
-
                 {isConsulta && (
                     <>
                         {/** CLIQUE DO LADO DIREITO */}
