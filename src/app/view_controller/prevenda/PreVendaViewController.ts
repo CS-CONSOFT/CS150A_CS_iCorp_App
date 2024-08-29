@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getPv, insertProductToPv, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getListPrecoTabela, getPv, insertProductToPv, postPrecoTabelaNovoLista, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
@@ -440,6 +440,48 @@ export async function handleGenerateReport({ cs_pv_id }: { cs_pv_id: string }) {
         throw error;
     }
 }
+
+
+export async function handleListaPrecoTabela({ cs_pdt_kdx }: { cs_pdt_kdx: string }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await getListPrecoTabela({ cs_tenant_id: currentUser.TenantId, cs_pdt_dkx: cs_pdt_kdx });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function handlePostPrecoTabelaNovoLista({ cs_atendimento_prod_id, cs_num_preco, cs_valor }:
+    { cs_atendimento_prod_id: string, cs_num_preco: number, cs_valor: number }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+
+        let currentPvId: any = ''
+        getSimpleData(DataKey.CurrentPV).then((res) => {
+            currentPvId = res
+        })
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await postPrecoTabelaNovoLista({
+            cs_tenant_id: currentUser.TenantId,
+            cs_atendimento_id: currentPvId,
+            cs_atendimento_prod_id: cs_atendimento_prod_id,
+            cs_num_preco: cs_num_preco,
+            cs_valor: cs_valor,
+            cs_usuario_id: currentUser.UsuarioId
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 
 
 

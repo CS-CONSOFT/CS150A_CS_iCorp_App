@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import { ActivityIndicator, Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomLoading from "../../components/loading/CustomLoading";
@@ -24,6 +24,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [nomeCotacao, setNomeCotacao] = useState('-');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
+    const [validationLoading, setValidationLoading] = useState(false)
     const [isEnviromentValidated, setIsEnviromentValidates] = useState(false)
     const { navigate } = useNavigation();
     const db = useDatabase();
@@ -95,11 +96,13 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     setUrlBase('');
                     setToken('xd--');
                     setNomeCotacao('-');
+                    setIsLoading(false)
                 }
             });
 
         } catch (error) {
             // Tratar erros (pode ser aprimorado com um alerta ou log)
+            setIsLoading(false)
         }
     }
 
@@ -136,6 +139,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         return <CustomLoading />
     }
     function validate(tenant: string, urlBase: string, token: string): void {
+        setValidationLoading(true)
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
@@ -148,10 +152,10 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     setIsEnviromentValidates(false)
                 })
             }
-            setIsLoading(false)
+            setValidationLoading(false)
         }).catch((res) => {
             showToast(ToastType.ERROR, "Erro", "Um erro ocorreu, verifique as informações")
-            setIsLoading(false)
+            setValidationLoading(false)
         })
     }
 
@@ -185,7 +189,12 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 style={commonStyle.common_button_style}
                                 underlayColor='white'
                             >
-                                <Text style={commonStyle.common_text_button_style}>Validar</Text>
+                                <View style={commonStyle.common_rowItem}>
+                                    {validationLoading && (
+                                        <ActivityIndicator color={"#FFF"} />
+                                    )}
+                                    <Text style={commonStyle.common_text_button_style}>Validar</Text>
+                                </View>
                             </TouchableHighlight>
                         </View>
 

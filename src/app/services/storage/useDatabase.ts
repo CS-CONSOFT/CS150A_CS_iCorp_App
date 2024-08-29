@@ -10,6 +10,9 @@ export type ConfigDB = {
 export function useDatabase() {
     const database = useSQLiteContext()
     async function create(data: ConfigDB) {
+        if (data.urlBase.substring(0, 8) != 'https://') {
+            data.urlBase = 'https://' + data.urlBase
+        }
         const statement = await database.prepareAsync(
             "INSERT OR REPLACE INTO csloc_config_env (id, urlBase, tenantId, token, isValidado) VALUES ($id, $urlBase, $tenantId, $token, $isValidado)"
         )

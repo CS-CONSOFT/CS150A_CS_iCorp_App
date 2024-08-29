@@ -19,7 +19,7 @@ import { IResProdutoGarantia } from "../../../../services/api/interfaces/produto
 
 //Item de produto que aparece na listagem
 //hidebottom é uma funcao de callback que controla se o bottom da pagina deve sumir ou nao
-export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, hideBottom }:
+export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, hideBottom, refreshScreen }:
     {
         isConsulta?: boolean
         product: DD080_Produtos,
@@ -28,7 +28,8 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         saveUnityPrice: (unityPrice: number, productId: string) => void
         saveDiscountPercent: (discountPercent: number, productId: string) => void
         saveDiscountValue: (valueDiscount: number, productId: string) => void,
-        hideBottom: (hide: boolean) => void
+        hideBottom: (hide: boolean) => void,
+        refreshScreen: () => void
     }) => {
 
     const [productAmount, setProductAmount] = useState(0.0);
@@ -36,7 +37,10 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
     const [guarantee, setGuarantee] = useState<IResProdutoGarantia>()
 
     useEffect(() => {
-        setProductAmount(product.csicp_dd080.DD080_Quantidade)
+        //quando o fator de conversao for diferente de 0, significa que a alteração deve ser feita na unidade secundária
+        setProductAmount(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 ? product.csicp_dd080.DD080_Quantidade : product.csicp_dd080.DD080_Un_Sec_Qtde)
+        console.log(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID);
+
     }, [product])
 
     const [dragX] = useState(new Animated.Value(0));
@@ -145,10 +149,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         }
         }>
             <Animated.View style={[common003_01_styles.containerRenderItem, common003_01_styles.boxShadow, animatedStyleX, animatedStyleY, extraIconsRightOpen && common003_01_styles.openContainerX]}>
-                {/** IMAGEM */}
-                {
 
-                }
                 <View style={common003_01_styles.productContainerLeft}>
                     {product.csicp_gg008c_Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path !== undefined && (
                         <Image style={common003_01_styles.productImage}
@@ -162,23 +163,35 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
 
                 </View>
 
+
+
                 {/** MEIO DO COMPONENTE, ONDE MOSTRA OS VALORES */}
                 <View style={common003_01_styles.productContainerMiddle}>
                     <Text style={common003_01_styles.productName}>N° {product.csicp_dd080.DD080_Codigo_Produto}</Text>
                     <Text style={common003_01_styles.productInfo}>{product.csicp_dd080.DD080_DescProduto.slice(0, 20)}</Text>
-                    <Text style={common003_01_styles.productInfo}>{`Qtd: ${productAmount}`}</Text>
 
-                    {product.csicp_dd080.DD080_Unidade && (
-                        <Text style={common003_01_styles.productInfo}>{`Unidade: ${product.csicp_dd080.DD080_Unidade}`}</Text>
+
+                    {/* QUANDO O TIPO DE CONVERSAO ID FOR IGUAL A 0, O VALOR QUE SERÁ REFLETIDO EM TELA SERÁ O DA UNIDADE PRIMARIA  */}
+                    {product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 && (
+                        <>
+                            <Text style={common003_01_styles.productInfo}>{`Qtd: ${productAmount} - ${product.csicp_gg007.GG007_Unidade}`}</Text>
+                            {product.csicp_dd080.DD080_Un_Sec_Qtde.toString() && (
+                                <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${product.csicp_dd080.DD080_Un_Sec_Qtde} (${product.csicp_gg007_Un_Sec.GG007_Unidade} / ${product.csicp_dd080.DD080_Un_Sec_FatorConv})`}</Text>
+                            )}
+                        </>
                     )}
 
-                    {product.csicp_dd080.DD080_Un_Sec && (
-                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${product.csicp_dd080.DD080_Un_Sec}`}</Text>
+                    {/* QUANDO O TIPO DE CONVERSAO ID FOR IGUAL A 1, O VALOR QUE SERÁ REFLETIDO EM TELA SERÁ O DA UNIDADE SECUNDÁRIA  */}
+                    {product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 1 && (
+                        <>
+                            <Text style={common003_01_styles.productInfo}>{`Qtd: ${product.csicp_dd080.DD080_Quantidade} - ${product.csicp_gg007.GG007_Unidade}`}</Text>
+                            {product.csicp_dd080.DD080_Un_Sec_Qtde.toString() && (
+                                <Text style={common003_01_styles.productInfo}>{`Unidade Sec: ${productAmount} (${product.csicp_gg007_Un_Sec.GG007_Unidade} / ${product.csicp_dd080.DD080_Un_Sec_FatorConv})`}</Text>
+                            )}
+                        </>
                     )}
 
-                    {product.csicp_dd080.DD080_Un_Sec_Qtde && (
-                        <Text style={common003_01_styles.productInfo}>{`Unidade Sec Qtd: ${product.csicp_dd080.DD080_Un_Sec_Qtde}`}</Text>
-                    )}
+
 
 
                     <View style={commonStyle.common_rowItem}>
@@ -190,8 +203,6 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
 
                     <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
                 </View>
-
-
                 {isConsulta && (
                     <>
                         {/** CLIQUE DO LADO DIREITO */}
@@ -228,6 +239,9 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                         saveUnityPrice={saveUnityPrice}
                         downSwipe={downSwipeToEdit}
                         setAmountProduct={(productAmount) => setProductAmount(productAmount)}
+                        refreshScreen={() => {
+                            refreshScreen()
+                        }}
                     />
                 )}
                 {extraBottomOpenLastSales && (

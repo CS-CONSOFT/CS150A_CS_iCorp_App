@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 import { WebView } from 'react-native-webview';
 import { commonStyle } from "../../CommonStyle";
-import CustomHorizontalFilter from "../../components/filterHorizontal/CustomHorizontalFilter";
+import CustomHorizontalFilter, { FilterHorizontalItem } from "../../components/filterHorizontal/CustomHorizontalFilter";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomLoading from "../../components/loading/CustomLoading";
@@ -18,6 +18,7 @@ import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 
 
 const CS_SC_003_PreVenda = () => {
@@ -25,12 +26,13 @@ const CS_SC_003_PreVenda = () => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
     const [paginationArray, setPaginationArray] = useState<number[]>([])
-    const [currentDateFilter, setCurrentDateFilter] = useState(-1)
+    const [currentDateFilter, setCurrentDateFilter] = useState(0)
+    const [currentFilterOfTypePV, setFilterTypeOfPv] = useState(0)
 
     useFocusEffect(
         useCallback(() => {
             _fetchPV(1, currentDateFilter)
-        }, [currentDateFilter])
+        }, [currentDateFilter, currentFilterOfTypePV])
     );
 
 
@@ -46,7 +48,11 @@ const CS_SC_003_PreVenda = () => {
 
         const todayDateString: string = todayDate.toISOString().slice(0, 10);
         const passDateString: string = passDate.toISOString().slice(0, 10);
-        handleFetchPv(passDateString, todayDateString, page, 10, true, true).then((res) => {
+
+        const isConsulta = currentFilterOfTypePV === 0
+        const isFaturado = currentFilterOfTypePV === 1
+
+        handleFetchPv(passDateString, todayDateString, page, 10, isConsulta, isFaturado).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
@@ -84,54 +90,65 @@ const CS_SC_003_PreVenda = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            {isLoading ? <>
-                <CustomLoading />
-            </> :
-                <View>
-                    <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
+            <View>
+                <Text style={stylesPreVenda.textTitle}>Lista Geral</Text>
 
-                    <CustomHorizontalFilter
-                        dataList={[
-                            { id: 0, label: 'Hoje' },
-                            { id: 1, label: 'Ontem' },
-                            { id: 2, label: '5 dias' },
-                            { id: 3, label: '15 dias' },
-                            { id: 4, label: '30 dias' },
-                        ]}
-                        onPress={(currentItem) => setCurrentDateFilter(currentItem)}
-                        currentDateFilter={currentDateFilter}
+                <CustomHorizontalFilter
+                    dataList={[
+                        { id: 0, label: 'Hoje' },
+                        { id: 1, label: 'Ontem' },
+                        { id: 2, label: '5 dias' },
+                        { id: 3, label: '15 dias' },
+                        { id: 4, label: '30 dias' },
+                    ]}
+                    onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                    currentItemSelected={currentDateFilter}
+                />
+                <CustomSeparator />
+
+
+                <View style={commonStyle.common_rowItem}>
+                    <FilterHorizontalItem
+                        item={{ id: 0, label: 'Consulta' }}
+                        onPress={(currentItem) => {
+                            setFilterTypeOfPv(currentItem)
+                            setCurrentDateFilter(0)
+                        }}
+                        currentItemSelected={currentFilterOfTypePV}
                     />
 
-                    <CustomHorizontalFilter
-                        dataList={[
-                            { id: 0, label: 'Consulta' },
-                            { id: 1, label: 'Faturado' },
-                        ]}
-                        onPress={(currentItem) => setCurrentDateFilter(currentItem)}
-                        currentDateFilter={currentDateFilter}
-                    />
-
-
-                    <FlatList
-                        style={{ height: '70%' }}
-                        data={pvList.toReversed()}
-                        refreshing={isLoading}
-                        onRefresh={handleRefreshList}
-                        ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
-                        renderItem={({ item }) => <PreVendaRenderItem item={item}
-                            onPress={() => goToDetails(item)} />}
-                        keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
-                        extraData={pvList}
+                    <FilterHorizontalItem
+                        item={{ id: 1, label: 'Faturado' }}
+                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        currentItemSelected={currentFilterOfTypePV}
                     />
                 </View>
-            }
-            {paginationArray !== undefined && paginationArray.length > 1 && (
-                <View style={{ height: '30%' }}>
-                    <Custom_Pagination
-                        onPagePress={(page) => _fetchPV(page, currentDateFilter)}
-                        paginationArray={paginationArray} />
-                </View>
-            )}
+
+                {!isLoading ? (
+                    <>
+                        <FlatList
+                            style={{ height: '70%' }}
+                            data={pvList.toReversed()}
+                            refreshing={isLoading}
+                            onRefresh={handleRefreshList}
+                            ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
+                            renderItem={({ item }) => <PreVendaRenderItem item={item}
+                                onPress={() => goToDetails(item)} />}
+                            keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
+                            extraData={pvList}
+                        />
+
+                        {paginationArray !== undefined && paginationArray.length > 1 && (
+                            <View style={{ height: '30%' }}>
+                                <Custom_Pagination
+                                    onPagePress={(page) => _fetchPV(page, currentDateFilter)}
+                                    paginationArray={paginationArray} />
+                            </View>
+                        )}
+                    </>
+                ) : <ActivityIndicator color={"#000"} />}
+
+            </View>
         </View>
     );
 }

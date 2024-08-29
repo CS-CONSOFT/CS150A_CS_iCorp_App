@@ -217,7 +217,7 @@ export const commonStyle = StyleSheet.create({
         fontSize: 16,
     },
     align_centralizar: {
-        alignItems: 'flex-start',
+        alignItems: 'center',
         justifyContent: "center",
 
     },

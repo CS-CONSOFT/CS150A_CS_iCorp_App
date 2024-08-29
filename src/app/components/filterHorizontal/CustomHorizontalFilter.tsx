@@ -1,7 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native"
 import { commonStyle } from "../../CommonStyle";
 
-const CustomHorizontalFilter = ({ onPress, currentDateFilter, dataList }: { onPress: (currentItem: number) => void, currentDateFilter: number, dataList: any[] }) => {
+const CustomHorizontalFilter = ({ onPress, currentItemSelected, dataList }: { onPress: (currentItem: number) => void, currentItemSelected: number, dataList: any[] }) => {
     return (
         <FlatList
             horizontal={true}
@@ -9,7 +9,7 @@ const CustomHorizontalFilter = ({ onPress, currentDateFilter, dataList }: { onPr
             data={dataList}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <>
-                <FilterDateRenderItem currentItemSelected={currentDateFilter} onPress={(currentItem) => onPress(currentItem)} item={item} />
+                <FilterHorizontalItem currentItemSelected={currentItemSelected} onPress={(currentItem) => onPress(currentItem)} item={item} />
             </>}
         />
     );
@@ -17,7 +17,7 @@ const CustomHorizontalFilter = ({ onPress, currentDateFilter, dataList }: { onPr
 
 
 /** item de renderizacao do filtro de dias */
-const FilterDateRenderItem = ({ item, onPress, currentItemSelected }: { item: any, onPress: (currentItem: number) => void, currentItemSelected: number }) => {
+export const FilterHorizontalItem = ({ item, onPress, currentItemSelected }: { item: any, onPress: (currentItem: number) => void, currentItemSelected: number }) => {
     return (
         <View>
             {currentItemSelected == item.id
