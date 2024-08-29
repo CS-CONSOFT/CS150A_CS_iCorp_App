@@ -26,5 +26,10 @@ export interface IResProductItemModel {
     IsMontar: boolean,
     IsSaldoNegativo: boolean,
     IsRequisitar: boolean,
-    IsEntregar: boolean
+    IsEntregar: boolean,
+    UN_Secundaria: string
+    UN_Sec_FatorConversao: number
+    UN_Sec_Quantidade: number
+    UN_Sec_TipoConversao: number
+    NroPrecoTabela: number
 }

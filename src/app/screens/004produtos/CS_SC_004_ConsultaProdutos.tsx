@@ -36,7 +36,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
      * quando é insere comanda, a rota chamada é a de inserir produto na comanda
      */
     const { cameFromPv, insertComanda, comandaId } = route.params
-    const { navigate } = useNavigation()
+    const navigation = useNavigation()
 
 
     // Função para inserir produto na pré-venda
@@ -48,11 +48,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             if (insertComanda) {
                 let dataPostInsertComandaProduto: IComandaDataInsert = {
                     in_comanda_id: comandaId,
-                    in_produto_id: product.Id || 'zzz',
+                    in_produto_id: product.Id || '--undefined--',
                 }
                 handleInsertProdutoComanda({ insertProdutoComanda: dataPostInsertComandaProduto }).then((res) => {
                     setStatus(FETCH_STATUS.SUCCESS)
-                    comandaId === undefined ? navigate('ComandaLista') : navigate('DetalheComanda', { comandaId: comandaId })
+                    comandaId === undefined ? navigation.navigate('ComandaLista') : navigation.navigate('DetalheComanda', { comandaId: comandaId })
                 })
             } else {
                 handleInsertProductPv(
@@ -66,9 +66,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     setStatus(FETCH_STATUS.SUCCESS)
                     showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
                     if (cameFromPv) {
-                        navigate('Pre_Venda_Detalhes_002', {
-                            currentPv: ""
-                        })
+                        navigation.goBack()
                     }
                 }).catch(() => {
                     showToast(ToastType.ERROR, "ERRO", "Consultar service center")
@@ -106,13 +104,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
          * guarda o _filterValues, para que possamos usar o filterValues na flat list.
         */
 
-        /**
-         * Os valores de formData seguem a estrutura de titles que formam o formFields
-         * Ex: Dominio: 'Comercial'; Usuario: 'Valter'; Senha:'xpto'
-         * A chave das propriedades é o que será usado em 'key' -> formData.[key]
-         * 
-         */
-
         setStatus(FETCH_STATUS.LOADING)
         const _filterValues: IReqGetProductSearch = {
             cs_page: page || 1,
@@ -127,7 +118,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         //chamada da api
         handleSearchProduct(_filterValues!).then((res) => {
             if (res.isOk == false) {
-                navigate('Menu')
+                navigation.navigate('Menu')
                 showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
             }
 

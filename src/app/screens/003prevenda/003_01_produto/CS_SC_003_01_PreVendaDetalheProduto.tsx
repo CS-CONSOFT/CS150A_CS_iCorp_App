@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
 import CustomLoading from "../../../components/loading/CustomLoading";
@@ -10,7 +10,7 @@ import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, ha
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {
@@ -18,10 +18,12 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const navigation = useNavigation()
 
-    useEffect(() => {
-        getCurrentPv()
-    }, [])
 
+    useFocusEffect(
+        useCallback(() => {
+            getCurrentPv()
+        }, [])
+    );
 
     function getCurrentPv() {
         setStatus(FETCH_STATUS.LOADING)
@@ -124,6 +126,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                         updateValueDiscount={updateValueDiscount}
                         updateUnityPrice={updateUnityPrice}
                         updateTablePrice={updateTablePrice}
+                        refreshScreen={() => getCurrentPv()}
                     />
                 )}
 
@@ -141,7 +144,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     );
 }
 
-const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProduct, updateDiscountPercent, updateUnityPrice, updateValueDiscount, updateTablePrice }: {
+const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProduct, updateDiscountPercent, updateUnityPrice, updateValueDiscount, updateTablePrice, refreshScreen }: {
     pv?: IResGetPv,
     isLoading: boolean,
     handleRefreshProducts: () => void,
@@ -150,11 +153,13 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
     updateValueDiscount: (productId: string, valueDiscount: number) => void,
     updateUnityPrice: (productId: string, unityPrice: number) => void,
     updateTablePrice: (productId: string, tablePrice: number) => void,
+    refreshScreen: () => void
 }) => {
+    //variavel que controla se o bottom da tela deve ou nao aparecer
+    const [hideBottom, setHideBottom] = useState(false)
     return (
         <>
             <FlatList
-
                 data={pv?.DD080_Produtos}
                 keyExtractor={(item) => item.csicp_dd080.DD080_Id}
                 refreshing={isLoading}
@@ -165,21 +170,28 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
                     <C_003_01_ProductPvItem
                         isConsulta={true}
                         product={item}
-                        onDeleteProductClick={(productId) => { deleteProduct(productId) }}
+                        onDeleteProductClick={(productId) => { deleteProduct(productId); }}
                         saveDiscountPercent={(discountPercent, productId) => updateDiscountPercent(productId, discountPercent)}
                         saveDiscountValue={(valueDiscount, productId) => updateValueDiscount(productId, valueDiscount)}
                         saveTablePrice={(tablePrice, productId) => updateTablePrice(productId, tablePrice)}
                         saveUnityPrice={(unityPrice, productId) => updateUnityPrice(productId, unityPrice)}
+                        hideBottom={(hide) => {
+                            setHideBottom(hide)
+                        }}
+                        refreshScreen={refreshScreen}
                     />
                 )}
             />
 
-            <C_003_01_04_BottomScreenItemProdutosDetalhesPV
-                dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
-                dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
-                totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
-                isConsulta={true}
-            />
+            {!hideBottom && (
+                <C_003_01_04_BottomScreenItemProdutosDetalhesPV
+                    dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
+                    dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}
+                    totalLiquido={formatMoneyValue(pv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido || 0)}
+                    isConsulta={true}
+                />
+            )}
+
         </>
     )
 }
@@ -206,11 +218,11 @@ const ScreenWhenIsNotConsulta = ({ pv, isLoading, handleRefreshProducts }: {
                         saveDiscountValue={() => { }}
                         saveTablePrice={() => { }}
                         saveUnityPrice={() => { }}
+                        hideBottom={() => { }}
+                        refreshScreen={() => { }}
                     />
                 )}
             />
-
-
             <C_003_01_04_BottomScreenItemProdutosDetalhesPV
                 dataEmissao={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_Data_Emissao || '1999-01-01')}
                 dataValidade={formatDateToSlashPattern(pv?.DD070_Nota.csicp_dd070.DD070_DataValidade || '1999-01-01')}

@@ -7,7 +7,7 @@ export const common003_01_styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 8,
         marginTop: 8,
-        height: 125,
+        height: 150,
     },
     boxShadow: {
         shadowColor: "#333333",
