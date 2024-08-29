@@ -19,7 +19,7 @@ import { IResProdutoGarantia } from "../../../../services/api/interfaces/produto
 
 //Item de produto que aparece na listagem
 //hidebottom é uma funcao de callback que controla se o bottom da pagina deve sumir ou nao
-export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, hideBottom }:
+export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeleteProductClick, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, hideBottom, refreshScreen }:
     {
         isConsulta?: boolean
         product: DD080_Produtos,
@@ -28,7 +28,8 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         saveUnityPrice: (unityPrice: number, productId: string) => void
         saveDiscountPercent: (discountPercent: number, productId: string) => void
         saveDiscountValue: (valueDiscount: number, productId: string) => void,
-        hideBottom: (hide: boolean) => void
+        hideBottom: (hide: boolean) => void,
+        refreshScreen: () => void
     }) => {
 
     const [productAmount, setProductAmount] = useState(0.0);
@@ -228,6 +229,9 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                         saveUnityPrice={saveUnityPrice}
                         downSwipe={downSwipeToEdit}
                         setAmountProduct={(productAmount) => setProductAmount(productAmount)}
+                        refreshScreen={() => {
+                            refreshScreen()
+                        }}
                     />
                 )}
                 {extraBottomOpenLastSales && (

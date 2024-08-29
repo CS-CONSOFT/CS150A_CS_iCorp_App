@@ -9,12 +9,13 @@ import CustomSwitch from "../../../../components/switch/CustomSwitch";
 import { DD080_Produtos } from '../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista';
 import { IReqUpdateProdutItens } from '../../../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens';
 import { ICON_NAME } from "../../../../util/IconsName";
-import { handleListaPrecoTabela, handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { handleListaPrecoTabela, handlePostPrecoTabelaNovoLista, handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { common003_01_styles } from "./CommonStyles";
 import { showToast, ToastType } from '../../../../util/ShowToast';
 import CustomAlertDialog from '../../../../components/modal/CustomAlertDialog';
 import { FlatList } from 'react-native-gesture-handler';
 import { formatMoneyValue } from '../../../../util/FormatText';
+import { useNavigation } from '@react-navigation/native';
 
 
 //lista de preço tabela
@@ -23,7 +24,7 @@ interface TablePrice {
     num: number
 }
 /** componente de edição dos valores do produto */
-const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
+const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct, refreshScreen }:
     {
         product: DD080_Produtos,
         saveTablePrice: (tablePrice: number, productId: string) => void
@@ -31,9 +32,11 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         saveDiscountPercent: (discountPercent: number, productId: string) => void
         saveDiscountValue: (valueDiscount: number, productId: string) => void
         downSwipe: () => void
-        setAmountProduct: (productAmount: number) => void
+        setAmountProduct: (productAmount: number) => void,
+        refreshScreen: () => void
     }) => {
 
+    const navigation = useNavigation()
 
     const [isEntregar, setIsEntregar] = useState(false);
     const [isMontar, setIsMontar] = useState(false);
@@ -211,8 +214,13 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 {!loadingBtnPopup && showPopup && (
                     <CustomAlertDialog
                         isVisible={showPopup}
-                        onDismiss={() => setShowPopUp(false)}
-                        children={<AlertDialog listTablePrice={tablePriceList || []} dismiss={() => setShowPopUp(false)} />}
+                        onDismiss={() => {
+                            setShowPopUp(false)
+                        }}
+                        children={<AlertDialog cs_atendimento_prod_id={product.csicp_dd080.DD080_Id} listTablePrice={tablePriceList || []} refreshScreen={() => {
+                            setShowPopUp(false)
+                            refreshScreen()
+                        }} />}
                     />
                 )}
 
@@ -312,7 +320,33 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 }
 
 
-const AlertDialog = ({ listTablePrice, dismiss }: { listTablePrice: TablePrice[], dismiss: () => void }) => {
+const AlertDialog = ({ cs_atendimento_prod_id, listTablePrice, refreshScreen }: { cs_atendimento_prod_id: string, listTablePrice: TablePrice[], refreshScreen: () => void }) => {
+    const [isLoading, setIsLoading] = useState(false)
+
+
+    async function scPostPrecoTabelaItem(precoSelecionado: TablePrice) {
+        setIsLoading(true)
+        const response = await handlePostPrecoTabelaNovoLista({
+            cs_atendimento_prod_id: cs_atendimento_prod_id,
+            cs_num_preco: precoSelecionado.num,
+            cs_valor: precoSelecionado.price
+        })
+
+        //se falhar
+        if (!response.IsOk) {
+            showToast(ToastType.ERROR, "Falha", "Não foi possivel atualizar preço tabela, tente novamente")
+            setIsLoading(false)
+            return
+        } else {
+            setIsLoading(false)
+            refreshScreen()
+        }
+    }
+
+
+    if (isLoading) {
+        return <ActivityIndicator color={"#000"} />
+    }
     return (
         <View style={commonStyle.modal_common_container}>
             {listTablePrice.length === 0 && (
@@ -320,24 +354,23 @@ const AlertDialog = ({ listTablePrice, dismiss }: { listTablePrice: TablePrice[]
             )}
 
             <Text style={commonStyle.btn_text_gray}>Selecione preço tabela</Text>
-
             {listTablePrice.length > 0 && (
                 <FlatList
                     data={listTablePrice}
                     keyExtractor={(item) => item.num.toString()}
                     renderItem={({ item }) =>
-                        <>
+                        <TouchableOpacity onPress={() => scPostPrecoTabelaItem(item)}>
                             <View style={[commonStyle.align_centralizar, commonStyle.common_padding_08]}>
                                 <Text style={commonStyle.common_text_button_style}>{item.num} - {formatMoneyValue(item.price)}</Text>
                             </View>
                             <CustomSeparator />
-                        </>}
+                        </TouchableOpacity>}
                 />
             )}
 
 
             <View style={[commonStyle.common_columnItem, commonStyle.justify_content_space_evl]}>
-                <TouchableOpacity style={commonStyle.btn_gray} onPress={dismiss}>
+                <TouchableOpacity style={commonStyle.btn_gray} onPress={refreshScreen}>
                     <Text style={commonStyle.btn_text_gray}>Fechar</Text>
                 </TouchableOpacity>
             </View>

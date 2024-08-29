@@ -337,3 +337,33 @@ export async function getListPrecoTabela({ cs_tenant_id, cs_pdt_dkx }:
         throw err;
     }
 }
+
+/** POST PREÇO PRODUTOS TABELA 
+ * Esta ACTION atualiza o preço tabela e o numero preço tabela, qdo usado via tabela de preço.
+*/
+export async function postPrecoTabelaNovoLista({ cs_tenant_id, cs_valor, cs_num_preco, cs_atendimento_id, cs_atendimento_prod_id, cs_usuario_id }:
+    { cs_tenant_id: number, cs_valor: number, cs_num_preco: number, cs_atendimento_id: string, cs_atendimento_prod_id: string, cs_usuario_id: string }): Promise<{ IsOk: boolean }> {
+
+    const url = {
+        TenantId: cs_tenant_id,
+        AtendimentoId: cs_atendimento_id,
+        AtendimentoProdutoId: cs_atendimento_prod_id,
+        IN_UsuarioID: cs_usuario_id
+    }
+
+    const body = {
+        prm_valor: cs_valor,
+        Prm_NroPreco: cs_num_preco
+    }
+
+    try {
+        const response = await api.post(`/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTab_PorTabelaPreco`,
+            body,
+            {
+                params: url
+            });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}

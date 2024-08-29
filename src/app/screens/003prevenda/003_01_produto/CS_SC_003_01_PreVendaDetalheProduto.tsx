@@ -124,6 +124,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                         updateValueDiscount={updateValueDiscount}
                         updateUnityPrice={updateUnityPrice}
                         updateTablePrice={updateTablePrice}
+                        refreshScreen={() => getCurrentPv()}
                     />
                 )}
 
@@ -141,7 +142,7 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     );
 }
 
-const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProduct, updateDiscountPercent, updateUnityPrice, updateValueDiscount, updateTablePrice }: {
+const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProduct, updateDiscountPercent, updateUnityPrice, updateValueDiscount, updateTablePrice, refreshScreen }: {
     pv?: IResGetPv,
     isLoading: boolean,
     handleRefreshProducts: () => void,
@@ -150,6 +151,7 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
     updateValueDiscount: (productId: string, valueDiscount: number) => void,
     updateUnityPrice: (productId: string, unityPrice: number) => void,
     updateTablePrice: (productId: string, tablePrice: number) => void,
+    refreshScreen: () => void
 }) => {
     //variavel que controla se o bottom da tela deve ou nao aparecer
     const [hideBottom, setHideBottom] = useState(false)
@@ -174,6 +176,7 @@ const ScreenWhenIsConsulta = ({ pv, isLoading, handleRefreshProducts, deleteProd
                         hideBottom={(hide) => {
                             setHideBottom(hide)
                         }}
+                        refreshScreen={refreshScreen}
                     />
                 )}
             />
@@ -213,7 +216,9 @@ const ScreenWhenIsNotConsulta = ({ pv, isLoading, handleRefreshProducts }: {
                         saveDiscountValue={() => { }}
                         saveTablePrice={() => { }}
                         saveUnityPrice={() => { }}
-                        hideBottom={() => { }} />
+                        hideBottom={() => { }}
+                        refreshScreen={() => { }}
+                    />
                 )}
             />
             <C_003_01_04_BottomScreenItemProdutosDetalhesPV
