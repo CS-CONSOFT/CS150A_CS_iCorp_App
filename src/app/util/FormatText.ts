@@ -35,7 +35,5 @@ export function formatDateToTracePattern(date: string): string {
  */
 export function formatMoneyValue(value?: number): string {
     const val = value || 0
-    let formattedValue = val.toFixed(2);
-    formattedValue = formattedValue.replace('.', ',');
-    return `R$ ${formattedValue}`;
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
 }

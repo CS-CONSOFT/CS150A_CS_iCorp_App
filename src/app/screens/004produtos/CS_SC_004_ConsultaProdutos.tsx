@@ -104,13 +104,6 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
          * guarda o _filterValues, para que possamos usar o filterValues na flat list.
         */
 
-        /**
-         * Os valores de formData seguem a estrutura de titles que formam o formFields
-         * Ex: Dominio: 'Comercial'; Usuario: 'Valter'; Senha:'xpto'
-         * A chave das propriedades é o que será usado em 'key' -> formData.[key]
-         * 
-         */
-
         setStatus(FETCH_STATUS.LOADING)
         const _filterValues: IReqGetProductSearch = {
             cs_page: page || 1,

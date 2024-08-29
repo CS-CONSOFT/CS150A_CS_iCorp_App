@@ -36,14 +36,13 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         refreshScreen: () => void
     }) => {
 
-    const navigation = useNavigation()
-
     const [isEntregar, setIsEntregar] = useState(false);
     const [isMontar, setIsMontar] = useState(false);
     const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
     const [isRequisitar, setIsRequisitar] = useState(false);
 
-    const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Quantidade);
+    //se tiver conversão, usa a quantidade secundaria
+    const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 ? product.csicp_dd080.DD080_Quantidade : product.csicp_dd080.DD080_Un_Sec_Qtde);
     const [tablePrice, setTablePrice] = useState(0);
     const [unityPrice, setUnityPrice] = useState(0);
     const [percentDiscount2, setPercentDiscount2] = useState(0);
