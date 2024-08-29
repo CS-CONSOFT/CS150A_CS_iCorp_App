@@ -1,8 +1,6 @@
-import { longPressHandlerName } from "react-native-gesture-handler/lib/typescript/handlers/LongPressGestureHandler";
 import { DataKey } from "../../../../enum/DataKeys";
-import { getSimpleData, storeSimpleData } from "../../../storage/AsyncStorageConfig";
+import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
-import { ICommonResponse } from "../../interfaces/CS_ICommonResponse";
 import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
@@ -10,37 +8,52 @@ import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
 import { IResGetListAlmox } from "../../interfaces/prevenda/CS_IResGetListAlmox";
 import { IResInsertPv } from "../../interfaces/prevenda/CS_IResInserirNovaPv";
 import { IResPreVenda } from "../../interfaces/prevenda/CS_IResPreVendaLista";
-import { IResProductsListPvModel } from "../../interfaces/prevenda/CS_IResProdutosPreVenda";
+import { IListaPrecoTabela } from "../../interfaces/prevenda/CS_ListaPrecoTabela";
 import { getEstaticasPV } from "../estaticas/CS_Estaticas";
 
 /**
  * Lista todas as PVS
- * @param IGetPreVendaList 
+ * @param iGetPreVendaList 
  * @returns lista de pvs
  */
-export async function fetchPVs(IGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
+export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<IResPreVenda> {
     try {
         let params = {
-            In_Tenant_Id: IGetPreVendaList.cs_tenant_id,
+            In_Tenant_Id: iGetPreVendaList.cs_tenant_id,
             In_IsCount: 0,
-            in_currentPage: IGetPreVendaList.cs_current_page,
-            in_pageSize: IGetPreVendaList.cs_page_size,
-            In_DataInicio: IGetPreVendaList.cs_data_inicial,
-            In_DataFinal: IGetPreVendaList.cs_data_final,
-            //         In_ClauseInt_List_csicp_dd070_Sit: '',
-            //       In_ClauseInt_List_csicp_dd070_TpAte: ''
+            in_currentPage: iGetPreVendaList.cs_current_page,
+            in_pageSize: iGetPreVendaList.cs_page_size,
+            In_DataInicio: iGetPreVendaList.cs_data_inicial,
+            In_DataFinal: iGetPreVendaList.cs_data_final,
+            In_ClauseInt_List_csicp_dd070_Sit: '',
+            In_ClauseInt_List_csicp_dd070_TpAte: ''
         }
 
-        /**
         try {
             const resSit = await _handleGetEstaticaSit();
-            params.In_ClauseInt_List_csicp_dd070_Sit = resSit;
+
+            /**
+             * construindo string para mandar na clausula IN
+             * index 0 = CONSULTA
+             * index 1 = FATURADO
+             */
+            let strToSit = ''
+            if (iGetPreVendaList.cs_consulta && !iGetPreVendaList.cs_faturado) {
+                strToSit = (resSit.at(0) || 0).toString()
+            } else if (iGetPreVendaList.cs_faturado && iGetPreVendaList.cs_consulta) {
+                strToSit = `${(resSit.at(0) || 0).toString()}, ${(resSit.at(1) || 0).toString()}`
+            } else {
+                strToSit = (resSit.at(1) || 0).toString()
+            }
+
             const resTpAtd = await _handleGetEstaticaTpAt();
+
+            params.In_ClauseInt_List_csicp_dd070_Sit = strToSit
             params.In_ClauseInt_List_csicp_dd070_TpAte = resTpAtd;
         } catch (error: any) {
-            throw new Error(`Failed to fetch static data: ${error.message}`);
+            throw new Error(`Failed to fetch s-tatic data: ${error.message}`);
         }
- */
+
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
         const response = await api.get(url, { headers: params });
         return response.data as IResPreVenda;
@@ -53,23 +66,25 @@ enum ES_TYPE {
     BPM = "BPM",
     APROVADO = "Aprovado",
     CONSULTA = "Consulta",
-    PV = "PreVenda"
+    PV = "PreVenda",
+    FATURADO = "Faturado"
 }
 
 
 /** recupera uma lista de ids da situacao para filtro da PV */
-async function _handleGetEstaticaSit(): Promise<string> {
+async function _handleGetEstaticaSit(): Promise<string[]> {
     try {
         // Faz uma requisição para salvar os dados de endereço
         const response = await getEstaticasPV();
 
         const idConsulta = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.CONSULTA)?.Id
-        const idAprovado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.APROVADO)?.Id
-        const idBPM = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.BPM)?.Id
+        const idFaturado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.FATURADO)?.Id
 
-        const stringReturn = `${idConsulta},${idAprovado},${idBPM}`
+        const arrayStr: string[] = []
+        arrayStr.push((idConsulta || 0).toString())
+        arrayStr.push((idFaturado || 0).toString())
 
-        return stringReturn;
+        return arrayStr;
     } catch (error) {
         throw error;
     }
@@ -128,20 +143,6 @@ export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): P
     }
 }
 
-/**
- * Busca os produtos da pv
- */
-export async function getPreSaleProducts({ cs_tenant_id, cs_atendimento_id }:
-    { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResProductsListPvModel> {
-
-    const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}/ListarProdutos`
-
-
-    /** RESPONSE DE PRODUTOS */
-    const response = await api.get(url)
-
-    return response.data as IResProductsListPvModel
-}
 
 export async function getPv({ cs_tenant_id, cs_atendimento_id }: { cs_tenant_id: number, cs_atendimento_id: string }): Promise<IResGetPv> {
     const headerParams = {
@@ -312,8 +313,55 @@ export async function GenerateReport({ cs_tenant_id, cs_pv_id, cs_nome_cot }:
     { cs_tenant_id: number, cs_pv_id: string, cs_nome_cot: string }): Promise<string> {
     try {
         const response = await api.get(`/CsExecReport/rest/PVMobile/RESTAPI_Report_html?DD070_ID=${cs_pv_id}&Prm_Tenant_Id=${cs_tenant_id}&NomeCotacao=${cs_nome_cot}`);
-        console.log(response.data);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
 
+
+/** LISTA PREÇO PRODUTOS TABELA */
+export async function getListPrecoTabela({ cs_tenant_id, cs_pdt_dkx }:
+    { cs_tenant_id: number, cs_pdt_dkx: string }): Promise<IListaPrecoTabela> {
+
+    const url = {
+        TenantId: cs_tenant_id,
+        Prm_ProdutoKdxId: cs_pdt_dkx
+    }
+    try {
+        const response = await api.get(`/cs_At_40_LogicoService/rest/CS_Basico_API/GetTabelaPreco`, {
+            params: url
+        });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+/** POST PREÇO PRODUTOS TABELA 
+ * Esta ACTION atualiza o preço tabela e o numero preço tabela, qdo usado via tabela de preço.
+*/
+export async function postPrecoTabelaNovoLista({ cs_tenant_id, cs_valor, cs_num_preco, cs_atendimento_id, cs_atendimento_prod_id, cs_usuario_id }:
+    { cs_tenant_id: number, cs_valor: number, cs_num_preco: number, cs_atendimento_id: string, cs_atendimento_prod_id: string, cs_usuario_id: string }): Promise<{ IsOk: boolean }> {
+
+    const url = {
+        TenantId: cs_tenant_id,
+        AtendimentoId: cs_atendimento_id,
+        AtendimentoProdutoId: cs_atendimento_prod_id,
+        IN_UsuarioID: cs_usuario_id
+    }
+
+    const body = {
+        prm_valor: cs_valor,
+        Prm_NroPreco: cs_num_preco
+    }
+
+    try {
+        const response = await api.post(`/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTab_PorTabelaPreco`,
+            body,
+            {
+                params: url
+            });
         return response.data;
     } catch (err) {
         throw err;

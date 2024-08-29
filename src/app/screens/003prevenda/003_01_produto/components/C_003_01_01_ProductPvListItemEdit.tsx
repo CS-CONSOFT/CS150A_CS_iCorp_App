@@ -1,22 +1,30 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import CurrencyInput from 'react-native-currency-input';
 import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
 import CustomSeparator from "../../../../components/lists/CustomSeparator";
 import CustomSwitch from "../../../../components/switch/CustomSwitch";
 import { DD080_Produtos } from '../../../../services/api/interfaces/prevenda/CS_IResPreVendaLista';
-import { FETCH_STATUS } from '../../../../util/FETCH_STATUS';
-import { ICON_NAME } from "../../../../util/IconsName";
-import { formatPercentInput, moneyApplyMask, moneyRemoveMask } from "../../../../util/Masks";
-import { handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
-import { common003_01_styles } from "./CommonStyles";
-import { formatMoneyValue } from '../../../../util/FormatText';
 import { IReqUpdateProdutItens } from '../../../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens';
-import CurrencyInput from 'react-native-currency-input';
+import { ICON_NAME } from "../../../../util/IconsName";
+import { handleListaPrecoTabela, handlePostPrecoTabelaNovoLista, handleUpdateProductAmount, handleUpdateProductSwtichs } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { common003_01_styles } from "./CommonStyles";
+import { showToast, ToastType } from '../../../../util/ShowToast';
+import CustomAlertDialog from '../../../../components/modal/CustomAlertDialog';
+import { FlatList } from 'react-native-gesture-handler';
+import { formatMoneyValue } from '../../../../util/FormatText';
+import { useNavigation } from '@react-navigation/native';
 
+
+//lista de preço tabela
+interface TablePrice {
+    price: number,
+    num: number
+}
 /** componente de edição dos valores do produto */
-const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct }:
+const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct, refreshScreen }:
     {
         product: DD080_Produtos,
         saveTablePrice: (tablePrice: number, productId: string) => void
@@ -24,22 +32,29 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         saveDiscountPercent: (discountPercent: number, productId: string) => void
         saveDiscountValue: (valueDiscount: number, productId: string) => void
         downSwipe: () => void
-        setAmountProduct: (productAmount: number) => void
+        setAmountProduct: (productAmount: number) => void,
+        refreshScreen: () => void
     }) => {
-
 
     const [isEntregar, setIsEntregar] = useState(false);
     const [isMontar, setIsMontar] = useState(false);
     const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
     const [isRequisitar, setIsRequisitar] = useState(false);
-    const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Quantidade);
 
+    //se tiver conversão, usa a quantidade secundaria
+    const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 ? product.csicp_dd080.DD080_Quantidade : product.csicp_dd080.DD080_Un_Sec_Qtde);
     const [tablePrice, setTablePrice] = useState(0);
     const [unityPrice, setUnityPrice] = useState(0);
     const [percentDiscount2, setPercentDiscount2] = useState(0);
     const [valueDiscount, setValueDiscount] = useState(0);
 
     const [updateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
+
+    const [showPopup, setShowPopUp] = useState(false)
+    const [loadingBtnPopup, setLoadingBtnPopup] = useState(false)
+
+
+    const [tablePriceList, setTablePriceList] = useState<TablePrice[]>()
 
 
     useEffect(() => {
@@ -82,6 +97,37 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         }
     }
 
+    //funcao que lista preço tabela para mudar via popup
+    async function scGetListPrecoTabela() {
+        setLoadingBtnPopup(true)
+        try {
+            const result = await handleListaPrecoTabela({ cs_pdt_kdx: product.csicp_gg520.GG520_Kardex_ID })
+
+            let _listTablePrice: TablePrice[] = []
+            for (let i = 1; i <= 9; i++) {
+                //@ts-ignore
+                const _listItem = createItemToListOfTablePrice(result[`PrecoVenda${i}`], i);
+                _listTablePrice.push(_listItem)
+            }
+
+            setTablePriceList(_listTablePrice)
+            setLoadingBtnPopup(false)
+            setShowPopUp(true)
+        } catch (error: any) {
+            setLoadingBtnPopup(false)
+            showToast(ToastType.ERROR, "Falha ao recuperar lista", error)
+        }
+    }
+
+    //funcao que cria UM ITEM para popular a lista de preco tabela
+    function createItemToListOfTablePrice(price: number, num: number): TablePrice {
+        let _tablePriceItem: TablePrice = {
+            price: price,
+            num: num
+        }
+        return _tablePriceItem
+    }
+
 
 
     return (
@@ -107,7 +153,19 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 {/** LINHA DE PREÇO */}
                 <View style={[common003_01_styles.extraBottomPriceStyle, { flexDirection: 'row', justifyContent: 'space-between', marginRight: 16 }]}>
                     <View style={{ flex: 1, marginRight: 8 }}>
-                        <Text style={common003_01_styles.extraBottomStyleChilds}>Tabela</Text>
+                        <View style={commonStyle.common_rowItem}>
+                            <Text style={common003_01_styles.extraBottomStyleChilds}>Tabela</Text>
+                            {loadingBtnPopup && !showPopup && (
+                                <ActivityIndicator color={"#000"} />
+                            )}
+
+                            {!loadingBtnPopup && !showPopup && (
+                                <CustomIcon icon={ICON_NAME.LISTA_CONTORNADO} onPress={() => {
+                                    scGetListPrecoTabela()
+                                }} />
+                            )}
+
+                        </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <CurrencyInput
                                 value={tablePrice}
@@ -116,7 +174,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]} {...textInputProps} />}
-                                prefix="R$"
+                                prefix="R$ "
                                 delimiter="."
                                 separator=","
                                 precision={2}
@@ -141,7 +199,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     ]} {...textInputProps} />}
 
 
-                                prefix="R$"
+                                prefix="R$ "
                                 delimiter="."
                                 separator=","
                                 precision={2}
@@ -150,6 +208,23 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                         </View>
                     </View>
                 </View>
+
+                {/* POPUP PREÇO TABELA */}
+                {!loadingBtnPopup && showPopup && (
+                    <CustomAlertDialog
+                        isVisible={showPopup}
+                        onDismiss={() => {
+                            setShowPopUp(false)
+                        }}
+                        children={<AlertDialog cs_atendimento_prod_id={product.csicp_dd080.DD080_Id} listTablePrice={tablePriceList || []} refreshScreen={() => {
+                            setShowPopUp(false)
+                            refreshScreen()
+                        }} />}
+                    />
+                )}
+
+
+                {/* FIM POPUP PREÇO TABELA */}
 
 
                 {/** LINHA DE DESCONTO */}
@@ -191,7 +266,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                     commonStyle.common_input,
                                     { height: 40, flex: 1, padding: 10 }
                                 ]} {...textInputProps} />}
-                                prefix="R$"
+                                prefix="R$ "
                                 delimiter="."
                                 separator=","
                                 precision={2}
@@ -241,6 +316,65 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             </View>
         </View>
     );
+}
+
+
+const AlertDialog = ({ cs_atendimento_prod_id, listTablePrice, refreshScreen }: { cs_atendimento_prod_id: string, listTablePrice: TablePrice[], refreshScreen: () => void }) => {
+    const [isLoading, setIsLoading] = useState(false)
+
+
+    async function scPostPrecoTabelaItem(precoSelecionado: TablePrice) {
+        setIsLoading(true)
+        const response = await handlePostPrecoTabelaNovoLista({
+            cs_atendimento_prod_id: cs_atendimento_prod_id,
+            cs_num_preco: precoSelecionado.num,
+            cs_valor: precoSelecionado.price
+        })
+
+        //se falhar
+        if (!response.IsOk) {
+            showToast(ToastType.ERROR, "Falha", "Não foi possivel atualizar preço tabela, tente novamente")
+            setIsLoading(false)
+            return
+        } else {
+            setIsLoading(false)
+            refreshScreen()
+        }
+    }
+
+
+    if (isLoading) {
+        return <ActivityIndicator color={"#000"} />
+    }
+    return (
+        <View style={commonStyle.modal_common_container}>
+            {listTablePrice.length === 0 && (
+                <Text style={commonStyle.btn_text_gray}>Nenhum dado na lista!</Text>
+            )}
+
+            <Text style={commonStyle.btn_text_gray}>Selecione preço tabela</Text>
+            {listTablePrice.length > 0 && (
+                <FlatList
+                    data={listTablePrice}
+                    keyExtractor={(item) => item.num.toString()}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity onPress={() => scPostPrecoTabelaItem(item)}>
+                            <View style={[commonStyle.align_centralizar, commonStyle.common_padding_08]}>
+                                <Text style={commonStyle.common_text_button_style}>{item.num} - {formatMoneyValue(item.price)}</Text>
+                            </View>
+                            <CustomSeparator />
+                        </TouchableOpacity>}
+                />
+            )}
+
+
+            <View style={[commonStyle.common_columnItem, commonStyle.justify_content_space_evl]}>
+                <TouchableOpacity style={commonStyle.btn_gray} onPress={refreshScreen}>
+                    <Text style={commonStyle.btn_text_gray}>Fechar</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 }
 
 export default C_003_01_01_ProductPvListItemEdit;

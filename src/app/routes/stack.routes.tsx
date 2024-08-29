@@ -47,7 +47,7 @@ declare global {
             Menu: undefined,
             Entrega: undefined,
             Serie: undefined,
-            Consulta_Produtos: { cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
+            Consulta_Produtos: { pvId?: string, cameFromPv: boolean, insertComanda: boolean, comandaId?: number },
             Config_Ambiente: undefined,
             Splash01: undefined,
             SimulacaoCrediario: { contaCodigo: number },
@@ -293,7 +293,7 @@ export default function StackRoutes() {
                 headerStyle: {
                     backgroundColor: "#0A3147"
                 },
-                headerBackVisible: true,
+                headerBackVisible: false,
             }} />
 
             <StackNav.Screen name="Obras" component={CS_SC_005_Obras} options={{
