@@ -10,6 +10,7 @@ import { ICON_NAME } from "../../../../util/IconsName";
 import { formatPercentInput } from "../../../../util/Masks";
 import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
+import CurrencyInput from "react-native-currency-input";
 
 const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, descontoValor = 0 }: { isConsulta?: boolean, descontoValor?: number }) => {
     const { navigate } = useNavigation()
@@ -67,16 +68,32 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
     );
 }
 
-const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor: number, save: (discountValue: number) => void, dismiss: () => void }) => {
-
-    const [desc1, setDesc1] = useState(formatPercentInput(descontoValor.toString()))
+const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number, save: (discountValue: number) => void, dismiss: () => void }) => {
+    const [desc1, setDesc1] = useState(descontoValor || 0)
     return (
         <View style={commonStyle.modal_common_container}>
             <Text>1° Desconto</Text>
-            <TextInput style={commonStyle.common_input}
-                onChangeText={(value) => setDesc1(formatPercentInput(value))}
-                value={desc1}
-                keyboardType='decimal-pad' />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CurrencyInput
+                    value={desc1}
+                    onChangeValue={(number) => {
+                        setDesc1(number || 0)
+                    }}
+                    //@ts-ignore
+                    renderTextInput={textInputProps => <TextInput
+                        style={[
+                            commonStyle.common_input,
+                            { height: 40, flex: 1, padding: 10 }
+                        ]}
+                        {...textInputProps}
+                    />}
+                    prefix=""
+                    delimiter="."
+                    separator="."
+                    precision={2}
+                    maxValue={99.99}
+                />
+            </View>
 
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
                 <Pressable style={commonStyle.btn_gray} onPress={() => save(Number(desc1))}>

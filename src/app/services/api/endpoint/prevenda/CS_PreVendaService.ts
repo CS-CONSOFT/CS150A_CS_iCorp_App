@@ -284,7 +284,7 @@ export async function LiberarPV({ cs_tenant_id, cs_pv_id, cs_bb012_id, cs_sy001_
             In_DD070_Id: cs_pv_id,
             In_BB012_Id: cs_bb012_id,
             In_SY001_Id: cs_sy001_id,
-            In_Comprometer: cs_isComprometer ? 1 : 0
+            In_Comprometer: cs_isComprometer
         }
         const response = await api.get(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_LiberarPV`, { headers: header });
         return response.data;

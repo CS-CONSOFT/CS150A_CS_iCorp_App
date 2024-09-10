@@ -401,7 +401,7 @@ export async function handleLiberarPV({ cs_bb012_id, cs_pv_id }: { cs_bb012_id: 
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
 
         // Faz uma requisição para salvar os dados de endereço
-        const response = await LiberarPV({ cs_tenant_id: currentUser.TenantId, cs_bb012_id: cs_bb012_id, cs_sy001_id: currentUser.UsuarioId, cs_pv_id: cs_pv_id, cs_isComprometer: false });
+        const response = await LiberarPV({ cs_tenant_id: currentUser.TenantId, cs_bb012_id: cs_bb012_id, cs_sy001_id: currentUser.UsuarioId, cs_pv_id: cs_pv_id, cs_isComprometer: true });
         return response;
     } catch (error) {
         throw error;

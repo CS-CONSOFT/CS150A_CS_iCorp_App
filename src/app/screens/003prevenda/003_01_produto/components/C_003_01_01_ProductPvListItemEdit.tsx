@@ -16,6 +16,7 @@ import CustomAlertDialog from '../../../../components/modal/CustomAlertDialog';
 import { FlatList } from 'react-native-gesture-handler';
 import { formatMoneyValue } from '../../../../util/FormatText';
 import { useNavigation } from '@react-navigation/native';
+import { FETCH_STATUS } from '../../../../util/FETCH_STATUS';
 
 
 //lista de preço tabela
@@ -24,7 +25,7 @@ interface TablePrice {
     num: number
 }
 /** componente de edição dos valores do produto */
-const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, setAmountProduct, refreshScreen }:
+const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityPrice, saveDiscountPercent, saveDiscountValue, downSwipe, fcnSetAmountProduct, refreshScreen }:
     {
         product: DD080_Produtos,
         saveTablePrice: (tablePrice: number, productId: string) => void
@@ -32,7 +33,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         saveDiscountPercent: (discountPercent: number, productId: string) => void
         saveDiscountValue: (valueDiscount: number, productId: string) => void
         downSwipe: () => void
-        setAmountProduct: (productAmount: number) => void,
+        fcnSetAmountProduct: (productAmount: number) => void,
         refreshScreen: () => void
     }) => {
 
@@ -40,7 +41,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [isMontar, setIsMontar] = useState(false);
     const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
     const [isRequisitar, setIsRequisitar] = useState(false);
-
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     //se tiver conversão, usa a quantidade secundaria
     const [productAmount, setProductAmount] = useState(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 ? product.csicp_dd080.DD080_Quantidade : product.csicp_dd080.DD080_Un_Sec_Qtde);
     const [tablePrice, setTablePrice] = useState(0);
@@ -68,14 +69,20 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     }, [])
 
     /** ALTERA A QUANTIDADE */
-    function alterAmount(isIncrement: boolean) {
+    async function alterAmount(isIncrement: boolean) {
+        setStatus(FETCH_STATUS.LOADING)
         const newAmount = isIncrement ? productAmount + 1 : productAmount - 1
-        handleUpdateProductAmount(product.csicp_dd080.DD080_Id, { Quantidade: newAmount }).then((res) => {
+        try {
+            const res = await handleUpdateProductAmount(product.csicp_dd080.DD080_Id, { Quantidade: newAmount })
             if (res.IsOk) {
                 setProductAmount(newAmount)
-                setAmountProduct(newAmount)
+                fcnSetAmountProduct(newAmount)
             }
-        })
+        } catch (error) {
+            showToast(ToastType.ERROR, "ERRO", "Falha ao atualizar quantidade")
+        } finally {
+            setStatus(FETCH_STATUS.IDLE)
+        }
     }
 
     /** FUNCAO PARA ALTERAR OS VALORES EM SWITCH */
@@ -137,9 +144,17 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 <Text style={common003_01_styles.extraBottomStyleTitles}>Quantidade</Text>
                 <CustomSeparator />
                 <View style={common003_01_styles.extraBottomStyleAmount}>
-                    <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
-                    <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
-                    <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
+                    {status === FETCH_STATUS.LOADING && (
+                        <ActivityIndicator color={"#000"} />
+                    )}
+                    {status !== FETCH_STATUS.LOADING && (
+                        <>
+                            <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
+                            <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
+                            <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
+                        </>
+                    )}
+
                 </View>
             </View>
 
@@ -216,7 +231,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                         onDismiss={() => {
                             setShowPopUp(false)
                         }}
-                        children={<AlertDialog cs_atendimento_prod_id={product.csicp_dd080.DD080_Id} listTablePrice={tablePriceList || []} refreshScreen={() => {
+                        children={<AlertDialogNovoPrecoTabela cs_atendimento_prod_id={product.csicp_dd080.DD080_Id} listTablePrice={tablePriceList || []} refreshScreen={() => {
                             setShowPopUp(false)
                             refreshScreen()
                         }} />}
@@ -241,18 +256,21 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                 onChangeValue={(number) => {
                                     setPercentDiscount2(number || 0)
                                 }}
-                                renderTextInput={textInputProps => <TextInput style={[
-                                    commonStyle.common_input,
-                                    { height: 40, flex: 1, padding: 10 }
-                                ]} {...textInputProps} />}
+                                renderTextInput={textInputProps => <TextInput
+                                    style={[
+                                        commonStyle.common_input,
+                                        { height: 40, flex: 1, padding: 10 }
+                                    ]}
+                                    {...textInputProps}
+                                />}
                                 prefix=""
                                 delimiter="."
                                 separator="."
                                 precision={2}
-                                maxValue={0.99}
+                                maxValue={99.99}
                             />
 
-                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount2) * 100, product.csicp_dd080.DD080_Id)} />
+                            <CustomIcon icon={ICON_NAME.CHECK} onPress={() => saveDiscountPercent(Number(percentDiscount2), product.csicp_dd080.DD080_Id)} />
                         </View>
                     </View>
 
@@ -319,7 +337,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 }
 
 
-const AlertDialog = ({ cs_atendimento_prod_id, listTablePrice, refreshScreen }: { cs_atendimento_prod_id: string, listTablePrice: TablePrice[], refreshScreen: () => void }) => {
+const AlertDialogNovoPrecoTabela = ({ cs_atendimento_prod_id, listTablePrice, refreshScreen }: { cs_atendimento_prod_id: string, listTablePrice: TablePrice[], refreshScreen: () => void }) => {
     const [isLoading, setIsLoading] = useState(false)
 
 
