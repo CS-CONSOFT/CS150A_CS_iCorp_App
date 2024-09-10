@@ -6,7 +6,6 @@ import CustomItemIconTitleHalfRoundedWhite from "../../components/items/CustomIt
 import { DataKey } from "../../enum/DataKeys";
 import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
 import { configureMenuByRule } from "./ListMenu";
-
 import CustomLoading from "../../components/loading/CustomLoading";
 import { IMenuItem, MenuTitle } from "../../services/api/interfaces/login/CS_IPostLoginData";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";

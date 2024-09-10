@@ -76,7 +76,7 @@ export const getRegrasUsuario = ({ sy001_id, tenant }: { tenant: number, sy001_i
 };
 
 
-/*retorna lista de menus que ja estao setados*/
+/*retorna lista de menus que ja estao setados independente de regra*/
 function listOfAlreadyMenuItems(): IMenuItem[] {
     const preVendaListMenu: IMenuItem[] = [{
         id: 999,
@@ -109,38 +109,31 @@ async function getListOfAllowedButtons(list: IRegraItem[]): Promise<IMenuItem[]>
     //regras que precisam ser checadas se existem
     const rulesToCheck = ['PVMOB_01_ACESSACARGA', 'PVMOB_02_NAOACESSSAVENDA', 'PVMOB_03_ACESSAOBRA', 'PVMOB_04_ACESSASERIE', 'PVMOB_05_ACESSAENTREGANFe']
 
-
-
-    //inicia a lista com a prevenda
-    let filteredRules: IMenuItem[] = listOfAlreadyMenuItems()
-
-
-    //pre venda item de menu que é usado para remover do index
-    const preVendaItemMenu: IMenuItem = {
-        id: 999,
-        title: MenuTitle.PV,
-        iconName: "cart-outline"
-    }
+    //variavel que armazena os itens de menu que serão setados de acordo com as regras
+    let filteredRulesMenuList: IMenuItem[] = listOfAlreadyMenuItems()
 
     //percorre a lista de regras a serem checadas e verifica a existencia dela na lista que veio da rota de regras de usuario
     for (let index = 0; index < rulesToCheck.length; index++) {
-        //checa se NAO ACESSA VENDA, nao insere na lista
-        if (rulesToCheck[index] === 'PVMOB_02_NAOACESSSAVENDA') {
-            //se nao puder acessar a PV, remove ela da lista e passa para a proxima iteração
-            const indexToRemove = filteredRules.indexOf(preVendaItemMenu)
-            filteredRules.splice(indexToRemove)
-            continue;
-        }
-        //recupera se o cidadao tem a regra
+        //recupera se o cidadao tem alguma regra referente a PV
         const _currentRule = list.find((item) => item.Label === rulesToCheck[index])
 
         //se a role existir na lista, cria um item de menu e seta na lista
         if (_currentRule !== undefined) {
-            filteredRules.push(setMenuItem(index) as IMenuItem)
+            //caso a regra seja para NÃO HAVER PV, passar para a proxima iteração
+            if (_currentRule.Label === "PVMOB_02_NAOACESSSAVENDA") {
+                //atribui a variavel que armazena a lista, a propria lista porem filtrada para nao trazer o item que contenha a PV
+                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== "PV")
+                continue;
+            }
+            //cria o item de menu quando há regra que permite isso
+            const itemMenu = setMenuItemWhenTheresRule(index) as IMenuItem
+            //se houve regra para atribuir item de menu, então insere na lista. A condição é o id ser diferente de -1, chegar a funcao setMenuItemWhenTheresRule para entender
+            if (itemMenu.id != -1) {
+                filteredRulesMenuList.push(itemMenu)
+            }
         }
     }
-
-    return filteredRules
+    return filteredRulesMenuList
 }
 
 
@@ -153,27 +146,33 @@ enum MenuRules {
 }
 
 
-function setMenuItem(index: number) {
+/** seta o item de menu quando há regras */
+function setMenuItemWhenTheresRule(index: number) {
+    let menuItem: IMenuItem = { id: -1, title: "-1", iconName: "-1" }
     switch (index) {
         case MenuRules.ACESSAOBRA:
-            return {
+            menuItem = {
                 id: index,
                 title: MenuTitle.OBRAS,
                 iconName: "construct-outline"
             }
+            break;
         case MenuRules.ACESSASERIE:
-            return {
+            menuItem = {
                 id: index,
                 title: MenuTitle.SERIE,
                 iconName: "barcode-outline"
             }
+            break;
         case MenuRules.ACESSAENTREGANFe:
-            return {
+            menuItem = {
                 id: index,
                 title: MenuTitle.ENTREGA,
                 iconName: "bag-check-outline"
             }
+            break;
     }
+    return menuItem
 }
 
 
