@@ -1,27 +1,71 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, SafeAreaView, View } from "react-native";
 import CustomHeaderUserInfo from "../../components/headers/CustomHeaderUserInfo";
 import CustomItemIconTitleHalfRoundedWhite from "../../components/items/CustomItemIconTitleHalfRoundedWhite";
-import { data } from "./ListMenu";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
-import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
 import { DataKey } from "../../enum/DataKeys";
+import { checkIfUserIsLogged, logout } from "../../view_controller/login/LoginViewController";
+import { configureMenuByRule } from "./ListMenu";
+import CustomLoading from "../../components/loading/CustomLoading";
+import { IMenuItem, MenuTitle } from "../../services/api/interfaces/login/CS_IPostLoginData";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 
 
 const CS_SC_002_Menu = () => {
     const { navigate } = useNavigation()
 
+    const [listOfMenu, setListOfMenu] = useState<IMenuItem[]>()
+    const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+
     useEffect(() => {
-        checkIfUserIsLogged().then((isLogged) => {
+        setStatus(FETCH_STATUS.LOADING)
+        checkIfUserIsLogged().then(async (isLogged) => {
             if (!isLogged) {
                 logout(DataKey.LoginResponse).then(() => {
                     navigate('Login')
                 })
+                setStatus(FETCH_STATUS.IDLE)
+            } else {
+                const menus = await configureMenuByRule()
+                setListOfMenu(menus)
+                setStatus(FETCH_STATUS.IDLE)
             }
         })
     }, [])
 
 
+    function scHandleClickMenuItem(menuTitle: string) {
+        console.log(menuTitle);
+
+        switch (menuTitle) {
+            case MenuTitle.PV:
+                navigate('Pre_Venda')
+                break;
+            case MenuTitle.CLIENTE:
+                navigate('TabListCliente')
+                break;
+            case MenuTitle.COMANDA:
+                navigate('ComandaLista')
+                break;
+            case MenuTitle.ENTREGA:
+                navigate('Entrega')
+                break;
+            case MenuTitle.OBRAS:
+                navigate('Obras')
+                break;
+            case MenuTitle.PRODUTO:
+                navigate('Consulta_Produtos', { cameFromPv: false, insertComanda: false })
+                break;
+            case MenuTitle.SERIE:
+                navigate('Serie')
+                break;
+        }
+    }
+
+    const isLoading = status === FETCH_STATUS.LOADING
+    if (isLoading) {
+        return <CustomLoading />
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
@@ -34,14 +78,14 @@ const CS_SC_002_Menu = () => {
                 }}>
                     <CustomHeaderUserInfo />
                     <FlatList
-                        data={data}
+                        data={listOfMenu}
                         keyExtractor={item => item.id.toString()}
                         numColumns={3}
                         renderItem={({ item }) => {
                             return (
                                 <CustomItemIconTitleHalfRoundedWhite
                                     title={item.title}
-                                    onPress={() => item.onPress(navigate)}
+                                    onPress={() => scHandleClickMenuItem(item.title)}
                                     iconName={item.iconName}
                                 />
                             );

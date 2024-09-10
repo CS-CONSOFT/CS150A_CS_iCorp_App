@@ -120,8 +120,8 @@ export const commonStyle = StyleSheet.create({
         padding: 10,
         borderRadius: 32,
         paddingHorizontal: 16,
-        //borderColor: "#B0B0B0"
-        backgroundColor: '#EDEEE9'
+        borderColor: "#B0B0B0",
+        backgroundColor: '#C3C3C3'
     },
     productImage: {
         height: '100%',

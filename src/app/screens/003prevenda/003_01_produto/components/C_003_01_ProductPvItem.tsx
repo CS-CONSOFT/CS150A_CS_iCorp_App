@@ -1,18 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Animated, Image, Pressable, Text, View } from "react-native";
+import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
+import { DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { IResProdutoGarantia } from "../../../../services/api/interfaces/produto/CS_IResGetProdutoGarantia";
 import { IProdutoItemUltimasVendas } from "../../../../services/api/interfaces/produto/CS_IResGetUltimasVendasProduto";
 import { formatMoneyValue } from "../../../../util/FormatText";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { ToastType, showToast } from "../../../../util/ShowToast";
+import { handleGetPv } from "../../../../view_controller/prevenda/PreVendaViewController";
 import { handleGetLastSalesProduct, handleGetProdutoGarantia } from "../../../../view_controller/produto/ProductViewController";
 import CS_003_01_02_ProductPvItemUltimasVendas from "./CS_003_01_02_ProductPvItemUltimasVendas";
 import C_003_01_01_ProductPvListItemEdit from "./C_003_01_01_ProductPvListItemEdit";
 import C_003_01_03_ProductPvItemGarantia from "./C_003_01_03_ProductPvItemGarantia";
 import { common003_01_styles } from './CommonStyles';
-import { DD080_Produtos } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
-import { commonStyle } from "../../../../CommonStyle";
-import { IResProdutoGarantia } from "../../../../services/api/interfaces/produto/CS_IResGetProdutoGarantia";
 
 
 
@@ -32,15 +34,17 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
         refreshScreen: () => void
     }) => {
 
+    const navigation = useNavigation()
     const [productAmount, setProductAmount] = useState(0.0);
+    const [currentTotalPrice, setCurrentTotalPrice] = useState(0.0);
     const [lastSalesProduct, setLastSalesProduct] = useState<IProdutoItemUltimasVendas[]>()
     const [guarantee, setGuarantee] = useState<IResProdutoGarantia>()
+
 
     useEffect(() => {
         //quando o fator de conversao for diferente de 0, significa que a alteração deve ser feita na unidade secundária
         setProductAmount(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID === 0 ? product.csicp_dd080.DD080_Quantidade : product.csicp_dd080.DD080_Un_Sec_Qtde)
-        console.log(product.csicp_dd080.DD080_Un_Sec_TipoConv_ID);
-
+        setCurrentTotalPrice(product.csicp_dd080.DD080_TotLiqProduto)
     }, [product])
 
     const [dragX] = useState(new Animated.Value(0));
@@ -139,6 +143,22 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
     /** FUNCOES QUE LIDAM COM AS ANIMACOES EM TELA */
 
 
+    //atualizando preço do produto quando a quantidade tbm é atualizada
+    async function scHandleUpdateAmount(amount: number) {
+        try {
+            const res = await handleGetPv()
+            if (res !== undefined) {
+                setProductAmount(amount)
+                const currentProd = res.DD080_Produtos.find((item) => item.csicp_dd080.DD080_Id == product.csicp_dd080.DD080_Id)
+                setCurrentTotalPrice(currentProd?.csicp_dd080.DD080_TotLiqProduto || 0)
+                showToast(ToastType.SUCCESS, "Quantidade atualizada", "")
+            }
+        } catch (error) {
+            navigation.goBack()
+            showToast(ToastType.ERROR, "Erro", "Nenhuma PV Ativa no momento")
+        }
+    }
+
 
 
     return (
@@ -201,7 +221,7 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                         )}
                     </View>
 
-                    <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(product.csicp_dd080.DD080_Total_Liquido)}`}</Text>
+                    <Text style={common003_01_styles.productInfo}>{`Total: ${formatMoneyValue(currentTotalPrice)}`}</Text>
                 </View>
                 {isConsulta && (
                     <>
@@ -238,7 +258,9 @@ export const C_003_01_ProductPvItem = ({ isConsulta = false, product, onDeletePr
                         saveTablePrice={saveTablePrice}
                         saveUnityPrice={saveUnityPrice}
                         downSwipe={downSwipeToEdit}
-                        setAmountProduct={(productAmount) => setProductAmount(productAmount)}
+                        fcnSetAmountProduct={(productAmount: number) => {
+                            scHandleUpdateAmount(productAmount)
+                        }}
                         refreshScreen={() => {
                             refreshScreen()
                         }}

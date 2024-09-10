@@ -1,15 +1,16 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, SafeAreaView, Text, TextInput, TouchableHighlight } from "react-native";
+import { ActivityIndicator, SafeAreaView, Text, TextInput, TouchableHighlight } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import { DataKey } from "../../enum/DataKeys";
+import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
-import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
@@ -67,33 +68,28 @@ const CS_SC001_LoginForm = () => {
         }
 
         try {
-
             loginData.tenant = tenantId
+            const res = await generalLoginVc(loginData)
+            setStatus(FETCH_STATUS.SUCCESS)
 
-            generalLoginVc(loginData).then((res) => {
-                setStatus(FETCH_STATUS.SUCCESS)
-                if (res.IsOk) {
-                    const toSaveJson = res.Model
-                    toSaveJson.TenantId = tenantId
-                    //salvando dados localmente
-                    storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
-                    navigateToMenu()
-                } else {
-                    showToast(ToastType.ERROR, "Falha ao logar", res.Msg)
-                }
-            }).catch((res) => {
-                if (res.StatusCode === undefined) {
-                    showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL base")
-                    setStatus(FETCH_STATUS.ERROR)
-                    logout(DataKey.LoginResponse).then(() => {
-                        storeSimpleData(DataKey.MaintainOpenConfig, "true").then(() => {
-                            navigate('Config_Ambiente')
-                        })
-                    })
-                }
-            })
+            if (res.IsOk) {
+                const toSaveJson = res.Model
+                toSaveJson.TenantId = tenantId
+                //salvando dados localmente
+                await storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
+                navigateToMenu()
+            } else {
+                showToast(ToastType.ERROR, "Falha ao logar", res.Msg)
+            }
+
         } catch (error) {
-            Alert.alert(error as string)
+            showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL base")
+            setStatus(FETCH_STATUS.ERROR)
+            logout(DataKey.LoginResponse).then(() => {
+                storeSimpleData(DataKey.MaintainOpenConfig, "true").then(() => {
+                    navigate('Config_Ambiente')
+                })
+            })
         }
     }
 
