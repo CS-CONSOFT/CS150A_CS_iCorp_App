@@ -1,25 +1,14 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getListOfPaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, paymentSelectForm, paymentSelectTerm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { deletePaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, paymentSelectForm, paymentSelectTerm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
-import { PaymentType } from "../../services/api/interfaces/pagamento/CS_IReqListFormPayment";
-import { IResPaymentResponse } from "../../services/api/interfaces/pagamento/CS_IResListFormPayment";
 import { IResFormPayment } from "../../services/api/interfaces/pagamento/CS_IResListFormPaymentComplete";
 import { IResPaymentFormByIdComplete } from "../../services/api/interfaces/pagamento/CS_IResPaymentFormByIdComplete";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
 
-export async function handleGetListOfPaymentForm({ paymentForm }: { paymentForm: PaymentType }): Promise<IResPaymentResponse> {
-    try {
-        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
-        const response = getListOfPaymentForm({ tenantId: currentUser.TenantId, paymentForm: paymentForm })
-        return response
-    } catch (error) {
-        throw error
-    }
-}
 
 
 export async function handleGetPaymentTermList({ paymentFormKey }: { paymentFormKey: string }): Promise<IResPaymentFormByIdComplete> {

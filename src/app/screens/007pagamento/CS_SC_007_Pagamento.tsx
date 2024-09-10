@@ -299,7 +299,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
         try {
             handleGetListOfPaymentForm002(isEntrance).then((res) => {
                 if (res !== undefined) {
-                    const transformedData = res.Lista_bb026!.map(item => ({
+                    const transformedData = res.Csicp_bb026!.map(item => ({
                         key: item.ID,
                         value: item.BB026_FormaPagamento
                     }));
@@ -328,7 +328,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
                             onFormSelected(key)
                         }
                     }}
-                    data={paymentsForm || [{}]}
+                    data={paymentsForm!}
                     save="key"
                 />
             </View>
