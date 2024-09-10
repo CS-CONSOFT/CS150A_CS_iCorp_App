@@ -12,6 +12,7 @@ import { useDatabase } from "../../services/storage/useDatabase";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { storeSimpleDataVc } from "../../view_controller/SharedViewController";
+import { logout } from "../../view_controller/login/LoginViewController";
 
 
 
@@ -205,7 +206,10 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
 
                         {isEnviromentValidated && (
                             <TouchableHighlight
-                                onPress={() => init(tenant, urlBase, token)}
+                                onPress={() => {
+                                    logout(DataKey.LoginResponse)
+                                    init(tenant, urlBase, token)
+                                }}
                                 style={commonStyle.common_button_style}
                                 underlayColor='white'
                             >
