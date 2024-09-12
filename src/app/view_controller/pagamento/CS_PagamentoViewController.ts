@@ -122,6 +122,8 @@ export async function handlePaymentSelectTerm({ formId, termId }: { formId: stri
         const response = paymentSelectTerm({ tenantId: currentUser.TenantId, pvId: currentPvId, formId: formId, termId: termId })
         return response
     } catch (error) {
+        console.log(error);
+
         throw error
     }
 } 

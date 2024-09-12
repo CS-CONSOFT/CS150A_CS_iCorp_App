@@ -33,7 +33,7 @@ const CS_SC_005_Obras = () => {
             handleGetListObras({ currentPage: page, dataFim: '2024-06-11', dataInicio: '2020-01-01' }).then(async (res) => {
                 if (res === undefined) {
                     navigate('Menu')
-                    showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
+                    showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do , provável erro de domínio")
                 }
                 const pagesArray = await handleGetPagesArray((res.Contador || {}).cs_number_of_pages || 1)
                 setPaginationArray(pagesArray)

@@ -72,7 +72,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString()).then(() => {
                         //configura a url no axios
                         api.defaults.baseURL = response.urlBase;
-                        api.defaults.timeout = 30000
+                        api.defaults.timeout = 15000
                         api.defaults.timeoutErrorMessage = "Tempo Limite Atingido!"
 
 
@@ -87,9 +87,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                             }
                         })
                         setIsLoading(false)
-
                     });
-
                 } else {
                     // Se não houver resposta, resetar estados
                     setHasValue(false);
@@ -144,6 +142,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
+                    console.log(JSON.stringify(res));
                     storeSimpleData(DataKey.MaintainOpenConfig, "false")
                     setIsEnviromentValidates(true)
                 })

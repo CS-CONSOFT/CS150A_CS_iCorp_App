@@ -11,21 +11,11 @@ import { commonStyle } from "../../CommonStyle";
 
 
 const CS_SC_001_Login = () => {
-    const { navigate } = useNavigation()
     const [currentDominio, setCurrentDominio] = useState('')
-
-    function navigateToMenu() {
-        navigate('Menu')
-    }
 
     useEffect(() => {
         getSimpleData(DataKey.DominioValorString).then((res) => {
             setCurrentDominio(res as string)
-        })
-        checkIfUserIsLogged().then((isLogged) => {
-            if (isLogged) {
-                navigateToMenu()
-            }
         })
     }, [])
 

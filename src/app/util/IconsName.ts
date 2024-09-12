@@ -36,5 +36,7 @@ export const ICON_NAME = {
     TRES_PONTOS_VERTICAL: "ellipsis-vertical-outline",
     WIFI: "wifi",
     PRINT: "print-outline",
+    OBS: "alert-circle-outline",
+    APROVED: "checkbox-outline",
 
 }

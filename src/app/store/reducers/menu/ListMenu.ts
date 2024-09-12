@@ -1,4 +1,4 @@
-import { IRegraItem } from "../../../services/api/endpoint/login/CS_LoginGeral";
+import { IRegraItem } from "../../../services/api/interfaces/login/CS_IPostLoginData";
 import { ActionType } from "../../type/ActionsType";
 
 //reducer responsavel por lidar com a lista de botoes disponiveis no menu

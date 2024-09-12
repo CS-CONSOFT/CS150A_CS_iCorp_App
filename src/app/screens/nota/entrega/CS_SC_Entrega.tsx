@@ -72,7 +72,7 @@ const CS_SC_Entrega = () => {
                     }
                 }).catch((err) => {
                     navigate('Menu')
-                    showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+                    showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
                 })
             }
         } catch (error) {

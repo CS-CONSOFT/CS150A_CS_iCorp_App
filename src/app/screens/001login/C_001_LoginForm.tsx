@@ -8,9 +8,11 @@ import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { storeObjectDataVc } from "../../view_controller/SharedViewController";
+import { getUserProperties, storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
+import { store } from "../../store/store";
+import { getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
 
 const CS_SC001_LoginForm = () => {
     //variaveis
@@ -35,8 +37,12 @@ const CS_SC001_LoginForm = () => {
             setStatus(FETCH_STATUS.LOADING)
             checkIfUserIsLogged().then((isLogged) => {
                 if (isLogged) {
-                    navigate('DrawerRoute')
-                    setStatus(FETCH_STATUS.IDLE)
+                    getUserProperties().then((res) => {
+                        // Despacha a ação que buscará as regras e atualizará o estado
+                        store.dispatch(getRegrasUsuario({ sy001_id: res.usuarioId || '', tenant: res.tenantId || 0 }));
+                        navigateToMenu()
+                        setStatus(FETCH_STATUS.IDLE)
+                    })
                 } else {
                     db.get().then((res) => {
                         setTenantId(Number(res?.tenantId))
@@ -71,7 +77,6 @@ const CS_SC001_LoginForm = () => {
             loginData.tenant = tenantId
             const res = await generalLoginVc(loginData)
             setStatus(FETCH_STATUS.SUCCESS)
-
             if (res.IsOk) {
                 const toSaveJson = res.Model
                 toSaveJson.TenantId = tenantId

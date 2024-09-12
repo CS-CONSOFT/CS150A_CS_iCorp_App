@@ -221,6 +221,7 @@ export async function updateProductSwitchItens({ pvTenant, AtendimentoProdutoId,
             IsSaldoNegativo: updateQuantidade.IsSaldoNegativo,
             IsRequisitar: updateQuantidade.IsRequisitar,
             IsEntregar: updateQuantidade.IsEntregar,
+            IsClienteRetira: updateQuantidade.IsClienteRetira
         }
 
         const url = `/cs_At_40_LogicoService/rest/CS_PV_API/Salvar_Set_ItemPV`

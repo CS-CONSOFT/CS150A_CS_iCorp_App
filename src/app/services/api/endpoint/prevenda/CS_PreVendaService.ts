@@ -26,32 +26,35 @@ export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<I
             In_DataInicio: iGetPreVendaList.cs_data_inicial,
             In_DataFinal: iGetPreVendaList.cs_data_final,
             In_ClauseInt_List_csicp_dd070_Sit: '',
-            In_ClauseInt_List_csicp_dd070_TpAte: ''
+            In_ClauseInt_List_csicp_dd070_TpAte: '',
+            In_UsuarioID: iGetPreVendaList.cs_usuario_id,
+            In_DD012_ACESSATODASPV: iGetPreVendaList.cs_acessa_todas_pv
         }
 
         try {
             const resSit = await _handleGetEstaticaSit();
-
             /**
              * construindo string para mandar na clausula IN
              * index 0 = CONSULTA
              * index 1 = FATURADO
+             * index 2 = APROVADO
              */
             let strToSit = ''
-            if (iGetPreVendaList.cs_consulta && !iGetPreVendaList.cs_faturado) {
+            if (iGetPreVendaList.cs_consulta) {
                 strToSit = (resSit.at(0) || 0).toString()
-            } else if (iGetPreVendaList.cs_faturado && iGetPreVendaList.cs_consulta) {
-                strToSit = `${(resSit.at(0) || 0).toString()}, ${(resSit.at(1) || 0).toString()}`
-            } else {
+            } else if (iGetPreVendaList.cs_faturado) {
+                strToSit = `${(resSit.at(1) || 0).toString()}`
+            } else if (iGetPreVendaList.cs_aprovado) {
+                strToSit = `${(resSit.at(2) || 0).toString()}`
+            }
+            else {
                 strToSit = (resSit.at(1) || 0).toString()
             }
-
             const resTpAtd = await _handleGetEstaticaTpAt();
-
             params.In_ClauseInt_List_csicp_dd070_Sit = strToSit
             params.In_ClauseInt_List_csicp_dd070_TpAte = resTpAtd;
         } catch (error: any) {
-            throw new Error(`Failed to fetch s-tatic data: ${error.message}`);
+            throw new Error(`Failed to fetch static data: ${error.message}`);
         }
 
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
@@ -79,10 +82,12 @@ async function _handleGetEstaticaSit(): Promise<string[]> {
 
         const idConsulta = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.CONSULTA)?.Id
         const idFaturado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.FATURADO)?.Id
+        const idAprovado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.APROVADO)?.Id
 
         const arrayStr: string[] = []
         arrayStr.push((idConsulta || 0).toString())
         arrayStr.push((idFaturado || 0).toString())
+        arrayStr.push((idAprovado || 0).toString())
 
         return arrayStr;
     } catch (error) {
@@ -359,6 +364,30 @@ export async function postPrecoTabelaNovoLista({ cs_tenant_id, cs_valor, cs_num_
     try {
         const response = await api.post(`/cs_At_40_LogicoService/rest/CS_PV_API/SetPrecoTab_PorTabelaPreco`,
             body,
+            {
+                params: url
+            });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+/** POST SAVE PV
+ * Esta ACTION atualiza o preço  tabela e o numero preço tabela, qdo usado via tabela de preço.
+*/
+export async function patchAtualizaObservaçãoPV({ cs_tenant_id, In_Obs, cs_atendimento_id }:
+    { cs_tenant_id: number, In_Obs: string, cs_atendimento_id: string }): Promise<{ Out_IsUpdated: boolean }> {
+
+    const url = {
+        In_Tenant_Id: cs_tenant_id,
+        In_DD070_ID: cs_atendimento_id,
+        In_Obs: In_Obs
+    }
+
+    try {
+        const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/csicp_dd070_SaveObs_PV`,
+            null,
             {
                 params: url
             });

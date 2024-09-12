@@ -119,7 +119,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         handleSearchProduct(_filterValues!).then((res) => {
             if (res.isOk == false) {
                 navigation.navigate('Menu')
-                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
             }
 
             if (res.isOk) {

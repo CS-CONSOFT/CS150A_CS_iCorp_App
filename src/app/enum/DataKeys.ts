@@ -10,5 +10,6 @@ export enum DataKey {
     CurrentContaId = "CurrentContaId",
     MaintainOpenConfig = "ManterConfiguracaoAbertaParaEdicao",
     IsFirstTimeOpenApp = "IsFirstTimeOpenApp",
-    NomeCotacao = "NomeCotacao"
+    NomeCotacao = "NomeCotacao",
+    ListMenu = "ListMenu",
 }
