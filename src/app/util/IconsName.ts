@@ -37,5 +37,6 @@ export const ICON_NAME = {
     WIFI: "wifi",
     PRINT: "print-outline",
     OBS: "alert-circle-outline",
+    APROVED: "checkbox-outline",
 
 }

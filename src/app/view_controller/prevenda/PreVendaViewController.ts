@@ -17,7 +17,7 @@ import { getUserProperties } from "../SharedViewController";
 
 
 
-export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number, cs_contulta: boolean, cs_faturado: boolean): Promise<IResPreVenda> {
+export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number, cs_contulta: boolean, cs_faturado: boolean, cs_aprovado: boolean): Promise<IResPreVenda> {
     const userProp = (await getUserProperties())
     const IGetPreVendaList: IReqGetPreVendaList = {
         cs_tenant_id: userProp.tenantId!,
@@ -29,7 +29,8 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
         cs_consulta: cs_contulta,
         cs_faturado: cs_faturado,
         cs_usuario_id: userProp.usuarioId || '',
-        cs_acessa_todas_pv: 1
+        cs_acessa_todas_pv: 1,
+        cs_aprovado: cs_aprovado
 
     }
     const result = fetchPVs(IGetPreVendaList)

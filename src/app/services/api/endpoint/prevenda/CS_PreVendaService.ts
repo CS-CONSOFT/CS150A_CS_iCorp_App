@@ -37,13 +37,17 @@ export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<I
              * construindo string para mandar na clausula IN
              * index 0 = CONSULTA
              * index 1 = FATURADO
+             * index 2 = APROVADO
              */
             let strToSit = ''
-            if (iGetPreVendaList.cs_consulta && !iGetPreVendaList.cs_faturado) {
+            if (iGetPreVendaList.cs_consulta) {
                 strToSit = (resSit.at(0) || 0).toString()
-            } else if (iGetPreVendaList.cs_faturado && iGetPreVendaList.cs_consulta) {
-                strToSit = `${(resSit.at(0) || 0).toString()}, ${(resSit.at(1) || 0).toString()}`
-            } else {
+            } else if (iGetPreVendaList.cs_faturado) {
+                strToSit = `${(resSit.at(1) || 0).toString()}`
+            } else if (iGetPreVendaList.cs_aprovado) {
+                strToSit = `${(resSit.at(2) || 0).toString()}`
+            }
+            else {
                 strToSit = (resSit.at(1) || 0).toString()
             }
             const resTpAtd = await _handleGetEstaticaTpAt();
@@ -76,15 +80,14 @@ async function _handleGetEstaticaSit(): Promise<string[]> {
         // Faz uma requisição para salvar os dados de endereço
         const response = await getEstaticasPV();
 
-        console.log(response);
-
-
         const idConsulta = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.CONSULTA)?.Id
         const idFaturado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.FATURADO)?.Id
+        const idAprovado = response.csicp_dd070_Sit.find((item) => item.Label == ES_TYPE.APROVADO)?.Id
 
         const arrayStr: string[] = []
         arrayStr.push((idConsulta || 0).toString())
         arrayStr.push((idFaturado || 0).toString())
+        arrayStr.push((idAprovado || 0).toString())
 
         return arrayStr;
     } catch (error) {

@@ -88,7 +88,8 @@ export const common003_01_styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     extraBottomStyleSwitchs: {
-        flexDirection: 'row',
+        flexDirection: 'column',
+        padding: 12,
         justifyContent: 'space-evenly',
     },
     extraBottomStyleAmount: {

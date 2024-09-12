@@ -6,7 +6,8 @@ export interface IReqUpdateProdutItens {
     IsMontar?: boolean,
     IsSaldoNegativo?: boolean,
     IsRequisitar?: boolean,
-    IsEntregar?: boolean
+    IsEntregar?: boolean,
+    IsClienteRetira?: boolean
 }
 
 

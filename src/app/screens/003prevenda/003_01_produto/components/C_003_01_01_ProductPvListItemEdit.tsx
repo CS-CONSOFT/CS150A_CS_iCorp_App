@@ -38,6 +38,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     }) => {
 
     const [isEntregar, setIsEntregar] = useState(false);
+    const [isClienteRetira, setIsClienteRetira] = useState(false);
     const [isMontar, setIsMontar] = useState(false);
     const [isSaldoNegativo, setIsSaldoNegativo] = useState(false);
     const [isRequisitar, setIsRequisitar] = useState(false);
@@ -49,7 +50,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [percentDiscount2, setPercentDiscount2] = useState(0);
     const [valueDiscount, setValueDiscount] = useState(0);
 
-    const [updateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
+    const [showLoadingupdateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
 
     const [showPopup, setShowPopUp] = useState(false)
     const [loadingBtnPopup, setLoadingBtnPopup] = useState(false)
@@ -59,6 +60,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
 
     useEffect(() => {
+        setIsClienteRetira(product.csicp_dd110_mod.Label === "Cliente Retira")
         setIsEntregar(product.csicp_dd080.DD080_Entregar)
         setIsMontar(product.csicp_dd080.DD080_IsMontar)
         setIsSaldoNegativo(product.csicp_dd080.DD080_Solicita_NS_Negativa)
@@ -87,10 +89,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
     /** FUNCAO PARA ALTERAR OS VALORES EM SWITCH */
     function handleSwitchChange(value: boolean, currentSwitch: number): void {
-        /** a chamada da api foi comentada para refatoração, primeiro iremos montar toda a estrutura e entao enviar para a api */
         switch (currentSwitch) {
             case 1:
                 setIsEntregar(value)
+                if (value) {
+                    setIsClienteRetira(false)
+                }
                 break
             case 2:
                 setIsRequisitar(value)
@@ -100,6 +104,12 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                 break
             case 4:
                 setIsMontar(value)
+                break
+            case 5:
+                setIsClienteRetira(value)
+                if (value) {
+                    setIsEntregar(false)
+                }
                 break
         }
     }
@@ -298,30 +308,36 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
             </View>
 
             {/** SWITCHS */}
-            <View style={common003_01_styles.extraBottomStyleSwitchs}>
-                <View>
+            <View>
+                <View style={[commonStyle.common_rowItem, { justifyContent: 'space-evenly' }]}>
                     <CustomSwitch title="Entregar" switchValue={isEntregar} onValueChange={(value: boolean) => handleSwitchChange(value, 1)} />
-                    <CustomSwitch title="Requisitar" switchValue={isRequisitar} onValueChange={(value: boolean) => handleSwitchChange(value, 2)} />
+                    <CustomSwitch title="Cliente Retira" switchValue={isClienteRetira} onValueChange={(value: boolean) => handleSwitchChange(value, 5)} />
                 </View>
-                <View>
-                    <CustomSwitch title="S. Negativo" switchValue={isSaldoNegativo} onValueChange={(value: boolean) => handleSwitchChange(value, 3)} />
+                <View style={[commonStyle.common_rowItem, { justifyContent: 'space-evenly' }]}>
+                    <CustomSwitch title="Requisitar" switchValue={isRequisitar} onValueChange={(value: boolean) => handleSwitchChange(value, 2)} />
                     <CustomSwitch title="Montar" switchValue={isMontar} onValueChange={(value: boolean) => handleSwitchChange(value, 4)} />
                 </View>
-
-                {updateDataFromSwitch ? <ActivityIndicator /> : <CustomIcon icon={ICON_NAME.CHECK} onPress={() => {
-                    setUpdateDataFromSwitchs(true)
-                    const updateData: IReqUpdateProdutItens = {
-                        IsEntregar: isEntregar,
-                        IsMontar: isMontar,
-                        IsRequisitar: isRequisitar,
-                        IsSaldoNegativo: isSaldoNegativo
-                    }
-                    handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, updateData).then(() => {
+                <View style={[commonStyle.common_rowItem, { justifyContent: 'space-around' }]}>
+                    <CustomSwitch title="S. Negativo" switchValue={isSaldoNegativo} onValueChange={(value: boolean) => handleSwitchChange(value, 3)} />
+                    {showLoadingupdateDataFromSwitch ? <ActivityIndicator /> : <CustomIcon icon={ICON_NAME.CHECK} onPress={async () => {
+                        setUpdateDataFromSwitchs(true)
+                        const updateData: IReqUpdateProdutItens = {
+                            IsEntregar: isEntregar,
+                            IsMontar: isMontar,
+                            IsRequisitar: isRequisitar,
+                            IsSaldoNegativo: isSaldoNegativo,
+                            IsClienteRetira: isClienteRetira
+                        }
+                        const res = await handleUpdateProductSwtichs(product.csicp_dd080.DD080_Id, updateData)
+                        if (res.IsOk) {
+                            showToast(ToastType.SUCCESS, "Sucesso", "Item atualizado!")
+                            refreshScreen()
+                        } else {
+                            showToast(ToastType.SUCCESS, "Erro", "Falha ao atualizar item!")
+                        }
                         setUpdateDataFromSwitchs(false)
-                    })
-                }} />}
-
-
+                    }} />}
+                </View>
             </View>
 
             {/** BOTOES */}

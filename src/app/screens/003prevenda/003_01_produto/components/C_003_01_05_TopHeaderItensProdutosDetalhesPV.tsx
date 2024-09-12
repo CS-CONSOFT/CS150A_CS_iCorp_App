@@ -81,7 +81,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                         children={<ObsItem textObs={obsText} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoPV({ cs_new_obs: newObs })
-                                if (res.Out_IsUpdated) {
+                                if (!res.Out_IsUpdated) {
                                     showToast(ToastType.SUCCESS, "Sucesso", "Observação da nota atualizada!")
                                 } else {
                                     showToast(ToastType.ERROR, "Falha", "Falha ao atualizar observação da nota!")
