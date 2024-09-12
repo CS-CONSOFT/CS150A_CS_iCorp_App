@@ -31,6 +31,9 @@ const CS_SC_003_PreVenda = () => {
 
     useFocusEffect(
         useCallback(() => {
+            /**
+             * 1 = pagina 1 para paginação
+             */
             _fetchPV(1, currentDateFilter)
         }, [currentDateFilter, currentFilterOfTypePV])
     );
@@ -51,8 +54,9 @@ const CS_SC_003_PreVenda = () => {
 
         const isConsulta = currentFilterOfTypePV === 0
         const isFaturado = currentFilterOfTypePV === 1
+        const isAprovado = currentFilterOfTypePV === 2
 
-        handleFetchPv(passDateString, todayDateString, page, 10, isConsulta, isFaturado).then((res) => {
+        handleFetchPv(passDateString, todayDateString, page, 10, isConsulta, isFaturado, isAprovado).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
@@ -64,11 +68,11 @@ const CS_SC_003_PreVenda = () => {
                 setStatus(FETCH_STATUS.SUCCESS)
             } catch (error) {
                 navigate('Menu')
-                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
             }
         }).catch((err) => {
             navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
         })
     }
 
@@ -122,6 +126,13 @@ const CS_SC_003_PreVenda = () => {
                         onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
                         currentItemSelected={currentFilterOfTypePV}
                     />
+
+
+                    <FilterHorizontalItem
+                        item={{ id: 2, label: 'Aprovado' }}
+                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        currentItemSelected={currentFilterOfTypePV}
+                    />
                 </View>
 
                 {!isLoading ? (
@@ -159,16 +170,20 @@ export default CS_SC_003_PreVenda;
 function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onPress: () => void }) {
     const [year, month, day] = item.DD070_Nota.csicp_dd070.DD070_Data_Emissao.split('-')
     const [isLoading, setIsLoading] = useState(false)
-    const [htmlResponse, setHtmlResponse] = useState('')
     const { navigate } = useNavigation()
 
+
+    enum NOTA_SIT {
+        CONSULTA = "Consulta",
+        APROVADO = "Aprovado"
+    }
 
     function liberarPV(): void {
         setIsLoading(true)
         handleLiberarPV({ cs_bb012_id: item.DD070_Nota.csicp_bb012.ID, cs_pv_id: item.DD070_Nota.csicp_dd070.DD070_Id }).then((res) => {
             setIsLoading(false)
             if (!res.IsErro) {
-                showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                showToast(ToastType.INFO, "Aguarde", "Estamos processando!")
             } else {
                 showToast(ToastType.ERROR, "Falha", res.Msg)
             }
@@ -230,8 +245,15 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
 
                     {!isLoading && (
                         <>
-                            <CustomIcon iconSize={32} icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
-                            <CustomIcon iconSize={32} icon={ICON_NAME.VOLTAR_CONTORNADO} onPress={() => retornarPv()} />
+                            {item.DD070_Nota.csicp_dd070_Sit.Label === NOTA_SIT.CONSULTA && (
+                                <>
+                                    <CustomIcon iconSize={32} icon={ICON_NAME.CHECK_CONTORNADO} onPress={() => liberarPV()} />
+                                </>
+                            )}
+
+                            {item.DD070_Nota.csicp_dd070_Sit.Label === NOTA_SIT.APROVADO && (
+                                <CustomIcon iconSize={32} icon={ICON_NAME.APROVED} onPress={() => retornarPv()} />
+                            )}
 
                             <CustomIcon iconSize={32} icon={ICON_NAME.PRINT} onPress={() => gerarReport()} />
                         </>

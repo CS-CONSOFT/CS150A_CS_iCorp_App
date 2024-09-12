@@ -51,7 +51,7 @@ const CS_SC_008_DetalheComanda = ({ route }: { route: any }) => {
             setStatus(FETCH_STATUS.SUCCESS)
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
         })
     }
 

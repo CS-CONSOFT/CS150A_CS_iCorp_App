@@ -52,7 +52,7 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
             }
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
         })
     }
 
