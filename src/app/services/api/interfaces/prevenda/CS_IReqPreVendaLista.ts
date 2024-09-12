@@ -9,5 +9,7 @@ export interface IReqGetPreVendaList {
     cs_data_inicial: string,
     cs_data_final: string,
     cs_consulta: boolean,
-    cs_faturado: boolean
+    cs_faturado: boolean,
+    cs_usuario_id: string,
+    cs_acessa_todas_pv: number
 }

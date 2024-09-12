@@ -40,7 +40,7 @@ const CS_SC_008_ListaComandas = () => {
             setStatus(FETCH_STATUS.SUCCESS)
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
         })
     }
     useFocusEffect(

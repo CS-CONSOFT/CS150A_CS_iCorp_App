@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getListPrecoTabela, getPv, insertProductToPv, postPrecoTabelaNovoLista, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getListPrecoTabela, getPv, insertProductToPv, patchAtualizaObservaçãoPV, postPrecoTabelaNovoLista, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
@@ -27,7 +27,10 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
         cs_data_inicial: cs_data_inicial,
         cs_data_final: cs_data_final,
         cs_consulta: cs_contulta,
-        cs_faturado: cs_faturado
+        cs_faturado: cs_faturado,
+        cs_usuario_id: userProp.usuarioId || '',
+        cs_acessa_todas_pv: 1
+
     }
     const result = fetchPVs(IGetPreVendaList)
     return result
@@ -477,6 +480,30 @@ export async function handlePostPrecoTabelaNovoLista({ cs_atendimento_prod_id, c
         });
         return response;
     } catch (error) {
+        throw error;
+    }
+}
+
+
+
+export async function handlePatchAtualizaObservacaoPV({ cs_new_obs }:
+    { cs_new_obs: string }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        const currentPvId = await getSimpleData(DataKey.CurrentPV)
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await patchAtualizaObservaçãoPV({
+            cs_tenant_id: currentUser.TenantId,
+            cs_atendimento_id: currentPvId as string,
+            In_Obs: cs_new_obs
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+
         throw error;
     }
 }

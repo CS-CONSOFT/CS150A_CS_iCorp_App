@@ -105,7 +105,6 @@ function listOfAlreadyMenuItems(): IMenuItem[] {
 
 /**filtra da lista de regras as regras responsaveis pelos botoes na PV*/
 async function getListOfAllowedButtons(list: IRegraItem[]): Promise<IMenuItem[]> {
-
     //regras que precisam ser checadas se existem
     const rulesToCheck = ['PVMOB_01_ACESSACARGA', 'PVMOB_02_NAOACESSSAVENDA', 'PVMOB_03_ACESSAOBRA', 'PVMOB_04_ACESSASERIE', 'PVMOB_05_ACESSAENTREGANFe']
 
@@ -114,15 +113,18 @@ async function getListOfAllowedButtons(list: IRegraItem[]): Promise<IMenuItem[]>
 
     //percorre a lista de regras a serem checadas e verifica a existencia dela na lista que veio da rota de regras de usuario
     for (let index = 0; index < rulesToCheck.length; index++) {
-        //recupera se o cidadao tem alguma regra referente a PV
+        //recupera se o cidadao tem alguma regra
         const _currentRule = list.find((item) => item.Label === rulesToCheck[index])
 
         //se a role existir na lista, cria um item de menu e seta na lista
         if (_currentRule !== undefined) {
             //caso a regra seja para NÃO HAVER PV, passar para a proxima iteração
             if (_currentRule.Label === "PVMOB_02_NAOACESSSAVENDA") {
-                //atribui a variavel que armazena a lista, a propria lista porem filtrada para nao trazer o item que contenha a PV
-                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== "PV")
+                //atribui para a variavel que armazena a lista, a propria lista porem filtrada para nao trazer o item que contenha a PV
+                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== MenuTitle.PV)
+                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== MenuTitle.COMANDA)
+                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== MenuTitle.PRODUTO)
+                filteredRulesMenuList = filteredRulesMenuList.filter((item) => item.title !== MenuTitle.CLIENTE)
                 continue;
             }
             //cria o item de menu quando há regra que permite isso
@@ -146,7 +148,9 @@ enum MenuRules {
 }
 
 
-/** seta o item de menu quando há regras */
+/** seta o item de menu quando há regras
+ * @param index representa o index da regra fixa setada em rulesToCheck em getListOfAllowedButtons
+ */
 function setMenuItemWhenTheresRule(index: number) {
     let menuItem: IMenuItem = { id: -1, title: "-1", iconName: "-1" }
     switch (index) {

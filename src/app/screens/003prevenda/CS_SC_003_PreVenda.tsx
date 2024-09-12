@@ -64,11 +64,11 @@ const CS_SC_003_PreVenda = () => {
                 setStatus(FETCH_STATUS.SUCCESS)
             } catch (error) {
                 navigate('Menu')
-                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor, provável erro de domínio")
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
             }
         }).catch((err) => {
             navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor, provável erro de domínio")
+            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
         })
     }
 
