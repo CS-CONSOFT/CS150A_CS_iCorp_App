@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { generalLogin, getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
+import { checkIfUserTheresRule, generalLogin, getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
 import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
 import { store } from "../../store/store";
@@ -16,11 +16,20 @@ export async function generalLoginVc(loginData: IPostLoginData) {
         store.dispatch(getRegrasUsuario({ sy001_id: result.Model.UsuarioId, tenant: result.Model.TenantId }));
         return result;
     } catch (err) {
-        console.log(err);
-
         throw err;
     }
 }
+
+export async function checkIfRuleDD012_ACESSATODASPV_Exists() {
+    try {
+        const res = await getObjectDataVc(DataKey.LoginResponse) as ILoginResponse;
+        const hasRule = await checkIfUserTheresRule({ sy001_id: res.UsuarioId, tenant: res.TenantId, regra: "DD012_ACESSATODASPV" })
+        return hasRule
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 export async function checkIfUserIsLogged() {
     try {

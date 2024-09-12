@@ -33,6 +33,28 @@ export interface Retorno {
     Msg: string
 }
 
+/** chega se o usuario tem uma regra especifica */
+export async function checkIfUserTheresRule({ sy001_id, tenant, regra }: { tenant: number, sy001_id: string, regra: string }): Promise<{ Out_PossuiRegra: boolean }> {
+    try {
+        const params = {
+            In_UsuarioID: sy001_id,
+            In_Tenant: tenant,
+            In_Regra: regra
+        };
+
+        const response = await api.get('/csr_aa100_Gestao_BL/rest/GestaoUsuario/Get_RegraUsuario', {
+            params: params
+        });
+
+        return response.data
+    } catch (err) {
+        throw err;
+    }
+};
+
+
+
+/** valida o ambiente do usuário */
 export async function validaAmbiente({ tenant, token }: { tenant: number, token: string }): Promise<IReturnValida> {
     try {
         const response = await api.get('/cs_At_40_LogicoService/rest/CS_ValidaAmbiente/Valida', {

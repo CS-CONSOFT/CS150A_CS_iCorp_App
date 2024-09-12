@@ -31,6 +31,9 @@ const CS_SC_003_PreVenda = () => {
 
     useFocusEffect(
         useCallback(() => {
+            /**
+             * 1 = pagina 1 para paginação
+             */
             _fetchPV(1, currentDateFilter)
         }, [currentDateFilter, currentFilterOfTypePV])
     );
@@ -167,7 +170,6 @@ export default CS_SC_003_PreVenda;
 function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onPress: () => void }) {
     const [year, month, day] = item.DD070_Nota.csicp_dd070.DD070_Data_Emissao.split('-')
     const [isLoading, setIsLoading] = useState(false)
-    const [htmlResponse, setHtmlResponse] = useState('')
     const { navigate } = useNavigation()
 
 

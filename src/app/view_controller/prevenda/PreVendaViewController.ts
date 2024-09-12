@@ -13,12 +13,17 @@ import { IResProductsListPvModel } from "../../services/api/interfaces/prevenda/
 import { IReqUpdateProdutItens } from "../../services/api/interfaces/produto/CS_IReqUpdateProdutoItens";
 import { IReqUpdatePrice } from "../../services/api/interfaces/produto/CS_IReqUpdateProdutoPreco";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { checkIfRuleDD012_ACESSATODASPV_Exists } from "../login/LoginViewController";
 import { getUserProperties } from "../SharedViewController";
 
 
 
 export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number, cs_contulta: boolean, cs_faturado: boolean, cs_aprovado: boolean): Promise<IResPreVenda> {
     const userProp = (await getUserProperties())
+
+    //checar se o usuario tem acesso a PV
+    const hasRule = await checkIfRuleDD012_ACESSATODASPV_Exists()
+
     const IGetPreVendaList: IReqGetPreVendaList = {
         cs_tenant_id: userProp.tenantId!,
         cs_is_count: false,
@@ -29,9 +34,8 @@ export async function handleFetchPv(cs_data_inicial: string, cs_data_final: stri
         cs_consulta: cs_contulta,
         cs_faturado: cs_faturado,
         cs_usuario_id: userProp.usuarioId || '',
-        cs_acessa_todas_pv: 1,
+        cs_acessa_todas_pv: hasRule ? 1 : 0,
         cs_aprovado: cs_aprovado
-
     }
     const result = fetchPVs(IGetPreVendaList)
     return result

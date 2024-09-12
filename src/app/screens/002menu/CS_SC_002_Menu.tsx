@@ -19,24 +19,23 @@ const CS_SC_002_Menu = () => {
 
     useEffect(() => {
         setStatus(FETCH_STATUS.LOADING)
-        checkIfUserIsLogged().then(async (isLogged) => {
+        checkIfUserIsLogged().then((isLogged) => {
             if (!isLogged) {
                 logout(DataKey.LoginResponse).then(() => {
                     navigate('Login')
                 })
                 setStatus(FETCH_STATUS.IDLE)
             } else {
-                const menus = await configureMenuByRule()
-                setListOfMenu(menus)
-                setStatus(FETCH_STATUS.IDLE)
+                configureMenuByRule().then((res) => {
+                    setListOfMenu(res)
+                    setStatus(FETCH_STATUS.IDLE)
+                })
             }
         })
     }, [])
 
 
     function scHandleClickMenuItem(menuTitle: string) {
-        console.log(menuTitle);
-
         switch (menuTitle) {
             case MenuTitle.PV:
                 navigate('Pre_Venda')

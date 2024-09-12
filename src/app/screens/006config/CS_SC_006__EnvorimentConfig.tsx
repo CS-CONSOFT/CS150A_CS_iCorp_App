@@ -142,6 +142,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
+                    console.log(JSON.stringify(res));
                     storeSimpleData(DataKey.MaintainOpenConfig, "false")
                     setIsEnviromentValidates(true)
                 })
