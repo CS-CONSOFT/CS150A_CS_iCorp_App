@@ -5,6 +5,7 @@ on:
     branches: [ "development" ]
   workflow_dispatch:
 
+
 env:
   NODE_VERSION: '20.x'  # Versão do Node a ser usada
 

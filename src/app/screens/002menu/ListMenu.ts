@@ -1,4 +1,5 @@
-import { store } from "../../store/store";
+import { DataKey } from "../../enum/DataKeys";
+import { getObject } from "../../services/storage/AsyncStorageConfig";
 
 interface IMenuItem {
     id: number,
@@ -14,6 +15,6 @@ interface IMenuItem {
  */
 export async function configureMenuByRule() {
     //recupera o menu do state
-    const listOfMenu = store.getState().listMenuReducer.listMenuReducer as IMenuItem[]
+    const listOfMenu = await getObject(DataKey.MenuList) as IMenuItem[]
     return listOfMenu
 }

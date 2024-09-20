@@ -1,7 +1,5 @@
 
-import { Dispatch } from "@reduxjs/toolkit";
 import { DataKey } from "../../../../enum/DataKeys";
-import { ActionType } from "../../../../store/type/ActionsType";
 import { storeSimpleDataVc } from "../../../../view_controller/SharedViewController";
 import api from "../../axios_config";
 import { IMenuItem, IPostLoginData, IRegraItem, MenuTitle } from "../../interfaces/login/CS_IPostLoginData";
@@ -74,26 +72,21 @@ export async function validaAmbiente({ tenant, token }: { tenant: number, token:
 
 
 /**retorna as regras de usuario para definir quais botoes aparecerao no menu e salva no estado*/
-export const getRegrasUsuario = ({ sy001_id, tenant }: { tenant: number, sy001_id: string }) => {
-    return async (dispatch: Dispatch<{ type: ActionType.LIST_MENU; payload: IMenuItem[] }>) => {
-        try {
-            const params = {
-                In_UsuarioID: sy001_id,
-                In_Tenant: tenant
-            };
+export const getRegrasUsuario = async ({ sy001_id, tenant }: { tenant: number, sy001_id: string }) => {
+    try {
+        const params = {
+            In_UsuarioID: sy001_id,
+            In_Tenant: tenant
+        };
 
-            const response = await api.get('/csr_aa100_Gestao_BL/rest/GestaoUsuario/Get_ListaRegraUsuario', {
-                params: params
-            });
+        const response = await api.get('/csr_aa100_Gestao_BL/rest/GestaoUsuario/Get_ListaRegraUsuario', {
+            headers: params
+        });
 
-            const filteredList = await getListOfAllowedButtons(response.data);
-            dispatch({
-                type: ActionType.LIST_MENU,
-                payload: filteredList,
-            });
-        } catch (err) {
-            throw err;
-        }
+        const filteredList = await getListOfAllowedButtons(response.data);
+        return filteredList
+    } catch (err) {
+        throw new Error("Erro no get de regras");
     };
 };
 
