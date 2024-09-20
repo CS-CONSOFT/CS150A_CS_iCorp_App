@@ -80,13 +80,13 @@ export const getRegrasUsuario = async ({ sy001_id, tenant }: { tenant: number, s
         };
 
         const response = await api.get('/csr_aa100_Gestao_BL/rest/GestaoUsuario/Get_ListaRegraUsuario', {
-            params: params
+            headers: params
         });
 
         const filteredList = await getListOfAllowedButtons(response.data);
         return filteredList
     } catch (err) {
-        throw err;
+        throw new Error("Erro no get de regras");
     };
 };
 

@@ -3,7 +3,6 @@ import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { checkIfUserTheresRule, generalLogin, getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
 import { removeValueFromStorage, storeObject } from "../../services/storage/AsyncStorageConfig";
-import { store } from "../../store/store";
 import { getObjectDataVc } from "../SharedViewController";
 
 
