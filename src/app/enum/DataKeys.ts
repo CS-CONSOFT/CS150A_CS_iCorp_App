@@ -12,4 +12,5 @@ export enum DataKey {
     IsFirstTimeOpenApp = "IsFirstTimeOpenApp",
     NomeCotacao = "NomeCotacao",
     ListMenu = "ListMenu",
+    MenuList = "MenuList",
 }

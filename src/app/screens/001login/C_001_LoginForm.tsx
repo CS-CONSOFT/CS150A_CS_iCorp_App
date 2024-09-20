@@ -11,7 +11,6 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { getUserProperties, storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
-import { store } from "../../store/store";
 import { getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
 
 const CS_SC001_LoginForm = () => {
@@ -39,7 +38,6 @@ const CS_SC001_LoginForm = () => {
                 if (isLogged) {
                     getUserProperties().then((res) => {
                         // Despacha a ação que buscará as regras e atualizará o estado
-                        store.dispatch(getRegrasUsuario({ sy001_id: res.usuarioId || '', tenant: res.tenantId || 0 }));
                         navigateToMenu()
                         setStatus(FETCH_STATUS.IDLE)
                     })
