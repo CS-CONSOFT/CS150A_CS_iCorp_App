@@ -2,8 +2,7 @@ import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
 import { checkIfUserTheresRule, generalLogin, getRegrasUsuario } from "../../services/api/endpoint/login/CS_LoginGeral";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
-import { removeValueFromStorage } from "../../services/storage/AsyncStorageConfig";
-import { store } from "../../store/store";
+import { removeValueFromStorage, storeObject } from "../../services/storage/AsyncStorageConfig";
 import { getObjectDataVc } from "../SharedViewController";
 
 
@@ -12,8 +11,9 @@ export async function generalLoginVc(loginData: IPostLoginData) {
     try {
         await removeValueFromStorage(DataKey.CurrentPV)
         const result = await generalLogin(loginData);
+        const menuList = await getRegrasUsuario({ sy001_id: result.Model.UsuarioId, tenant: result.Model.TenantId })
         // Despacha a ação thunk que buscará as regras e atualizará o estado
-        store.dispatch(getRegrasUsuario({ sy001_id: result.Model.UsuarioId, tenant: result.Model.TenantId }));
+        storeObject(DataKey.MenuList, menuList)
         return result;
     } catch (err) {
         throw err;
