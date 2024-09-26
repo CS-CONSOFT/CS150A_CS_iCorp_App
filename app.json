@@ -10,7 +10,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "br.com.csicorpnet.pvmobile",
+    "scheme": "br.com.csicorpnet.csicorp",
     "ios": {
       "supportsTablet": true
     },
@@ -19,7 +19,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "br.com.csicorpnet.pvmobile",
+      "package": "br.com.csicorpnet.csicorp",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
