@@ -1,8 +1,6 @@
 name: Gerar pacote PV-Mobile aab
 
 on:
-  push:
-    branches: [ "csprd" ]
   workflow_dispatch:
 
 env:
