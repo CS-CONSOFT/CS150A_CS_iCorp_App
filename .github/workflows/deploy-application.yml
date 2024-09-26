@@ -1,8 +1,6 @@
 name: Gerar APK
 
 on:
-  push:
-    branches: [ "development" ]
   workflow_dispatch:
 
 
