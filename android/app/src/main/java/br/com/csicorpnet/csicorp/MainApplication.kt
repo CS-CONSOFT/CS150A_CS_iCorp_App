@@ -1,4 +1,4 @@
-package br.com.csicorpnet.pvmobile
+package br.com.csicorpnet.csicorp
 
 import android.app.Application
 import android.content.res.Configuration

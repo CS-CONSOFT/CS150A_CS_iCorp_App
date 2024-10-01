@@ -37,7 +37,7 @@ const CS_SC_Serie = () => {
                 setNota(res)
             }).catch((err) => {
                 navigate('Menu')
-                showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+                showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
             })
         } catch (error: any) {
             showToast(ToastType.ERROR, "Error", error)

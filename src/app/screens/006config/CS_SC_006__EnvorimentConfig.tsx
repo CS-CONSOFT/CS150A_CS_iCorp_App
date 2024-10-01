@@ -93,7 +93,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     setHasValue(false);
                     setTenant('');
                     setUrlBase('');
-                    setToken('xd--');
+                    setToken('-');
                     setNomeCotacao('-');
                     setIsLoading(false)
                 }
@@ -137,24 +137,25 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     if (isLoading) {
         return <CustomLoading />
     }
+
     function validate(tenant: string, urlBase: string, token: string): void {
         setValidationLoading(true)
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
-                    console.log(JSON.stringify(res));
                     storeSimpleData(DataKey.MaintainOpenConfig, "false")
                     setIsEnviromentValidates(true)
                 })
             } else {
+                showToast(ToastType.ERROR, "Erro", res.Retorno.Msg)
                 storeSimpleDataVc(DataKey.IsConfigValidada, "0").then(() => {
                     storeSimpleData(DataKey.MaintainOpenConfig, "true")
                     setIsEnviromentValidates(false)
                 })
             }
             setValidationLoading(false)
-        }).catch((res) => {
-            showToast(ToastType.ERROR, "Erro", "Um erro ocorreu, verifique as informações")
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
             setValidationLoading(false)
         })
     }

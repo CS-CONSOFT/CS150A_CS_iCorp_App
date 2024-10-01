@@ -10,7 +10,7 @@ export async function getCep(cep: string, tenantId: number): Promise<IResGetCep>
             In_CEP: cep,
             In_Tenant_ID: tenantId
         }
-        const response = await api.get(url, { params: urlParams })
+        const response = await api.get(url, { headers: urlParams })
         return response.data as IResGetCep
     } catch (error) {
         throw error

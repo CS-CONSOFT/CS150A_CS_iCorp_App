@@ -11,6 +11,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getUserProperties, storeObjectDataVc } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
+import React from "react";
 
 const CS_SC001_LoginForm = () => {
     //variaveis

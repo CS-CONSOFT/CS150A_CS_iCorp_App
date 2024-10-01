@@ -22,6 +22,7 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListComanda } from "../../view_controller/comanda/CS_ComandaViewController";
 import { ButtonLink } from "../../components/button/CustomButtonLink";
 import { formatMoneyValue } from "../../util/FormatText";
+import React from "react";
 //Interface
 
 
@@ -40,7 +41,7 @@ const CS_SC_008_ListaComandas = () => {
             setStatus(FETCH_STATUS.SUCCESS)
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+            showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
         })
     }
     useFocusEffect(

@@ -5,7 +5,6 @@ import { IReqSave1201 } from "../../interfaces/contas/CS_IReqSave1201";
 import { CS_IReqSave1202 } from "../../interfaces/contas/CS_IReqSave1202";
 import { IReqSaveConta } from "../../interfaces/contas/CS_IReqSaveConta";
 import { CS_IReqSaveEndereco } from "../../interfaces/contas/CS_IReqSaveEndereco";
-import { CS_IResGetConta } from "../../interfaces/contas/CS_IResGetConta";
 import { IResGetContaById } from "../../interfaces/contas/CS_IResGetContaById";
 import { IResGetListConta } from "../../interfaces/contas/CS_IResGetListConta";
 import { IResPadraoConta } from "./IResPadraoConta";
@@ -17,7 +16,7 @@ export async function getContaById({ cs_tenant_id, cs_conta_id }: { cs_tenant_id
             In_BB012_ID: cs_conta_id
         }
 
-        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_Conta', { params: data });
+        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_Conta', { headers: data });
 
         return response.data;
     } catch (err) {
@@ -30,7 +29,7 @@ export async function saveConta({ cs_tenant_id, cs_save_conta }: { cs_tenant_id:
         const data = {
             Tenant_id: cs_tenant_id
         }
-        const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Save_Conta', cs_save_conta, { params: data });
+        const response = await api.post('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Save_Conta', cs_save_conta, { headers: data });
         return response.data;
     } catch (err) {
         throw err;
@@ -56,18 +55,6 @@ export async function getListConta({ commonReq, cs_mod_relacao_id }: { commonReq
     }
 }
 
-export async function getConta({ cs_tenant_id, cs_conta_id }: { cs_tenant_id: number, cs_conta_id: string }): Promise<CS_IResGetConta> {
-    try {
-        const urlParams = {
-            Tenant_id: cs_tenant_id,
-            In_BB012_ID: cs_conta_id
-        }
-        const response = await api.get('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Get_Conta', { params: urlParams });
-        return response.data;
-    } catch (err) {
-        throw err;
-    }
-}
 
 
 
@@ -78,7 +65,7 @@ export async function deleteConta({ cs_tenant_id, cs_conta_id }: { cs_tenant_id:
             In_BB012_ID: cs_conta_id
         }
 
-        const response = await api.delete('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Delete_Conta', { params: data });
+        const response = await api.delete('/CSR_BB100_ClienteFor_IS/rest/CS_Contas/csicp_bb012_Delete_Conta', { headers: data });
         return response.data;
     } catch (err) {
         throw err;

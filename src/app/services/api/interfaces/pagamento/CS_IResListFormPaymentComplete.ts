@@ -1,4 +1,5 @@
 export interface IResFormPayment {
+    Lista_bb026: any
     PageSize: PageSize
     Csicp_bb026: Csicp_bb026[]
     Code_Erro: Code_Erro

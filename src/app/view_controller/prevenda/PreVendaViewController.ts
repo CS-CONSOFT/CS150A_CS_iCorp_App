@@ -20,25 +20,32 @@ import { getUserProperties } from "../SharedViewController";
 
 export async function handleFetchPv(cs_data_inicial: string, cs_data_final: string, cs_current_page: number, cs_page_size: number, cs_contulta: boolean, cs_faturado: boolean, cs_aprovado: boolean): Promise<IResPreVenda> {
     const userProp = (await getUserProperties())
+    try {
+        //checar se o usuario tem acesso a PV
+        const hasRule = await checkIfRuleDD012_ACESSATODASPV_Exists()
+        const IGetPreVendaList: IReqGetPreVendaList = {
+            cs_tenant_id: userProp.tenantId!,
+            cs_is_count: false,
+            cs_current_page: cs_current_page,
+            cs_page_size: cs_page_size,
+            cs_data_inicial: cs_data_inicial,
+            cs_data_final: cs_data_final,
+            cs_consulta: cs_contulta,
+            cs_faturado: cs_faturado,
+            cs_usuario_id: userProp.usuarioId || '',
+            cs_acessa_todas_pv: hasRule ? 1 : 0,
+            cs_aprovado: cs_aprovado
+        }
+        try {
+            const result = fetchPVs(IGetPreVendaList)
+            return result
+        } catch (error) {
+            throw error
+        }
 
-    //checar se o usuario tem acesso a PV
-    const hasRule = await checkIfRuleDD012_ACESSATODASPV_Exists()
-
-    const IGetPreVendaList: IReqGetPreVendaList = {
-        cs_tenant_id: userProp.tenantId!,
-        cs_is_count: false,
-        cs_current_page: cs_current_page,
-        cs_page_size: cs_page_size,
-        cs_data_inicial: cs_data_inicial,
-        cs_data_final: cs_data_final,
-        cs_consulta: cs_contulta,
-        cs_faturado: cs_faturado,
-        cs_usuario_id: userProp.usuarioId || '',
-        cs_acessa_todas_pv: hasRule ? 1 : 0,
-        cs_aprovado: cs_aprovado
+    } catch (error) {
+        throw error
     }
-    const result = fetchPVs(IGetPreVendaList)
-    return result
 }
 
 /**
@@ -507,8 +514,6 @@ export async function handlePatchAtualizaObservacaoPV({ cs_new_obs }:
         });
         return response;
     } catch (error) {
-        console.log(error);
-
         throw error;
     }
 }
