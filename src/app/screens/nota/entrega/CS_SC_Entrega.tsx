@@ -21,6 +21,7 @@ import { commonStyle } from "../../../CommonStyle";
 import { Info_Nota, Produtos } from "../../../services/api/interfaces/notas/CS_IResNoteData";
 import { useNavigation } from "@react-navigation/native";
 import { ToastType, showToast } from "../../../util/ShowToast";
+import React from "react";
 
 
 const CS_SC_Entrega = () => {
@@ -72,7 +73,7 @@ const CS_SC_Entrega = () => {
                     }
                 }).catch((err) => {
                     navigate('Menu')
-                    showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+                    showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
                 })
             }
         } catch (error) {

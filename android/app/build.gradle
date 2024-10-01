@@ -104,32 +104,26 @@ def enableProguardInReleaseBuilds = (findProperty('android.enableProguardInRelea
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
-// @generated begin react-native-pdf-packaging-options - expo prebuild (DO NOT MODIFY) sync-e288c3c5efbb1ef5e1a1959a848260c36558a381
-
-    packagingOptions {
-        pickFirst 'lib/x86/libc++_shared.so'
-        pickFirst 'lib/x86_64/libjsc.so'
-        pickFirst 'lib/arm64-v8a/libjsc.so'
-        pickFirst 'lib/arm64-v8a/libc++_shared.so'
-        pickFirst 'lib/x86_64/libc++_shared.so'
-        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-    }
-
-// @generated end react-native-pdf-packaging-options
     ndkVersion rootProject.ext.ndkVersion
 
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'br.com.csicorpnet.pvmobile'
+    namespace 'br.com.csicorpnet.csicorp'
     defaultConfig {
-        applicationId 'br.com.csicorpnet.pvmobile'
+        applicationId 'br.com.csicorpnet.csicorp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "0.1.4"
+        versionCode 3
+        versionName "0.1.7"
     }
     signingConfigs {
+        debug {
+            storeFile file('cs_apps_icorp.keystore')
+            storePassword 'c$#1.123456789c$#1.'
+            keyAlias 'cs_apps_icorp'
+            keyPassword 'c$#1.123456789c$#1.'
+        }
         release {
             storeFile file('cs_apps_icorp.keystore')
             storePassword 'c$#1.123456789c$#1.'
@@ -138,6 +132,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.

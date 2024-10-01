@@ -38,3 +38,4 @@ yarn-error.*
 src\app\services\storage\sqlite\envoriment_config.db
 cs_app-pv-mobile-react-expo\%ProgramData%
 cs_apps_icorp.keystore
+android\app\build.gradle

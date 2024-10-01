@@ -13,6 +13,7 @@ import { IReqSave1201 } from "../../services/api/interfaces/contas/CS_IReqSave12
 import { ToastType, showToast } from "../../util/ShowToast";
 import ColorStyle from "../../ColorStyle";
 import { IResGetContaById } from "../../services/api/interfaces/contas/CS_IResGetContaById";
+import React from "react";
 
 
 const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
@@ -207,8 +208,8 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     }
                 })
             })
-        }).catch((res) => {
-            showToast(ToastType.ERROR, "Erro", "Um erro ocorreu")
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
             setIsSavingLoading(false)
             return
         })

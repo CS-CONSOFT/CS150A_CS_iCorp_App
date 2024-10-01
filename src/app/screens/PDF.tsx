@@ -5,6 +5,7 @@ import { shareAsync } from 'expo-sharing';
 import { ActivityIndicator, Text, TouchableHighlight, View } from "react-native";
 import { commonStyle } from "../CommonStyle";
 import { showToast, ToastType } from "../util/ShowToast";
+import React from "react";
 
 const PDF = ({ route }: { route: any }) => {
     const [htmlResponse, setHtmlResponse] = useState('')
@@ -22,13 +23,11 @@ const PDF = ({ route }: { route: any }) => {
                 setIsLoading(false)
 
             }).catch((err) => {
-                console.log(err);
-
-                showToast(ToastType.ERROR, "Erro", "Um erro ocorreu ao gerar PDF, tente novamente")
+                showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
                 setIsLoading(false)
             });
         }).catch((err) => {
-            showToast(ToastType.ERROR, "Erro", "Um erro ocorreu ao gerar PDF, tente novamente")
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
             setIsLoading(false)
         });
     };

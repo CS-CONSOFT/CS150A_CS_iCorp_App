@@ -19,6 +19,7 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
 import CustomSeparator from "../../components/lists/CustomSeparator";
+import React from "react";
 
 
 const CS_SC_003_PreVenda = () => {
@@ -72,7 +73,7 @@ const CS_SC_003_PreVenda = () => {
             }
         }).catch((err) => {
             navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+            showToast(ToastType.ERROR, "Falha na requisição", err.response.data.Errors[0])
         })
     }
 
@@ -187,9 +188,9 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
             } else {
                 showToast(ToastType.ERROR, "Falha", res.Msg)
             }
-        }).catch(() => {
+        }).catch((err) => {
             setIsLoading(false)
-            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
+            showToast(ToastType.ERROR, "Falha", err.response.data.Errors[0])
         })
     }
 
@@ -202,9 +203,9 @@ function PreVendaRenderItem({ item, onPress }: { item: Csicp_dd070_Completo, onP
             } else {
                 showToast(ToastType.ERROR, "Falha", res.Msg)
             }
-        }).catch(() => {
+        }).catch((err) => {
             setIsLoading(false)
-            showToast(ToastType.ERROR, "Falha", "Um erro desconhecido ocorreu!")
+            showToast(ToastType.ERROR, "Falha", err.response.data.Errors[0])
         })
     }
 
