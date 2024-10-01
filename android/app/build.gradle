@@ -114,8 +114,8 @@ android {
         applicationId 'br.com.csicorpnet.csicorp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "0.1.5"
+        versionCode 2
+        versionName "0.1.6"
     }
     signingConfigs {
         debug {

@@ -54,14 +54,14 @@ export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<I
             params.In_ClauseInt_List_csicp_dd070_Sit = strToSit
             params.In_ClauseInt_List_csicp_dd070_TpAte = resTpAtd;
         } catch (error: any) {
-            throw new Error(`Failed to fetch static data: ${error.message}`);
+            throw new Error(`Falha ao buscar dados estáticos: ${error.message}`);
         }
 
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
         const response = await api.get(url, { headers: params });
         return response.data as IResPreVenda;
     } catch (error) {
-        throw error;
+        throw new Error(`Falha ao buscar lista de PV: ${error}`);;
     }
 }
 
@@ -219,13 +219,11 @@ export async function RI_Gerar_RI({ cs_tenant_id, cs_pv_id, cs_cliente_id, In1_g
         const header = {
             In_Tenant_Id: cs_tenant_id,
             In_DD070_ID: cs_pv_id,
-            In1_gg001_ID_AlmoxSaida: In1_gg001_ID_AlmoxSaida
-        }
-
-        const url = {
+            In1_gg001_ID_AlmoxSaida: In1_gg001_ID_AlmoxSaida,
             In_SY001_id_Usuario: cs_cliente_id
         }
-        const response = await api.post(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_Gerar_RI`, null, { headers: header, params: url });
+
+        const response = await api.post(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_Gerar_RI`, null, { headers: header });
         return response.data;
     } catch (err) {
         throw err;
@@ -389,7 +387,7 @@ export async function patchAtualizaObservaçãoPV({ cs_tenant_id, In_Obs, cs_ate
         const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/csicp_dd070_SaveObs_PV`,
             null,
             {
-                params: url
+                headers: url
             });
         return response.data;
     } catch (err) {

@@ -20,6 +20,7 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { handleGetListConta } from "../../view_controller/conta/ContaViewController";
 import { handleAnaliseCliente, handleGerarCliente } from "../../view_controller/crediario/CrediarioViewController";
 import { handleSetClienteToPv } from "../../view_controller/prevenda/PreVendaViewController";
+import React from "react";
 
 const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
     const [clientList, setClientList] = useState<IResGetListConta>()
@@ -52,7 +53,7 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
             }
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+            showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
         })
     }
 
@@ -207,7 +208,7 @@ const AlertDialog = ({ cliente, onClose }: { cliente: Csicp_bb012, onClose: (cli
                                 setResultOfAnalysis(res)
                                 setIsBtnLoading(false)
                             }).catch((err) => {
-                                showToast(ToastType.ERROR, "Falha", err)
+                                showToast(ToastType.ERROR, "Falha", err.response.data.Errors[0])
                                 setIsBtnLoading(false)
                             })
                         }}>

@@ -11,6 +11,7 @@ import { handleGetContaById, handleSave1206 } from "../../view_controller/conta/
 import { handleGetCep, handleGetCityList, handleGetUfList } from "../../view_controller/endereco/EnderecoViewController";
 import { IResGetContaById } from "../../services/api/interfaces/contas/CS_IResGetContaById";
 import ColorStyle from "../../ColorStyle";
+import React from "react";
 
 
 const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
@@ -182,9 +183,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param ufId id da UF
      */
     function getCities(ufId: string, valor?: string) {
-        console.log(ufSelected);
-        console.log(attributesMap.UFNome);
-
         handleGetCityList(ufId, valor).then((res) => {
             const list = res.csicp_aa028
             if (list !== undefined) {

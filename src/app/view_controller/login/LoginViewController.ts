@@ -26,7 +26,7 @@ export async function checkIfRuleDD012_ACESSATODASPV_Exists() {
         const hasRule = await checkIfUserTheresRule({ sy001_id: res.UsuarioId, tenant: res.TenantId, regra: "DD012_ACESSATODASPV" })
         return hasRule
     } catch (err) {
-        throw err;
+        throw err
     }
 }
 

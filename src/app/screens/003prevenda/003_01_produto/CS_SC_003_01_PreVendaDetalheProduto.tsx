@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
 import CustomLoading from "../../../components/loading/CustomLoading";
@@ -10,7 +11,7 @@ import { handleDeleteProductFromPv, handleGetPv, handleUpdatePercentDiscount, ha
 import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_01_04_BottomScreenItemProdutosDetalhesPV";
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React from "react";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {

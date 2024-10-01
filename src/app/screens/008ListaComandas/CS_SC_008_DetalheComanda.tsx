@@ -30,6 +30,7 @@ import { formatMoneyValue } from "../../util/FormatText";
 import { common003_01_styles } from "../003prevenda/003_01_produto/components/CommonStyles";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import { IReqUpdateQtdComanda } from "../../services/api/interfaces/comanda/CS_IReqUpdateQtdComandaProd";
+import React from "react";
 
 
 
@@ -51,7 +52,7 @@ const CS_SC_008_DetalheComanda = ({ route }: { route: any }) => {
             setStatus(FETCH_STATUS.SUCCESS)
         }).catch((err) => {
             navigation.navigate('Menu')
-            showToast(ToastType.ERROR, err.code, "Indefinição na resposta do servidor")
+            showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
         })
     }
 

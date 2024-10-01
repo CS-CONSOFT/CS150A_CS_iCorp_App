@@ -68,14 +68,14 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     if (cameFromPv) {
                         navigation.goBack()
                     }
-                }).catch(() => {
-                    showToast(ToastType.ERROR, "ERRO", "Consultar service center")
+                }).catch((err) => {
+                    showToast(ToastType.ERROR, "ERRO", err.response.data.Errors[0])
                     setStatus(FETCH_STATUS.ERROR)
                     return
                 })
             }
-        }).catch(() => {
-            showToast(ToastType.ERROR, "Erro", "Checar service center")
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
             setStatus(FETCH_STATUS.ERROR)
             return
         })
@@ -130,8 +130,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 // @ts-ignore
                 setStatus(FETCH_STATUS.ERROR)
             }
-        }).catch((res) => {
-            showToast(ToastType.ERROR, "Erro", res.Msg)
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
             setStatus(FETCH_STATUS.ERROR)
             return
         })

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "PV Mobile",
+    "name": "CS-iCorp App",
     "slug": "cs-pv-mobile",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "0.1.5",
+    "version": "0.1.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/launcher_icon.jpeg",
         "backgroundColor": "#ffffff"
       },
       "package": "br.com.csicorpnet.csicorp",

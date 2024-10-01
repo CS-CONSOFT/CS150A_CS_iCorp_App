@@ -13,6 +13,7 @@ import { Csicp_bb0082 } from "../../services/api/interfaces/pagamento/CS_IResPay
 import { handleSimulacaoCrediario } from "../../view_controller/crediario/CrediarioViewController";
 import { useNavigation } from "@react-navigation/native";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import React from "react";
 
 const CS_SC_012_SimuladorDeCredito = ({ route }: { route: any }) => {
     const [paymentValue, setPaymentValue] = useState(0)
@@ -38,8 +39,8 @@ const CS_SC_012_SimuladorDeCredito = ({ route }: { route: any }) => {
             }));
             setPaymentsForm(transformedData)
             setStatus(FETCH_STATUS.IDLE)
-        }).catch(() => {
-            showToast(ToastType.ERROR, "Falha", "---")
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Falha", err.response.data.Errors[0])
             setStatus(FETCH_STATUS.ERROR)
         })
     }, [])
