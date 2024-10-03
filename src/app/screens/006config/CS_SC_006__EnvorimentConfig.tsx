@@ -22,7 +22,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
     const [token, setToken] = useState('-');
-    const [nomeCotacao, setNomeCotacao] = useState('-');
+    const [nomeCotacao, setNomeCotacao] = useState('CSCOTACAO0010');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const [validationLoading, setValidationLoading] = useState(false)
@@ -264,14 +264,15 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                     value={token}
                                 />
 
-                                <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Modelo de Impressão Nome Cotação</Text>
+                                <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Modelo impressão cotação</Text>
 
                                 <TextInput
                                     style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
                                     onChangeText={setNomeCotacao}
-                                    placeholder="Digite o valor nome cotação"
+                                    placeholder="Modelo impressão cotação"
                                     value={nomeCotacao}
                                 />
+                                <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Valor Padrão</Text>
 
                                 <TouchableHighlight
                                     onPress={create}
