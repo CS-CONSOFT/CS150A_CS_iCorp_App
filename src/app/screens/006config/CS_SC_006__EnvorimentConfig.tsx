@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import { ActivityIndicator, Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomLoading from "../../components/loading/CustomLoading";
@@ -21,7 +21,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
     const [urlBase, setUrlBase] = useState('');
-    const [token, setToken] = useState('xd');
+    const [token, setToken] = useState('-');
     const [nomeCotacao, setNomeCotacao] = useState('-');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
@@ -225,7 +225,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     !hasValue && (
                         // Se não houver valores, exibir campos de entrada para configuração
                         <View style={[commonStyle.common_margin_top_64, commonStyle.common_margin_horizontal]}>
-                            <View style={[commonStyle.common_columnItem]}>
+                            <ScrollView style={[commonStyle.common_columnItem]}>
 
                                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_margin_bottom_8]}>
                                     <Text style={[commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Tenant</Text>
@@ -288,7 +288,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 >
                                     <Text style={[commonStyle.common_text_button_style]}>Cancelar</Text>
                                 </TouchableHighlight>
-                            </View>
+                            </ScrollView>
                         </View>
                     )
                 }

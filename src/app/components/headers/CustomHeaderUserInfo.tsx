@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { getUserProperties } from "../../view_controller/SharedViewController";
 import { IGetUserProperties } from "../../view_controller/interface/IGetUserProperties";
-import appConfig from '../../../../app.json';
+
 const CustomHeaderUserInfo = () => {
     const [useProp, setUserProp] = useState<IGetUserProperties>()
     useEffect(() => {
@@ -22,7 +22,6 @@ const CustomHeaderUserInfo = () => {
         <View style={styles.container}>
             <Text style={styles.txtEstabName}>{useProp?.estabName}</Text>
             <Text style={styles.txtUsername}>{useProp?.userName}</Text>
-            <Text style={{ color: "#FFF" }}>-Versão: {appConfig.expo.version}</Text>
         </View>
     );
 }

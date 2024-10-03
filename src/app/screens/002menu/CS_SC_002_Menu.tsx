@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, SafeAreaView, View } from "react-native";
+import { FlatList, ImageBackground, SafeAreaView, Text, View } from "react-native";
 import CustomHeaderUserInfo from "../../components/headers/CustomHeaderUserInfo";
 import CustomItemIconTitleHalfRoundedWhite from "../../components/items/CustomItemIconTitleHalfRoundedWhite";
 import { DataKey } from "../../enum/DataKeys";
@@ -9,7 +9,7 @@ import { configureMenuByRule } from "./ListMenu";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { IMenuItem, MenuTitle } from "../../services/api/interfaces/login/CS_IPostLoginData";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-
+import appConfig from '../../../../app.json';
 
 const CS_SC_002_Menu = () => {
     const { navigate } = useNavigation()
@@ -76,6 +76,7 @@ const CS_SC_002_Menu = () => {
                     flex: 1,
                 }}>
                     <CustomHeaderUserInfo />
+
                     <FlatList
                         data={listOfMenu}
                         keyExtractor={item => item.id.toString()}
@@ -90,7 +91,9 @@ const CS_SC_002_Menu = () => {
                             );
                         }}
                     />
+                    <Text style={{ color: "#fff", padding: 8 }}>-Versão: {appConfig.expo.version}</Text>
                 </View>
+
             </ImageBackground>
         </SafeAreaView>
     );
