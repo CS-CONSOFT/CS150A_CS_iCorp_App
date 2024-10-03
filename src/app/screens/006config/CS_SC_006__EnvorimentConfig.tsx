@@ -164,7 +164,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground
-                source={require('../../../../assets/loginConf01.png')}
+                source={require('../../../../assets/loginConf01.jpg')}
                 style={{ flex: 1 }}
             >
                 {hasValue && (
