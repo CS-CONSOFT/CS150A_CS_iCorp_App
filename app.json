@@ -1,14 +1,14 @@
 {
   "expo": {
     "name": "CS-iCorp App",
-    "slug": "cs-pv-mobile",
+    "slug": "cs-icorp-app",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "0.1.7",
+    "version": "0.1.8",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconeLogoCS.png",
     "userInterfaceStyle": "light",
     "scheme": "br.com.csicorpnet.csicorp",
     "ios": {
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/launcher_icon.jpeg",
+        "foregroundImage": "./assets/iconeLogoCS.png",
         "backgroundColor": "#ffffff"
       },
       "package": "br.com.csicorpnet.csicorp",
@@ -26,7 +26,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/iconeLogoCS.png"
     },
     "plugins": [
       "expo-build-properties",
