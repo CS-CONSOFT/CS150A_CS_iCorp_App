@@ -134,10 +134,12 @@ export const commonStyle = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
+        height: 48,
         borderRadius: 32,
         elevation: 3,
         margin: 14,
-        backgroundColor: ColorStyle.colorPrimary100
+        backgroundColor: ColorStyle.colorPrimary100,
+       
     },
     common_text_button_style: {
         fontSize: 16,

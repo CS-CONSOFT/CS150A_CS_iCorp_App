@@ -22,7 +22,7 @@ const CS_SC_001_Login = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                source={require('../../../../assets/loginConf02.png')}
+                source={require('../../../../assets/Obras.jpg')}
                 style={{ flex: 1 }}
             >
                 <View style={{ marginTop: 50, marginHorizontal: 30 }}>
