@@ -41,7 +41,7 @@ export async function checkIfUserTheresRule({ sy001_id, tenant, regra }: { tenan
         };
 
         const response = await api.get('/csr_aa100_Gestao_BL/rest/GestaoUsuario/Get_RegraUsuario', {
-            params: params
+            headers: params
         })
         return response.data
     } catch (err) {
