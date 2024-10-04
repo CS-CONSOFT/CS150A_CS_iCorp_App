@@ -1,11 +1,23 @@
-name: Gerar APK
+name: Gerar pacote PV-Mobile aab
 
 on:
   workflow_dispatch:
-
+    inputs:
+      environment:
+        description: 'Escolha o ambiente: dev ou prod'
+        required: true
+        default: 'prod'
+      versionCode:
+        description: 'Código de versão do aplicativo. Ex 6'
+        required: true
+        default: '1' 
+      versionName:
+        description: 'Nome da versão do aplicativo. Ex 0.2.2'
+        required: true
+        default: '0.1.0' 
 
 env:
-  NODE_VERSION: '20.x'  # Versão do Node a ser usada
+  NODE_VERSION: '20.x' 
 
 permissions:
   contents: read
@@ -38,14 +50,28 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x android/gradlew
 
-      - name: Generate APK
+      - name: Modificando version.properties
+        run: |
+          echo "Modificando version.properties com novos valores..."
+          sed -i "s/^versionCode=.*/versionCode=${{ github.event.inputs.versionCode }}/" version.properties
+          sed -i "s/^versionName=.*/versionName=${{ github.event.inputs.versionName }}/" version.properties
+
+      - name: Gerar pacote
         run: |
           cd android
-          ./gradlew assembleRelease
+          if [ "${{ github.event.inputs.environment }}" == "prod" ]; then
+            ./gradlew bundleRelease
+          else
+            ./gradlew assembleRelease
+          fi
 
-      - name: Upload APK
+      - name: Upload Pacote
         uses: actions/upload-artifact@v3
         with:
-          name: cs-pvmobile-010-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
-
+          name: cs-pvmobile
+          path: |
+            if [ "${{ github.event.inputs.environment }}" == "prod" ]; then
+              android/app/build/outputs/bundle/release/app-release.aab
+            else
+              android/app/build/outputs/apk/release/app-release.apk
+            fi
