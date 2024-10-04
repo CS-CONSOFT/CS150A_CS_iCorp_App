@@ -1,5 +1,4 @@
-name: Gerar pacote PV-Mobile aab
-
+name: Gerar pacote PV-Mobile
 on:
   workflow_dispatch:
     inputs:

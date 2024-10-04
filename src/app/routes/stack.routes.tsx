@@ -96,7 +96,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -106,7 +106,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -124,7 +124,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -134,7 +134,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -144,7 +144,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -157,7 +157,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: false,
 
@@ -169,7 +169,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: false,
             }} />
@@ -179,7 +179,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -189,7 +189,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
 
@@ -200,7 +200,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
 
@@ -212,7 +212,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -223,7 +223,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -233,7 +233,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -243,7 +243,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -254,7 +254,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -267,7 +267,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -281,7 +281,7 @@ export default function StackRoutes() {
                     headerTitleAlign: 'center',
                     headerTintColor: "#fff",
                     headerStyle: {
-                        backgroundColor: "#0A3147"
+                        backgroundColor: "#163045"
                     },
                     headerBackVisible: true,
                 }} />
@@ -291,7 +291,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: false,
             }} />
@@ -301,7 +301,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             }} />
@@ -311,7 +311,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -321,7 +321,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -332,7 +332,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -342,7 +342,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#0A3147"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true,
             })} />
@@ -350,9 +350,9 @@ export default function StackRoutes() {
             <StackNav.Screen name="Pre_Venda_Detalhes_001" component={TopTab001} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,
                 headerTitleAlign: 'center',
-                headerTintColor: "#c3c3c3",
+                headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#104765"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true
             })} />
@@ -360,9 +360,9 @@ export default function StackRoutes() {
             <StackNav.Screen name="Pre_Venda_Detalhes_002" component={TabRoutes002} options={({ route }: { route: any }) => ({
                 title: route.params.currentPv,
                 headerTitleAlign: 'center',
-                headerTintColor: "#c3c3c3",
+                headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#104765"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true
             })} />
@@ -372,9 +372,9 @@ export default function StackRoutes() {
             <StackNav.Screen name="Pre_Venda" component={TabRoutes001} options={{
                 title: "Pré Venda",
                 headerTitleAlign: 'center',
-                headerTintColor: "#c3c3c3",
+                headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#104765"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true
             }} />
@@ -382,9 +382,9 @@ export default function StackRoutes() {
             <StackNav.Screen name="Pagamento" component={CS_SC_007_Pagamento} options={{
                 title: "Pagamento",
                 headerTitleAlign: 'center',
-                headerTintColor: "#c3c3c3",
+                headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "#104765"
+                    backgroundColor: "#163045#104765"
                 },
                 headerBackVisible: true
             }} />

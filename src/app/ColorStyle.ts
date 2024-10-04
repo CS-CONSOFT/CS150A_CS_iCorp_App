@@ -1,6 +1,6 @@
 export default {
     //Primary
-    colorPrimary300: '#0A3147',
+    colorPrimary300: '#163045',
     colorPrimary200: '#95B5C7',
     colorPrimary100: '#A3C5D9',
     //Neutrais

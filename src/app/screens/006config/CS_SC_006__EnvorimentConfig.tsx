@@ -20,9 +20,9 @@ import { logout } from "../../view_controller/login/LoginViewController";
 const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     // Estados para gerenciar tenant, URL base, token e se há valores armazenados
     const [tenant, setTenant] = useState('');
-    const [urlBase, setUrlBase] = useState('');
+    const [urlBase, setUrlBase] = useState('https://###.csicorpnet.com.br');
     const [token, setToken] = useState('-');
-    const [nomeCotacao, setNomeCotacao] = useState('CSCOTACAO0010');
+    const [nomeCotacao, setNomeCotacao] = useState('');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const [validationLoading, setValidationLoading] = useState(false)
@@ -246,13 +246,13 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 />
 
                                 <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>URL</Text>
-
                                 <TextInput
-                                    style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                                    style={[commonStyle.common_input, { marginBottom: 1 }]}
                                     onChangeText={setUrlBase}
                                     placeholder="Digite a URL"
                                     value={urlBase}
                                 />
+                                <Text style={[commonStyle.common_fontWeight_600, { marginLeft: 16, marginBottom: 16, color: '#fff', fontSize: 14, fontStyle: 'italic' }]}>https://###.csicorpnet.com.br </Text>
 
 
                                 <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Token</Text>
@@ -267,12 +267,12 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Modelo impressão cotação</Text>
 
                                 <TextInput
-                                    style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                                    style={[commonStyle.common_input, { marginBottom: 1 }]}
                                     onChangeText={setNomeCotacao}
                                     placeholder="Modelo impressão cotação"
                                     value={nomeCotacao}
                                 />
-                                <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Valor Padrão</Text>
+                                <Text style={[commonStyle.common_fontWeight_600, { marginLeft: 16, color: '#fff', fontSize: 14, fontStyle: 'italic' }]}>Ex: CSCOTACAO0010 </Text>
 
                                 <TouchableHighlight
                                     onPress={create}
