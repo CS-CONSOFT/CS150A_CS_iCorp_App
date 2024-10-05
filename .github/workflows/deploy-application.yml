@@ -55,6 +55,12 @@ jobs:
           sed -i "s/^versionCode=.*/versionCode=${{ github.event.inputs.versionCode }}/" version.properties
           sed -i "s/^versionName=.*/versionName=${{ github.event.inputs.versionName }}/" version.properties
 
+      - name: Modificando app.json
+        run: |
+          echo "Modificando app.json com novos valores..."
+          sed -i "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.versionName }}\"/" app.json
+
+
       - name: Gerar pacote
         run: |
           cd android
