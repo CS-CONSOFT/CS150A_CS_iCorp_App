@@ -105,10 +105,13 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 def getVersionCodeAndName() {
     def props = new Properties()
-    file('../../version.properties').withInputStream { stream -> 
+    file('version.properties').withInputStream { stream -> 
         props.load(stream)
     }
-    return [versionCode: 1] // Corrigido
+    return [
+        versionCode: props['versionCode']?.toInteger(), 
+        versionName: props['versionName']
+    ]
 }
 
 
@@ -124,8 +127,8 @@ android {
         applicationId 'br.com.csicorpnet.csicorp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "0.2.1"
+        versionCode versionInfo.versionCode
+        versionName versionInfo.versionName
     }
     signingConfigs {
         debug {
