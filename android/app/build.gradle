@@ -105,7 +105,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 def getVersionCodeAndName() {
     def props = new Properties()
-    file('version.properties').withInputStream { stream -> 
+    file('../../version.properties').withInputStream { stream -> 
         props.load(stream)
     }
     return [
