@@ -64,9 +64,7 @@ export async function sendMessage({ cs_tenant_id, cs_obra_id, message, usuario }
         response = await api.get(url, {
             headers: {
                 In_Tenant_Id: cs_tenant_id,
-                In_dd190_ID: cs_obra_id
-            },
-            params: {
+                In_dd190_ID: cs_obra_id,
                 In_UsuarioID: usuario,
                 In_Mensagem: message
             }
