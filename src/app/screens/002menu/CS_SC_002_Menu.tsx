@@ -11,6 +11,7 @@ import { IMenuItem, MenuTitle } from "../../services/api/interfaces/login/CS_IPo
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import appConfig from '../../../../app.json';
 
+
 const CS_SC_002_Menu = () => {
     const { navigate } = useNavigation()
 
