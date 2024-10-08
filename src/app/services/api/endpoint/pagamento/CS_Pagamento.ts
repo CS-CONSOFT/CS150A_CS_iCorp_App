@@ -38,14 +38,12 @@ export async function getPaymentFormByIdWithConditions({ tenantId, paymentFormKe
     const url = `/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_FormaPagto`
 
     const headerParams = {
-        tenant_id: tenantId
-    }
-
-    const searchParams = {
+        tenant_id: tenantId,
         in_bb026_id: paymentFormKey
     }
+
     try {
-        const response = await api.get(url, { headers: headerParams, params: searchParams })
+        const response = await api.get(url, { headers: headerParams })
         //id da condicao fixa
         const condFixId = response.data.csicp_bb026.csicp_bb026.BB026_CondPagtoFixoID
 
