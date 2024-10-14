@@ -6,9 +6,9 @@ import { ICON_NAME } from "../../util/IconsName";
 import CustomIcon from "../icon/CustomIcon";
 import CustomItemIconTitleNoColor from "../items/CustomItemIconTitleNoColor";
 import CustomSeparator from "../lists/CustomSeparator";
-import { listBottomMenu001, listBottomMenuComanda } from "./ListBottomMenu";
+import { listBottomMenuComanda } from "./ListBottomMenu";
 
-const CustomPvBottomMenu_001 = () => {
+const CustomPvBottomMenu_Comanda = () => {
     const { navigate } = useNavigation()
 
     function goToSearchProduct() {
@@ -21,15 +21,15 @@ const CustomPvBottomMenu_001 = () => {
         <View style={styles.mainContainer}>
             <CustomSeparator />
             <FlatList
-                data={listBottomMenu001}
+                data={listBottomMenuComanda}
                 key={"_"}
                 keyExtractor={item => "_" + item.id.toString()}
                 numColumns={5}
                 renderItem={({ item }) => {
                     if (item.id === "special-button") {
                         return (
-                            <Pressable onPress={goToSearchProduct}>
-                                <View style={styles.centerBottomMenuButtonContainer}>
+                            <Pressable onPress={goToSearchProduct} style={{ alignItems: 'center', width: '100%', padding: 4 }}>
+                                <View style={[styles.centerBottomMenuButtonContainer]}>
                                     <CustomIcon
                                         icon={ICON_NAME.ADICIONAR_CONTORNADO}
                                         iconColor="#A3C5D9" />
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CustomPvBottomMenu_001;
+export default CustomPvBottomMenu_Comanda;
