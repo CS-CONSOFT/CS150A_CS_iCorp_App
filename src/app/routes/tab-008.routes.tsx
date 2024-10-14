@@ -2,13 +2,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CS_SC_008_ListaComandas from '../screens/008ListaComandas/CS_SC_008_ListaComandas';
+import CustomPvBottomMenu_001 from "../components/bottomMenus/CustomPvBottomMenu_001";
 
 
 const BottomTab = createBottomTabNavigator()
 
 export default function TabRoutes008() {
     return (
-        <BottomTab.Navigator>
+        <BottomTab.Navigator tabBar={() => <CustomPvBottomMenu_001 apenasIrPraHome={true} />}>
 
             <BottomTab.Screen
                 name='Comanda Lista'

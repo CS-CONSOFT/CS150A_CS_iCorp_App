@@ -33,3 +33,13 @@ export const listBottomMenu002 = [
     }
 ]
 
+/**001 */
+export const listBottomMenuComanda = [
+    {
+        id: 1,
+        title: "Home",
+        onPress: (navigate: any) => { navigate('Menu') },
+        iconName: ICON_NAME.ESTATISTICA_CONTORNADO
+    }
+]
+

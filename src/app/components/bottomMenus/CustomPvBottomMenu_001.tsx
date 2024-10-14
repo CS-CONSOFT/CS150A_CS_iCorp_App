@@ -6,10 +6,11 @@ import { ICON_NAME } from "../../util/IconsName";
 import CustomIcon from "../icon/CustomIcon";
 import CustomItemIconTitleNoColor from "../items/CustomItemIconTitleNoColor";
 import CustomSeparator from "../lists/CustomSeparator";
-import { listBottomMenu001 } from "./ListBottomMenu";
+import { listBottomMenu001, listBottomMenuComanda } from "./ListBottomMenu";
 
-const CustomPvBottomMenu_001 = () => {
+const CustomPvBottomMenu_001 = ({ apenasIrPraHome }: { apenasIrPraHome: boolean }) => {
     const { navigate } = useNavigation()
+
     function goToSearchProduct() {
         removeValueFromStorage(DataKey.CurrentPV).then(() => {
             navigate('Consulta_Produtos', { cameFromPv: false, insertComanda: false })
@@ -20,12 +21,12 @@ const CustomPvBottomMenu_001 = () => {
         <View style={styles.mainContainer}>
             <CustomSeparator />
             <FlatList
-                data={listBottomMenu001}
+                data={apenasIrPraHome ? listBottomMenuComanda : listBottomMenu001}
                 key={"_"}
                 keyExtractor={item => "_" + item.id.toString()}
                 numColumns={5}
                 renderItem={({ item }) => {
-                    if (item.id === "special-button") {
+                    if (item.id === "special-button" && !apenasIrPraHome) {
                         return (
                             <Pressable onPress={goToSearchProduct}>
                                 <View style={styles.centerBottomMenuButtonContainer}>
