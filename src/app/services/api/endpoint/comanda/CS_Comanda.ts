@@ -72,7 +72,21 @@ export async function getComandaById({ cs_tenant_id, comanda_id }: { cs_tenant_i
 }
 
 
+export async function deleteComanda({ cs_tenant_id, comanda_id }: { cs_tenant_id: number, comanda_id: number }): Promise<CS_IResComandaById> {
+    try {
 
+        const header = {
+            in_tt010_id: comanda_id,
+            Tenant_id: cs_tenant_id
+        }
+
+        const response = await api.delete('/CSR_DD100_PreVenda/rest/CS_Comandas/comanda_delete_comanda', { headers: header });
+
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
 
 
 export async function updateQtdProdutoComanda({ cs_update_qtd }: { cs_update_qtd: IReqUpdateQtdComanda }): Promise<CS_IResComandaById> {

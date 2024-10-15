@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     image: {
         width: 32,
         height: 32,
-        borderRadius: 4
+        borderRadius: 4,
+        alignSelf: 'center'
     },
     container: {
         flex: 1,

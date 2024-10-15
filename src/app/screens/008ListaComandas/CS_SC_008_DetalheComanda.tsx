@@ -86,7 +86,7 @@ const CS_SC_008_DetalheComanda = ({ route }: { route: any }) => {
                             product={item}
                         />
                     }
-                    image={<ImageProductItem img={item.Imagens.find((item) => item.GG008c_IsPadrao)?.gg008c_Path} />}
+                    image={<ImageProductItem img={item.Imagens[0].gg008c_Path} />}
                     rightItem={
                         <RightItem
                             click={() => {

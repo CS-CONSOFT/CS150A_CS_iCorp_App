@@ -19,7 +19,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Lista_TT010 } from "../../services/api/interfaces/comanda/CS_IResListaComanda";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleGetListComanda } from "../../view_controller/comanda/CS_ComandaViewController";
+import { handleDeleteComanda, handleGetListComanda } from "../../view_controller/comanda/CS_ComandaViewController";
 import { ButtonLink } from "../../components/button/CustomButtonLink";
 import { formatMoneyValue } from "../../util/FormatText";
 import React from "react";
@@ -33,6 +33,11 @@ const CS_SC_008_ListaComandas = () => {
     const [listaComanda, setListaComanda] = useState<Lista_TT010[]>()
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
 
+    useFocusEffect(
+        useCallback(() => {
+            getListComanda()
+        }, [])
+    )
 
     function getListComanda() {
         setStatus(FETCH_STATUS.LOADING)
@@ -44,11 +49,8 @@ const CS_SC_008_ListaComandas = () => {
             showToast(ToastType.ERROR, err.code, err.response.data.Errors[0])
         })
     }
-    useFocusEffect(
-        useCallback(() => {
-            getListComanda()
-        }, [])
-    )
+
+
 
     const isLoading = status === FETCH_STATUS.LOADING
 
@@ -59,13 +61,6 @@ const CS_SC_008_ListaComandas = () => {
             <ActivityIndicator style={[commonStyle.align_centralizar, { height: "100%" }]} size="large" color={ColorStyle.colorPrimary200} />
             :
             <>
-                <ButtonLink
-                    onPress={
-                        () => navigation.navigate("Consulta_Produtos",
-                            { cameFromPv: false, insertComanda: true, comandaId: undefined })
-                    }
-                    label={"Nova Comanda"}
-                />
                 <FlatList
                     data={listaComanda}
                     refreshing={isLoading}
@@ -81,6 +76,8 @@ const CS_SC_008_ListaComandas = () => {
                                     comandaId: item.csicp_tt010.tt010_Id
                                 })
                             }}
+                            update={getListComanda}
+
                         />
                     }
 
@@ -96,8 +93,18 @@ export default CS_SC_008_ListaComandas;
 
 
 // Componente de exibição da imagem do produto
-function ComandaItem({ item, totalValor, onPress }: { item: Lista_TT010, totalValor: number, onPress: () => void }) {
+function ComandaItem({ item, totalValor, onPress, update }: { item: Lista_TT010, totalValor: number, onPress: () => void, update: () => void }) {
     const [year, month, day] = item.csicp_tt010.tt010_datahora.split('-')
+
+    function deleteComanda(comandaId: number) {
+        handleDeleteComanda({ comandaId: comandaId }).then(() => {
+            showToast(ToastType.SUCCESS, "Comanda deletada!", "")
+            update()
+        }).catch((err) => {
+            showToast(ToastType.ERROR, "Erro ao deletar comanda!", "")
+        })
+    }
+
     return (
         <Pressable onPress={onPress} style={[stylesPreVenda.containerRenderItem]}>
             <View style={stylesPreVenda.containerRenderItemLeft}>
@@ -122,10 +129,9 @@ function ComandaItem({ item, totalValor, onPress }: { item: Lista_TT010, totalVa
                         }
                     </Text>
                 </View>
-                <Pressable onPress={onPress} style={[stylesConsultaProduto.rightIcons]}>
-
-                    <CustomIcon icon={ICON_NAME.ENVIAR} />
-                </Pressable>
+                {/*   <Pressable onPress={() => deleteComanda(item.csicp_tt010.tt010_Id)} style={[stylesConsultaProduto.rightIcons]}>
+                    <CustomIcon icon={ICON_NAME.LIXEIRA} />
+                </Pressable> */}
             </View>
 
 

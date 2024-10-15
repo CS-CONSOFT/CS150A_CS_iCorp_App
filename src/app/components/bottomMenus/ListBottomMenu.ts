@@ -33,3 +33,13 @@ export const listBottomMenu002 = [
     }
 ]
 
+/**001 */
+export const listBottomMenuComanda = [
+    {
+        id: 'special-button',
+        title: "Lista",
+        onPress: (navigate: any) => { navigate("Consulta_Produtos", { cameFromPv: false, insertComanda: true, comandaId: undefined }) },
+        iconName: ICON_NAME.LISTA_CONTORNADO
+    },
+]
+
