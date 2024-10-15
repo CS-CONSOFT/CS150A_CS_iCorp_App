@@ -6,25 +6,25 @@ import { commonStyle } from "../../CommonStyle";
 
 interface ReactProps {
     children: ReactNode,
-    image: ReactNode,
+    image?: ReactNode,
     rightItem?: ReactNode,
     bottomItem?: ReactNode,
 }
 
 
-const BottomContanier = ({image, children, rightItem, bottomItem}: ReactProps) => {
+const BottomContanier = ({ image, children, rightItem, bottomItem }: ReactProps) => {
 
     const [open, setOpen] = useState<Boolean>(false)
 
-    return(
-        <View style={[{height: "auto"}]}>
+    return (
+        <View style={[{ height: "auto" }]}>
             <Pressable
                 onPress={() => {
                     setOpen(!open)
                 }}
             >
                 <View style={[common003_01_styles.containerRenderItem,
-                common003_01_styles.boxShadow, {marginBottom: 5}]}>
+                common003_01_styles.boxShadow, { marginBottom: 5 }]}>
                     {/** IMAGEM */}
                     <View style={common003_01_styles.productContainerLeft}>
                         {image}
@@ -36,7 +36,7 @@ const BottomContanier = ({image, children, rightItem, bottomItem}: ReactProps) =
                         }
                     </View>
                     <View>
-                        {/*Btn*/ 
+                        {/*Btn*/
                             rightItem
                         }
                     </View>
@@ -53,4 +53,4 @@ const BottomContanier = ({image, children, rightItem, bottomItem}: ReactProps) =
     )
 }
 
-export  default BottomContanier;
+export default BottomContanier;

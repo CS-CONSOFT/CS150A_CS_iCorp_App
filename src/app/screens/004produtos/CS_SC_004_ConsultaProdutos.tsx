@@ -52,7 +52,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 }
                 handleInsertProdutoComanda({ insertProdutoComanda: dataPostInsertComandaProduto }).then((res) => {
                     setStatus(FETCH_STATUS.SUCCESS)
-                    comandaId === undefined ? navigation.navigate('ComandaLista') : navigation.navigate('DetalheComanda', { comandaId: comandaId })
+                    //comandaId === undefined ? navigation.navigate('ComandaLista') : navigation.navigate('DetalheComanda', { comandaId: comandaId })
+                    showToast(ToastType.SUCCESS, "Produdo Inserido", "")
                 })
             } else {
                 handleInsertProductPv(
