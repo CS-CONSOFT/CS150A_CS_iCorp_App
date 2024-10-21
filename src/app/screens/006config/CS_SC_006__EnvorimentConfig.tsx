@@ -112,6 +112,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         const isValidado = false;
         try {
             await db.create({ id, urlBase, token, tenantId: tenant, isValidado }).then(() => {
+
                 storeSimpleData(DataKey.NomeCotacao, nomeCotacao).then(() => {
                     get().then(() => {
                         setIsLoading(false)
