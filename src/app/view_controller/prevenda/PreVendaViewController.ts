@@ -444,12 +444,10 @@ export async function handleGenerateReport({ cs_pv_id }: { cs_pv_id: string }) {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
 
         let nomeCot: any = ''
-        getSimpleData(DataKey.NomeCotacao).then((res) => {
-            nomeCot = res
-        })
-
+        const res = await getSimpleData(DataKey.NomeCotacao)
         // Faz uma requisição para salvar os dados de endereço
-        const response = await GenerateReport({ cs_tenant_id: currentUser.TenantId, cs_nome_cot: nomeCot, cs_pv_id: cs_pv_id });
+        //@ts-ignore
+        const response = await GenerateReport({ cs_tenant_id: currentUser.TenantId, cs_nome_cot: res, cs_pv_id: cs_pv_id });
         return response;
     } catch (error) {
         throw error;
