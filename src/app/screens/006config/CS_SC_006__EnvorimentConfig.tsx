@@ -153,7 +153,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                 })
             }
         }).catch((err) => {
-            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
+            showToast(ToastType.ERROR, "Erro", 'Falha ao validar')
         })
     }
 
