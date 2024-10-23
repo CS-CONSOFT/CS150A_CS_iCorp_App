@@ -25,7 +25,6 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     const [nomeCotacao, setNomeCotacao] = useState('');
     const [hasValue, setHasValue] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
-    const [validationLoading, setValidationLoading] = useState(false)
     const [isEnviromentValidated, setIsEnviromentValidates] = useState(false)
     const { navigate } = useNavigation();
     const db = useDatabase();
@@ -140,7 +139,6 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     }
 
     function validate(tenant: string, urlBase: string, token: string): void {
-        setValidationLoading(true)
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
@@ -154,10 +152,8 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     setIsEnviromentValidates(false)
                 })
             }
-            setValidationLoading(false)
         }).catch((err) => {
             showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
-            setValidationLoading(false)
         })
     }
 
@@ -192,9 +188,6 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                 underlayColor='white'
                             >
                                 <View style={commonStyle.common_rowItem}>
-                                    {validationLoading && (
-                                        <ActivityIndicator color={"#FFF"} />
-                                    )}
                                     <Text style={commonStyle.common_text_button_style}>Validar</Text>
                                 </View>
                             </TouchableHighlight>
