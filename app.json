@@ -6,13 +6,16 @@
       "ios",
       "android"
     ],
-    "version": "0.2.6",
+    "version": "0.2.7",
     "orientation": "portrait",
     "icon": "./assets/iconeLogoCS.png",
     "userInterfaceStyle": "light",
     "scheme": "br.com.csicorpnet.csicorp",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Usamos a câmera para escanear QR Codes e facilitar o login sem precisar digitar."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -34,9 +37,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "cameraPermission": "Usamos a câmera para escanear QR Codes e facilitar o login sem precisar digitar."
         }
       ]
     ]
