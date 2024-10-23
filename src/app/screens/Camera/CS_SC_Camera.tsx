@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function CS_SC_Camera({ route }: { route: any }) {
     const [facing, setFacing] = useState('back');
     //dados que vem do qrcode ou barcode
-    const [dataCode, setDataCode] = useState('O texto irá aparecer aqui');
+    const [dataCode, setDataCode] = useState('');
     const [permission, requestPermission] = useCameraPermissions();
     const { currentScreen } = route.params
     const { navigate } = useNavigation()
@@ -21,8 +21,9 @@ export default function CS_SC_Camera({ route }: { route: any }) {
         // Camera permissions are not granted yet.
         return (
             <View style={styles.container}>
-                <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-                <Button onPress={requestPermission} title="grant permission" />
+                <Text style={{ textAlign: 'center' }}>CS Icorp app gostaria de acessar sua câmera!</Text>
+                <Text style={{ textAlign: 'center' }}>Usamos a câmera para escanear QR Codes e facilitar o login sem precisar digitar.</Text>
+                <Button onPress={requestPermission} title="Continuar" />
             </View>
         );
     }
