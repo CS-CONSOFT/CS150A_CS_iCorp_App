@@ -21,9 +21,9 @@ export default function CS_SC_Camera({ route }: { route: any }) {
         // Camera permissions are not granted yet.
         return (
             <View style={styles.container}>
-                <Text style={{ textAlign: 'center' }}>"CS Icorp" gostaria de acessar sua câmera!</Text>
+                <Text style={{ textAlign: 'center' }}>CS Icorp app gostaria de acessar sua câmera!</Text>
                 <Text style={{ textAlign: 'center' }}>Usamos a câmera para escanear QR Codes e facilitar o login sem precisar digitar.</Text>
-                <Button onPress={requestPermission} title="Continuar!" />
+                <Button onPress={requestPermission} title="Continuar" />
             </View>
         );
     }
