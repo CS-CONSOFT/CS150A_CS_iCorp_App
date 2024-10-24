@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextInput, Text, View, StyleSheet, KeyboardType } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { DataKey } from "../../enum/DataKeys";
+import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
 
 
 const CustomSearch = ({
@@ -14,6 +17,8 @@ const CustomSearch = ({
     keyboartType = 'default',
     /** placeholder do input */
     placeholder,
+    previusScreen = undefined,
+    showCamera = false,
     /** variavel que define se a pesquisa deve ser feita ao clicar no icone de pesquisa ou enquanto digita o campo */
     clickToSearch = false }:
     {
@@ -31,14 +36,32 @@ const CustomSearch = ({
          * de pesquisa. O botao de pesquisa deve ser implementado na tela pai e chamar a funcao
          * onSearchPress
          */
-        clickToSearch?: boolean
+        clickToSearch?: boolean,
+
+        /** tela que está chamando a camera, usado para voltar para a propria tela quando estiver na camera */
+        previusScreen?: string,
+        /** deve mostraar icone de camera */
+        showCamera?: boolean
     }) => {
 
     const [valueSearch, setValueSearch] = useState('')
-
+    const { navigate } = useNavigation()
+    const [valueOfCamera, setValueOfCamera] = useState('')
     /**
      * funcao que e chamada enquanto o usuario digita algo
      */
+
+
+    useFocusEffect(useCallback(() => {
+        const fetchData = async () => {
+            const res = await getSimpleData(DataKey.CAMERA_CONTENT)
+            if (res) {
+                setValueSearch(res as string)
+            }
+        }
+        fetchData()
+    }, []))
+
 
     const handleInputTyping = (value: string) => {
         //se nao for para pesquisar durante o clique, faça a pesquisa aqui
@@ -67,6 +90,14 @@ const CustomSearch = ({
             )}
             {onFilterClick !== undefined && (
                 <CustomIcon icon={ICON_NAME.FILTRAR_CONTORNADO} iconSize={44} onPress={onFilterClick} />
+            )}
+            {showCamera && (
+                <CustomIcon icon={ICON_NAME.CAMERA} iconColor="#000" iconSize={44} onPress={() => {
+                    navigate('Camera', {
+                        previousScreen: previusScreen || "Menu"
+                    })
+
+                }} />
             )}
         </View>
     );

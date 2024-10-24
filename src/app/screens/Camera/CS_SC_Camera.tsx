@@ -1,16 +1,20 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { commonStyle } from '../../CommonStyle';
 import { useNavigation } from '@react-navigation/native';
+import { getSimpleData, storeSimpleData } from '../../services/storage/AsyncStorageConfig';
+import { DataKey } from '../../enum/DataKeys';
+import { handleGetSimpleData } from '../../view_controller/SharedViewController';
 
 export default function CS_SC_Camera({ route }: { route: any }) {
     const [facing, setFacing] = useState('back');
     //dados que vem do qrcode ou barcode
     const [dataCode, setDataCode] = useState('');
     const [permission, requestPermission] = useCameraPermissions();
-    const { currentScreen } = route.params
+    const { previousScreen } = route.params
     const { navigate } = useNavigation()
+
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -32,9 +36,11 @@ export default function CS_SC_Camera({ route }: { route: any }) {
         setFacing(current => (current === 'back' ? 'front' : 'back'));
     }
 
-    function readBarCode(scanningResult: BarcodeScanningResult) {
+    async function readBarCode(scanningResult: BarcodeScanningResult) {
         setDataCode(scanningResult.data)
-        navigate(currentScreen)
+        navigate(previousScreen)
+
+        await storeSimpleData(DataKey.CAMERA_CONTENT, scanningResult.data)
     }
 
     return (
