@@ -66,6 +66,8 @@ const CS_SC_Serie = () => {
             onSearchPress={(value) => search(value)}
             clickToSearch={true}
             keyboartType='numeric'
+            showCamera={true}
+            previusScreen="Serie"
         />
 
         {loadingProducts && (

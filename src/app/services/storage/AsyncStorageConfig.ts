@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 export const storeSimpleData = async (key: string, value: string) => {
     try {
         await SecureStore.setItemAsync(key, value);
+        return value
     } catch (e) {
         return e
     }

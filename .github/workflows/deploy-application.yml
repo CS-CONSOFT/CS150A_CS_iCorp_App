@@ -28,55 +28,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Set up JDK 22
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '22'
-
-      - name: Setup Expo CLI
-        run: npm install expo-cli --global
-
-      - name: Install npm dependencies
-        run: npm install
-
-      - name: Give execute permission to gradlew
-        run: chmod +x android/gradlew
 
       - name: Modificando version.properties
         run: |
-          echo "Modificando version.properties com novos valores..."
-          sed -i "s/^versionCode=.*/versionCode=${{ github.event.inputs.versionCode }}/" version.properties
-          sed -i "s/^versionName=.*/versionName=${{ github.event.inputs.versionName }}/" version.properties
+            echo "Original version.properties content:"
+            cat version.properties
+            
+            
+            sed -i 's/^TESTE=.*/TESTE=NOVOTEXTO/' version.properties || echo "No match found"
+            
+            
+            echo "Updated version.properties content:"
+            cat version.properties
 
-      - name: Modificando app.json
+            
+      - name: Update version in app.json
         run: |
-          echo "Modificando app.json com novos valores..."
-          sed -i "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.versionName }}\"/" app.json
+          NEW_VERSION="1.2.0"
+          
+          # Update the version field in app.json
+          jq ".expo.version = \"$NEW_VERSION\"" app.json > temp.json && mv temp.json app.json
+
+  
 
 
-      - name: Gerar pacote
-        run: |
-          cd android
-          if [ "${{ github.event.inputs.environment }}" == "prod" ]; then
-            ./gradlew bundleRelease
-          else
-            ./gradlew assembleRelease
-          fi
-
-      - name: Upload Pacote
-        uses: actions/upload-artifact@v3
-        with:
-          name: cs-pvmobile
-          path: |
-            if [ "${{ github.event.inputs.environment }}" == "prod" ]; then
-              android/app/build/outputs/bundle/release/app-release.aab
-            else
-              android/app/build/outputs/apk/release/app-release.apk
-            fi
+     

@@ -10,7 +10,7 @@ export const stylesConsultaProduto = StyleSheet.create({
     rightIcons: {
         backgroundColor: '#E3E3E3',
         paddingVertical: 5,
-        paddingHorizontal: 5,
+        paddingHorizontal: 25,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         flex: 1,
