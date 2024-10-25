@@ -41,15 +41,13 @@ jobs:
             echo "Updated version.properties content:"
             cat version.properties
 
-      - name: Commit changes
+            
+      - name: Update version in app.json
         run: |
-          git config --local user.email "valter.gabriel@cs-consoft.com.br"  # Replace with your email
-          git config --local user.name "valtecsgabriel"  # Replace with your name
-          git add version.properties
-          git commit -m "Update TESTE value in version.properties" || echo "No changes to commit"
+          NEW_VERSION="1.2.0"
           
-      - name: Push changes
-        run: git push
+          # Update the version field in app.json
+          jq ".expo.version = \"$NEW_VERSION\"" app.json > temp.json && mv temp.json app.json
 
   
 
