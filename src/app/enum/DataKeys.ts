@@ -13,4 +13,5 @@ export enum DataKey {
     NomeCotacao = "NomeCotacao",
     ListMenu = "ListMenu",
     MenuList = "MenuList",
+    CAMERA_CONTENT = "CAMERA_CONTENT"
 }
