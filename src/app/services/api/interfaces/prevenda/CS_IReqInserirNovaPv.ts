@@ -8,6 +8,7 @@ export interface IReqInsertPvWhitoutService {
     cs_quantidade: number,
     cs_codigo_produto: string,
     cs_entrega: boolean,
+    cs_saldo_id?: string
 
     /**
      * Tipos possiveis:

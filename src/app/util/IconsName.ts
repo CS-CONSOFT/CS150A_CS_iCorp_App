@@ -1,6 +1,7 @@
 export const ICON_NAME = {
     BUSCA_CONTORNADO: 'search-outline',
     CARRINHO_CONTORNADO: 'cart-outline',
+    PRICETAGS: 'pricetags-outline',
     PAPEL_LISTA_CONTORNADO: 'newspaper-outline',
     ADICIONAR_PESSOA_CONTORNADO: 'person-add-outline',
     LOCALIZACAO: 'location-outline',

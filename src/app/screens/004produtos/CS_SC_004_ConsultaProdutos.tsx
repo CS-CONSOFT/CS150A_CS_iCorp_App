@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -23,6 +23,8 @@ import { handleInsertProdutoComanda } from "../../view_controller/comanda/CS_Com
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
+import { moneyApplyMask } from "../../util/Masks";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
@@ -40,7 +42,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
 
     // Função para inserir produto na pré-venda
-    function scInsertProduct(product: IResGetProductItem) {
+    function scInsertProduct(product: IResGetProductItem, saldoId?: string) {
         setStatus(FETCH_STATUS.BTN_CLICK)
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
             const pvId = currentPv as string
@@ -62,7 +64,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     1, // quantidade
                     1, // tipo atendimento
                     pvId ? pvId : undefined, // pv id
-                    undefined // conta id
+                    undefined, // conta id
+                    saldoId //saldo id
                 ).then(() => {
                     setStatus(FETCH_STATUS.SUCCESS)
                     showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
@@ -153,7 +156,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         placeholder="Pesquisar Produto"
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick}
-                        clickToSearch={true} />
+                        clickToSearch={true}
+                    />
                 </View>
 
                 {isLoading ? (
@@ -174,7 +178,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                                     rightItem={
                                         <RightItem
                                             loadingClick={loadingBtnClickItem}
-                                            scInsertProduct={() => scInsertProduct(item)}
+                                            scInsertProduct={(saldoId) => scInsertProduct(item, saldoId)}
+                                            product={item}
                                         />
                                     }
                                 />
@@ -231,12 +236,104 @@ const ProductItem = ({ product }: { product: IResGetProductItem }) => {
 }
 
 // Componente do botão direito para adicionar o produto à pré-venda
-const RightItem = ({ scInsertProduct, loadingClick }: { scInsertProduct: () => void, loadingClick: boolean }) => {
+const RightItem = ({ scInsertProduct, loadingClick, product }: { scInsertProduct: (saldoId?: string) => void, loadingClick: boolean, product: IResGetProductItem }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handlePress = () => {
+        setModalVisible(true);
+    };
+
     return (
         <View style={stylesConsultaProduto.rightIcons}>
-            <Pressable onPress={scInsertProduct}>
-                {loadingClick ? <ActivityIndicator size={32} color={"#000"} /> : <CustomIcon icon={ICON_NAME.CARRINHO_CONTORNADO} />}
-            </Pressable>
+            <View>
+                {loadingClick ? <ActivityIndicator size={32} color="#000" />
+                    :
+                    <>
+                        <View style={{ marginVertical: 24 }}>
+                            <Pressable onPress={handlePress}>
+                                <CustomIcon icon={ICON_NAME.PRICETAGS} />
+                            </Pressable>
+                        </View>
+                        <CustomSeparator />
+                        <View style={{ marginVertical: 24 }}>
+                            <Pressable onPress={() => scInsertProduct(undefined)}>
+                                <CustomIcon icon={ICON_NAME.CARRINHO_CONTORNADO} />
+                            </Pressable>
+                        </View>
+                    </>
+                }
+
+
+            </View>
+
+
+
+            {/* Modal para exibir a lista de produtos */}
+            <Modal
+                transparent={true}
+                animationType="slide"
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+
+
+                        <Text style={styles.modalTitle}>Selecione um Saldo</Text>
+                        <Text style={styles.modalSubtitle}>
+                            Clique em um item da lista para enviar com o saldo correspondente ou use o botão abaixo para enviar sem saldo.
+                        </Text>
+
+                        {/* Lista de produtos */}
+                        <FlatList
+                            data={product.NS_List}
+                            keyExtractor={(item) => item.csicp_gg520.Id}
+                            renderItem={({ item }) => (
+                                <Pressable onPress={() => {
+                                    scInsertProduct(item.csicp_gg520.Id);
+                                    setModalVisible(false);
+                                }} style={styles.productItemContainer}>
+                                    <View style={styles.productInfoContainer}>
+                                        <Text style={styles.productNumber}>{item.csicp_gg520.GG520_NS_NumeroSaldo}</Text>
+                                        <Text style={styles.productBalance}>{moneyApplyMask(item.csicp_gg520.GG520_Saldo || 0)}</Text>
+                                        <Text style={styles.productDescription}>{item.csicp_gg520.GG520_DescricaoSaldo}</Text>
+                                        <Text style={styles.productWarehouse}>{item.csicp_gg001.GG001_DescAlmox}</Text>
+                                    </View>
+                                </Pressable>
+                            )}
+                        />
+
+                        {/* Botão para enviar sem saldo */}
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    styles.button,
+                                    { backgroundColor: pressed ? '#2ecc71' : '#28a745' } // Verde para "Enviar Sem Saldo"
+                                ]}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                    scInsertProduct(undefined);
+                                }}
+                            >
+
+                                <Text style={styles.buttonText}>Enviar Sem Saldo</Text>
+                            </Pressable>
+                            {/* Botão para fechar o modal */}
+                            <Pressable
+                                style={({ pressed }) => [
+                                    styles.button,
+                                    { backgroundColor: pressed ? '#e74c3c' : '#c0392b' } // Vermelho para "Cancelar"
+                                ]}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Cancelar</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -282,6 +379,94 @@ const styles = StyleSheet.create({
     },
     paginationContainer: {
         flexShrink: 0,
+    },
+    rightIcons: {
+        // Estilo para o container do botão direito
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fundo semi-transparente
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        elevation: 5, // Sombra para Android
+        shadowColor: '#000', // Sombra para iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    productItem: {
+        padding: 10,
+        borderBottomColor: '#ccc',
+    },
+    productItemContainer: {
+        backgroundColor: '#f9f9f9',
+        borderRadius: 8,
+        padding: 15,
+        marginVertical: 5,
+        marginHorizontal: 10,
+        elevation: 2, // Sombra para Android
+        shadowColor: '#000', // Sombra para iOS
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,
+    },
+    productInfoContainer: {
+        flexDirection: 'column',
+    },
+    productNumber: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    productBalance: {
+        fontSize: 14,
+        color: '#000',
+        marginTop: 5,
+    },
+    productDescription: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 5,
+    },
+    productWarehouse: {
+        fontSize: 12,
+        color: '#999',
+        marginTop: 5,
+    },
+    buttonContainer: {
+        flexDirection: 'column', // Alinha os botões lado a lado
+        justifyContent: 'space-between', // Espaça os botões
+        marginTop: 20, // Espaço acima dos botões
+    },
+    button: {
+        padding: 15,
+        borderRadius: 5,
+        marginVertical: 5, // Espaço entre os botões
+        alignItems: 'center', // Centraliza o texto no botão
+    },
+    buttonText: {
+        color: '#fff', // Cor do texto em branco
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    modalSubtitle: {
+        fontSize: 14,
+        color: '#666',
+        marginVertical: 10,
+        textAlign: 'center', // Centraliza o texto
     },
 });
 
