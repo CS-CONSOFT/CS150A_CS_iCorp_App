@@ -125,7 +125,8 @@ export async function insertProductToPv(insertPv: IReqInsertPvWhitoutService): P
             Quantidade: insertPv.cs_quantidade,
             Codigo: insertPv.cs_codigo_produto,
             IsDelivery: insertPv.cs_entrega,
-            TipoAtendimento: insertPv.cs_tipo_atendimento
+            TipoAtendimento: insertPv.cs_tipo_atendimento,
+            NS_GG520_ID: insertPv.cs_saldo_id
         }
 
         let url = ''

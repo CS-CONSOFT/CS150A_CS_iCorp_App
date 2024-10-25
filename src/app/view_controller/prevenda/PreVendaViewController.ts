@@ -87,12 +87,13 @@ export function getFinalDateToFilter(dateFilterId?: number): Date {
  * @param cs_quantidade 
  * @param cs_tipo_atendimento 
  * @param cs_atendimento pode ser indefinido
+ * @param saldoId 
  * @returns 
  */
 export async function handleInsertProductPv(
     cs_codigo_produto: string, cs_entrega: boolean,
     cs_quantidade: number, cs_tipo_atendimento: number,
-    cs_atendimento?: string, cs_conta_id?: string
+    cs_atendimento?: string, cs_conta_id?: string, saldoId?: string
 ): Promise<IResInsertPv> {
 
     const userProp = (await getUserProperties())
@@ -105,7 +106,8 @@ export async function handleInsertProductPv(
         cs_conta_id: cs_conta_id,
         cs_entrega: cs_entrega,
         cs_quantidade: cs_quantidade,
-        cs_tipo_atendimento: cs_tipo_atendimento
+        cs_tipo_atendimento: cs_tipo_atendimento,
+        cs_saldo_id: saldoId ? saldoId : ""
     }
 
     const result = insertProductToPv(insert)
