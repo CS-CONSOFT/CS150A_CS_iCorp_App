@@ -31,7 +31,15 @@ jobs:
 
       - name: Modificando version.properties
         run: |
-           sed -i 's/^TESTE=.*/TESTE=NOVOTEXTO/' version.properties
+            echo "Original version.properties content:"
+            cat version.properties
+            
+            
+            sed -i 's/^TESTE=.*/TESTE=NOVOTEXTO/' version.properties || echo "No match found"
+            
+            
+            echo "Updated version.properties content:"
+            cat version.properties
 
 
   
