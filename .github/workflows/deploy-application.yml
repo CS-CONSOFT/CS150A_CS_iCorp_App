@@ -41,6 +41,15 @@ jobs:
             echo "Updated version.properties content:"
             cat version.properties
 
+      - name: Commit changes
+        run: |
+          git config --local user.email "valter.gabriel@cs-consoft.com.br"  # Replace with your email
+          git config --local user.name "valtecsgabriel"  # Replace with your name
+          git add version.properties
+          git commit -m "Update TESTE value in version.properties" || echo "No changes to commit"
+          
+      - name: Push changes
+        run: git push
 
   
 
