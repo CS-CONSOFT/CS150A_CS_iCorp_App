@@ -39,7 +39,6 @@ export default function CS_SC_Camera({ route }: { route: any }) {
     async function readBarCode(scanningResult: BarcodeScanningResult) {
         setDataCode(scanningResult.data)
         navigate(previousScreen)
-
         await storeSimpleData(DataKey.CAMERA_CONTENT, scanningResult.data)
     }
 

@@ -140,6 +140,8 @@ const CS_SC_Entrega = () => {
             onSearchPress={(value) => searchNote(value)}
             clickToSearch={true}
             keyboartType='numeric'
+            showCamera={true}
+            previusScreen="Entrega"
         />
 
         {loadingProducts && (

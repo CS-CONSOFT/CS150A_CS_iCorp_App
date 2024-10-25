@@ -5,7 +5,7 @@ import CustomIcon from "../icon/CustomIcon";
 import { ICON_NAME } from "../../util/IconsName";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DataKey } from "../../enum/DataKeys";
-import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { getSimpleData, storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 
 
 const CustomSearch = ({
@@ -45,8 +45,8 @@ const CustomSearch = ({
     }) => {
 
     const [valueSearch, setValueSearch] = useState('')
+
     const { navigate } = useNavigation()
-    const [valueOfCamera, setValueOfCamera] = useState('')
     /**
      * funcao que e chamada enquanto o usuario digita algo
      */
@@ -56,6 +56,7 @@ const CustomSearch = ({
         const fetchData = async () => {
             const res = await getSimpleData(DataKey.CAMERA_CONTENT)
             if (res) {
+                search(res as string)
                 setValueSearch(res as string)
             }
         }
@@ -66,10 +67,15 @@ const CustomSearch = ({
     const handleInputTyping = (value: string) => {
         //se nao for para pesquisar durante o clique, faça a pesquisa aqui
         if (!clickToSearch) {
-            onSearchPress(value)
+            search(value)
         }
         setValueSearch(value)
     };
+
+    const search = async (value: string) => {
+        onSearchPress(value)
+        await storeSimpleData(DataKey.CAMERA_CONTENT, "")
+    }
 
 
     return (
@@ -96,7 +102,6 @@ const CustomSearch = ({
                     navigate('Camera', {
                         previousScreen: previusScreen || "Menu"
                     })
-
                 }} />
             )}
         </View>
