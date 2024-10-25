@@ -157,7 +157,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         onSearchPress={handleFormSubmitToSearch}
                         onFilterClick={handleFilterClick}
                         clickToSearch={true}
+                        showCamera={true}
+                        previusScreen="Consulta_Produtos"
                     />
+
+
                 </View>
 
                 {isLoading ? (
