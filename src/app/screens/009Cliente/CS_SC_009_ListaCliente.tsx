@@ -128,7 +128,7 @@ const RenderItemCliente = ({ cliente, edit, handlePopUp }: { cliente: Csicp_bb01
                     <Text style={commonStyle.common_fontWeight_800}>{cliente.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}</Text>
                     <Text style={commonStyle.common_fontWeight_800}>{cliente.BB01202.csicp_bb01202.BB012_CPF || cliente.BB01202.csicp_bb01202.BB012_CNPJ}</Text>
                     <Text style={[commonStyle.common_fontWeight_800]}>{cliente.csicp_bb012.csicp_bb012_SitCta.Label}</Text>
-                    <Text style={[commonStyle.common_fontWeight_800]}>{moneyApplyMask(cliente.BB01201.csicp_bb01201.BB012_LimiteCredito)}</Text>
+                    <Text style={[commonStyle.common_fontWeight_800]}>Limite de crédito: {moneyApplyMask(cliente.BB01201.csicp_bb01201.BB012_LimiteCredito)}</Text>
                 </View>
             } title={cliente.csicp_bb012.csicp_bb012.BB012_Nome_Cliente}
             rightItem={<RightItemCliente cliente={cliente} handlePopUp={handlePopUp} />}
