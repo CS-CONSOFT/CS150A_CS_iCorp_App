@@ -17,7 +17,7 @@ const CS_SC_011_splash_Produto = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
                 style={{ flex: 1 }}
-                source={require('../../../../assets/CadastroProduto.png')}
+                source={require('../../../../assets/login.png')}
             >
                 <View
                     style={[
