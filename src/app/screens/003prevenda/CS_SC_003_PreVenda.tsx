@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 import { WebView } from 'react-native-webview';
 import { commonStyle } from "../../CommonStyle";
@@ -26,25 +26,31 @@ const CS_SC_003_PreVenda = () => {
     const [pvList, setPvList] = useState<Csicp_dd070_Completo[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
-    const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [currentDateFilter, setCurrentDateFilter] = useState(0)
     const [currentFilterOfTypePV, setFilterTypeOfPv] = useState(0)
-
-    useFocusEffect(
-        useCallback(() => {
-            /**
-             * 1 = pagina 1 para paginação
-             */
-            _fetchPV(1, currentDateFilter)
-        }, [currentDateFilter, currentFilterOfTypePV])
-    );
+    const [currentPage, setCurrentPage] = useState(0)
+    const [hasMoreData, setHasMoreData] = useState(true)
+    const [hasChangedFilter, setHasChangedFilter] = useState(false)
 
 
 
-    const _fetchPV = async (page: number, dateFilterId: number) => {
+
+    useEffect(() => {
+
+        // Resetar os dados ao alterar o filtro
+        if (hasChangedFilter) {
+            setPvList([]);  // Limpar a lista de dados
+            setCurrentPage(0);  // Resetar a páginação
+            setHasMoreData(true);  // Garantir que há mais dados
+        }
+
+        _fetchPV(currentDateFilter);  // Recarregar os dados com o novo filtro
+    }, [currentDateFilter, currentFilterOfTypePV]);
+
+
+
+    const _fetchPV = async (dateFilterId: number) => {
         setStatus(FETCH_STATUS.LOADING)
-
-
         /**Formatando data */
         const todayDate: Date = new Date()
 
@@ -57,16 +63,20 @@ const CS_SC_003_PreVenda = () => {
         const isFaturado = currentFilterOfTypePV === 1
         const isAprovado = currentFilterOfTypePV === 2
 
-        handleFetchPv(passDateString, todayDateString, page, 10, isConsulta, isFaturado, isAprovado).then((res) => {
+        handleFetchPv(passDateString, todayDateString, currentPage + 1, 10, isConsulta, isFaturado, isAprovado).then((res) => {
             try {
                 if (res.csicp_dd070_Completo !== undefined) {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
-                        setPvList(res.csicp_dd070_Completo)
-                        const pagesArray = getPaginationList(res.Contador.cs_number_of_pages)
-                        setPaginationArray(pagesArray)
+                        setPvList(prevData => [...prevData, ...res.csicp_dd070_Completo]);
+                        setCurrentPage(prevPage => prevPage + 1);
+                        //se a pagina atual for maior ou igual ao total de paginas, nao precisa mais chamar a rolagem
+                        if (currentPage >= res.Contador.cs_number_of_pages) {
+                            setHasMoreData(false)
+                        }
                     }
                 }
                 setStatus(FETCH_STATUS.SUCCESS)
+
             } catch (error) {
                 navigate('Menu')
                 showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
@@ -77,12 +87,20 @@ const CS_SC_003_PreVenda = () => {
         })
     }
 
-    function handleRefreshList(): void {
-        setStatus(FETCH_STATUS.LOADING)
-        _fetchPV(1, currentDateFilter).then(() => {
-            setStatus(FETCH_STATUS.SUCCESS)
-        })
-    }
+
+
+    const isLoading = status === FETCH_STATUS.LOADING
+    const handleLoadMore = () => {
+        if (!isLoading && hasMoreData) {
+            setStatus(FETCH_STATUS.LOADING)
+            if (pvList.length > 9) {
+                _fetchPV(currentDateFilter)
+            } else {
+                setStatus(FETCH_STATUS.SUCCESS)
+            }
+        }
+
+    };
 
     function goToDetails(currentPv: Csicp_dd070_Completo) {
         storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
@@ -91,7 +109,6 @@ const CS_SC_003_PreVenda = () => {
         })
     }
 
-    const isLoading = status === FETCH_STATUS.LOADING
 
     return (
         <View style={{ flex: 1 }}>
@@ -106,7 +123,13 @@ const CS_SC_003_PreVenda = () => {
                         { id: 3, label: '15 dias' },
                         { id: 4, label: '30 dias' },
                     ]}
-                    onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                    onPress={(currentItem) => {
+                        if (!isLoading) {
+                            setCurrentDateFilter(currentItem)
+                            setHasChangedFilter(true)
+                            setCurrentPage(0)
+                        }
+                    }}
                     currentItemSelected={currentDateFilter}
                 />
                 <CustomSeparator />
@@ -116,52 +139,72 @@ const CS_SC_003_PreVenda = () => {
                     <FilterHorizontalItem
                         item={{ id: 0, label: 'Consulta' }}
                         onPress={(currentItem) => {
-                            setFilterTypeOfPv(currentItem)
-                            setCurrentDateFilter(0)
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setCurrentDateFilter(0)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+
                         }}
                         currentItemSelected={currentFilterOfTypePV}
                     />
 
                     <FilterHorizontalItem
                         item={{ id: 1, label: 'Faturado' }}
-                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        onPress={(currentItem) => {
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+                        }
+                        }
+
                         currentItemSelected={currentFilterOfTypePV}
                     />
 
 
                     <FilterHorizontalItem
                         item={{ id: 2, label: 'Aprovado' }}
-                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        onPress={(currentItem) => {
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+                        }}
                         currentItemSelected={currentFilterOfTypePV}
                     />
                 </View>
 
-                {!isLoading ? (
-                    <>
-                        <FlatList
-                            style={{ height: '70%' }}
-                            data={pvList.toReversed()}
-                            refreshing={isLoading}
-                            onRefresh={handleRefreshList}
-                            ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
-                            renderItem={({ item }) => <PreVendaRenderItem item={item}
-                                onPress={() => goToDetails(item)} />}
-                            keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
-                            extraData={pvList}
-                        />
 
-                        {paginationArray !== undefined && paginationArray.length > 1 && (
-                            <View style={{ height: '30%' }}>
-                                <Custom_Pagination
-                                    onPagePress={(page) => _fetchPV(page, currentDateFilter)}
-                                    paginationArray={paginationArray} />
-                            </View>
-                        )}
-                    </>
-                ) : <ActivityIndicator color={"#000"} />}
+                <FlatList
+                    style={{ height: '70%' }}
+                    data={pvList.toReversed()}
+                    ListFooterComponent={() => <>
+                        {isLoading && <ActivityIndicator size={32} color={"#000"} style={{ padding: 16 }} />}
+                    </>}
+                    ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
+                    renderItem={({ item }) => <PreVendaRenderItem item={item}
+                        onPress={() => goToDetails(item)} />}
+                    keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}
+                    //extraData={pvList}
+                    onEndReached={handleLoadMore}
+                    onEndReachedThreshold={0.1}
+                />
+                {/* 
+                {paginationArray !== undefined && paginationArray.length > 1 && (
+                    <View style={{ height: '30%' }}>
+                        <Custom_Pagination
+                            onPagePress={(page) => _fetchPV(currentDateFilter)}
+                            paginationArray={paginationArray} />
+                    </View>
+                )} */}
+
 
             </View>
-        </View>
+        </View >
     );
 }
 export default CS_SC_003_PreVenda;

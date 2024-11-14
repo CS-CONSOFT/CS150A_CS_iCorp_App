@@ -1,6 +1,6 @@
 export interface IResCityList {
     PageSize: PageSize
-    csicp_aa028: Csicp_aa028[]
+    csicp_aa028_List: Csicp_aa028[]
     Code_Erro: Code_Erro
 }
 
