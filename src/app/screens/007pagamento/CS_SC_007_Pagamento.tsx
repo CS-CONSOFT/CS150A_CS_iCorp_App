@@ -102,14 +102,13 @@ const CS_SC_007_Pagamento = () => {
                     <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Detalhamento</Text>
                     <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => setToDeleteForm(!toDeleteForm)} />
                 </View>
-
-                {/* Componente para exibir a lista de formas de pagamento com opção de deletar */}
-                <CustomCard_001 title="Forma    -    Condição    -    Valor"
-                    children={<ListDetalhamentoFormasPagamento
-                        list={listOfPaymentSaved!}
-                        toDeleteForm={toDeleteForm}
-                        deletePaymentForm={(formaPgtoAtendimentoId) => deletePaymentForm(formaPgtoAtendimentoId)} />} />
             </ScrollView>
+            {/* Componente para exibir a lista de formas de pagamento com opção de deletar */}
+            <CustomCard_001 title="Forma    -    Condição    -    Valor"
+                children={<ListDetalhamentoFormasPagamento
+                    list={listOfPaymentSaved!}
+                    toDeleteForm={toDeleteForm}
+                    deletePaymentForm={(formaPgtoAtendimentoId) => deletePaymentForm(formaPgtoAtendimentoId)} />} />
         </SafeAreaView>
     );
 }
@@ -536,14 +535,11 @@ const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado
 
                 {termItem?.PermiteEntrada && (
                     <View>
-
+                        <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
                         {/** CHAMANDO O COMPONENTE DE FORMA DE PAGAMENTO SETANDO A ENTRADA COMO TRUE */}
                         <ItemFormaPagamento onFormSelected={(key) => {
                             setEntranceFormId(key)
                         }} isEntrance={true} />
-
-
-                        <Text style={[commonStyle.common_fontWeight_600, commonStyle.font_size_18]}>Valor Entrada</Text>
                         <CurrencyInput
                             value={paymentValueEntranceValue}
                             onChangeValue={(number) => setPaymentValueEntranceValue(number || 0)}
