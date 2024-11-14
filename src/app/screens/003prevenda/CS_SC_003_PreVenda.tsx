@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 import { WebView } from 'react-native-webview';
 import { commonStyle } from "../../CommonStyle";
@@ -26,22 +26,26 @@ const CS_SC_003_PreVenda = () => {
     const [pvList, setPvList] = useState<Csicp_dd070_Completo[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
     const { navigate } = useNavigation()
-    const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [currentDateFilter, setCurrentDateFilter] = useState(0)
     const [currentFilterOfTypePV, setFilterTypeOfPv] = useState(0)
     const [currentPage, setCurrentPage] = useState(0)
     const [hasMoreData, setHasMoreData] = useState(true)
+    const [hasChangedFilter, setHasChangedFilter] = useState(false)
 
 
 
-    useFocusEffect(
-        useCallback(() => {
-            /**
-             * 1 = pagina 1 para paginação
-             */
-            _fetchPV(currentDateFilter)
-        }, [currentDateFilter, currentFilterOfTypePV])
-    );
+
+    useEffect(() => {
+
+        // Resetar os dados ao alterar o filtro
+        if (hasChangedFilter) {
+            setPvList([]);  // Limpar a lista de dados
+            setCurrentPage(0);  // Resetar a páginação
+            setHasMoreData(true);  // Garantir que há mais dados
+        }
+
+        _fetchPV(currentDateFilter);  // Recarregar os dados com o novo filtro
+    }, [currentDateFilter, currentFilterOfTypePV]);
 
 
 
@@ -65,7 +69,6 @@ const CS_SC_003_PreVenda = () => {
                     if (res.csicp_dd070_Completo.length !== 0 || res.csicp_dd070_Completo.length !== undefined) {
                         setPvList(prevData => [...prevData, ...res.csicp_dd070_Completo]);
                         setCurrentPage(prevPage => prevPage + 1);
-
                         //se a pagina atual for maior ou igual ao total de paginas, nao precisa mais chamar a rolagem
                         if (currentPage >= res.Contador.cs_number_of_pages) {
                             setHasMoreData(false)
@@ -73,6 +76,7 @@ const CS_SC_003_PreVenda = () => {
                     }
                 }
                 setStatus(FETCH_STATUS.SUCCESS)
+
             } catch (error) {
                 navigate('Menu')
                 showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
@@ -82,6 +86,17 @@ const CS_SC_003_PreVenda = () => {
             showToast(ToastType.ERROR, "Falha na requisição", err.response.data.Errors[0])
         })
     }
+
+
+
+    const isLoading = status === FETCH_STATUS.LOADING
+    const handleLoadMore = () => {
+        if (!isLoading && hasMoreData) {
+            if (pvList.length > 9) {
+                _fetchPV(currentDateFilter)
+            }
+        }
+    };
 
     function handleRefreshList(): void {
         setStatus(FETCH_STATUS.LOADING)
@@ -97,13 +112,6 @@ const CS_SC_003_PreVenda = () => {
         })
     }
 
-    const handleLoadMore = () => {
-        if (!isLoading && hasMoreData) {
-            _fetchPV(currentDateFilter)
-        }
-    };
-
-    const isLoading = status === FETCH_STATUS.LOADING
 
     return (
         <View style={{ flex: 1 }}>
@@ -118,7 +126,13 @@ const CS_SC_003_PreVenda = () => {
                         { id: 3, label: '15 dias' },
                         { id: 4, label: '30 dias' },
                     ]}
-                    onPress={(currentItem) => setCurrentDateFilter(currentItem)}
+                    onPress={(currentItem) => {
+                        if (!isLoading) {
+                            setCurrentDateFilter(currentItem)
+                            setHasChangedFilter(true)
+                            setCurrentPage(0)
+                        }
+                    }}
                     currentItemSelected={currentDateFilter}
                 />
                 <CustomSeparator />
@@ -128,28 +142,47 @@ const CS_SC_003_PreVenda = () => {
                     <FilterHorizontalItem
                         item={{ id: 0, label: 'Consulta' }}
                         onPress={(currentItem) => {
-                            setFilterTypeOfPv(currentItem)
-                            setCurrentDateFilter(0)
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setCurrentDateFilter(0)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+
                         }}
                         currentItemSelected={currentFilterOfTypePV}
                     />
 
                     <FilterHorizontalItem
                         item={{ id: 1, label: 'Faturado' }}
-                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        onPress={(currentItem) => {
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+                        }
+                        }
+
                         currentItemSelected={currentFilterOfTypePV}
                     />
 
 
                     <FilterHorizontalItem
                         item={{ id: 2, label: 'Aprovado' }}
-                        onPress={(currentItem) => setFilterTypeOfPv(currentItem)}
+                        onPress={(currentItem) => {
+                            if (!isLoading) {
+                                setFilterTypeOfPv(currentItem)
+                                setHasChangedFilter(true)
+                                setCurrentPage(0)
+                            }
+                        }}
                         currentItemSelected={currentFilterOfTypePV}
                     />
                 </View>
 
                 <FlatList
-                    style={{ height: '80%' }}
+                    style={{ height: '70%' }}
                     data={pvList.toReversed()}
                     refreshing={isLoading}
                     onRefresh={handleRefreshList}
@@ -161,14 +194,14 @@ const CS_SC_003_PreVenda = () => {
                     onEndReached={handleLoadMore}
                     onEndReachedThreshold={0.1}
                 />
-
+                {/* 
                 {paginationArray !== undefined && paginationArray.length > 1 && (
                     <View style={{ height: '30%' }}>
                         <Custom_Pagination
                             onPagePress={(page) => _fetchPV(currentDateFilter)}
                             paginationArray={paginationArray} />
                     </View>
-                )}
+                )} */}
 
 
             </View>
