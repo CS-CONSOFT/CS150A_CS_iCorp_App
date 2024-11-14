@@ -92,18 +92,15 @@ const CS_SC_003_PreVenda = () => {
     const isLoading = status === FETCH_STATUS.LOADING
     const handleLoadMore = () => {
         if (!isLoading && hasMoreData) {
+            setStatus(FETCH_STATUS.LOADING)
             if (pvList.length > 9) {
                 _fetchPV(currentDateFilter)
+            } else {
+                setStatus(FETCH_STATUS.SUCCESS)
             }
         }
-    };
 
-    function handleRefreshList(): void {
-        setStatus(FETCH_STATUS.LOADING)
-        _fetchPV(currentDateFilter).then(() => {
-            setStatus(FETCH_STATUS.SUCCESS)
-        })
-    }
+    };
 
     function goToDetails(currentPv: Csicp_dd070_Completo) {
         storeSimpleData(DataKey.CurrentPV, currentPv.DD070_Nota.csicp_dd070.DD070_Id)
@@ -181,11 +178,13 @@ const CS_SC_003_PreVenda = () => {
                     />
                 </View>
 
+
                 <FlatList
                     style={{ height: '70%' }}
                     data={pvList.toReversed()}
-                    refreshing={isLoading}
-                    onRefresh={handleRefreshList}
+                    ListFooterComponent={() => <>
+                        {isLoading && <ActivityIndicator size={32} color={"#000"} style={{ padding: 16 }} />}
+                    </>}
                     ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                     renderItem={({ item }) => <PreVendaRenderItem item={item}
                         onPress={() => goToDetails(item)} />}
