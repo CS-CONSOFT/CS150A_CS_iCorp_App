@@ -17,6 +17,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { formatMoneyValue } from '../../../../util/FormatText';
 import { useNavigation } from '@react-navigation/native';
 import { FETCH_STATUS } from '../../../../util/FETCH_STATUS';
+import React from 'react';
 
 
 //lista de preço tabela
@@ -68,6 +69,9 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setTablePrice(product.csicp_dd080.DD080_Preco_Tabela || 0);
         setUnityPrice(product.csicp_dd080.DD080_Preco_Unitario || 0);
         setValueDiscount(product.csicp_dd080.DD080_Total_Desconto || 0);
+
+        var percentDiscount = 100 * (product.csicp_dd080.DD080_Total_Desconto / (product.csicp_dd080.DD080_Preco_Tabela * product.csicp_dd080.DD080_Quantidade))
+        setPercentDiscount2(percentDiscount);
     }, [])
 
     /** ALTERA A QUANTIDADE */
