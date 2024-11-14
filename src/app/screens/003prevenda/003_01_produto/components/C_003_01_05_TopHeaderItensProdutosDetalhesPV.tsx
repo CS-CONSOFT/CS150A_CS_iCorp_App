@@ -11,6 +11,7 @@ import { ICON_NAME } from "../../../../util/IconsName";
 import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
 import { handlePatchAtualizaObservacaoPV } from "../../../../view_controller/prevenda/PreVendaViewController";
+import React from "react";
 
 const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, descontoValor = 0, obsText }: { isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
     const { navigate } = useNavigation()

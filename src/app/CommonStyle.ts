@@ -121,7 +121,7 @@ export const commonStyle = StyleSheet.create({
         borderRadius: 32,
         paddingHorizontal: 16,
         borderColor: "#B0B0B0",
-        backgroundColor: '#FFF'
+        backgroundColor: '#d3d3d3'
     },
     productImage: {
         height: '100%',
@@ -139,7 +139,7 @@ export const commonStyle = StyleSheet.create({
         elevation: 3,
         margin: 14,
         backgroundColor: ColorStyle.colorPrimary100,
-       
+
     },
     common_text_button_style: {
         fontSize: 16,

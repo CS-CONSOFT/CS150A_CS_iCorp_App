@@ -57,7 +57,9 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
     useEffect(() => {
         try {
             handleGetUfList().then((res) => {
-                const list = res.Lista_csicp_aa027
+                const list = res.csicp_aa027_List
+                console.log(list);
+
                 const mappedUfList = list.map(item => (
                     {
                         key: item.csicp_aa027.Id,
@@ -184,7 +186,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      */
     function getCities(ufId: string, valor?: string) {
         handleGetCityList(ufId, valor).then((res) => {
-            const list = res.csicp_aa028
+            const list = res.csicp_aa028_List
             if (list !== undefined) {
                 const mappedList = list.map(item =>
                 (
