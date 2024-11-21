@@ -233,7 +233,7 @@ const ProductItem = ({ product }: { product: IResGetProductItem }) => {
     return (
         <View style={commonStyle.justify_content_space_btw}>
             <Text style={stylesConsultaProduto.productCode}>{`Código:  ${product.CodgProduto}`}</Text>
-            <Text style={stylesConsultaProduto.productDesc}>{`${product.DescArtigo}`}</Text>
+            <Text style={stylesConsultaProduto.productDesc}>{`${product.DescReduzida}`}</Text>
             <Text style={stylesConsultaProduto.productPrice}>{`${formatMoneyValue(product.Preco!)}`}</Text>
         </View>
     )
