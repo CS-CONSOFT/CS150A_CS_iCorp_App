@@ -4,7 +4,7 @@ import { IReqInsertPaymentForm } from "../../interfaces/pagamento/CS_IReqInsertP
 import { PaymentType } from "../../interfaces/pagamento/CS_IReqListFormPayment";
 import { CS_IResBB026_Estatica } from "../../interfaces/pagamento/CS_IResBB026_Estatica";
 import { IResPaymentResponse } from "../../interfaces/pagamento/CS_IResListFormPayment";
-import { IResFormPayment } from '../../interfaces/pagamento/CS_IResListFormPaymentComplete';
+import { IResFormPayment, ResComboBB026 } from '../../interfaces/pagamento/CS_IResListFormPaymentComplete';
 import { IResPaymentFormByIdComplete } from '../../interfaces/pagamento/CS_IResPaymentFormByIdComplete';
 import { TermItem } from './../../interfaces/pagamento/IResPaymentTerm';
 
@@ -102,6 +102,28 @@ export async function getListOfPaymentForm002({ tenantId, onlyAVista }: { tenant
         In_IsActive: true,
         in_currentPage: 1,
         in_pageSize: 9999
+    }
+
+
+    try {
+        const response = await api.get(url, { headers: headerParams })
+        return response.data as IResFormPayment
+    } catch (error) {
+        throw error
+    }
+}
+
+/** A NOVA API APONTA PRA ESSA FUNCAO */
+export async function getListOfPaymentFormCombo({ tenantId, bb026classeId, bb026tipoId, ff003_TpEspId, isEntrada }: { tenantId: number, isEntrada?: boolean, bb026classeId: number, bb026tipoId: number, ff003_TpEspId: number }): Promise<ResComboBB026> {
+
+    let url = `/CSR_BB100_Tabelas_LIB/rest/CS_TabelasTotalizacao/csicp_bb026_Get_Combo_FormaPagto`
+
+
+    const headerParams = {
+        tenant_id: tenantId,
+        In_csicp_bb026_Tipo: bb026tipoId,
+        In_csicp_bb026_Classe: bb026classeId,
+        In_csicp_ff003_TpEsp: ff003_TpEspId
     }
 
 

@@ -15,7 +15,7 @@ import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPre
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handlePaymentSelectForm, handlePaymentSelectTerm } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetListOfPaymentFormCombo, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handlePaymentSelectForm, handlePaymentSelectTerm } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { INotaPagamentosValores, handleCalculateValuesPayedAndToPay, handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
@@ -288,7 +288,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
 
     useEffect(() => {
         setBtnLoading(false)
-        getFormaPagamento002()
+        getFormaPagamentoCombo()
     }, [])
 
     /**
@@ -310,7 +310,24 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
         } catch (error: any) {
             showToast(ToastType.ERROR, "ERROR", error)
         }
+    }
 
+    function getFormaPagamentoCombo() {
+        try {
+            handleGetListOfPaymentFormCombo(undefined, undefined, isEntrance).then((res) => {
+                if (res !== undefined) {
+                    const transformedData = res.Csicp_bb026!.map(item => ({
+                        key: item.ID,
+                        value: item.BB026_FormaPagamento
+                    }));
+                    setPaymentsForm(transformedData)
+                } else {
+                    showToast(ToastType.ERROR, "Lista vazia", "Não foi possivel recuperar a forma de pagamento!")
+                }
+            })
+        } catch (error: any) {
+            showToast(ToastType.ERROR, "ERROR", error)
+        }
     }
 
     return (
