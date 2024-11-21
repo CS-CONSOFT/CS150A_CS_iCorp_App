@@ -110,6 +110,8 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
                 <CurrencyInput
                     value={desc1}
                     onChangeValue={(number) => {
+                        console.log("Digitando: " + number);
+
                         setDesc1(number || 0)
                     }}
                     //@ts-ignore
@@ -131,6 +133,7 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
                 <Pressable style={commonStyle.btn_gray} onPress={() => {
                     setIsLoading(true)
+                    console.log("Salvando: " + Number(desc1));
                     save(Number(desc1))
                 }}>
                     {isLoading ? <ActivityIndicator color={"#000"} /> : <Text style={commonStyle.btn_text_gray}>Salvar</Text>}

@@ -1,10 +1,11 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { deletePaymentForm, getListOfPaymentForm002, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, paymentSelectForm, paymentSelectTerm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
+import { getEstaticasBB } from "../../services/api/endpoint/estaticas/CS_Estaticas";
+import { deletePaymentForm, getListOfPaymentForm002, getListOfPaymentFormCombo, getListOfPaymentFormCreditoLoja, getPaymentFormByIdWithConditions, getPaymentTerm, insertPaymentForm, paymentSelectForm, paymentSelectTerm } from "../../services/api/endpoint/pagamento/CS_Pagamento";
 import { saveGlobalDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
-import { IResFormPayment } from "../../services/api/interfaces/pagamento/CS_IResListFormPaymentComplete";
+import { IResFormPayment, ResComboBB026 } from "../../services/api/interfaces/pagamento/CS_IResListFormPaymentComplete";
 import { IResPaymentFormByIdComplete } from "../../services/api/interfaces/pagamento/CS_IResPaymentFormByIdComplete";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { getObject, getSimpleData } from "../../services/storage/AsyncStorageConfig";
@@ -41,6 +42,40 @@ export async function handleGetListOfPaymentForm002(onlyAVista: boolean): Promis
     }
 }
 
+export async function handleGetListOfPaymentFormCombo(bb026Tipo?: string, bb026Class?: string, isEntrada?: boolean): Promise<ResComboBB026> {
+    try {
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
+
+        var tipo = 0;
+        var classe = 0;
+        var ff003Id = 0;
+
+        const lista = (await getEstaticasBB()).csicp_ff003_TpEsp
+        ff003Id = lista.find((item) => item.Label == "A Receber")!.Id
+
+        if (isEntrada) {
+            const fullTipo = (await getEstaticasBB()).csicp_bb026_Tipo.find((item) => item.Label == "A Vista")
+            tipo = fullTipo!.Id
+        }
+
+
+        switch (bb026Class) {
+            case "CreditoLoja":
+                const fullClasse = (await getEstaticasBB()).csicp_bb026_Classe.find((item) => item.Label == "Crédito Loja")
+                classe = fullClasse!.Id
+                break;
+            default:
+                break;
+        }
+
+        const response = getListOfPaymentFormCombo({ tenantId: currentUser.TenantId, bb026classeId: classe, bb026tipoId: tipo, ff003_TpEspId: ff003Id, isEntrada: isEntrada })
+        return response
+    } catch (error) {
+        throw error
+    }
+}
+
+
 export async function handleGetListOfPaymentFormCreditoLoja(): Promise<IResFormPayment> {
     try {
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
@@ -68,6 +103,10 @@ export async function handleInsertPaymentForm({ insertPaymentBody }: { insertPay
 
 export async function handleSaveGlobalDiscount({ cs_valor_percentual }: { cs_valor_percentual: number }): Promise<ICommonResponse> {
     try {
+
+        console.log("ViewModel: " + cs_valor_percentual);
+
+
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse
         let currentPvId: any = ''
         const res = await getSimpleData(DataKey.CurrentPV)
