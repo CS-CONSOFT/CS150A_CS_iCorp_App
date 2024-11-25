@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, Pressable, ScrollView, Text, TextInput, To
 import CurrencyInput from "react-native-currency-input";
 import { commonStyle } from "../../CommonStyle";
 import CustomSwitch from "../../components/switch/CustomSwitch";
-import { handleGetListOfPaymentFormCreditoLoja, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleGetListOfPaymentFormCombo, handleGetListOfPaymentFormCreditoLoja, handleGetPaymentTermList } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { SelectList } from "react-native-dropdown-select-list";
 import { ToastType, showToast } from "../../util/ShowToast";
 import CustomSeparator from "../../components/lists/CustomSeparator";
@@ -32,8 +32,8 @@ const CS_SC_012_SimuladorDeCredito = ({ route }: { route: any }) => {
 
     useEffect(() => {
         setStatus(FETCH_STATUS.LOADING)
-        handleGetListOfPaymentFormCreditoLoja().then((res) => {
-            const transformedData = res.Lista_bb026!.map(item => ({
+        handleGetListOfPaymentFormCombo(undefined, "CreditoLoja", false).then((res) => {
+            const transformedData = res.Csicp_bb026!.map(item => ({
                 key: item.ID,
                 value: item.BB026_FormaPagamento
             }));
