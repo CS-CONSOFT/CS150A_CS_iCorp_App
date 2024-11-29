@@ -6,7 +6,9 @@
       "ios",
       "android"
     ],
+
     "version": "0.3.0",
+
     "orientation": "portrait",
     "icon": "./assets/iconeLogoCS.png",
     "userInterfaceStyle": "light",
