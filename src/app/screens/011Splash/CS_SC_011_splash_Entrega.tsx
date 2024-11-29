@@ -1,12 +1,13 @@
-import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import { commonStyle } from "../../CommonStyle";
-import ColorStyle from "../../ColorStyle";
-import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+import { ImageBackground, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import ColorStyle from "../../ColorStyle";
+import { commonStyle } from "../../CommonStyle";
 
 
 const CS_SC_011_splash_Entrega = () => {
     const { navigate } = useNavigation()
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
@@ -41,7 +42,7 @@ const CS_SC_011_splash_Entrega = () => {
                     <TouchableOpacity
                         onPress={() => navigate('Splash_PreVenda')}
                         style={[
-                            
+
                             commonStyle.border_radius_32,
                             commonStyle.align_centralizar,
                             {
@@ -57,7 +58,7 @@ const CS_SC_011_splash_Entrega = () => {
                             style={[
                                 commonStyle.common_fontWeight_600,
                                 commonStyle.font_size_18,
-                                
+
                                 {
                                     color: ColorStyle.colorPrimary300,
                                     marginRight: 12
@@ -66,7 +67,7 @@ const CS_SC_011_splash_Entrega = () => {
                         >
                             Proximo
                         </Text>
-                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline"/>
+                        <Ionicons size={24} color={ColorStyle.colorPrimary300} name="arrow-forward-outline" />
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

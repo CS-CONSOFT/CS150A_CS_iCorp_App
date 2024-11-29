@@ -6,7 +6,7 @@ const BottomTab = createBottomTabNavigator()
 
 export default function TabRoutes001() {
     return (
-        <BottomTab.Navigator tabBar={() => <CustomPvBottomMenu_001 apenasIrPraHome={false} />}>
+        <BottomTab.Navigator tabBar={() => <CustomPvBottomMenu_001 />}>
             <BottomTab.Screen options={{ headerShown: false }} name='PreVendaDetalheProduto' component={CS_SC_003_PreVenda} />
         </BottomTab.Navigator >
     )
