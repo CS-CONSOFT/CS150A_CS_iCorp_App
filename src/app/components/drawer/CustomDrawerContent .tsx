@@ -59,7 +59,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
                     }
                 ]}
             >
-                -Versão: {appConfig.expo.version}
+                -Versão: Definida pelo YAML
             </Text>
         </DrawerContentScrollView>
     );
