@@ -33,6 +33,10 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
     const [paginationArray, setPaginationArray] = useState<number[]>([])
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
+    const [filter, setFilter] = useState({
+        isPromo: false,
+        isSaldo: false
+    })
 
     /** quando vem da pv, ao inserir o produto é passado o id da pv atual.
      * quando é insere comanda, a rota chamada é a de inserir produto na comanda
@@ -114,8 +118,12 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             /** testa se tem apenas numeros, se sim, preenche o codigo, se nao, preenche a descricao */
             cs_codigo_produto: /^\d+$/.test(valueToSearch) ? valueToSearch : undefined,
             cs_descricao_reduzida: /^\d+$/.test(valueToSearch) ? undefined : valueToSearch,
-            cs_is_com_saldo: valueToSearch.isSaldo
+            cs_is_com_saldo: filter.isSaldo
         };
+
+        //console.log(_filterValues);
+
+
         //seta os valores para o filter values que sera enviado na chamada da api
         setProductAtributtesToSearch(_filterValues)
 
@@ -203,7 +211,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}
-                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} search={(filters) => handleFormSubmitToSearch(filters)} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} filter={filter} setFilter={setFilter} close={() => setStatus(FETCH_STATUS.IDLE)} />}
                 />
             </Suspense>
         </SafeAreaView>
@@ -343,26 +351,29 @@ const RightItem = ({ scInsertProduct, loadingClick, product }: { scInsertProduct
 }
 
 // Componente do modal de filtros com switches para promoção e saldo
-const ModalSwitchFilter = ({ titles, close, search }: { titles: string[], search: (filter: any) => void, close: () => void }) => {
-    const [filter, setFilter] = useState({
-        isPromo: false,
-        isSaldo: false
-    })
+const ModalSwitchFilter = ({ titles, close, filter, setFilter }: { titles: string[], close: () => void, filter, setFilter }) => {
+
     return (
         <View style={{ flexDirection: 'column', backgroundColor: "#fff", width: '80%', padding: 8, borderRadius: 32, justifyContent: 'center' }}>
             <CustomIcon icon={ICON_NAME.FECHAR} onPress={close} />
-            <CustomSwitch
+            {/*   <CustomSwitch
                 title={titles[0]}
                 switchValue={filter.isPromo}
-                onValueChange={(value) => setFilter({ isPromo: value, isSaldo: filter.isSaldo })}
-            />
+                onValueChange={(value) => {
+                    setFilter({ isPromo: value, isSaldo: filter.isSaldo })
+                    //close()
+                }}
+            /> */}
             <CustomSwitch
                 title={titles[1]}
                 switchValue={filter.isSaldo}
-                onValueChange={(value) => setFilter({ isPromo: filter.isPromo, isSaldo: value })}
+                onValueChange={(value) => {
+                    setFilter({ isPromo: filter.isPromo, isSaldo: value })
+                    // close()
+                }}
             />
-            <Pressable style={commonStyle.common_button_style} onPress={() => search(filter)}>
-                <Text style={commonStyle.common_text_button_style}>Filtrar</Text>
+            <Pressable style={commonStyle.common_button_style} onPress={() => close()}>
+                <Text style={commonStyle.common_text_button_style}>Inserir Filtro</Text>
             </Pressable>
         </View>
     )

@@ -17,6 +17,8 @@ import { IResUltimasVendaProduto } from "../../interfaces/produto/CS_IResGetUlti
  * @param IGetProdutoSearch parametro de busca
  */
 export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Promise<IResProdutoSearch> {
+    console.log(IGetProdutoSearch);
+
     try {
         const headerParams = {
             cs_tenant_id: IGetProdutoSearch.cs_tenant_id,
@@ -33,16 +35,20 @@ export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Prom
                 cs_page_size: IGetProdutoSearch.cs_page_size,
                 cs_page: IGetProdutoSearch.cs_page,
                 cs_itens_per_page: 5,
-                cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto
+                cs_codigo_produto: IGetProdutoSearch.cs_codigo_produto,
+                cs_is_com_saldo: IGetProdutoSearch.cs_is_com_saldo
             }
         } else if (IGetProdutoSearch.cs_descricao_reduzida) {
             urlParams = {
                 cs_page_size: IGetProdutoSearch.cs_page_size,
                 cs_page: IGetProdutoSearch.cs_page,
                 cs_itens_per_page: 5,
-                cs_descricao_artigo: IGetProdutoSearch.cs_descricao_reduzida
+                cs_descricao_reduzida: IGetProdutoSearch.cs_descricao_reduzida,
+                cs_is_com_saldo: IGetProdutoSearch.cs_is_com_saldo
             }
         }
+
+
 
 
 
