@@ -384,7 +384,7 @@ export default function StackRoutes() {
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
-                    backgroundColor: "163045"
+                    backgroundColor: "#163045"
                 },
                 headerBackVisible: true
             }} />
