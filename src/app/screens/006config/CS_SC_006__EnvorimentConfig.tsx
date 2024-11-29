@@ -139,6 +139,8 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
     }
 
     function validate(tenant: string, urlBase: string, token: string): void {
+
+
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
@@ -153,7 +155,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                 })
             }
         }).catch((err) => {
-            showToast(ToastType.ERROR, "Erro", 'Falha ao validar')
+            showToast(ToastType.ERROR, "Erro", err)
         })
     }
 
