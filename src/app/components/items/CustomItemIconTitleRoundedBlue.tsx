@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import CustomIcon from "../icon/CustomIcon";
 import { IItemList } from "../lists/IItemList";
+import React from "react";
 
 
 const CustomItemIconTitleRoundedBlue = ({ title, onPress = () => { }, iconName }: IItemList) => {
