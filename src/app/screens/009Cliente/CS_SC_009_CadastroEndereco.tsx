@@ -58,7 +58,7 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         try {
             handleGetUfList().then((res) => {
                 const list = res.csicp_aa027_List
-                console.log(list);
+
 
                 const mappedUfList = list.map(item => (
                     {

@@ -104,7 +104,7 @@ export async function handleInsertPaymentForm({ insertPaymentBody }: { insertPay
 export async function handleSaveGlobalDiscount({ cs_valor_percentual }: { cs_valor_percentual: number }): Promise<ICommonResponse> {
     try {
 
-        console.log("ViewModel: " + cs_valor_percentual);
+
 
 
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse

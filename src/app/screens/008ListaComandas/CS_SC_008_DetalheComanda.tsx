@@ -1,36 +1,31 @@
 import { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 //Componentes
-import { CustomBottomContanier } from "../../components/bottomItem/CustomBottomContanier";
 import { ButtonActionTransparent } from "../../components/button/CustomButtonAcyionTransparent";
 import { ButtonLink } from "../../components/button/CustomButtonLink";
 import { ButtonActionSecondary } from "../../components/button/CustonButtonActionSecondary";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 //Estilo
-import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import { stylesConsultaProduto } from "../004produtos/ConsultaProdutoStyles";
 //Icons
 import { ICON_NAME } from "../../util/IconsName";
 //DataFake
-import { DataListaComando, Produto } from "../../util/ListaComandoDataFake";
 //Navegação
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 //Interface
-import BottomContanier from "../../components/BottomContanier/bottomContanier";
-import { ContainerQuantidade } from "../../components/Quantidade/containerQuantidade";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { handleDeleteProdutoComanda, handleGetComanda, handleUpdateQuantidadeProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
-import { Lista_TT010 } from "../../services/api/interfaces/comanda/CS_IResListaComanda";
-import { ToastType, showToast } from "../../util/ShowToast";
-import { CS_IResComandaById, Produtos_comanda } from "../../services/api/interfaces/comanda/CS_IResComandaById";
-import CustomLoading from "../../components/loading/CustomLoading";
-import { formatMoneyValue } from "../../util/FormatText";
-import { common003_01_styles } from "../003prevenda/003_01_produto/components/CommonStyles";
-import CustomSeparator from "../../components/lists/CustomSeparator";
-import { IReqUpdateQtdComanda } from "../../services/api/interfaces/comanda/CS_IReqUpdateQtdComandaProd";
 import React from "react";
+import BottomContanier from "../../components/BottomContanier/bottomContanier";
+import CustomSeparator from "../../components/lists/CustomSeparator";
+import CustomLoading from "../../components/loading/CustomLoading";
+import { IReqUpdateQtdComanda } from "../../services/api/interfaces/comanda/CS_IReqUpdateQtdComandaProd";
+import { CS_IResComandaById, Produtos_comanda } from "../../services/api/interfaces/comanda/CS_IResComandaById";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
+import { formatMoneyValue } from "../../util/FormatText";
+import { ToastType, showToast } from "../../util/ShowToast";
+import { handleDeleteProdutoComanda, handleGetComanda, handleUpdateQuantidadeProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
+import { common003_01_styles } from "../003prevenda/003_01_produto/components/CommonStyles";
 
 
 

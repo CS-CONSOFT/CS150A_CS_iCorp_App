@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import CurrencyInput from 'react-native-currency-input';
 import { commonStyle } from "../../../../CommonStyle";
 import CustomIcon from "../../../../components/icon/CustomIcon";
@@ -59,6 +59,9 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
 
     const [tablePriceList, setTablePriceList] = useState<TablePrice[]>()
 
+    //editar a quantidade
+    const [showEditAmount, setShowEditAmount] = useState(false);
+
 
     useEffect(() => {
         setIsClienteRetira(product.csicp_dd110_mod.Label === "Cliente Retira")
@@ -87,6 +90,22 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         } catch (error) {
             showToast(ToastType.ERROR, "ERRO", "Falha ao atualizar quantidade")
         } finally {
+            setStatus(FETCH_STATUS.IDLE)
+        }
+    }
+
+    async function alterAmountQtd(qtd: number) {
+        setStatus(FETCH_STATUS.LOADING)
+        try {
+            const res = await handleUpdateProductAmount(product.csicp_dd080.DD080_Id, { Quantidade: qtd })
+            if (res.IsOk) {
+                setProductAmount(qtd)
+                fcnSetAmountProduct(qtd)
+            }
+        } catch (error) {
+            showToast(ToastType.ERROR, "ERRO", "Falha ao atualizar quantidade")
+        } finally {
+            setShowEditAmount(false)
             setStatus(FETCH_STATUS.IDLE)
         }
     }
@@ -163,9 +182,29 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     )}
                     {status !== FETCH_STATUS.LOADING && (
                         <>
-                            <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
-                            <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
-                            <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
+                            {showEditAmount ?
+                                <>
+                                    <TextInput
+                                        onChangeText={(val) => setProductAmount(Number(val))}
+                                        style={styles.input}
+                                        keyboardType="numeric"
+                                        placeholder="Digite a quantidade"
+                                        defaultValue={String(productAmount)}
+                                    />
+                                    <TouchableOpacity style={styles.okButton} onPress={() => alterAmountQtd(productAmount)}>
+                                        <Text style={styles.okButtonText}>OK</Text>
+                                    </TouchableOpacity>
+                                </>
+                                :
+                                <>
+                                    <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
+                                    <TouchableOpacity onPress={() => setShowEditAmount(true)}>
+                                        <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
+                                    </TouchableOpacity>
+                                    <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
+                                </>
+
+                            }
                         </>
                     )}
 
@@ -414,5 +453,41 @@ const AlertDialogNovoPrecoTabela = ({ cs_atendimento_prod_id, listTablePrice, re
         </View>
     )
 }
+const styles = StyleSheet.create({
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#ccc',
+        marginBottom: 16,
+    },
+    amountContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 8,
+        width: 100,
+        textAlign: 'center',
+    },
+    okButton: {
+        marginLeft: 16,
+        backgroundColor: '#2E2E2E',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+    },
+    okButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+});
 
 export default C_003_01_01_ProductPvListItemEdit;

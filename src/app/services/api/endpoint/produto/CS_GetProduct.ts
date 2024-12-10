@@ -17,7 +17,7 @@ import { IResUltimasVendaProduto } from "../../interfaces/produto/CS_IResGetUlti
  * @param IGetProdutoSearch parametro de busca
  */
 export async function getProducts(IGetProdutoSearch: IReqGetProductSearch): Promise<IResProdutoSearch> {
-    console.log(IGetProdutoSearch);
+
 
     try {
         const headerParams = {
@@ -262,7 +262,7 @@ export async function getLastSalesProduct({ cs_tenant_id, cs_produto_id, cs_cont
 export async function saveGlobalDiscount({ cs_tenant_id, cs_atendimento_id, cs_valor_percentual }:
     { cs_tenant_id: number, cs_atendimento_id: string, cs_valor_percentual: number }): Promise<ICommonResponse> {
 
-    console.log("Data: " + cs_valor_percentual);
+
     const url = `/cs_At_40_LogicoService/rest/CS_PV_API/${cs_tenant_id}/${cs_atendimento_id}/SalvarDescontoGlobal`
     const response = await api.post(url, null, { params: { ValorPercentual: cs_valor_percentual } })
     return response.data as ICommonResponse

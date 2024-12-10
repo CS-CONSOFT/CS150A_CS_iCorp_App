@@ -1,25 +1,20 @@
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
-import { WebView } from 'react-native-webview';
 import { commonStyle } from "../../CommonStyle";
 import CustomHorizontalFilter, { FilterHorizontalItem } from "../../components/filterHorizontal/CustomHorizontalFilter";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
-import CustomLoading from "../../components/loading/CustomLoading";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 import { DataKey } from "../../enum/DataKeys";
 import { Csicp_dd070_Completo } from "../../services/api/interfaces/prevenda/CS_IResPreVendaLista";
 import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatMoneyValue } from "../../util/FormatText";
-import { getPaginationList } from "../../util/GetPaginationArray";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { getFinalDateToFilter, handleFetchPv, handleGenerateReport, handleLiberarPV, handleRetornarPV } from "../../view_controller/prevenda/PreVendaViewController";
 import { stylesPreVenda } from "./PreVendaStyles";
-import CustomSeparator from "../../components/lists/CustomSeparator";
-import React from "react";
 
 
 const CS_SC_003_PreVenda = () => {
@@ -36,7 +31,6 @@ const CS_SC_003_PreVenda = () => {
 
 
     useEffect(() => {
-
         // Resetar os dados ao alterar o filtro
         if (hasChangedFilter) {
             setPvList([]);  // Limpar a lista de dados
@@ -99,7 +93,6 @@ const CS_SC_003_PreVenda = () => {
                 setStatus(FETCH_STATUS.SUCCESS)
             }
         }
-
     };
 
     function goToDetails(currentPv: Csicp_dd070_Completo) {
@@ -185,7 +178,7 @@ const CS_SC_003_PreVenda = () => {
                     ListFooterComponent={() => <>
                         {isLoading && <ActivityIndicator size={32} color={"#000"} style={{ padding: 16 }} />}
                     </>}
-                    ListEmptyComponent={<CustomEmpty text={"Nenhuma pré venda encontrada"} />}
+                    ListEmptyComponent={() => !isLoading && <CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                     renderItem={({ item }) => <PreVendaRenderItem item={item}
                         onPress={() => goToDetails(item)} />}
                     keyExtractor={(item) => item.DD070_Nota.csicp_dd070.DD070_Id.toString()}

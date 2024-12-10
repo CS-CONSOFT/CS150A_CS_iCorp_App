@@ -25,7 +25,7 @@ export async function handleSearchProduct(iGetProductSearch: IReqGetProductSearc
     const estabId = (await getUserProperties()).estabId;
     iGetProductSearch.cs_empresa_id = estabId
     iGetProductSearch.cs_tenant_id = tenant!
-    iGetProductSearch.cs_page_size = 10
+    iGetProductSearch.cs_page_size = 999
 
 
     const productRes = await getProducts(iGetProductSearch)

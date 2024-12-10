@@ -13,16 +13,16 @@ const CS_SC_005_04_01_Pdf = ({ pdffile }: any) => {
             <Pdf
                 source={aquivoPdf}
                 onLoadComplete={(numberOfPages, filePath) => {
-                    console.log(`Numero de pagina: ${numberOfPages}`);
+
                 }}
                 onPageChanged={(page, numberOfPages) => {
-                    console.log(`Pagina: ${page}`);
+
                 }}
                 onError={(error) => {
-                    console.log(error);
+
                 }}
                 onPressLink={(uri) => {
-                    console.log(`Link pressed: ${uri}`);
+
                 }}
                 style={{ height: "60%" }}
             />
