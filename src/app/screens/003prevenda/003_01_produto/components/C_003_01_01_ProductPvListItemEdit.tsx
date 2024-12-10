@@ -50,6 +50,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
     const [unityPrice, setUnityPrice] = useState(0);
     const [percentDiscount2, setPercentDiscount2] = useState(0);
     const [valueDiscount, setValueDiscount] = useState(0);
+    const [totalDiscount, setTotalDiscount] = useState(0);
 
     const [showLoadingupdateDataFromSwitch, setUpdateDataFromSwitchs] = useState(false)
 
@@ -71,9 +72,9 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
         setIsRequisitar(product.csicp_dd080.DD080_Gera_Requisicao)
         setTablePrice(product.csicp_dd080.DD080_Preco_Tabela || 0);
         setUnityPrice(product.csicp_dd080.DD080_Preco_Unitario || 0);
-        setValueDiscount(product.csicp_dd080.DD080_Total_Desconto || 0);
-
-        var percentDiscount = 100 * (product.csicp_dd080.DD080_Total_Desconto / (product.csicp_dd080.DD080_Preco_Tabela * product.csicp_dd080.DD080_Quantidade))
+        setValueDiscount(product.csicp_dd080.DD080_Valor_DescProduto || 0);
+        setTotalDiscount(product.csicp_dd080.DD080_Total_Desconto || 0);
+        var percentDiscount = 100 * (product.csicp_dd080.DD080_Valor_DescProduto / (product.csicp_dd080.DD080_Preco_Tabela * product.csicp_dd080.DD080_Quantidade))
         setPercentDiscount2(percentDiscount);
     }, [])
 
@@ -328,7 +329,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                     </View>
 
                     <View style={{ flex: 1, marginLeft: 8 }}>
-                        <Text style={common003_01_styles.extraBottomStyleChilds}>Valor Desconto</Text>
+                        <Text style={common003_01_styles.extraBottomStyleChilds}>Valor Unitário</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <CurrencyInput
                                 value={valueDiscount}
@@ -347,6 +348,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                         </View>
                     </View>
                 </View>
+                <Text style={{ marginLeft: 8, fontWeight: 600 }}>Total Desconto: {formatMoneyValue(totalDiscount)}</Text>
 
             </View>
 

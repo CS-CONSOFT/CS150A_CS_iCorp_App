@@ -35,7 +35,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
     const [filter, setFilter] = useState({
         isPromo: false,
-        isSaldo: false
+        isSaldo: true
     })
 
     /** quando vem da pv, ao inserir o produto é passado o id da pv atual.
