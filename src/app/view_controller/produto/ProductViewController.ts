@@ -19,35 +19,18 @@ interface IArrayWithPagesAndProductResponse {
 }
 
 
-export async function handleSearchProduct(iGetProductSearch: IReqGetProductSearch): Promise<IArrayWithPagesAndProductResponse> {
+export async function handleSearchProduct(iGetProductSearch: IReqGetProductSearch): Promise<IResProdutoSearch> {
 
     const tenant = (await getUserProperties()).tenantId;
     const estabId = (await getUserProperties()).estabId;
-    iGetProductSearch.cs_empresa_id = estabId
-    iGetProductSearch.cs_tenant_id = tenant!
-    iGetProductSearch.cs_page_size = 999
+    iGetProductSearch.cs_empresa_id = estabId;
+    iGetProductSearch.cs_tenant_id = tenant!;
+    iGetProductSearch.cs_page_size = 6;
 
+    const productRes = await getProducts(iGetProductSearch);
+    ;
 
-    const productRes = await getProducts(iGetProductSearch)
-    let response: IArrayWithPagesAndProductResponse;
-    if (productRes.cs_is_ok) {
-        let pagesArray: number[] = []
-        for (let i = 1; i <= productRes.c_pages_number; i++) {
-            pagesArray.push(i)
-        }
-        response = {
-            isOk: productRes.cs_is_ok,
-            pagesArray: pagesArray,
-            productResponse: productRes
-        }
-    } else {
-        response = {
-            isOk: productRes.cs_is_ok,
-            error: productRes.cs_msg,
-            pagesArray: []
-        }
-    }
-    return response
+    return productRes;
 }
 
 export async function handleGetLastSalesProduct({ cs_produto_id }: { cs_produto_id: string }): Promise<IResUltimasVendaProduto> {
