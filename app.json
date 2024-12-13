@@ -7,7 +7,7 @@
       "android"
     ],
 
-    "version": "0.3.0",
+    "version": "0.3.2",
 
     "orientation": "portrait",
     "icon": "./assets/iconeLogoCS.png",
