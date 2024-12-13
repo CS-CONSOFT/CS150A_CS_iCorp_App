@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import { TextInput } from "react-native-gesture-handler";
@@ -7,13 +7,13 @@ import { commonStyle } from "../../../../CommonStyle";
 import CustomItemIconTitleRoundedBlue from "../../../../components/items/CustomItemIconTitleRoundedBlue";
 import CustomAlertDialog from "../../../../components/modal/CustomAlertDialog";
 import CustomTopItem from "../../../../components/topItem/CustomTopItem";
+import { DD075_Obs } from "../../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { ICON_NAME } from "../../../../util/IconsName";
 import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
-import { handlePatchAtualizaObservacaoPV } from "../../../../view_controller/prevenda/PreVendaViewController";
-import React from "react";
+import { handlePatchAtualizaObservacaoContribuintePV, handlePatchAtualizaObservacaoPV } from "../../../../view_controller/prevenda/PreVendaViewController";
 
-const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, descontoValor = 0, obsText }: { isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
+const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsulta = false, descontoValor = 0, obsText }: { obsContribuinte?: DD075_Obs, isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
     const { navigate } = useNavigation()
     const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
     const [isObsModalVisible, setIsObsModalVisible] = useState(false)
@@ -54,7 +54,15 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                         </View>
                         <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
                             <CustomItemIconTitleRoundedBlue
-                                title={"Observação"}
+                                title={"Obs"}
+                                onPress={showModalObs}
+                                iconName={ICON_NAME.OBS}
+                            />
+                        </View>
+
+                        <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
+                            <CustomItemIconTitleRoundedBlue
+                                title={"Obs Contri"}
                                 onPress={showModalObs}
                                 iconName={ICON_NAME.OBS}
                             />
@@ -82,15 +90,46 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ isConsulta = false, desc
                         children={<ObsItem textObs={obsText} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoPV({ cs_new_obs: newObs })
+                                console.log(newObs);
+
                                 if (!res.Out_IsUpdated) {
                                     showToast(ToastType.SUCCESS, "Sucesso", "Observação da nota atualizada!")
                                 } else {
-                                    showToast(ToastType.ERROR, "Falha", "Falha ao atualizar observação da nota!")
+                                    showToast(ToastType.ERROR, "Falha", res.Msg)
                                 }
                             } catch (error) {
-                                showToast(ToastType.ERROR, "Falha", "Falha ao atualizar observação da nota!")
+                                console.log(error);
+
+                                //@ts-ignore
+                                showToast(ToastType.ERROR, "Falha error", error.config.message)
                             } finally {
                                 setIsObsModalVisible(false)
+
+                            }
+                        }} dismiss={() => setIsObsModalVisible(false)} />}
+                    />
+
+                    <CustomAlertDialog
+                        isVisible={isObsModalVisible}
+                        onDismiss={() => { }}
+                        children={<ObsItem dd075={obsContribuinte} save={async (newObs) => {
+                            try {
+                                const res = await handlePatchAtualizaObservacaoContribuintePV({ DD075_ID: obsContribuinte?.csicp_dd075.DD070_ID || "", DD075_OBS: newObs })
+                                console.log(newObs);
+
+                                if (!res.Out_IsUpdated) {
+                                    showToast(ToastType.SUCCESS, "Sucesso", "Observação da nota atualizada!")
+                                } else {
+                                    showToast(ToastType.ERROR, "Falha", res.Msg)
+                                }
+                            } catch (error) {
+                                console.log(error);
+
+                                //@ts-ignore
+                                showToast(ToastType.ERROR, "Falha error", error.config.message)
+                            } finally {
+                                setIsObsModalVisible(false)
+
                             }
                         }} dismiss={() => setIsObsModalVisible(false)} />}
                     />
@@ -110,8 +149,6 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
                 <CurrencyInput
                     value={desc1}
                     onChangeValue={(number) => {
-                        console.log("Digitando: " + number);
-
                         setDesc1(number || 0)
                     }}
                     //@ts-ignore
@@ -133,7 +170,6 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
                 <Pressable style={commonStyle.btn_gray} onPress={() => {
                     setIsLoading(true)
-                    console.log("Salvando: " + Number(desc1));
                     save(Number(desc1))
                 }}>
                     {isLoading ? <ActivityIndicator color={"#000"} /> : <Text style={commonStyle.btn_text_gray}>Salvar</Text>}
@@ -146,8 +182,8 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
         </View>
     )
 }
-const ObsItem = ({ textObs, save, dismiss }: { textObs?: string, save: (newObs: string) => void, dismiss: () => void }) => {
-    const [obs, setObs] = useState(textObs || '')
+const ObsItem = ({ textObs, dd075, save, dismiss }: { textObs?: string, save: (newObs: string) => void, dismiss: () => void, dd075?: DD075_Obs }) => {
+    const [obs, setObs] = useState(textObs || dd075?.csicp_dd075.DD075_Descricao_Compl || "")
     const [isLoading, setIsLoading] = useState(false)
     return (
         <View style={commonStyle.modal_common_container}>
@@ -167,6 +203,9 @@ const ObsItem = ({ textObs, save, dismiss }: { textObs?: string, save: (newObs: 
                 </Pressable>
                 <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={dismiss}>
                     <Text style={styleProdutoPVDetalhe.btn_text_cancel_desconto}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={() => setObs("")}>
+                    <Text style={styleProdutoPVDetalhe.btn_text_limpar}>Limpar</Text>
                 </Pressable>
             </View>
         </View>
@@ -188,7 +227,7 @@ export const styleProdutoPVDetalhe = StyleSheet.create({
     },
     topHeaderItemStyle: {
         elevation: 1,
-        width: '25%'
+        width: '20%'
     },
     btn_apply_desconto: {
         backgroundColor: '#E3E3E3',
@@ -209,6 +248,11 @@ export const styleProdutoPVDetalhe = StyleSheet.create({
     },
     btn_text_cancel_desconto: {
         color: '#1068EB',
+        fontWeight: '600',
+        alignSelf: 'center'
+    },
+    btn_text_limpar: {
+        color: 'red',
         fontWeight: '600',
         alignSelf: 'center'
     }

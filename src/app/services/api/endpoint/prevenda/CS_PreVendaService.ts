@@ -1,7 +1,7 @@
 import { DataKey } from "../../../../enum/DataKeys";
 import { storeSimpleData } from "../../../storage/AsyncStorageConfig";
 import api from "../../axios_config";
-import { IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
+import { DD075_Obs, IResGetPv } from "../../interfaces/prevenda/CS_Common_IPreVenda";
 import { IReqInsertPvWhitoutService } from "../../interfaces/prevenda/CS_IReqInserirNovaPv";
 import { IReqGetPreVendaList } from "../../interfaces/prevenda/CS_IReqPreVendaLista";
 import { IReqUpdateDD071 } from "../../interfaces/prevenda/CS_IReqUpdateDD071";
@@ -376,17 +376,43 @@ export async function postPrecoTabelaNovoLista({ cs_tenant_id, cs_valor, cs_num_
  * Esta ACTION atualiza o preço  tabela e o numero preço tabela, qdo usado via tabela de preço.
 */
 export async function patchAtualizaObservaçãoPV({ cs_tenant_id, In_Obs, cs_atendimento_id }:
-    { cs_tenant_id: number, In_Obs: string, cs_atendimento_id: string }): Promise<{ Out_IsUpdated: boolean }> {
+    { cs_tenant_id: number, In_Obs: string, cs_atendimento_id: string }): Promise<{ Out_IsUpdated: boolean, Msg: string }> {
 
     const url = {
         In_Tenant_Id: cs_tenant_id,
         In_DD070_ID: cs_atendimento_id,
-        In_Obs: In_Obs
     }
 
     try {
         const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/csicp_dd070_SaveObs_PV`,
-            null,
+            In_Obs,
+            {
+                headers: url
+            });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function patchAtualizaObservaçãoContribuintePV({ cs_tenant_id, DD075_Id, DD075_Obs, cs_atendimento_id }:
+    { cs_tenant_id: number, DD075_Id: string, DD075_Obs: string, cs_atendimento_id: string }): Promise<{ Out_IsUpdated: boolean, Msg: string }> {
+
+    const url = {
+        In_Tenant_Id: cs_tenant_id
+    }
+
+    const DD075 = {
+        DD075_Id: DD075_Id,
+        DD070_ID: cs_atendimento_id,
+        DD075_TipoRegistro: 2,
+        DD075_NomeCampo: "",
+        DD075_Descricao_Compl: DD075_Obs
+    }
+
+    try {
+        const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/csicp_dd075_SaveObs_IntContrib`,
+            DD075,
             {
                 headers: url
             });

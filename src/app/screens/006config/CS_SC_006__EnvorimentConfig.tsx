@@ -13,6 +13,7 @@ import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { storeSimpleDataVc } from "../../view_controller/SharedViewController";
 import { logout } from "../../view_controller/login/LoginViewController";
+import React from "react";
 
 
 
@@ -71,7 +72,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                     storeSimpleDataVc(DataKey.TenantId, response.tenantId.toString()).then(() => {
                         //configura a url no axios
                         api.defaults.baseURL = response.urlBase;
-                        api.defaults.timeout = 15000
+                        api.defaults.timeout = 60000
                         api.defaults.timeoutErrorMessage = "Tempo Limite Atingido!"
 
 

@@ -35,6 +35,7 @@ import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
 import TopTab001 from "./top-tab001.routes";
 import PDF from "../screens/PDF";
+import CS_SC_013ConsultaScore from "../screens/013ConsultaScore/CS_SC_013ConsultaScore";
 
 
 
@@ -78,6 +79,7 @@ declare global {
             Splash_Entrega: undefined
             Splash_PreVenda: undefined
             Splash_Produto: undefined
+            ConsultaScore: undefined
         }
     }
 }
@@ -103,6 +105,16 @@ export default function StackRoutes() {
 
             <StackNav.Screen name="RespostaCrediario" component={CS_SC_012_RespostaCrediario} options={{
                 title: "Propostas",
+                headerTitleAlign: 'center',
+                headerTintColor: "#fff",
+                headerStyle: {
+                    backgroundColor: "#163045"
+                },
+                headerBackVisible: true,
+            }} />
+
+            <StackNav.Screen name="ConsultaScore" component={CS_SC_013ConsultaScore} options={{
+                title: "Consultar Score",
                 headerTitleAlign: 'center',
                 headerTintColor: "#fff",
                 headerStyle: {
