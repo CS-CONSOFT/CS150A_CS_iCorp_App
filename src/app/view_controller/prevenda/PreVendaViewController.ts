@@ -1,6 +1,6 @@
 import { DataKey } from "../../enum/DataKeys";
 import { ILoginResponse } from "../../screens/001login/ILoginResponse";
-import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getListPrecoTabela, getPv, insertProductToPv, patchAtualizaObservaçãoPV, postPrecoTabelaNovoLista, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
+import { GenerateReport, LiberarPV, RI_CancelaRI, RI_ExcluirRI, RI_Gerar_RI, RI_RequisitarRI, RetornarPV, csicp_gg001_Get_List_Almox, deleteProductFromPv, fetchPVs, getListPrecoTabela, getPv, insertProductToPv, patchAtualizaObservaçãoContribuintePV, patchAtualizaObservaçãoPV, postPrecoTabelaNovoLista, savedd071, setClienteToPv } from "../../services/api/endpoint/prevenda/CS_PreVendaService";
 import { updatePercentDiscount, updateProductAmount, updateProductSwitchItens, updateTablePrice, updateUnityPrice, updateValueDiscount } from "../../services/api/endpoint/produto/CS_GetProduct";
 import { ICommonResponse } from "../../services/api/interfaces/CS_ICommonResponse";
 import { DD071_Enderecos, IPVProductDiscount, IPVTenant, IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
@@ -517,6 +517,29 @@ export async function handlePatchAtualizaObservacaoPV({ cs_new_obs }:
         throw error;
     }
 }
+
+
+export async function handlePatchAtualizaObservacaoContribuintePV({ DD075_ID, DD075_OBS }:
+    { DD075_ID: string, DD075_OBS: string }) {
+    try {
+        // Obtém o usuário atual do armazenamento
+        const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
+
+        const currentPvId = await getSimpleData(DataKey.CurrentPV)
+
+        // Faz uma requisição para salvar os dados de endereço
+        const response = await patchAtualizaObservaçãoContribuintePV({
+            cs_tenant_id: currentUser.TenantId,
+            cs_atendimento_id: currentPvId as string,
+            DD075_Id: DD075_ID,
+            DD075_Obs: DD075_OBS
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 
 

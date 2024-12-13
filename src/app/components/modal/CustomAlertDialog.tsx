@@ -1,4 +1,5 @@
 
+import React from "react";
 import { ReactNode } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

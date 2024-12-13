@@ -53,7 +53,7 @@ export async function checkIfUserTheresRule({ sy001_id, tenant, regra }: { tenan
 
 /** valida o ambiente do usuário */
 export async function validaAmbiente({ tenant, token }: { tenant: number, token: string }): Promise<IReturnValida> {
-    console.log(tenant);
+
 
     try {
         const response = await api.get('/cs_At_40_LogicoService/rest/CS_ValidaAmbiente/Valida', {
@@ -63,7 +63,7 @@ export async function validaAmbiente({ tenant, token }: { tenant: number, token:
             }
         });
         storeSimpleDataVc(DataKey.DominioValorString, response.data.Dominio);
-        console.log(response.data);
+
 
         return response.data;
     } catch (err) {

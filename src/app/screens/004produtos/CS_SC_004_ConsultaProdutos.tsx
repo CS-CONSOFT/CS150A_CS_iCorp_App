@@ -25,42 +25,37 @@ import { handleSearchProduct } from "../../view_controller/produto/ProductViewCo
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import { moneyApplyMask } from "../../util/Masks";
 import CustomSeparator from "../../components/lists/CustomSeparator";
-
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
-    // Estados para gerenciar a lista de produtos, status de carregamento, paginação, mensagens de erro e filtros de pesquisa
-    const [productList, setProductList] = useState<IResGetProductItem[]>()
+    const [productList, setProductList] = useState<IResGetProductItem[]>([]);
     const [status, setStatus] = useState(FETCH_STATUS.IDLE);
-    const [paginationArray, setPaginationArray] = useState<number[]>([])
-    const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>()
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);  // Total de itens
+    const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>();
     const [filter, setFilter] = useState({
         isPromo: false,
-        isSaldo: false
-    })
+        isSaldo: true
+    });
+    const [lastSaldoValue, setLastSaldoValue] = useState(true)
 
-    /** quando vem da pv, ao inserir o produto é passado o id da pv atual.
-     * quando é insere comanda, a rota chamada é a de inserir produto na comanda
-     */
-    const { cameFromPv, insertComanda, comandaId } = route.params
-    const navigation = useNavigation()
-
+    const { cameFromPv, insertComanda, comandaId } = route.params;
+    const navigation = useNavigation();
 
     // Função para inserir produto na pré-venda
     function scInsertProduct(product: IResGetProductItem, saldoId?: string) {
-        setStatus(FETCH_STATUS.BTN_CLICK)
+        setStatus(FETCH_STATUS.BTN_CLICK);
         getSimpleData(DataKey.CurrentPV).then((currentPv) => {
-            const pvId = currentPv as string
+            const pvId = currentPv as string;
 
             if (insertComanda) {
                 let dataPostInsertComandaProduto: IComandaDataInsert = {
                     in_comanda_id: comandaId,
                     in_produto_id: product.Id || '--undefined--',
-                }
-                handleInsertProdutoComanda({ insertProdutoComanda: dataPostInsertComandaProduto }).then((res) => {
-                    setStatus(FETCH_STATUS.SUCCESS)
-                    //comandaId === undefined ? navigation.navigate('ComandaLista') : navigation.navigate('DetalheComanda', { comandaId: comandaId })
-                    showToast(ToastType.SUCCESS, "Produdo Inserido", "")
-                })
+                };
+                handleInsertProdutoComanda({ insertProdutoComanda: dataPostInsertComandaProduto }).then(() => {
+                    setStatus(FETCH_STATUS.SUCCESS);
+                    showToast(ToastType.SUCCESS, "Produto Inserido", "");
+                });
             } else {
                 handleInsertProductPv(
                     product.CodgProduto!.toString(),
@@ -69,91 +64,89 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                     1, // tipo atendimento
                     pvId ? pvId : undefined, // pv id
                     undefined, // conta id
-                    saldoId //saldo id
+                    saldoId // saldo id
                 ).then(() => {
-                    setStatus(FETCH_STATUS.SUCCESS)
-                    showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!")
+                    setStatus(FETCH_STATUS.SUCCESS);
+                    showToast(ToastType.SUCCESS, "Tudo certo!", "Produto adicionado com sucesso!");
                     if (cameFromPv) {
-                        navigation.goBack()
+                        navigation.goBack();
                     }
                 }).catch((err) => {
-                    showToast(ToastType.ERROR, "ERRO", err.response.data.Errors[0])
-                    setStatus(FETCH_STATUS.ERROR)
-                    return
-                })
+                    showToast(ToastType.ERROR, "ERRO", err.response.data.Errors[0]);
+                    setStatus(FETCH_STATUS.ERROR);
+                });
             }
         }).catch((err) => {
-            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
-            setStatus(FETCH_STATUS.ERROR)
-            return
-        })
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0]);
+            setStatus(FETCH_STATUS.ERROR);
+        });
     }
 
     // Flags para determinar o estado atual do carregamento
-    const isLoading = status == FETCH_STATUS.LOADING
-    const openModal = status == FETCH_STATUS.MODAL
-    const loadingBtnClickItem = status == FETCH_STATUS.BTN_CLICK
+    const isLoading = status === FETCH_STATUS.LOADING;
+    const openModal = status === FETCH_STATUS.MODAL;
+    const loadingBtnClickItem = status === FETCH_STATUS.BTN_CLICK;
 
     // Função para abrir o modal de filtros
     function handleFilterClick() {
-        setStatus(FETCH_STATUS.MODAL)
+        setStatus(FETCH_STATUS.MODAL);
     }
 
-
     // Função para realizar a busca de produtos
-    const handleFormSubmitToSearch = (valueToSearch?: any, page?: number) => {
-        /** caso a chamada seja feita por paginação, mudar o tipo de loading para manter a paginação mostrando em tela
-         * enquanto o usuário estiver vendo uma lista de produto baseado nos filtros dele.
-         */
+    const handleFormSubmitToSearch = (valueToSearch?: any, page: number = currentPage) => {
 
-        /** Foi criada a variavel _filterValues para fazermos a busca, porem
-         * para mostrar a lista precisamos de um objeto filterValues 
-         * que tenha controle de estado a nivel da tela. Por iss foi implementado o useState que
-         * guarda o _filterValues, para que possamos usar o filterValues na flat list.
-        */
-
-        setStatus(FETCH_STATUS.LOADING)
+        if (lastSaldoValue != filter.isSaldo) {
+            setLastSaldoValue(filter.isSaldo)
+            setProductList([])
+        }
+        setStatus(FETCH_STATUS.LOADING);
         const _filterValues: IReqGetProductSearch = {
-            cs_page: page || 1,
-            /** testa se tem apenas numeros, se sim, preenche o codigo, se nao, preenche a descricao */
+            cs_page: page,
             cs_codigo_produto: /^\d+$/.test(valueToSearch) ? valueToSearch : undefined,
             cs_descricao_reduzida: /^\d+$/.test(valueToSearch) ? undefined : valueToSearch,
             cs_is_com_saldo: filter.isSaldo
         };
 
-        //console.log(_filterValues);
 
 
-        //seta os valores para o filter values que sera enviado na chamada da api
-        setProductAtributtesToSearch(_filterValues)
 
-        //chamada da api
+        setProductAtributtesToSearch(_filterValues);
+
+        // Chamada da API para buscar produtos
         handleSearchProduct(_filterValues!).then((res) => {
-            if (res.isOk == false) {
-                navigation.navigate('Menu')
-                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
+            if (res.cs_is_ok === false) {
+                navigation.navigate('Menu');
+                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor");
             }
 
-            if (res.isOk) {
-                setProductList(res.productResponse?.List)
-                setPaginationArray(res.pagesArray)
-                setStatus(FETCH_STATUS.SUCCESS)
+            if (res.cs_is_ok) {
+                // Atualiza o total de itens disponível
+                setTotalCount(res.c_pages_number);
+
+
+                setProductList((prevList) => [...prevList, ...res.List]);
+                setStatus(FETCH_STATUS.SUCCESS);
             } else {
-                // @ts-ignore
-                setStatus(FETCH_STATUS.ERROR)
+                setStatus(FETCH_STATUS.ERROR);
             }
         }).catch((err) => {
-            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0])
-            setStatus(FETCH_STATUS.ERROR)
-            return
-        })
+            showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0]);
+            setStatus(FETCH_STATUS.ERROR);
+        });
     };
 
-    function handleRefreshList(): void {
-        handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, productAtributtesToSearch?.cs_page)
-    }
+    // Função de carregar mais produtos na rolagem infinita
+    const handleLoadMore = () => {
+        // Evita carregar mais se já carregamos todos os itens
+        if (currentPage < totalCount) {
+            if (isLoading) return; // Evita carregar mais enquanto está carregando
 
-
+            // Atualiza a página e chama a pesquisa novamente com a nova página
+            const nextPage = currentPage + 1;
+            setCurrentPage(nextPage); // Atualiza o estado de currentPage
+            handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, nextPage);
+        }
+    };
 
     // Renderização da tela
     return (
@@ -168,56 +161,46 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         showCamera={true}
                         previusScreen="Consulta_Produtos"
                     />
-
-
                 </View>
 
-                {isLoading ? (
-                    <ActivityIndicator style={[commonStyle.align_centralizar, { height: '100%' }]} size="large" color={ColorStyle.colorPrimary200} />
-                ) : (
-                    <View style={[paginationArray.length > 1 ? { height: "75%" } : { height: "88%" }]}>
-                        <FlatList
-                            data={productList}
-                            refreshing={isLoading}
-                            onRefresh={handleRefreshList}
-                            keyExtractor={(item) => item.Id!.toString()}
-                            ListEmptyComponent={<CustomEmpty text="Nenhum produto encontrado!" />}
-                            renderItem={({ item }) => (
-                                <CustomProduct
-                                    onClickItem={() => { }}
-                                    children={<ProductItem product={item} />}
-                                    image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
-                                    rightItem={
-                                        <RightItem
-                                            loadingClick={loadingBtnClickItem}
-                                            scInsertProduct={(saldoId) => scInsertProduct(item, saldoId)}
-                                            product={item}
-                                        />
-                                    }
-                                />
-                            )}
-                        />
+                <View style={{ height: "85%" }}>
+                    <FlatList
+                        data={productList}
+                        keyExtractor={(item) => item.Id!.toString()}
+                        ListEmptyComponent={() => !isLoading && <CustomEmpty text="Nenhum produto encontrado!" />}
+                        ListFooterComponent={() => isLoading && <ActivityIndicator color={"#000"} />}
+                        renderItem={({ item }) => (
+                            <CustomProduct
+                                onClickItem={() => { }}
+                                children={<ProductItem product={item} />}
+                                image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
+                                rightItem={
+                                    <RightItem
+                                        loadingClick={loadingBtnClickItem}
+                                        scInsertProduct={(saldoId) => scInsertProduct(item, saldoId)}
+                                        product={item}
+                                    />
+                                }
+                            />
+                        )}
+                        refreshing={isLoading}
+                        onEndReached={handleLoadMore} // Detecta o final da lista e carrega mais
+                        onEndReachedThreshold={0.5} // Carrega mais quando 50% do final da lista for visível
+                    />
+                </View>
 
-                    </View>
-                )}
-                {paginationArray.length > 1 && (
-                    <View >
-                        <Custom_Pagination
-                            onPagePress={(page) => handleFormSubmitToSearch(productAtributtesToSearch?.cs_descricao_reduzida, page)}
-                            paginationArray={paginationArray}
-                        />
-                    </View>
-                )}
                 <CustomAlertDialog
                     isVisible={openModal}
                     onDismiss={() => { }}
-                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} filter={filter} setFilter={setFilter} close={() => setStatus(FETCH_STATUS.IDLE)} />}
+                    children={<ModalSwitchFilter titles={['Promoção', 'Com Saldo']} filter={filter} setFilter={setFilter} close={() => {
+                        setStatus(FETCH_STATUS.IDLE)
+                    }} />}
                 />
             </Suspense>
         </SafeAreaView>
-
     );
-}
+};
+
 
 // Componente de exibição da imagem do produto
 const ImageProductItem = ({ descProd, image }: { descProd: string, image?: string }) => {
