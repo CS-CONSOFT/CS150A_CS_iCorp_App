@@ -1,3 +1,5 @@
+import React from "react";
+
 const CS_SC_013ConsultaScore = () => {
     return (
         <>SCORE AQUI</>
