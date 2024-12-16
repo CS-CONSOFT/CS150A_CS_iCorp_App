@@ -21,6 +21,7 @@ import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import CustomLoading from "../../components/loading/CustomLoading";
 import { moneyApplyMask, moneyRemoveMask } from "../../util/Masks";
 import CurrencyInput from "react-native-currency-input";
+import React from "react";
 
 const CS_SC_007_Pagamento = () => {
     // Estado para armazenar o PV (Ponto de Venda) atual
@@ -283,34 +284,16 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
     /** guarda o id da forma de pagamento selecionada */
     const [selected, setSelected] = useState("");
     /** guarda a lista de pagamento */
-    const [paymentsForm, setPaymentsForm] = useState<{ key: string, value: string }[]>();
+    const [paymentsForm, setPaymentsForm] = useState<{ key: string, value: string }[]>([{
+        key: "",
+        value: ""
+    }]);
     const [btnLoading, setBtnLoading] = useState(false)
 
     useEffect(() => {
         setBtnLoading(false)
         getFormaPagamentoCombo()
     }, [])
-
-    /**
-      * Funcao que busca as formas de pagamento
-      */
-    function getFormaPagamento002() {
-        try {
-            handleGetListOfPaymentForm002(isEntrance).then((res) => {
-                if (res !== undefined) {
-                    const transformedData = res.Csicp_bb026!.map(item => ({
-                        key: item.ID,
-                        value: item.BB026_FormaPagamento
-                    }));
-                    setPaymentsForm(transformedData)
-                } else {
-                    showToast(ToastType.ERROR, "Lista vazia", "Não foi possivel recuperar a forma de pagamento!")
-                }
-            })
-        } catch (error: any) {
-            showToast(ToastType.ERROR, "ERROR", error)
-        }
-    }
 
     function getFormaPagamentoCombo() {
         try {
@@ -344,7 +327,7 @@ const ItemFormaPagamento = ({ onFormSelected, isEntrance = false }: { isEntrance
                             onFormSelected(key)
                         }
                     }}
-                    data={paymentsForm!}
+                    data={paymentsForm}
                     save="key"
                 />
             </View>

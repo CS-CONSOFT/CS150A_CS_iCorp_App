@@ -476,14 +476,11 @@ export async function handlePostPrecoTabelaNovoLista({ cs_atendimento_prod_id, c
         const currentUser = await getObject(DataKey.LoginResponse) as ILoginResponse;
 
 
-        let currentPvId: any = ''
-        getSimpleData(DataKey.CurrentPV).then((res) => {
-            currentPvId = res
-        })
-
+        const currentPvId = await getSimpleData(DataKey.CurrentPV)
         // Faz uma requisição para salvar os dados de endereço
         const response = await postPrecoTabelaNovoLista({
             cs_tenant_id: currentUser.TenantId,
+            //@ts-ignore
             cs_atendimento_id: currentPvId,
             cs_atendimento_prod_id: cs_atendimento_prod_id,
             cs_num_preco: cs_num_preco,

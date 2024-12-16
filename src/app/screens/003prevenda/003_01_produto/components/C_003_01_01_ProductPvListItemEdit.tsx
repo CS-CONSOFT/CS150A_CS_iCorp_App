@@ -412,7 +412,8 @@ const AlertDialogNovoPrecoTabela = ({ cs_atendimento_prod_id, listTablePrice, re
 
         //se falhar
         if (!response.IsOk) {
-            showToast(ToastType.ERROR, "Falha", "Não foi possivel atualizar preço tabela, tente novamente")
+            //@ts-ignore
+            showToast(ToastType.ERROR, "Falha", response.Msg)
             setIsLoading(false)
             return
         } else {
