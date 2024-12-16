@@ -98,6 +98,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         if (lastSaldoValue != filter.isSaldo) {
             setLastSaldoValue(filter.isSaldo)
             setProductList([])
+        } else {
+            setProductList([])
         }
         setStatus(FETCH_STATUS.LOADING);
         const _filterValues: IReqGetProductSearch = {
