@@ -37,6 +37,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         isSaldo: true
     });
     const [lastSaldoValue, setLastSaldoValue] = useState(true)
+    const [lastSearch, setLastSearch] = useState("")
 
     const { cameFromPv, insertComanda, comandaId } = route.params;
     const navigation = useNavigation();
@@ -98,12 +99,23 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         if (lastSaldoValue != filter.isSaldo) {
             setLastSaldoValue(filter.isSaldo)
             setProductList([])
-        } else {
-            setProductList([])
         }
+
+        /**
+         * changePage => caso a pesquisa mude, a pagina deve ser setada para a 1 novamente, porem como o 
+         * page recebe como parametro, isso é controlado atraves dessa variavel
+         */
+        let changePage = false;
+        if (lastSearch != valueToSearch) {
+            changePage = true
+            setCurrentPage(1)
+            setProductList([])
+            setLastSearch(valueToSearch)
+        }
+
         setStatus(FETCH_STATUS.LOADING);
         const _filterValues: IReqGetProductSearch = {
-            cs_page: page,
+            cs_page: changePage ? 1 : page,
             cs_codigo_produto: /^\d+$/.test(valueToSearch) ? valueToSearch : undefined,
             cs_descricao_reduzida: /^\d+$/.test(valueToSearch) ? undefined : valueToSearch,
             cs_is_com_saldo: filter.isSaldo
@@ -134,7 +146,9 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         }).catch((err) => {
             showToast(ToastType.ERROR, "Erro", err.response.data.Errors[0]);
             setStatus(FETCH_STATUS.ERROR);
-        });
+        }).finally(() => {
+            changePage = false;
+        })
     };
 
     // Função de carregar mais produtos na rolagem infinita
@@ -149,6 +163,11 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, nextPage);
         }
     };
+
+    function search() {
+        handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, currentPage);
+
+    }
 
     // Renderização da tela
     return (

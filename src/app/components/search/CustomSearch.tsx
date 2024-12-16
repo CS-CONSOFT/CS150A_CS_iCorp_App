@@ -6,6 +6,7 @@ import { ICON_NAME } from "../../util/IconsName";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DataKey } from "../../enum/DataKeys";
 import { getSimpleData, storeSimpleData } from "../../services/storage/AsyncStorageConfig";
+import React from "react";
 
 
 const CustomSearch = ({

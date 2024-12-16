@@ -200,7 +200,7 @@ const C_003_01_01_ProductPvListItemEdit = ({ product, saveTablePrice, saveUnityP
                                 <>
                                     <Ionicons name={'remove-circle-outline'} size={36} onPress={() => alterAmount(false)} />
                                     <TouchableOpacity onPress={() => setShowEditAmount(true)}>
-                                        <Text style={common003_01_styles.extraBottomStyleChilds}>{productAmount}</Text>
+                                        <Text style={[common003_01_styles.extraBottomStyleChilds, { textDecorationLine: 'underline' }]}>{productAmount}</Text>
                                     </TouchableOpacity>
                                     <Ionicons name={'add-circle-outline'} size={36} onPress={() => alterAmount(true)} />
                                 </>
@@ -412,7 +412,7 @@ const AlertDialogNovoPrecoTabela = ({ cs_atendimento_prod_id, listTablePrice, re
 
         //se falhar
         if (!response.IsOk) {
-            showToast(ToastType.ERROR, "Falha", "Não foi possivel atualizar preço tabela, tente novamente")
+            showToast(ToastType.ERROR, "Falha", response.Msg)
             setIsLoading(false)
             return
         } else {
