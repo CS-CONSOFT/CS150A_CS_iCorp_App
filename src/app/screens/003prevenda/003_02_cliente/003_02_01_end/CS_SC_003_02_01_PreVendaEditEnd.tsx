@@ -94,7 +94,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
         getCurrentPv()
         try {
             handleGetUfList().then((res) => {
-                const list = res.Lista_csicp_aa027
+                const list = res.csicp_aa027_List
                 const mappedUfList = list.map(item => (
                     {
                         key: item.csicp_aa027.Id,
@@ -188,7 +188,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
      */
     function getCities(valor?: string) {
         handleGetCityList(attributesMap.UF, valor).then((res) => {
-            const list = res.csicp_aa028
+            const list = res.csicp_aa028_List
             const mappedList = list.map(item =>
             (
                 {
