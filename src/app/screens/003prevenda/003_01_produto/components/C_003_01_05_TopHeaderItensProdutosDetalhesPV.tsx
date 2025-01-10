@@ -13,7 +13,7 @@ import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
 import { handlePatchAtualizaObservacaoContribuintePV, handlePatchAtualizaObservacaoPV } from "../../../../view_controller/prevenda/PreVendaViewController";
 
-const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsulta = false, descontoValor = 0, obsText }: { obsContribuinte?: DD075_Obs, isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
+const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContribuinte, isConsulta = false, descontoValor = 0, obsText }: { refreshSreen: () => void, obsContribuinte?: DD075_Obs, isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
     const { navigate } = useNavigation()
     const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
     const [isObsModalVisible, setIsObsModalVisible] = useState(false)
@@ -25,7 +25,6 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsu
     function showModalObs() {
         setIsObsModalVisible(true)
     }
-
     return (
         <View>
             {isConsulta && (
@@ -76,10 +75,12 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsu
                             handleSaveGlobalDiscount({ cs_valor_percentual: discountValue }).then((res) => {
                                 if (res.IsOk) {
                                     showToast(ToastType.SUCCESS, "Sucesso", res.Msg)
+                                    refreshSreen()
                                 } else {
                                     showToast(ToastType.ERROR, "Erro", res.Msg)
                                 }
                                 setIsDiscountModalVisible(false)
+
                             })
                         }} dismiss={() => setIsDiscountModalVisible(false)} />}
                     />
@@ -93,10 +94,12 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsu
                                 console.log(newObs);
 
                                 if (!res.Out_IsUpdated) {
+                                    refreshSreen()
                                     showToast(ToastType.SUCCESS, "Sucesso", "Observação da nota atualizada!")
                                 } else {
                                     showToast(ToastType.ERROR, "Falha", res.Msg)
                                 }
+
                             } catch (error) {
                                 console.log(error);
 
@@ -104,7 +107,6 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsu
                                 showToast(ToastType.ERROR, "Falha error", error.config.message)
                             } finally {
                                 setIsObsModalVisible(false)
-
                             }
                         }} dismiss={() => setIsObsModalVisible(false)} />}
                     />
@@ -112,12 +114,13 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ obsContribuinte, isConsu
                     <CustomAlertDialog
                         isVisible={isObsModalVisible}
                         onDismiss={() => { }}
-                        children={<ObsItem dd075={obsContribuinte} save={async (newObs) => {
+                        children={<ObsItemContri dd075={obsContribuinte} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoContribuintePV({ DD075_ID: obsContribuinte?.csicp_dd075.DD070_ID || "", DD075_OBS: newObs })
                                 console.log(newObs);
 
                                 if (!res.Out_IsUpdated) {
+                                    refreshSreen()
                                     showToast(ToastType.SUCCESS, "Sucesso", "Observação da nota atualizada!")
                                 } else {
                                     showToast(ToastType.ERROR, "Falha", res.Msg)
@@ -183,6 +186,36 @@ const DescontoItem = ({ descontoValor, save, dismiss }: { descontoValor?: number
     )
 }
 const ObsItem = ({ textObs, dd075, save, dismiss }: { textObs?: string, save: (newObs: string) => void, dismiss: () => void, dd075?: DD075_Obs }) => {
+    const [obs, setObs] = useState(textObs || dd075?.csicp_dd075.DD075_Descricao_Compl || "")
+    const [isLoading, setIsLoading] = useState(false)
+    return (
+        <View style={commonStyle.modal_common_container}>
+            <Text>Observação</Text>
+            <TextInput style={commonStyle.common_input}
+                multiline={true}
+                onChangeText={setObs}
+                value={obs}
+            />
+
+            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
+                <Pressable style={commonStyle.btn_gray} onPress={() => {
+                    setIsLoading(true)
+                    save(obs)
+                }}>
+                    {isLoading ? <ActivityIndicator color={"#000"} /> : <Text style={commonStyle.btn_text_gray}>Salvar</Text>}
+                </Pressable>
+                <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={dismiss}>
+                    <Text style={styleProdutoPVDetalhe.btn_text_cancel_desconto}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styleProdutoPVDetalhe.btn_cancel_desconto} onPress={() => setObs("")}>
+                    <Text style={styleProdutoPVDetalhe.btn_text_limpar}>Limpar</Text>
+                </Pressable>
+            </View>
+        </View>
+    )
+}
+
+const ObsItemContri = ({ textObs, dd075, save, dismiss }: { textObs?: string, save: (newObs: string) => void, dismiss: () => void, dd075?: DD075_Obs }) => {
     const [obs, setObs] = useState(textObs || dd075?.csicp_dd075.DD075_Descricao_Compl || "")
     const [isLoading, setIsLoading] = useState(false)
     return (

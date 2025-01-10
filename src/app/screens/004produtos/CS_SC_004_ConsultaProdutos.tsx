@@ -130,7 +130,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         handleSearchProduct(_filterValues!).then((res) => {
             if (res.cs_is_ok === false) {
                 navigation.navigate('Menu');
-                showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor");
+                showToast(ToastType.ERROR, "Erro", res.cs_msg || "Erro ao buscar produtos");
             }
 
             if (res.cs_is_ok) {
