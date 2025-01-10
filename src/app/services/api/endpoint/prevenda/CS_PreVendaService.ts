@@ -59,7 +59,12 @@ export async function fetchPVs(iGetPreVendaList: IReqGetPreVendaList): Promise<I
 
         const url = `/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/Get_PreVendas_List`;
         const response = await api.get(url, { headers: params });
-        return response.data as IResPreVenda;
+        if (response.data != undefined) {
+            return response.data as IResPreVenda;
+        } else {
+            throw new Error(`Falha ao buscar lista de PV`);
+        }
+
     } catch (error) {
         throw new Error(`Falha ao buscar lista de PV: ${error}`);;
     }
