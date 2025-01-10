@@ -177,28 +177,35 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
      * @param key id da seleção
      */
     function setSelectedUf(key: string) {
+        console.log('uf selecionada', key);
         setValueToObjectWhenInputTyped('Cidade', '')
         setValueToObjectWhenInputTyped('UF', key)
-        getCities()
+        getCities(key, "")
     }
 
     /**
      * Função que busca as cidades
      * @param valor o valor de pesquisa
      */
-    function getCities(valor?: string) {
-        handleGetCityList(attributesMap.UF, valor).then((res) => {
-            const list = res.csicp_aa028_List
-            const mappedList = list.map(item =>
-            (
-                {
-                    key: item.csicp_aa028.Id,
-                    value: item.csicp_aa028.AA028_Cidade
-                }
-            )
-            )
-            setCityList(mappedList)
-        })
+    function getCities(ufKey: string, valor?: string,) {
+        if (ufKey != "") {
+            console.log('chamando get citites', ufKey);
+
+            handleGetCityList(ufKey, valor).then((res) => {
+                const list = res.csicp_aa028_List
+                const mappedList = list.map(item =>
+                (
+                    {
+                        key: item.csicp_aa028.Id,
+                        value: item.csicp_aa028.AA028_Cidade
+                    }
+                )
+                )
+                console.log(mappedList);
+
+                setCityList(mappedList)
+            })
+        }
     }
 
     /**

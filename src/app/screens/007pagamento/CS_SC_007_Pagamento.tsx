@@ -41,6 +41,7 @@ const CS_SC_007_Pagamento = () => {
     // Função para inicializar o componente, obtendo os dados do PV e calculando os valores pagos e a pagar
     function start() {
         setStatus(FETCH_STATUS.LOADING)
+        setToDeleteForm(false)
         try {
             handleGetPv().then((res) => {
                 if (res !== undefined) {
