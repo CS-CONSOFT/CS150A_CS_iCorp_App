@@ -58,8 +58,6 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
         try {
             handleGetUfList().then((res) => {
                 const list = res.csicp_aa027_List
-
-
                 const mappedUfList = list.map(item => (
                     {
                         key: item.csicp_aa027.Id,
@@ -175,8 +173,10 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param key id da selecao
      */
     function setSelectedUf(key: string) {
+
+
         setUfSelected(key)
-        getCities(key, undefined)
+        getCities(key, "")
     }
 
     /**
@@ -185,20 +185,23 @@ const CS_SC_009_CadastroEndereco = ({ route }: { route: any }) => {
      * @param ufId id da UF
      */
     function getCities(ufId: string, valor?: string) {
-        handleGetCityList(ufId, valor).then((res) => {
-            const list = res.csicp_aa028_List
-            if (list !== undefined) {
-                const mappedList = list.map(item =>
-                (
-                    {
-                        key: item.csicp_aa028.Id,
-                        value: item.csicp_aa028.AA028_Cidade
-                    }
-                )
-                )
-                setCityList(mappedList)
-            }
-        })
+        if (ufId != "") {
+            handleGetCityList(ufId, valor).then((res) => {
+                const list = res.csicp_aa028_List
+                if (list !== undefined) {
+                    const mappedList = list.map(item =>
+                    (
+                        {
+                            key: item.csicp_aa028.Id,
+                            value: item.csicp_aa028.AA028_Cidade
+                        }
+                    )
+                    )
+                    setCityList(mappedList)
+                }
+            })
+        }
+
     }
 
     /**
