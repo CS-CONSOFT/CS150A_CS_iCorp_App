@@ -65,7 +65,7 @@ const CS_SC_Serie = () => {
             placeholder="Chave Nota"
             onSearchPress={(value) => search(value)}
             clickToSearch={true}
-            keyboartType='numeric'
+            // keyboartType='numeric'
             showCamera={true}
             previusScreen="Serie"
         />
