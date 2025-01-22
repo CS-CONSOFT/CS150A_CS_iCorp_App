@@ -2,10 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CS_SC_ConsultaProdutos from "../screens/004produtos/CS_SC_004_ConsultaProdutos";
 import TopTab001 from "./top-tab001.routes";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getSimpleData, storeSimpleData } from "../services/storage/AsyncStorageConfig";
 import { DataKey } from "../enum/DataKeys";
 import { StyleSheet, Text, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const BottomTab = createBottomTabNavigator()
@@ -26,11 +27,13 @@ export default function TabRoutes002({ route }: { route: any }) {
             console.log('currentCountOfProduct:', data);
         };
 
-        storeSimpleData(DataKey.PV_CAME_FROM_BOTTOM_NAVIGATION, "true");
 
         fetchData();
     }, [currentCountOfProduct]);
 
+    useFocusEffect(useCallback(() => {
+        storeSimpleData(DataKey.PV_CAME_FROM_BOTTOM_NAVIGATION, "true");
+    }, []))
 
 
     const { cameFromPv, insertComanda, comandaId } = route.params;
@@ -93,22 +96,25 @@ export default function TabRoutes002({ route }: { route: any }) {
                 />
             )} */}
 
-            <BottomTab.Screen
-                name="Pré Venda"
-                options={{
-                    tabBarIcon: ({ color, focused }) => (
-                        <View style={styles.iconContainer}>
-                            <Ionicons color={color} size={24} name={"cart"} />
-                            {currentCountOfProduct > 0 && (
-                                <View style={styles.badge}>
-                                    <Text style={styles.badgeText}>{currentCountOfProduct}</Text>
-                                </View>
-                            )}
-                        </View>
-                    ),
-                }}
-                component={TopTab001}
-            />
+            {!cameFromPv && (
+                <BottomTab.Screen
+                    name="Pré Venda"
+                    options={{
+                        tabBarIcon: ({ color, focused }) => (
+                            <View style={styles.iconContainer}>
+                                <Ionicons color={color} size={24} name={"cart"} />
+                                {currentCountOfProduct > 0 && (
+                                    <View style={styles.badge}>
+                                        <Text style={styles.badgeText}>{currentCountOfProduct}</Text>
+                                    </View>
+                                )}
+                            </View>
+                        ),
+                    }}
+                    component={TopTab001}
+                />
+            )}
+
 
         </BottomTab.Navigator >
 

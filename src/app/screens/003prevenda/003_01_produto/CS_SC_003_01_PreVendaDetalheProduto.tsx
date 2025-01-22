@@ -25,7 +25,6 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
     useFocusEffect(
         useCallback(() => {
             getCurrentPv()
-
         }, [])
     );
 

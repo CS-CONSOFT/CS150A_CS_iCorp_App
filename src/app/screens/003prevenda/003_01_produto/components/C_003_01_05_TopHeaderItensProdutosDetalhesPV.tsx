@@ -33,6 +33,10 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
 
                 
                  */
+                console.log("---");
+                console.log(cameFromButtonNavigation);
+                console.log("---");
+
                 if (cameFromButtonNavigation === "true") {
                     setPvCameFromButtonNavigation(true)
                 } else {
@@ -40,7 +44,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                 }
 
             })
-        }, [])
+        }, [pvCameFromButtonNavigation])
     )
 
     function showModalDiscount() {
@@ -73,7 +77,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                             <CustomItemIconTitleRoundedBlue
                                 title={"Código"}
                                 onPress={() => {
-                                    if (pvCameFromButtonNavigation) {
+                                    if (!pvCameFromButtonNavigation) {
                                         navigate('Consulta_Produtos', { cameFromPv: true, insertComanda: false })
                                     } else {
                                         showToast(ToastType.INFO, "Para inserir um novo produto", "Use o botão inferior para ir para a tela de produtos")
