@@ -33,9 +33,6 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
 
                 
                  */
-                console.log("---");
-                console.log(cameFromButtonNavigation);
-                console.log("---");
 
                 if (cameFromButtonNavigation === "true") {
                     setPvCameFromButtonNavigation(true)
@@ -126,7 +123,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                         children={<ObsItem textObs={obsText} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoPV({ cs_new_obs: newObs })
-                                console.log(newObs);
+
 
                                 if (!res.Out_IsUpdated) {
                                     refreshSreen()
@@ -136,7 +133,6 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                                 }
 
                             } catch (error) {
-                                console.log(error);
 
                                 //@ts-ignore
                                 showToast(ToastType.ERROR, "Falha error", error.config.message)
@@ -152,7 +148,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                         children={<ObsItemContri dd075={obsContribuinte} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoContribuintePV({ DD075_ID: obsContribuinte?.csicp_dd075.DD070_ID || "", DD075_OBS: newObs })
-                                console.log(newObs);
+
 
                                 if (!res.Out_IsUpdated) {
                                     refreshSreen()
@@ -161,7 +157,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                                     showToast(ToastType.ERROR, "Falha", res.Msg)
                                 }
                             } catch (error) {
-                                console.log(error);
+
 
                                 //@ts-ignore
                                 showToast(ToastType.ERROR, "Falha error", error.config.message)

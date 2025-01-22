@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Suspense, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
@@ -26,6 +26,15 @@ import { handleSearchProduct } from "../../view_controller/produto/ProductViewCo
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
 import { Dimensions } from 'react-native';
 
+interface FilterProduto {
+    isPromo: boolean,
+    isSaldo: boolean,
+    cs_descricao_artigo?: string,
+    cs_descricao_marca?: string,
+    cs_referencia?: string,
+    cs_descricao_grupo?: string
+
+}
 
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
@@ -34,10 +43,15 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);  // Total de itens
     const [productAtributtesToSearch, setProductAtributtesToSearch] = useState<IReqGetProductSearch>();
-    const [filter, setFilter] = useState({
+    const [filter, setFilter] = useState<FilterProduto>({
         isPromo: false,
-        isSaldo: true
+        isSaldo: true,
+        cs_descricao_artigo: "",
+        cs_descricao_marca: "",
+        cs_referencia: "",
+        cs_descricao_grupo: ""
     });
+
     const [lastSaldoValue, setLastSaldoValue] = useState(true)
     const [lastSearch, setLastSearch] = useState("")
 
@@ -97,6 +111,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     // Função para realizar a busca de produtos
     const handleFormSubmitToSearch = (valueToSearch?: any, page: number = currentPage) => {
+        console.log(filter);
 
         if (lastSaldoValue != filter.isSaldo) {
             setLastSaldoValue(filter.isSaldo)
@@ -113,14 +128,22 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
             setCurrentPage(1)
             setProductList([])
             setLastSearch(valueToSearch)
+        } else {
+            return;
         }
 
         setStatus(FETCH_STATUS.LOADING);
+
         const _filterValues: IReqGetProductSearch = {
             cs_page: changePage ? 1 : page,
             cs_codigo_produto: /^\d+$/.test(valueToSearch) ? valueToSearch : undefined,
             cs_descricao_reduzida: /^\d+$/.test(valueToSearch) ? undefined : valueToSearch,
-            cs_is_com_saldo: filter.isSaldo
+            cs_is_com_saldo: filter.isSaldo,
+
+            cs_descricao_marca: filter.cs_descricao_marca,
+            cs_descricao_grupo: filter.cs_descricao_grupo,
+            cs_referencia: filter.cs_referencia,
+            cs_descricao_artigo: filter.cs_descricao_artigo,
         };
 
 
@@ -130,6 +153,8 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
         // Chamada da API para buscar produtos
         handleSearchProduct(_filterValues!).then((res) => {
+
+
             if (res.cs_is_ok === false) {
                 navigation.navigate('Menu');
                 showToast(ToastType.ERROR, "Erro", res.cs_msg || "Erro ao buscar produtos");
@@ -358,28 +383,88 @@ const RightItem = ({ scInsertProduct, loadingClick, product }: { scInsertProduct
 }
 
 // Componente do modal de filtros com switches para promoção e saldo
-const ModalSwitchFilter = ({ titles, close, filter, setFilter }: { titles: string[], close: () => void, filter, setFilter }) => {
+const ModalSwitchFilter = ({ titles, close, filter, setFilter }: { titles: string[], close: () => void, filter: FilterProduto, setFilter }) => {
 
     return (
         <View style={{ flexDirection: 'column', backgroundColor: "#fff", width: '80%', padding: 8, borderRadius: 32, justifyContent: 'center' }}>
-            <CustomIcon icon={ICON_NAME.FECHAR} onPress={close} />
-            {/*   <CustomSwitch
-                title={titles[0]}
-                switchValue={filter.isPromo}
-                onValueChange={(value) => {
-                    setFilter({ isPromo: value, isSaldo: filter.isSaldo })
-                    //close()
-                }}
-            /> */}
+            <CustomIcon icon={ICON_NAME.FECHAR} onPress={() => {
+                close()
+
+            }} />
             <CustomSwitch
                 title={titles[1]}
                 switchValue={filter.isSaldo}
                 onValueChange={(value) => {
-                    setFilter({ isPromo: filter.isPromo, isSaldo: value })
-                    // close()
+                    setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        isPromo: filter.isPromo, isSaldo: value
+                    }))
+
                 }}
             />
-            <Pressable style={commonStyle.common_button_style} onPress={() => close()}>
+            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Descrição Artigo</Text>
+            <TextInput
+                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 250 }]}
+                onChangeText={(value) =>
+                    setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        cs_descricao_artigo: value,
+                    }))
+                }
+                value={filter.cs_descricao_artigo}
+                placeholder="Descrição Artigo"
+            // keyboardType='numeric'
+            />
+
+
+            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Descrição Marca</Text>
+            <TextInput
+                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 250 }]}
+
+                onChangeText={(value) =>
+                    setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        cs_descricao_marca: value,
+                    }))
+                }
+                value={filter.cs_descricao_marca}
+                placeholder="Descrição Marca"
+            // keyboardType='numeric'
+            />
+
+            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Referência</Text>
+            <TextInput
+                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 250 }]}
+                onChangeText={(value) =>
+                    setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        cs_referencia: value,
+                    }))
+                }
+                value={filter.cs_referencia}
+                placeholder="Referência"
+            // keyboardType='numeric'
+            />
+
+
+            <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Descrição Grupo</Text>
+            <TextInput
+                style={[commonStyle.common_input, commonStyle.common_margin_bottom_16, { width: 250 }]}
+                value={filter.cs_descricao_grupo}
+                placeholder="Descrição Grupo"
+                onChangeText={(value) =>
+                    setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        cs_descricao_grupo: value,
+                    }))
+                }
+            // keyboardType='numeric'
+            />
+
+
+            <Pressable style={commonStyle.common_button_style} onPress={() => {
+                close()
+            }}>
                 <Text style={commonStyle.common_text_button_style}>Inserir Filtro</Text>
             </Pressable>
         </View>

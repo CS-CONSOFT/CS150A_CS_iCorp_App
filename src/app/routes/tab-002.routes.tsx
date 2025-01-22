@@ -24,7 +24,7 @@ export default function TabRoutes002({ route }: { route: any }) {
         const fetchData = async () => {
             const data = await getSimpleData(DataKey.COUNT_PRODUCT_CURRENT_PV);
             setCurrentCountOfProduct(Number(data) || 0);
-            console.log('currentCountOfProduct:', data);
+
         };
 
 
