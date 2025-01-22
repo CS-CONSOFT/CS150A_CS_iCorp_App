@@ -77,10 +77,10 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                 setDocumentType(DOCUMENT_TYPE.IS_CNPJ)
                 saveValuesToObjectForm('CPF_CNPJ', (res.BB01202.csicp_bb01202.BB012_CNPJ || 0).toString())
                 saveValuesToObjectForm('INSCES', (res.BB01202.csicp_bb01202.BB012_InscEstadual || 0).toString())
-                   saveValuesToObjectForm('fantasyName', res.csicp_bb012.csicp_bb012.BB012_Nome_Fantasia)
+                saveValuesToObjectForm('fantasyName', res.csicp_bb012.csicp_bb012.BB012_Nome_Fantasia)
             }
             saveValuesToObjectForm('username', res.csicp_bb012.csicp_bb012.BB012_Nome_Cliente)
-         
+
             saveValuesToObjectForm('codigo', (res.csicp_bb012.csicp_bb012.BB012_Codigo || 0).toString())
 
             setIsLoadingData(false)
@@ -249,14 +249,6 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                     placeholder="Nome"
                 />
 
-                <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Nome Fantasia</Text>
-                <TextInput
-                    style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
-                    onChangeText={(value) => saveValuesToObjectForm('fantasyName', value)}
-                    value={attributesMap.fantasyName}
-                    maxLength={100}
-                    placeholder="Nome Fantasia"
-                />
 
                 {documentType === DOCUMENT_TYPE.IS_CPF && (
                     <>
@@ -280,6 +272,15 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                             value={attributesMap.INSCES}
                             placeholder="Inscrição Estadual"
                             keyboardType='numeric'
+                        />
+
+                        <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>Nome Fantasia</Text>
+                        <TextInput
+                            style={[commonStyle.common_input, commonStyle.common_margin_bottom_16]}
+                            onChangeText={(value) => saveValuesToObjectForm('fantasyName', value)}
+                            value={attributesMap.fantasyName}
+                            maxLength={100}
+                            placeholder="Nome Fantasia"
                         />
                     </>
                 )}
