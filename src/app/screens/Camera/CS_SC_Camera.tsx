@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getSimpleData, storeSimpleData } from '../../services/storage/AsyncStorageConfig';
 import { DataKey } from '../../enum/DataKeys';
 import { handleGetSimpleData } from '../../view_controller/SharedViewController';
+import React from 'react';
 
 export default function CS_SC_Camera({ route }: { route: any }) {
     const [facing, setFacing] = useState('back');

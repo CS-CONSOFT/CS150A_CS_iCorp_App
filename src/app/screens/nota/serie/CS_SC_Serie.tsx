@@ -145,7 +145,7 @@ const AlertDialog = ({ item, onClose }: { item: Produtos, onClose: (produto: Pro
                         <TextInput
                             style={commonStyle.common_input}
                             placeholder="Novo Cor/Série --- Ex. 267"
-                            keyboardType='number-pad'
+                            // keyboardType='number-pad'
                             onChangeText={setCorSerie}
                             value={CorSerie}
                         />
