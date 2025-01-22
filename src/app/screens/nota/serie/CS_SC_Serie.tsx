@@ -65,7 +65,7 @@ const CS_SC_Serie = () => {
             placeholder="Chave Nota"
             onSearchPress={(value) => search(value)}
             clickToSearch={true}
-            // keyboartType='numeric'
+            keyboartType='numeric'
             showCamera={true}
             previusScreen="Serie"
         />
@@ -145,7 +145,7 @@ const AlertDialog = ({ item, onClose }: { item: Produtos, onClose: (produto: Pro
                         <TextInput
                             style={commonStyle.common_input}
                             placeholder="Novo Cor/Série --- Ex. 267"
-                            keyboardType='number-pad'
+                            // keyboardType='number-pad'
                             onChangeText={setCorSerie}
                             value={CorSerie}
                         />
