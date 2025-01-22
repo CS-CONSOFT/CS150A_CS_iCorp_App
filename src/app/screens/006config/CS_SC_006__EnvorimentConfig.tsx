@@ -139,9 +139,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
         return <CustomLoading />
     }
 
-    function validate(tenant: string, urlBase: string, token: string): void {
-
-
+    function validate(tenant: string, token: string): void {
         validaAmbiente({ tenant: Number(tenant), token: token }).then((res) => {
             if (res.Retorno.IsOk) {
                 storeSimpleDataVc(DataKey.IsConfigValidada, "1").then(() => {
@@ -186,7 +184,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                             </TouchableHighlight>
 
                             <TouchableHighlight
-                                onPress={() => validate(tenant, urlBase, token)}
+                                onPress={() => validate(tenant, token)}
                                 style={commonStyle.common_button_style}
                                 underlayColor='white'
                             >
@@ -249,7 +247,7 @@ const CS_SC_006__EnvorimentConfig = ({ route }: { route: any }) => {
                                     placeholder="Digite a URL"
                                     value={urlBase}
                                 />
-                                <Text style={[commonStyle.common_fontWeight_600, { marginLeft: 16, marginBottom: 16, color: '#fff', fontSize: 14, fontStyle: 'italic' }]}>https://###.csicorpnet.com.br </Text>
+                                <Text onPress={() => setUrlBase("https://###.csicorpnet.com.br")} style={[commonStyle.common_fontWeight_600, { marginLeft: 16, marginBottom: 16, color: '#fff', fontSize: 14, fontStyle: 'italic' }]}>https://###.csicorpnet.com.br - clique aqui se deseja copiar</Text>
 
 
                                 <Text style={[commonStyle.common_margin_bottom_8, commonStyle.common_fontWeight_600, { color: '#fff', fontSize: 16 }]}>Token</Text>
