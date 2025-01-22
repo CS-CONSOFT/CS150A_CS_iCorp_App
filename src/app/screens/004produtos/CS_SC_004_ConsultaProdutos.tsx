@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Suspense, useState } from "react";
-import { ActivityIndicator, Button, FlatList, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
+import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
-import Custom_Pagination from "../../components/pagination/Custom_Pagination";
 import CustomProduct from "../../components/product/CustomProduct";
 import CustomSearch from "../../components/search/CustomSearch";
 import CustomSwitch from "../../components/switch/CustomSwitch";
@@ -18,13 +18,15 @@ import { getSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
+import { moneyApplyMask } from "../../util/Masks";
 import { showToast, ToastType } from "../../util/ShowToast";
 import { handleInsertProdutoComanda } from "../../view_controller/comanda/CS_ComandaViewController";
 import { handleInsertProductPv } from "../../view_controller/prevenda/PreVendaViewController";
 import { handleSearchProduct } from "../../view_controller/produto/ProductViewController";
 import { stylesConsultaProduto } from "./ConsultaProdutoStyles";
-import { moneyApplyMask } from "../../util/Masks";
-import CustomSeparator from "../../components/lists/CustomSeparator";
+import { Dimensions } from 'react-native';
+
+
 const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
 
     const [productList, setProductList] = useState<IResGetProductItem[]>([]);
@@ -254,7 +256,7 @@ const ProductItem = ({ product }: { product: IResGetProductItem }) => {
 // Componente do botão direito para adicionar o produto à pré-venda
 const RightItem = ({ scInsertProduct, loadingClick, product }: { scInsertProduct: (saldoId?: string) => void, loadingClick: boolean, product: IResGetProductItem }) => {
     const [modalVisible, setModalVisible] = useState(false);
-
+    const windowHeight = Dimensions.get('window').height;
     const handlePress = () => {
         setModalVisible(true);
     };
@@ -302,6 +304,7 @@ const RightItem = ({ scInsertProduct, loadingClick, product }: { scInsertProduct
 
                         {/* Lista de produtos */}
                         <FlatList
+                            style={{ maxHeight: windowHeight / 2 }}
                             data={product.NS_List}
                             keyExtractor={(item) => item.csicp_gg520.Id}
                             renderItem={({ item }) => (
@@ -440,7 +443,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000', // Sombra para iOS
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
-        shadowRadius: 1,
+        shadowRadius: 1
     },
     productInfoContainer: {
         flexDirection: 'column',
