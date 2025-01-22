@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import CustomHeaderLogo from "../components/headers/CustomHeaderLogo";
 import CustomLoggoutTitle from "../components/headers/CustomLoggoutTitle";
 import CS_SC_001_Login from "../screens/001login/CS_SC_001_Login";
@@ -35,6 +36,7 @@ import TabRoutes009 from "./tab-009.routes";
 import TopTab001 from "./top-tab001.routes";
 import PDF from "../screens/PDF";
 import CS_SC_013ConsultaScore from "../screens/013ConsultaScore/CS_SC_013ConsultaScore";
+import { Text } from "react-native";
 
 const StackNav = createNativeStackNavigator();
 
@@ -364,6 +366,7 @@ export default function StackRoutes() {
           cameFromPv: false,
           insertComanda: false,
           comandaId: undefined,
+
         }}
         options={{
           title: "Consulta de Produto",

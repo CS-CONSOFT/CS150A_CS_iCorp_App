@@ -4,5 +4,6 @@ export let FETCH_STATUS = {
     SUCCESS: 'success',
     ERROR: 'error',
     MODAL: 'modal',
-    BTN_CLICK: 'BTN_CLICK'
+    BTN_CLICK: 'BTN_CLICK',
+    REFRESH_LIST: 'REFRESH_LIST',
 }
