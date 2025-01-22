@@ -250,7 +250,6 @@ const CS_SC_009_CadastroCliente = ({ route }: { route: any }) => {
                 />
 
 
-
                 {documentType === DOCUMENT_TYPE.IS_CPF && (
                     <>
                         <Text style={[commonStyle.text_aligment_left, commonStyle.common_margin_left_16, commonStyle.font_size_16]}>RG</Text>

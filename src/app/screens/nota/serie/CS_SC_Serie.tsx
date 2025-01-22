@@ -148,6 +148,7 @@ const AlertDialog = ({ item, onClose }: { item: Produtos, onClose: (produto: Pro
                             // keyboardType='number-pad'
                             onChangeText={setCorSerie}
                             value={CorSerie}
+                            maxLength={200}
                         />
                         <TouchableOpacity style={commonStyle.common_button_style} onPress={() => setNewCorSerie()}>
                             {isBtnLoading ? <ActivityIndicator color={"#0A3147"} /> : <Text style={commonStyle.common_text_button_style}>Salvar</Text>}
