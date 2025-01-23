@@ -46,14 +46,15 @@ const CS_SC_Entrega = () => {
 
 
     //funcao para pesquisar nota
-    async function searchNote(value: string) {
+    async function searchNote(noteValue: string) {
+
         try {
             //criando objeto para enviar
-            setNoteTyped(value)
+            setNoteTyped(noteValue)
             const tenant = (await getUserProperties()).tenantId;
             if (tenant != undefined) {
                 //enviando o objeto
-                const iEntregaGet: IReqGetDelivery = { note: noteTyped, tenant }
+                const iEntregaGet: IReqGetDelivery = { note: noteValue, tenant }
                 //setando loading
                 setStatus(FETCH_STATUS.LOADING)
                 //buscando notas

@@ -5,11 +5,11 @@ import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import { DataKey } from "../../enum/DataKeys";
 import { IPostLoginData } from "../../services/api/interfaces/login/CS_IPostLoginData";
-import { storeSimpleData } from "../../services/storage/AsyncStorageConfig";
+import { storeObject, storeSimpleData } from "../../services/storage/AsyncStorageConfig";
 import { useDatabase } from "../../services/storage/useDatabase";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { getUserProperties, storeObjectDataVc } from "../../view_controller/SharedViewController";
+import { getUserProperties } from "../../view_controller/SharedViewController";
 import { checkIfUserIsLogged, generalLoginVc, logout } from "../../view_controller/login/LoginViewController";
 import React from "react";
 
@@ -79,13 +79,14 @@ const CS_SC001_LoginForm = () => {
                 const toSaveJson = res.Model
                 toSaveJson.TenantId = tenantId
                 //salvando dados localmente
-                await storeObjectDataVc(DataKey.LoginResponse, toSaveJson)
+                await storeObject(DataKey.LoginResponse, toSaveJson)
                 navigateToMenu()
             } else {
                 showToast(ToastType.ERROR, "Falha ao logar", res.Msg)
             }
         } catch (error) {
-            showToast(ToastType.ERROR, "Erro", "Falha ao logar, verifique a URL base")
+            //@ts-ignore
+            showToast(ToastType.ERROR, "Erro", error.message)
             setStatus(FETCH_STATUS.ERROR)
             logout(DataKey.LoginResponse).then(() => {
                 storeSimpleData(DataKey.MaintainOpenConfig, "true").then(() => {

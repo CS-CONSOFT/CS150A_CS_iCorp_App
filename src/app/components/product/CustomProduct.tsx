@@ -4,6 +4,7 @@ import { common003_01_styles } from "../../screens/003prevenda/003_01_produto/co
 import ColorStyle from "../../ColorStyle";
 import { commonStyle } from "../../CommonStyle";
 import CustomLoading from "../loading/CustomLoading";
+import React from "react";
 
 
 interface ReactProps {

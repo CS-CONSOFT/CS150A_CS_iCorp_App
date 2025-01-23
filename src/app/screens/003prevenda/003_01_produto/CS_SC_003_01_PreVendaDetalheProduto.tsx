@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { FlatList, SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView, View } from "react-native";
 import CustomEmpty from "../../../components/lists/CustomEmpty";
 import CustomLoading from "../../../components/loading/CustomLoading";
 import { IResGetPv } from "../../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
@@ -12,6 +12,8 @@ import C_003_01_04_BottomScreenItemProdutosDetalhesPV from "./components/C_003_0
 import C_003_01_05_TopHeaderItensProdutosDetalhesPV from "./components/C_003_01_05_TopHeaderItensProdutosDetalhesPV";
 import { C_003_01_ProductPvItem } from "./components/C_003_01_ProductPvItem";
 import React from "react";
+import { getSimpleData, storeSimpleData } from "../../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../../enum/DataKeys";
 
 
 const CS_SC_003_01_PreVendaDetalheProduto = () => {
@@ -26,13 +28,23 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
         }, [])
     );
 
-    function getCurrentPv() {
+    async function getCurrentPv() {
+        storeSimpleData(DataKey.PV_CAME_FROM_BOTTOM_NAVIGATION, "false");
+
+
         setStatus(FETCH_STATUS.LOADING)
         //pega a pv
         handleGetPv().then((res) => {
             if (res !== undefined) {
                 setPv(res)
                 setStatus(FETCH_STATUS.SUCCESS)
+
+                if (res.DD080_Produtos != undefined && res.DD080_Produtos.length != undefined) {
+                    storeSimpleData(DataKey.COUNT_PRODUCT_CURRENT_PV, res.DD080_Produtos.length.toString());
+                } else {
+                    storeSimpleData(DataKey.COUNT_PRODUCT_CURRENT_PV, "0");
+                }
+
             }
         }).catch((err) => {
             navigation.goBack()
@@ -140,7 +152,6 @@ const CS_SC_003_01_PreVendaDetalheProduto = () => {
                     />
                 )}
             </>}
-
         </SafeAreaView>
     );
 }

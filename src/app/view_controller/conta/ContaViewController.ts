@@ -65,11 +65,15 @@ export async function handleGetListConta({
   pageSize,
   cs_search,
   modRelacaoID,
+  cs_codigoConta,
+  cs_cpfcnpj
 }: {
   currentPage: number;
   pageSize: number;
   modRelacaoID: number;
   cs_search?: string;
+  cs_codigoConta?: number;
+  cs_cpfcnpj?: string;
 }) {
   try {
     // Obtém o usuário atual do armazenamento
@@ -85,6 +89,8 @@ export async function handleGetListConta({
       in_currentPage: currentPage,
       in_pageSize: pageSize,
       in_search: cs_search,
+      In_CodgConta: cs_codigoConta,
+      In_CPFCNPJ: cs_cpfcnpj
     };
 
     // Faz uma requisição para obter a lista de contas com os parâmetros fornecidos

@@ -6,13 +6,6 @@ import { getObject, getSimpleData, storeObject, storeSimpleData } from "../servi
 
 
 
-export async function storeObjectDataVc(key: string, value: object) {
-    try {
-        storeObject(key, value)
-    } catch (error) {
-        return error
-    }
-}
 
 export async function handleGetSimpleData(key: string) {
     let value: any = ''
