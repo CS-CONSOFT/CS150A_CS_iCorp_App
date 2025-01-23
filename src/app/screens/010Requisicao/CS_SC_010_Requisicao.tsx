@@ -13,6 +13,7 @@ import { formatDateToSlashPattern } from "../../util/FormatText";
 import { ToastType, showToast } from "../../util/ShowToast";
 import { SelectList } from "react-native-dropdown-select-list";
 import CustomLoading from "../../components/loading/CustomLoading";
+import React from "react";
 
 const CS_SC_010_Requisicao = () => {
     const [pv, setPv] = useState<IResGetPv>()

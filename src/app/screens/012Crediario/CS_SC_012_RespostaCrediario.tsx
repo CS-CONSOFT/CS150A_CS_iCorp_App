@@ -5,6 +5,7 @@ import { commonStyle } from "../../CommonStyle";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import { IResSimulacaoCrediario } from "../../services/api/interfaces/crediario/IResSimulacaoCrediario";
 import { formatMoneyValue } from "../../util/FormatText";
+import React from "react";
 
 const CS_SC_012_RespostaCrediario = ({ route }: { route: any }) => {
     const { jsonResponse, valorEntrada } = route.params

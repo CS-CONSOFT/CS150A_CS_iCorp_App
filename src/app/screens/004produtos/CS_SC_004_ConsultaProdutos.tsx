@@ -191,10 +191,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
         }
     };
 
-    function search() {
-        handleFormSubmitToSearch(productAtributtesToSearch?.cs_codigo_produto || productAtributtesToSearch?.cs_descricao_reduzida, currentPage);
 
-    }
 
     // Renderização da tela
     return (
@@ -219,7 +216,7 @@ const CS_SC_ConsultaProdutos = ({ route }: { route: any }) => {
                         ListFooterComponent={() => isLoading && <ActivityIndicator color={"#000"} />}
                         renderItem={({ item }) => (
                             <CustomProduct
-                                onClickItem={() => { }}
+                                onClickItem={() => navigation.navigate('ProdutosMaisDetalhes', { currentProduct: item })}
                                 children={<ProductItem product={item} />}
                                 image={<ImageProductItem descProd={item.DescArtigo!} image={item.Imagens?.find((val) => val.IsPadrao)?.URL_Path} />}
                                 rightItem={

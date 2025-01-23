@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import CurrencyInput from "react-native-currency-input";
 import { SelectList } from "react-native-dropdown-select-list";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { commonStyle } from "../../CommonStyle";
@@ -8,20 +9,17 @@ import CustomCard_003 from "../../components/cards/CustomCard_003";
 import CustomIcon from "../../components/icon/CustomIcon";
 import CustomEmpty from "../../components/lists/CustomEmpty";
 import CustomSeparator from "../../components/lists/CustomSeparator";
+import CustomLoading from "../../components/loading/CustomLoading";
 import { IReqInsertPaymentForm } from "../../services/api/interfaces/pagamento/CS_IReqInsertPaymentForm";
 import { ItemListPaymentFormSaved } from "../../services/api/interfaces/pagamento/IResListPaymentFormSaved";
 import { TermItem } from "../../services/api/interfaces/pagamento/IResPaymentTerm";
 import { IResGetPv } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
+import { FETCH_STATUS } from "../../util/FETCH_STATUS";
 import { formatMoneyValue } from "../../util/FormatText";
 import { ICON_NAME } from "../../util/IconsName";
 import { ToastType, showToast } from "../../util/ShowToast";
-import { handleDeletePaymentForm, handleGetListOfPaymentForm002, handleGetListOfPaymentFormCombo, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handlePaymentSelectForm, handlePaymentSelectTerm } from "../../view_controller/pagamento/CS_PagamentoViewController";
+import { handleDeletePaymentForm, handleGetListOfPaymentFormCombo, handleGetPaymentTerm, handleGetPaymentTermList, handleInsertPaymentForm, handlePaymentSelectForm, handlePaymentSelectTerm } from "../../view_controller/pagamento/CS_PagamentoViewController";
 import { INotaPagamentosValores, handleCalculateValuesPayedAndToPay, handleGetPv } from "../../view_controller/prevenda/PreVendaViewController";
-import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import CustomLoading from "../../components/loading/CustomLoading";
-import { moneyApplyMask, moneyRemoveMask } from "../../util/Masks";
-import CurrencyInput from "react-native-currency-input";
-import React from "react";
 
 const CS_SC_007_Pagamento = () => {
     // Estado para armazenar o PV (Ponto de Venda) atual
@@ -97,7 +95,7 @@ const CS_SC_007_Pagamento = () => {
                 <BuyValues TotalLiquido={currentPv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido} Pagamento_ValorAPagar={iNotaValoresPagoEPagar?.valorAPagar} Pagamento_ValorPago={iNotaValoresPagoEPagar?.valorPago} />
 
                 {/* Componente para exibir a seleção de itens */}
-                <CustomCard_003 children={<ItemSelecao valorAPagarZerado={iNotaValoresPagoEPagar?.valorAPagar === 0} finish={start} />} />
+                <CustomCard_003 children={<ItemSelecao restanteValorAPagar={iNotaValoresPagoEPagar?.valorAPagar || 0} valorAPagarZerado={iNotaValoresPagoEPagar?.valorAPagar === 0} finish={start} />} />
 
                 {/* Seção de detalhamento com opção para deletar forma de pagamento */}
                 <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
@@ -171,11 +169,12 @@ enum PaymentStage {
 }
 
 // Componente que exibe as opções de seleção de item para a forma de pagamento, condição e pagamento
-const ItemSelecao = ({ finish, valorAPagarZerado }: {
+const ItemSelecao = ({ finish, valorAPagarZerado, restanteValorAPagar }: {
     /** Função chamada para buscar novamente na API os dados ao finalizar um pagamento */
     finish: () => void,
     /** Variável que indica se o valor a pagar está zerado */
-    valorAPagarZerado: boolean
+    valorAPagarZerado: boolean,
+    restanteValorAPagar: number
 }) => {
     /** Estado que mantém o estágio atual da seleção */
     const [currentStage, setCurrentStage] = useState(PaymentStage.FORMA)
@@ -256,7 +255,7 @@ const ItemSelecao = ({ finish, valorAPagarZerado }: {
             {/* Renderiza o componente ItemPagamento se o estágio atual for PAGAMENTO */}
             {/**@ts-ignore */}
             {currentStage === PaymentStage.PAGAMENTO && (
-                <ItemPagamento valorAPagarZerado={valorAPagarZerado} finishPayment={finishPayment} paymentFormId={formaPagamentoId} termId={condicaoId} />
+                <ItemPagamento restanteValorAPagar={restanteValorAPagar} valorAPagarZerado={valorAPagarZerado} finishPayment={finishPayment} paymentFormId={formaPagamentoId} termId={condicaoId} />
             )}
         </View>
     )
@@ -376,7 +375,6 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
                     //tem condicao de pagamento e ela nao e ela possui condições. Ou seja, NÃO É FIXA
                     if (res.formByIdWithConditions?.FatoresAcrescimos != undefined) {
                         const transformedData = res.formByIdWithConditions.FatoresAcrescimos!
-                            .sort(e => e.csicp_bb008.BB008_Codigo)
                             .map(item => ({
                                 key: item.csicp_bb008.ID,
                                 value: item.csicp_bb008.BB008_Condicao_Pagto
@@ -434,9 +432,9 @@ const RenderItemCondicao = ({ id, title, onTermSelected }: { id: string, title: 
 }
 
 /** termId == condicaoId */
-const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado }: { valorAPagarZerado: boolean, paymentFormId: string, termId: string, finishPayment: () => void }) => {
+const ItemPagamento = ({ paymentFormId, termId, finishPayment, valorAPagarZerado, restanteValorAPagar }: { restanteValorAPagar: number, valorAPagarZerado: boolean, paymentFormId: string, termId: string, finishPayment: () => void }) => {
     const [termItem, setTermItem] = useState<TermItem>()
-    const [paymentValue, setPaymentValue] = useState(0)
+    const [paymentValue, setPaymentValue] = useState(restanteValorAPagar)
     const [paymentValueEntranceValue, setPaymentValueEntranceValue] = useState(0)
     const [entranceFormId, setEntranceFormId] = useState('')
     const [btnClickLoading, setBtnClickLoading] = useState(false)

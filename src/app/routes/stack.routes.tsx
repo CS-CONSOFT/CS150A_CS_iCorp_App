@@ -14,6 +14,7 @@ import CS_SC_Serie from "../screens/nota/serie/CS_SC_Serie";
 
 import CS_SC_003_02_01_PreVendaEditEnd from "../screens/003prevenda/003_02_cliente/003_02_01_end/CS_SC_003_02_01_PreVendaEditEnd";
 import CS_SC_003_02_PreVendaDetalheCliente from "../screens/003prevenda/003_02_cliente/CS_SC_003_02_PreVendaDetalheCliente";
+import CS_SC_004_01_ProdutosMaisDetalhes from "../screens/004produtos/CS_SC_004_01_ProdutosMaisDetalhes";
 import CS_SC_005_Obras_Filhas from "../screens/005obras/CS_SC_005_Obras_Filhas";
 import CS_SC_008_DetalheComanda from "../screens/008ListaComandas/CS_SC_008_DetalheComanda";
 import CS_SC_009_CadastroCliente from "../screens/009Cliente/CS_SC_009_CadastroCliente";
@@ -26,17 +27,17 @@ import CS_SC_011_splash_PreVenda from "../screens/011Splash/CS_SC_011_splash_Pre
 import CS_SC_011_splash_Produto from "../screens/011Splash/CS_SC_011_splash_Produto";
 import CS_SC_012_RespostaCrediario from "../screens/012Crediario/CS_SC_012_RespostaCrediario";
 import CS_SC_012_SimuladorDeCredito from "../screens/012Crediario/CS_SC_012_SimuladorDeCredito";
+import CS_SC_013ConsultaScore from "../screens/013ConsultaScore/CS_SC_013ConsultaScore";
 import CS_SC_Camera from "../screens/Camera/CS_SC_Camera";
 import CS_SC_Entrega from "../screens/nota/entrega/CS_SC_Entrega";
+import PDF from "../screens/PDF";
+import { IResGetProductItem } from "../services/api/interfaces/produto/CS_IResGetProdutoSearch";
 import DrawerRoute001 from "./drawer.route";
 import TabRoutes001 from "./tab-001.routes";
 import TabRoutes002 from "./tab-002.routes";
 import TabRoutes008 from "./tab-008.routes";
 import TabRoutes009 from "./tab-009.routes";
 import TopTab001 from "./top-tab001.routes";
-import PDF from "../screens/PDF";
-import CS_SC_013ConsultaScore from "../screens/013ConsultaScore/CS_SC_013ConsultaScore";
-import { Text } from "react-native";
 
 const StackNav = createNativeStackNavigator();
 
@@ -84,6 +85,7 @@ declare global {
       Splash_Entrega: undefined;
       Splash_PreVenda: undefined;
       Splash_Produto: undefined;
+      ProdutosMaisDetalhes: { currentProduct: IResGetProductItem };
     }
   }
 }
@@ -496,6 +498,20 @@ export default function StackRoutes() {
         component={TabRoutes001}
         options={{
           title: "Pré Venda",
+          headerTitleAlign: "center",
+          headerTintColor: "#fff",
+          headerStyle: {
+            backgroundColor: "#163045",
+          },
+          headerBackVisible: true,
+        }}
+      />
+
+      <StackNav.Screen
+        name="ProdutosMaisDetalhes"
+        component={CS_SC_004_01_ProdutosMaisDetalhes}
+        options={{
+          title: "Produto Detalhes",
           headerTitleAlign: "center",
           headerTintColor: "#fff",
           headerStyle: {
