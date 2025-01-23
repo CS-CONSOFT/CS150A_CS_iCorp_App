@@ -1,9 +1,9 @@
-import { ActivityIndicator, FlatList, Pressable, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import { IResGetPv, Requisicoes } from "../../services/api/interfaces/prevenda/CS_Common_IPreVenda";
 import { useEffect, useState } from "react";
 import { FETCH_STATUS } from "../../util/FETCH_STATUS";
-import { handleCsicp_gg001_Get_List_Almox, handleGetPv, handleRI_CancelaRI, handleRI_ExcluirRI, handleRI_Gerar_RI, handleRI_RequisitarRI } from "../../view_controller/prevenda/PreVendaViewController";
+import { handleCsicp_gg001_Get_List_Almox, handleGetPv, handleRI_CancelaRI, handleRI_ExcluirRI, handleRI_Gerar_OBS_RI, handleRI_Gerar_RI, handleRI_RequisitarRI } from "../../view_controller/prevenda/PreVendaViewController";
 import CustomCard_001 from "../../components/cards/CustomCard_001";
 import CustomSeparator from "../../components/lists/CustomSeparator";
 import CustomVerticalSeparator from "../../components/lists/CustomVertticalSeparator";
@@ -14,12 +14,14 @@ import { ToastType, showToast } from "../../util/ShowToast";
 import { SelectList } from "react-native-dropdown-select-list";
 import CustomLoading from "../../components/loading/CustomLoading";
 import React from "react";
+import CustomAlertDialog from "../../components/modal/CustomAlertDialog";
 
 const CS_SC_010_Requisicao = () => {
     const [pv, setPv] = useState<IResGetPv>()
     const [almoxSelected, setAlmoxSelected] = useState("");
     const [listAmox, setListAlmox] = useState<{ key: string, value: string }[]>();
     const [status, setStatus] = useState(FETCH_STATUS.IDLE)
+    const [isObsModalVisible, setIsObsModalVisible] = useState(false)
 
     useEffect(() => {
         getCurrentPv()
@@ -38,6 +40,7 @@ const CS_SC_010_Requisicao = () => {
         handleCsicp_gg001_Get_List_Almox().then((res) => {
             setListAlmox(res)
         })
+        setAlmoxSelected('')
     }
 
     if (status === FETCH_STATUS.LOADING) {
@@ -61,6 +64,9 @@ const CS_SC_010_Requisicao = () => {
             showToast(ToastType.INFO, "Selecione", "Um Almoxarifado")
         }
     }
+
+
+
     const requisicoes = pv?.Requisicao?.Requisicoes?.toReversed() ?? [];
     return (
         <SafeAreaView>
@@ -89,8 +95,8 @@ const CS_SC_010_Requisicao = () => {
                     renderItem={({ item }) =>
                         <CustomCard_001
                             title={`${item.csicp_gg071.gg071_ProtocolNumber} - ${item.csicp_status}`}
-                            children={<RenderItem item={item} />}
-                            rightChildren={<RightItem item={item} refresh={getCurrentPv} />}
+                            children={<RenderItem refreshSreen={getCurrentPv} isObsModalVisible={isObsModalVisible} setIsObsModalVisible={setIsObsModalVisible} item={item} />}
+                            rightChildren={<RightItem item={item} refresh={getCurrentPv} setIsObsModalVisible={setIsObsModalVisible} />}
                             showRightChildren={true}
                         />
 
@@ -101,7 +107,43 @@ const CS_SC_010_Requisicao = () => {
     );
 }
 
-const RenderItem = ({ item }: { item: Requisicoes }) => {
+const ObsItem = ({ obsRI, save, dismiss }: { save: (newObs: string) => void, dismiss: () => void, obsRI?: string }) => {
+    const [obs, setObs] = useState(obsRI || "")
+    const [isLoading, setIsLoading] = useState(false)
+    return (
+        <View style={commonStyle.modal_common_container}>
+            <Text>Observação</Text>
+            <TextInput style={{
+                margin: 4,
+                //borderWidth: 1,
+                padding: 25,
+                borderRadius: 12,
+                paddingHorizontal: 32,
+                borderColor: "#B0B0B0",
+                backgroundColor: '#d3d3d3'
+            }}
+                multiline={true}
+                onChangeText={setObs}
+                value={obs}
+            />
+
+            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl]}>
+                <Pressable style={commonStyle.btn_gray} onPress={() => {
+                    setIsLoading(true)
+                    save(obs)
+                }}>
+                    {isLoading ? <ActivityIndicator color={"#000"} /> : <Text style={commonStyle.btn_text_gray}>Salvar</Text>}
+                </Pressable>
+                <Pressable style={commonStyle.btn_gray} onPress={dismiss}>
+                    <Text style={commonStyle.btn_cancel_modal}>Cancelar</Text>
+                </Pressable>
+            </View>
+        </View>
+    )
+}
+
+
+const RenderItem = ({ item, isObsModalVisible, setIsObsModalVisible, refreshSreen }: { refreshSreen: () => void, item: Requisicoes, isObsModalVisible: boolean, setIsObsModalVisible: (visible: boolean) => void }) => {
     return (
         <View>
             <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_evl, { margin: 16 }]}>
@@ -137,11 +179,34 @@ const RenderItem = ({ item }: { item: Requisicoes }) => {
                     <Text style={[commonStyle.text_aligment_center]}>{(item.csicp_sy001_UserAtendente.SY001_Nome || "---")}</Text>
                 </View>
             </View>
+
+            <CustomAlertDialog
+                isVisible={isObsModalVisible}
+                onDismiss={() => { }}
+                children={<ObsItem obsRI={item.csicp_gg071.gg071_Observacao} save={async (newObs) => {
+                    try {
+                        const res = await handleRI_Gerar_OBS_RI({ In_GG071_ID: item.csicp_gg071.gg071_Id, In_Observacao: newObs })
+                        if (res.Code_Erro != "0") {
+                            showToast(ToastType.ERROR, "Falha", res.Mensagem)
+                        } else {
+                            showToast(ToastType.SUCCESS, "Sucesso", res.Mensagem)
+                        }
+
+                        refreshSreen()
+                    } catch (error) {
+
+                        //@ts-ignore
+                        showToast(ToastType.ERROR, "Falha error", error.config.message)
+                    } finally {
+                        setIsObsModalVisible(false)
+                    }
+                }} dismiss={() => setIsObsModalVisible(false)} />}
+            />
         </View>
     )
 }
 
-const RightItem = ({ item, refresh }: { item: Requisicoes, refresh: () => void }) => {
+const RightItem = ({ item, refresh, setIsObsModalVisible }: { item: Requisicoes, refresh: () => void, setIsObsModalVisible: (visible: boolean) => void }) => {
     const [isLoading, setIsLoading] = useState(false)
     if (isLoading) {
         return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -171,6 +236,9 @@ const RightItem = ({ item, refresh }: { item: Requisicoes, refresh: () => void }
                     setIsLoading(false)
                     refresh()
                 })
+            }} />
+            <CustomIcon icon={ICON_NAME.ALERT} onPress={() => {
+                setIsObsModalVisible(true)
             }} />
             <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => {
                 setIsLoading(true)

@@ -6,6 +6,20 @@ export const commonStyle = StyleSheet.create({
         backgroundColor: "#0A3147",
         borderRadius: 32
     },
+    btn_cancel_modal: {
+        fontWeight: '600',
+        alignSelf: 'center'
+    },
+    btn_text_limpar_modal: {
+        color: '#1068EB',
+        fontWeight: '600',
+        alignSelf: 'center'
+    },
+    btn_text_limpar: {
+        color: 'red',
+        fontWeight: '600',
+        alignSelf: 'center'
+    },
     filterDateTextClicked: {
         color: "#FFF"
     },
