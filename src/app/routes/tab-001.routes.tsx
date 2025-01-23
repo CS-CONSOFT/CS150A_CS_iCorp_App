@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import CustomPvBottomMenu_001 from '../components/bottomMenus/CustomPvBottomMenu_001'
 import CS_SC_003_PreVenda from '../screens/003prevenda/CS_SC_003_PreVenda'
+import React from 'react'
 
 const BottomTab = createBottomTabNavigator()
 

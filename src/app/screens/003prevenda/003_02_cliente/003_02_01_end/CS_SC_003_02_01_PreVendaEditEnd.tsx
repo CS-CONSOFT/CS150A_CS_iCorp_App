@@ -177,7 +177,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
      * @param key id da seleção
      */
     function setSelectedUf(key: string) {
-        console.log('uf selecionada', key);
+
         setValueToObjectWhenInputTyped('Cidade', '')
         setValueToObjectWhenInputTyped('UF', key)
         getCities(key, "")
@@ -189,7 +189,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
      */
     function getCities(ufKey: string, valor?: string,) {
         if (ufKey != "") {
-            console.log('chamando get citites', ufKey);
+
 
             handleGetCityList(ufKey, valor).then((res) => {
                 const list = res.csicp_aa028_List
@@ -201,7 +201,7 @@ const CS_SC_003_02_01_PreVendaEditEnd = ({ route }: { route: any }) => {
                     }
                 )
                 )
-                console.log(mappedList);
+
 
                 setCityList(mappedList)
             })

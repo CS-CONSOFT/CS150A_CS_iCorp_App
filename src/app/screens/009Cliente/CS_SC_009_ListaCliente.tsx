@@ -59,7 +59,9 @@ const CS_SC_009_ListaCliente = ({ route }: { route: any }) => {
       currentPage: page || 1,
       pageSize: 10,
       modRelacaoID: 3,
-      cs_search: searchValue,
+      cs_search: /^\d+$/.test(searchValue) ? undefined : searchValue,
+      cs_codigoConta: /^\d+$/.test(searchValue) && searchValue.length != 11 && searchValue.length != 14 ? Number.parseInt(searchValue) : undefined,
+      cs_cpfcnpj: /^\d+$/.test(searchValue) && searchValue.length === 11 || searchValue.length === 14 ? searchValue : undefined
     })
       .then((res) => {
         try {

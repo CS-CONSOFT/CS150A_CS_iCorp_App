@@ -10,6 +10,8 @@ export interface ICommonReq {
     In_IsCount: number,
     in_currentPage: number,
     in_pageSize: number,
-    in_search?: string
+    In_CPFCNPJ?: string,
+    in_search?: string,
+    In_CodgConta?: number
 }
 

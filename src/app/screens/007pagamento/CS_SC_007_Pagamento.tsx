@@ -375,10 +375,12 @@ const ItemCondicao = ({ formaId, onTermSelected }: { formaId: string, onTermSele
                 if (res !== undefined) {
                     //tem condicao de pagamento e ela nao e ela possui condições. Ou seja, NÃO É FIXA
                     if (res.formByIdWithConditions?.FatoresAcrescimos != undefined) {
-                        const transformedData = res.formByIdWithConditions.FatoresAcrescimos!.map(item => ({
-                            key: item.csicp_bb008.ID,
-                            value: item.csicp_bb008.BB008_Condicao_Pagto
-                        }));
+                        const transformedData = res.formByIdWithConditions.FatoresAcrescimos!
+                            .sort(e => e.csicp_bb008.BB008_Codigo)
+                            .map(item => ({
+                                key: item.csicp_bb008.ID,
+                                value: item.csicp_bb008.BB008_Condicao_Pagto
+                            }));
                         setPaymentTerms(transformedData)
                         setIsLoading(false)
                     } else {
