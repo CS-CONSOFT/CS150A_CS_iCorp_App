@@ -85,30 +85,30 @@ const CS_SC_007_Pagamento = () => {
 
     return (
         <SafeAreaView>
-            <ScrollView>
-                {/* Componente para exibir o topo da tela com informações do protocolo e cliente */}
-                <TopOfScreen currentPv={currentPv?.DD070_Nota.csicp_dd070.DD070_ProtocolNumber} clientPv={currentPv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""} />
 
-                <CustomSeparator />
+            {/* Componente para exibir o topo da tela com informações do protocolo e cliente */}
+            <TopOfScreen currentPv={currentPv?.DD070_Nota.csicp_dd070.DD070_ProtocolNumber} clientPv={currentPv?.DD070_Nota.csicp_bb012.BB012_Nome_Cliente || ""} />
 
-                {/* Componente para exibir os valores de compra, pagamento a pagar e valor pago */}
-                <BuyValues TotalLiquido={currentPv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido} Pagamento_ValorAPagar={iNotaValoresPagoEPagar?.valorAPagar} Pagamento_ValorPago={iNotaValoresPagoEPagar?.valorPago} />
+            <CustomSeparator />
 
-                {/* Componente para exibir a seleção de itens */}
-                <CustomCard_003 children={<ItemSelecao restanteValorAPagar={iNotaValoresPagoEPagar?.valorAPagar || 0} valorAPagarZerado={iNotaValoresPagoEPagar?.valorAPagar === 0} finish={start} />} />
+            {/* Componente para exibir os valores de compra, pagamento a pagar e valor pago */}
+            <BuyValues TotalLiquido={currentPv?.DD070_Nota.csicp_dd070.DD070_Total_Liquido} Pagamento_ValorAPagar={iNotaValoresPagoEPagar?.valorAPagar} Pagamento_ValorPago={iNotaValoresPagoEPagar?.valorPago} />
 
-                {/* Seção de detalhamento com opção para deletar forma de pagamento */}
-                <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
-                    <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Detalhamento</Text>
-                    <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => setToDeleteForm(!toDeleteForm)} />
-                </View>
-            </ScrollView>
+            {/* Componente para exibir a seleção de itens */}
+            <CustomCard_003 children={<ItemSelecao restanteValorAPagar={iNotaValoresPagoEPagar?.valorAPagar || 0} valorAPagarZerado={iNotaValoresPagoEPagar?.valorAPagar === 0} finish={start} />} />
+
+            {/* Seção de detalhamento com opção para deletar forma de pagamento */}
+            <View style={[commonStyle.common_rowItem, commonStyle.justify_content_space_btw, commonStyle.common_padding_16]}>
+                <Text style={[commonStyle.common_fontWeight_800, { fontSize: 18 }]}>Detalhamento</Text>
+                <CustomIcon icon={ICON_NAME.LIXEIRA} onPress={() => setToDeleteForm(!toDeleteForm)} />
+            </View>
             {/* Componente para exibir a lista de formas de pagamento com opção de deletar */}
             <CustomCard_001 title="Forma    -    Condição    -    Valor"
                 children={<ListDetalhamentoFormasPagamento
                     list={listOfPaymentSaved!}
                     toDeleteForm={toDeleteForm}
                     deletePaymentForm={(formaPgtoAtendimentoId) => deletePaymentForm(formaPgtoAtendimentoId)} />} />
+
         </SafeAreaView>
     );
 }
