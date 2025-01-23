@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IResGetProductItem } from "../../services/api/interfaces/produto/CS_IResGetProdutoSearch";
+import { useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
 const CS_SC_004_01_ProdutosMaisDetalhes = ({ route }: { route: any }) => {
     //ISSO NAO É USADO PQ POR ALGUMA RAZAO TAVA SENDO LIDO COMO UNDEFINED EM TELA
@@ -75,12 +77,19 @@ const CS_SC_004_01_ProdutosMaisDetalhes = ({ route }: { route: any }) => {
 
             <View style={styles.card}>
                 <Text style={styles.sectionTitle}>Características</Text>
-                <Text style={styles.cardContent}>{caracteristica || "Não informado"}</Text>
+                {/* <Text style={styles.cardContent}>{caracteristica || "Não informado"}</Text> */}
+                <RenderHtml
+                    contentWidth={250}
+                    source={{ html: caracteristica }}
+                />
             </View>
 
             <View style={styles.card}>
                 <Text style={styles.sectionTitle}>Ficha Técnica</Text>
-                <Text style={styles.cardContent}>{fichaTecnica || "Não informado"}</Text>
+                <RenderHtml
+                    contentWidth={250}
+                    source={{ html: fichaTecnica }}
+                />
             </View>
         </ScrollView>
     );
