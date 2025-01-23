@@ -42,6 +42,12 @@ const CS_SC_003_PreVenda = () => {
     }, [currentDateFilter, currentFilterOfTypePV]);
 
 
+    async function refreshPv() {
+        setStatus(FETCH_STATUS.REFRESH_LIST)
+        await _fetchPV(currentDateFilter)
+        setStatus(FETCH_STATUS.IDLE)
+    }
+
 
     const _fetchPV = async (dateFilterId: number) => {
         setStatus(FETCH_STATUS.LOADING)
@@ -70,20 +76,23 @@ const CS_SC_003_PreVenda = () => {
                     }
                 }
                 setStatus(FETCH_STATUS.SUCCESS)
-
             } catch (error) {
                 navigate('Menu')
                 showToast(ToastType.ERROR, "Erro", "Indefinição na resposta do servidor")
+                setStatus(FETCH_STATUS.ERROR)
             }
         }).catch((err) => {
             navigate('Menu')
             showToast(ToastType.ERROR, "Falha na requisição", err.response.data.Errors[0])
+            setStatus(FETCH_STATUS.ERROR)
         })
     }
 
 
 
+
     const isLoading = status === FETCH_STATUS.LOADING
+    const isRefreshingList = status === FETCH_STATUS.REFRESH_LIST
     const handleLoadMore = () => {
         if (!isLoading && hasMoreData) {
             setStatus(FETCH_STATUS.LOADING)
@@ -175,8 +184,10 @@ const CS_SC_003_PreVenda = () => {
                 <FlatList
                     style={{ height: '70%' }}
                     data={pvList.toReversed()}
+                    refreshing={isRefreshingList}
+                    onRefresh={refreshPv}
                     ListFooterComponent={() => <>
-                        {isLoading && <ActivityIndicator size={32} color={"#000"} style={{ padding: 16 }} />}
+                        {isLoading && !isRefreshingList && <ActivityIndicator size={32} color={"#000"} style={{ padding: 16 }} />}
                     </>}
                     ListEmptyComponent={() => !isLoading && <CustomEmpty text={"Nenhuma pré venda encontrada"} />}
                     renderItem={({ item }) => <PreVendaRenderItem item={item}

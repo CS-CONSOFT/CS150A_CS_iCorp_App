@@ -11,6 +11,7 @@ import { ICON_NAME } from "../../../util/IconsName";
 import { handleGetPv } from "../../../view_controller/prevenda/PreVendaViewController";
 import { ClienteStyles } from "./ClienteStyles";
 import C_003_02_01_HeaderClient from "./components/C_003_02_01_HeaderClient";
+import React from 'react';
 
 
 interface Avatar {

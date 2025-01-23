@@ -236,6 +236,22 @@ export async function RI_Gerar_RI({ cs_tenant_id, cs_pv_id, cs_cliente_id, In1_g
     }
 }
 
+export async function RI_Gerar_OBS_RI({ cs_tenant_id, In_GG071_ID, In_Observacao }:
+    { cs_tenant_id: number, In_GG071_ID: number, In_Observacao: string }) {
+    try {
+        const header = {
+            In_Tenant_Id: cs_tenant_id,
+            In_GG071_ID: In_GG071_ID
+        }
+
+        const response = await api.patch(`/CSR_DD100_PreVenda/rest/CS_DD100_PreVenda/RI_GravaObs`, In_Observacao, { headers: header });
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 
 export async function RI_ExcluirRI({ cs_tenant_id, In_GG071_ID, In_GG071_STA_ID }: { cs_tenant_id: number, In_GG071_STA_ID: number, In_GG071_ID: number }) {
     try {

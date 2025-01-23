@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import { TextInput } from "react-native-gesture-handler";
@@ -12,11 +12,37 @@ import { ICON_NAME } from "../../../../util/IconsName";
 import { ToastType, showToast } from "../../../../util/ShowToast";
 import { handleSaveGlobalDiscount } from "../../../../view_controller/pagamento/CS_PagamentoViewController";
 import { handlePatchAtualizaObservacaoContribuintePV, handlePatchAtualizaObservacaoPV } from "../../../../view_controller/prevenda/PreVendaViewController";
+import { getSimpleData } from "../../../../services/storage/AsyncStorageConfig";
+import { DataKey } from "../../../../enum/DataKeys";
 
 const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContribuinte, isConsulta = false, descontoValor = 0, obsText }: { refreshSreen: () => void, obsContribuinte?: DD075_Obs, isConsulta?: boolean, descontoValor?: number, obsText?: string }) => {
     const { navigate } = useNavigation()
     const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
     const [isObsModalVisible, setIsObsModalVisible] = useState(false)
+    const [pvCameFromButtonNavigation, setPvCameFromButtonNavigation] = useState(false)
+
+    useFocusEffect(
+        useCallback(() => {
+            getSimpleData(DataKey.PV_CAME_FROM_BOTTOM_NAVIGATION).then(cameFromButtonNavigation => {
+                /**
+                 *Nesse código ele verifica se está setado em memória que os produtos da PV
+                 foram acessados por meio do bottom da consulta de produtos ou entrando diretamente em uma PV.
+
+                 Caso seja diretamente da PV, permite a adição do produto. Caso nao, a uma mensagem informativa é passada
+                 direcionando como realizar a adição do produto;
+
+                
+                 */
+
+                if (cameFromButtonNavigation === "true") {
+                    setPvCameFromButtonNavigation(true)
+                } else {
+                    setPvCameFromButtonNavigation(false)
+                }
+
+            })
+        }, [pvCameFromButtonNavigation])
+    )
 
     function showModalDiscount() {
         setIsDiscountModalVisible(true)
@@ -47,7 +73,13 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                         <View style={styleProdutoPVDetalhe.topHeaderItemStyle}>
                             <CustomItemIconTitleRoundedBlue
                                 title={"Código"}
-                                onPress={() => navigate('Consulta_Produtos', { cameFromPv: true, insertComanda: false })}
+                                onPress={() => {
+                                    if (!pvCameFromButtonNavigation) {
+                                        navigate('Consulta_Produtos', { cameFromPv: true, insertComanda: false })
+                                    } else {
+                                        showToast(ToastType.INFO, "Para inserir um novo produto", "Use o botão inferior para ir para a tela de produtos")
+                                    }
+                                }}
                                 iconName={ICON_NAME.ADICIONAR_CONTORNADO}
                             />
                         </View>
@@ -91,7 +123,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                         children={<ObsItem textObs={obsText} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoPV({ cs_new_obs: newObs })
-                                console.log(newObs);
+
 
                                 if (!res.Out_IsUpdated) {
                                     refreshSreen()
@@ -101,7 +133,6 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                                 }
 
                             } catch (error) {
-                                console.log(error);
 
                                 //@ts-ignore
                                 showToast(ToastType.ERROR, "Falha error", error.config.message)
@@ -117,7 +148,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                         children={<ObsItemContri dd075={obsContribuinte} save={async (newObs) => {
                             try {
                                 const res = await handlePatchAtualizaObservacaoContribuintePV({ DD075_ID: obsContribuinte?.csicp_dd075.DD070_ID || "", DD075_OBS: newObs })
-                                console.log(newObs);
+
 
                                 if (!res.Out_IsUpdated) {
                                     refreshSreen()
@@ -126,7 +157,7 @@ const C_003_01_05_TopHeaderItensProdutosDetalhesPV = ({ refreshSreen, obsContrib
                                     showToast(ToastType.ERROR, "Falha", res.Msg)
                                 }
                             } catch (error) {
-                                console.log(error);
+
 
                                 //@ts-ignore
                                 showToast(ToastType.ERROR, "Falha error", error.config.message)

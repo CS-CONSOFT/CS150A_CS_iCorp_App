@@ -27,6 +27,8 @@ export interface IResGetProductItem {
         IsPadrao?: boolean;
     }[];
     NS_List: NS_List[]
+    Caracteristica: string,
+    FichaTecnica: string
 }
 
 

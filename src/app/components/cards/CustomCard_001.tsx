@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import { commonStyle } from "../../CommonStyle";
 import { ReactNode } from "react";
+import React from "react";
 
 
 /**
